@@ -1,0 +1,18 @@
+{
+  "name": "billy",
+  "description": "Arise phoenix. arise.",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/brisbaneshores/billy.git"
+  },
+  "engines": {
+    "node": ">=0.4.7"
+  },
+  "dependencies": {
+      "hbs": "~0.0.7",
+      "optimist": "~0.2"
+  },
+  "devDependencies": {},
+  "main": "bin/billy"
+}
