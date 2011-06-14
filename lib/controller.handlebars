@@ -1,0 +1,13 @@
+/* billy controller : {{name}} */
+(function() {
+  // Load the controller logic
+  var module = {};
+  (function() {
+    {{{controllerLogic}}}
+  })();
+
+  // Augment with the routes
+  module.exports.routes = {{{routes}}};
+
+  new (Backbone.Controller.extend(module.exports));
+})();
