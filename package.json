@@ -11,7 +11,8 @@
   },
   "dependencies": {
       "hbs": "~0.0.7",
-      "optimist": "~0.2"
+      "optimist": "~0.2",
+      "growl": "~1.1"
   },
   "devDependencies": {},
   "main": "bin/billy"
