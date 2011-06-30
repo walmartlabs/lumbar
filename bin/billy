@@ -13,7 +13,7 @@ var config = argv._[0],
 // Show help prompt if requested or if the 
 // incorrect usage options are supplied
 if (argv.h || argv.help || !config || !out) {
-  console.error("Usage: billy [--watch] [--controller template] [--module module] configFile outputDir");
+  console.error("Usage: billy [--watch] [--module module] configFile outputDir");
   return;
 }
 
@@ -28,10 +28,6 @@ fs.stat(out, function(err, stat) {
 
     if (!stat.isDirectory()) {
         throw new Error("Output must be a directory");
-    }
-
-    if (argv.controller) {
-        arise.setControllerTemplate(argv.controller);
     }
 
     worker.call(arise, module, function(err, status) {
