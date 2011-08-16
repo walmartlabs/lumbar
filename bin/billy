@@ -6,22 +6,25 @@ var fs = require('fs'),
 var argv = require('optimist').argv;
 
 var config = argv._[0],
-    out = argv._[1],
+    options = {
+      outdir: argv._[1],
+      minimize: argv.minimize
+    },
     module = argv.module,
     watch = argv.watch;
 
 // Show help prompt if requested or if the 
 // incorrect usage options are supplied
-if (argv.h || argv.help || !config || !out) {
-  console.error("Usage: billy [--watch] [--module module] configFile outputDir");
+if (argv.h || argv.help || !config || !options.outdir) {
+  console.error("Usage: billy [--minimize] [--watch] [--module module] configFile outputDir");
   return;
 }
 
-var arise = billy.init(config, out),
+var arise = billy.init(config, options),
     worker = watch ? arise.watch : arise.build;
 
 // First figure out what our output looks like
-fs.stat(out, function(err, stat) {
+fs.stat(options.outdir, function(err, stat) {
     if (err) {
         throw err;
     }

@@ -12,7 +12,8 @@
   "dependencies": {
       "hbs": "~0.0.7",
       "optimist": "~0.2",
-      "growl": "~1.1"
+      "growl": "~1.1",
+      "uglify-js": "~1.0"
   },
   "devDependencies": {},
   "main": "bin/billy"
