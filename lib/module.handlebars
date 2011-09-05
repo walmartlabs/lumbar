@@ -1,0 +1,10 @@
+/* billy module : {{fileName}} */
+(function() {
+  var module = {};
+  (function() {
+    {{{moduleContents}}}
+  })();
+  if (typeof module.exports !== 'undefined') {
+    {{namespace}}.{{type}}['{{{name}}}'] = module.exports;
+  }
+})();
