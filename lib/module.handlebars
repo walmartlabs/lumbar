@@ -1,0 +1,11 @@
+/* billy module : {{fileName}} */
+(function() {
+  var module = {};
+  (function() {
+    {{{moduleContents}}}
+  })();
+  if (typeof module.exports !== 'undefined') {
+    module.exports.name = '{{{name}}}';
+    {{namespace}}['{{{name}}}'] = module.exports;
+  }
+})();
