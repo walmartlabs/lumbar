@@ -1,2 +1,3 @@
 node_modules
 build_package.sh
+npm-debug.log

@@ -17,6 +17,11 @@
       "optimist": "~0.2",
       "uglify-js": "~1.0"
   },
-  "devDependencies": {},
-  "main": "bin/lumbar"
+  "devDependencies": {
+    "wrench": "~1.2"
+  },
+  "main": "bin/lumbar",
+  "scripts": {
+    "test": "expresso test/*"
+  }
 }
