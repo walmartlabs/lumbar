@@ -1,7 +1,9 @@
 {
   "name": "lumbar",
-  "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
   "version": "0.4.0",
+  "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
+  "keywords": ["build", "module", "mobile", "backbone"],
+  "author": "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)",
   "repository": {
     "type": "git",
     "url": "git://github.com/walmartlabs/lumbar.git"
