@@ -1,10 +1,10 @@
 {
-  "name": "billy",
+  "name": "lumbar",
   "description": "Arise phoenix. arise.",
   "version": "0.4.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/brisbaneshores/billy.git"
+    "url": "git://github.com/walmartlabs/lumbar.git"
   },
   "engines": {
     "node": ">=0.4.7"
