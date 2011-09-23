@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs'),
-    billy = require('../lib/billy');
+    lumbar = require('../lib/lumbar');
 
 var argv = require('optimist').argv;
 
@@ -21,7 +21,7 @@ if (argv.h || argv.help || !lumbarFile || !options.outdir) {
   return;
 }
 
-var arise = billy.init(lumbarFile, options),
+var arise = lumbar.init(lumbarFile, options),
     worker = watch ? arise.watch : arise.build;
 
 // First figure out what our output looks like
