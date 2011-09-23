@@ -1,6 +1,6 @@
 {
   "name": "lumbar",
-  "description": "Arise phoenix. arise.",
+  "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
   "version": "0.4.0",
   "repository": {
     "type": "git",
