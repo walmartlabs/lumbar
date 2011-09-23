@@ -16,5 +16,5 @@
       "uglify-js": "~1.0"
   },
   "devDependencies": {},
-  "main": "bin/billy"
+  "main": "bin/lumbar"
 }
