@@ -41,6 +41,7 @@ function runTest(configFile, expectedDir, beforeExit, assert) {
   });
 
   beforeExit(function() {
+    seenFiles = seenFiles.sort();
     assert.deepEqual(seenFiles, expectedFiles, configFile + ': seen file list matches');
   });
 }
