@@ -1,0 +1,13 @@
+{
+  "platforms": [ "iphone", "web" ],
+  "modules": {
+    "base": [
+      "js/base.js",
+      {"src": "js/iphone.js", "platform": "iphone"},
+      {"src": "js/web.js", "platforms": ["web"]}
+    ],
+    "home": [
+      "js/home/home.js"
+    ]
+  }
+}

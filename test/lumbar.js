@@ -57,3 +57,6 @@ exports['multiple-files'] = function(beforeExit, assert) {
 exports['file-modules'] = function(beforeExit, assert) {
   runTest('test/artifacts/file-modules.json', 'test/expected/file-modules', beforeExit, assert);
 };
+exports['multiple-platforms'] = function(beforeExit, assert) {
+  runTest('test/artifacts/multiple-platforms.json', 'test/expected/multiple-platforms', beforeExit, assert);
+};
