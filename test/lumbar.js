@@ -3,15 +3,23 @@ var fs = require('fs'),
     lumbar = require('../lib/lumbar'),
     wrench = require('wrench');
 
-function runTest(configFile, expectedDir, beforeExit, assert) {
+function runTest(configFile, expectedDir, options, beforeExit, assert) {
   var outdir = '/tmp/lumbar-test/test-' + Date.now() + Math.random();
   console.log('Creating test directory ' + outdir + ' for ' + configFile);
   fs.mkdirSync(outdir, 0755);
 
+  if (typeof options === 'function') {
+    assert = beforeExit;
+    beforeExit = options;
+    options = undefined;
+  } else {
+    options.outdir = outdir;
+  }
+
   var expectedFiles = glob.globSync(expectedDir + '/**/*.js').map(function(fileName) { return fileName.substring(expectedDir.length); }),
       seenFiles = [];
 
-  var arise = lumbar.init(configFile, {outdir: outdir});
+  var arise = lumbar.init(configFile, options || {outdir: outdir});
   arise.build(undefined, function(err, status) {
     if (err) {
       throw err;
@@ -78,3 +86,9 @@ exports['template'] = function(beforeExit, assert) {
 // TODO : Error handling for Missing template cache definitions
 // TODO : Test multiple template references in the same file
 
+exports['dev-config'] = function(beforeExit, assert) {
+  runTest('test/artifacts/package-config.json', 'test/expected/dev-config', {packageConfigFile: 'config/dev.json'}, beforeExit, assert);
+};
+exports['production-config'] = function(beforeExit, assert) {
+  runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}, beforeExit, assert);
+};
