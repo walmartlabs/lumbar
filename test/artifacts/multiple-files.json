@@ -2,7 +2,9 @@
   "modules": {
     "base": [
       "js/base.js",
-      "js/home/home.js"
+      "js/home/home.js",
+      "js/iphone.js",
+      "js/web.js"
     ]
   }
 }
