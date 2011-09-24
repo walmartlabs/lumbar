@@ -33,3 +33,6 @@ function runTest(configFile, expectedDir, callback) {
 exports['single-file'] = function() {
   runTest('test/artifacts/single-file.json', 'test/expected/single');
 };
+exports['single-dir'] = function() {
+  runTest('test/artifacts/single-directory.json', 'test/expected/single');
+};
