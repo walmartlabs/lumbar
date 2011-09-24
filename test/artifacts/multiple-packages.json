@@ -1,0 +1,23 @@
+{
+  "platforms": [ "iphone", "web" ],
+  "packages": {
+    "web": {
+      "platforms": [ "web", "iphone" ]
+    },
+    "native": {
+      "platforms": [ "iphone" ],
+      "modules": [ "base", "home" ],
+      "combine": true
+    }
+  },
+  "modules": {
+    "base": [
+      "js/base.js",
+      {"src": "js/iphone.js", "platform": "iphone"},
+      {"src": "js/web.js", "platforms": ["web"]}
+    ],
+    "home": [
+      "js/home/home.js"
+    ]
+  }
+}

@@ -41,11 +41,12 @@ function runTest(configFile, expectedDir, beforeExit, assert) {
   });
 
   beforeExit(function() {
+    seenFiles = seenFiles.sort();
     assert.deepEqual(seenFiles, expectedFiles, configFile + ': seen file list matches');
   });
 }
 
-fs.mkdirSync('/tmp/lumbar-test', 0755);
+try { fs.mkdirSync('/tmp/lumbar-test', 0755); } catch (err) {}
 
 exports['single-file'] = function(beforeExit, assert) {
   runTest('test/artifacts/single-file.json', 'test/expected/single-file', beforeExit, assert);
@@ -61,4 +62,7 @@ exports['file-modules'] = function(beforeExit, assert) {
 };
 exports['multiple-platforms'] = function(beforeExit, assert) {
   runTest('test/artifacts/multiple-platforms.json', 'test/expected/multiple-platforms', beforeExit, assert);
+};
+exports['multiple-packages'] = function(beforeExit, assert) {
+  runTest('test/artifacts/multiple-packages.json', 'test/expected/multiple-packages', beforeExit, assert);
 };
