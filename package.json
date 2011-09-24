@@ -18,6 +18,7 @@
       "uglify-js": "~1.0"
   },
   "devDependencies": {
+    "glob": "~2.0",
     "wrench": "~1.2"
   },
   "main": "bin/lumbar",
