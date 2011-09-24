@@ -54,3 +54,6 @@ exports['single-dir'] = function(beforeExit, assert) {
 exports['multiple-files'] = function(beforeExit, assert) {
   runTest('test/artifacts/multiple-files.json', 'test/expected/js-dir', beforeExit, assert);
 };
+exports['file-modules'] = function(beforeExit, assert) {
+  runTest('test/artifacts/file-modules.json', 'test/expected/file-modules', beforeExit, assert);
+};
