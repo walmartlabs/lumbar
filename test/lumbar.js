@@ -73,3 +73,8 @@ exports['router'] = function(beforeExit, assert) {
 exports['template'] = function(beforeExit, assert) {
   runTest('test/artifacts/template.json', 'test/expected/template', beforeExit, assert);
 };
+
+// TODO : Templates that are dependent on the platform
+// TODO : Error handling for Missing template cache definitions
+// TODO : Test multiple template references in the same file
+
