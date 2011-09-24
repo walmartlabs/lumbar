@@ -35,13 +35,13 @@ function runTest(configFile, expectedDir, beforeExit, assert) {
           expectedContent = fs.readFileSync(expectedDir + fileName, 'utf8');
       assert.equal(generatedContent, expectedContent, configFile + ':' + fileName + ': content matches');
     });
+
+    // Cleanup (Do cleanup here so the files remain for the failure case)
+    wrench.rmdirSyncRecursive(outdir);
   });
 
   beforeExit(function() {
     assert.deepEqual(seenFiles, expectedFiles, configFile + ': file list matches');
-
-    // Cleanup
-    wrench.rmdirSyncRecursive(outdir);
   });
 }
 
