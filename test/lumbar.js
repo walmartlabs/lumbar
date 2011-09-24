@@ -70,3 +70,6 @@ exports['multiple-packages'] = function(beforeExit, assert) {
 exports['router'] = function(beforeExit, assert) {
   runTest('test/artifacts/router.json', 'test/expected/router', beforeExit, assert);
 };
+exports['template'] = function(beforeExit, assert) {
+  runTest('test/artifacts/template.json', 'test/expected/template', beforeExit, assert);
+};
