@@ -45,7 +45,7 @@ function runTest(configFile, expectedDir, beforeExit, assert) {
   });
 }
 
-fs.mkdirSync('/tmp/lumbar-test', 0755);
+try { fs.mkdirSync('/tmp/lumbar-test', 0755); } catch (err) {}
 
 exports['single-file'] = function(beforeExit, assert) {
   runTest('test/artifacts/single-file.json', 'test/expected/single-file', beforeExit, assert);
