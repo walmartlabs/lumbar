@@ -1,0 +1,14 @@
+{
+  "modules": {
+    "home": {
+      "router": "js/home/home.js",
+      "routes": {
+        "": "home",
+        "home": "home"
+      },
+      "support": [
+        "js/base.js"
+      ]
+    }
+  }
+}

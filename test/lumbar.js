@@ -66,3 +66,7 @@ exports['multiple-platforms'] = function(beforeExit, assert) {
 exports['multiple-packages'] = function(beforeExit, assert) {
   runTest('test/artifacts/multiple-packages.json', 'test/expected/multiple-packages', beforeExit, assert);
 };
+
+exports['router'] = function(beforeExit, assert) {
+  runTest('test/artifacts/router.json', 'test/expected/router', beforeExit, assert);
+};
