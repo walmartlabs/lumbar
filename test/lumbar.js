@@ -75,6 +75,9 @@ exports['multiple-packages'] = function(beforeExit, assert) {
   runTest('test/artifacts/multiple-packages.json', 'test/expected/multiple-packages', beforeExit, assert);
 };
 
+exports['module-map'] = function(beforeExit, assert) {
+  runTest('test/artifacts/module-map.json', 'test/expected/module-map', beforeExit, assert);
+};
 exports['router'] = function(beforeExit, assert) {
   runTest('test/artifacts/router.json', 'test/expected/router', beforeExit, assert);
 };

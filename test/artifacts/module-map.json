@@ -1,0 +1,20 @@
+{
+  "packages": {
+    "web": {},
+    "native": {
+      "combine": true
+    }
+  },
+  "modules": {
+    "base": [
+      "js/base.js",
+      "module-map.json"
+    ],
+    "home": {
+      "router": "js/home/home.js",
+      "routes": {"home": "home"}
+    }
+  },
+
+  "moduleMap": "App.moduleMap"
+}
