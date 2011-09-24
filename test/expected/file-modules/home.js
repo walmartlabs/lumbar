@@ -1,1 +1,4 @@
+(function(){;;
 var Home = true;
+;;
+})();
