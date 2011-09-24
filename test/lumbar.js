@@ -4,7 +4,7 @@ var fs = require('fs'),
     wrench = require('wrench');
 
 function runTest(configFile, expectedDir, beforeExit, assert) {
-  var outdir = '/tmp/lumbar-test-' + Date.now() + Math.random();
+  var outdir = '/tmp/lumbar-test/test-' + Date.now() + Math.random();
   console.log('Creating test directory ' + outdir + ' for ' + configFile);
   fs.mkdirSync(outdir, 0755);
 
@@ -41,9 +41,11 @@ function runTest(configFile, expectedDir, beforeExit, assert) {
   });
 
   beforeExit(function() {
-    assert.deepEqual(seenFiles, expectedFiles, configFile + ': file list matches');
+    assert.deepEqual(seenFiles, expectedFiles, configFile + ': seen file list matches');
   });
 }
+
+fs.mkdirSync('/tmp/lumbar-test', 0755);
 
 exports['single-file'] = function(beforeExit, assert) {
   runTest('test/artifacts/single-file.json', 'test/expected/single-file', beforeExit, assert);
