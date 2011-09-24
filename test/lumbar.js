@@ -29,3 +29,7 @@ function runTest(configFile, expectedDir, callback) {
     wrench.rmdirSyncRecursive(outdir);
   });
 }
+
+exports['single-file'] = function() {
+  runTest('test/artifacts/single-file.json', 'test/expected/single');
+};
