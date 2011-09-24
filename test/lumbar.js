@@ -34,5 +34,8 @@ exports['single-file'] = function() {
   runTest('test/artifacts/single-file.json', 'test/expected/single-file');
 };
 exports['single-dir'] = function() {
-  runTest('test/artifacts/single-directory.json', 'test/expected/single-directory');
+  runTest('test/artifacts/single-directory.json', 'test/expected/js-dir');
+};
+exports['multiple-files'] = function() {
+  runTest('test/artifacts/multiple-files.json', 'test/expected/js-dir');
 };

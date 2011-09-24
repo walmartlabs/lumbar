@@ -1,0 +1,8 @@
+{
+  "modules": {
+    "base": [
+      "js/base.js",
+      "js/home/home.js"
+    ]
+  }
+}
