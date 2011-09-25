@@ -95,3 +95,5 @@ exports['dev-config'] = function(beforeExit, assert) {
 exports['production-config'] = function(beforeExit, assert) {
   runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}, beforeExit, assert);
 };
+
+// TODO : Test file not found and other cases
