@@ -1,8 +1,12 @@
+(function(){;;
 var allYour = true;
 
 module.belongToUs = function() {
 };
 ;;
+})();
+;;
+(function(){;;
 /* lumbar router : js/home/home.js */
 (function() {
   // Load the router logic
@@ -16,4 +20,6 @@ module.belongToUs = function() {
   module.exports.routes = {"home":"home"};
 
   new (Backbone.Router.extend(module.exports));
+})();
+;;
 })();

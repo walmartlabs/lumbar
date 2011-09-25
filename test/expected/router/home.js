@@ -1,3 +1,4 @@
+(function(){;;
 var allYour = true;
 
 module.belongToUs = function() {
@@ -16,4 +17,6 @@ module.belongToUs = function() {
   module.exports.routes = {"":"home","home":"home"};
 
   new (Backbone.Router.extend(module.exports));
+})();
+;;
 })();

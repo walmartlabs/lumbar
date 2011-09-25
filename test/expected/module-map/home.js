@@ -1,3 +1,4 @@
+(function(){;;
 /* lumbar router : js/home/home.js */
 (function() {
   // Load the router logic
@@ -11,4 +12,6 @@
   module.exports.routes = {"home":"home"};
 
   new (Backbone.Router.extend(module.exports));
+})();
+;;
 })();
