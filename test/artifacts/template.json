@@ -1,7 +1,7 @@
 {
   "modules": {
     "base": [
-      "js/base.js"
+      {"src": "js/base.js"}
     ]
   },
   "templates": {
