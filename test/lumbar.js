@@ -102,5 +102,8 @@ exports['scope-resource'] = function(beforeExit, assert) {
 exports['scope-none'] = function(beforeExit, assert) {
   runTest('test/artifacts/scope-none.json', 'test/expected/scope-none', beforeExit, assert);
 };
+exports['application-namespace'] = function(beforeExit, assert) {
+  runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', beforeExit, assert);
+};
 
 // TODO : Test file not found and other cases

@@ -1,0 +1,21 @@
+{
+  "packages": {
+    "web": {},
+    "native": {
+      "combine": true
+    }
+  },
+  "modules": {
+    "base": [
+      "js/base.js"
+    ],
+    "home": [
+      "js/home/home.js"
+    ]
+  },
+
+  "application": {
+    "name": "Lumbar",
+    "module": "base"
+  }
+}
