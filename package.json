@@ -15,7 +15,8 @@
       "growl": "~1.1",
       "handlebars": "~1.0",
       "optimist": "~0.2",
-      "uglify-js": "~1.0"
+      "uglify-js": "~1.0",
+      "underscore": "~1.1"
   },
   "devDependencies": {
     "glob": "~2.0",
