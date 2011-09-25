@@ -8,18 +8,8 @@ namespace.belongToUs = function() {
 }).call(this, base);
 var home = {};
 (function(namespace) {
-/* lumbar router : js/home/home.js */
-(function() {
-  // Load the router logic
-  var module = {};
-  (function() {
-    var Home = true;
-
-  })();
-
-  // Augment with the routes
-  module.exports.routes = {"home":"home"};
-
-  new (Backbone.Router.extend(module.exports));
-})();
+/* router : js/home/home.js */
+namespace.routes = {"home":"home"};
+var Home = true;
+;;
 }).call(this, home);
