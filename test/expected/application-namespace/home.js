@@ -1,5 +1,5 @@
 Lumbar.home = {};
-(function(namespace, global) {
+(function(namespace) {
 var Home = true;
 ;;
-})(Lumbar.home, this);
+}).call(this, Lumbar.home);

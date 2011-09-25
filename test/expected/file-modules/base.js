@@ -1,8 +1,8 @@
 var base = {};
-(function(namespace, global) {
+(function(namespace) {
 var allYour = true;
 
 namespace.belongToUs = function() {
 };
 ;;
-})(base, this);
+}).call(this, base);

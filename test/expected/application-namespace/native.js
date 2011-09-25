@@ -1,13 +1,13 @@
 var Lumbar = {};
-(function(namespace, global) {
+(function(namespace) {
 var allYour = true;
 
 namespace.belongToUs = function() {
 };
 ;;
-})(Lumbar, this);
+}).call(this, Lumbar);
 Lumbar.home = {};
-(function(namespace, global) {
+(function(namespace) {
 var Home = true;
 ;;
-})(Lumbar.home, this);
+}).call(this, Lumbar.home);

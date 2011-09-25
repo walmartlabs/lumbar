@@ -1,8 +1,8 @@
 var Lumbar = {};
-(function(namespace, global) {
+(function(namespace) {
 var allYour = true;
 
 namespace.belongToUs = function() {
 };
 ;;
-})(Lumbar, this);
+}).call(this, Lumbar);

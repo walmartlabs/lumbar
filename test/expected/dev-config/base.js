@@ -1,5 +1,5 @@
 var base = {};
-(function(namespace, global) {
+(function(namespace) {
 App.config = {"dev": true}
 ;
-})(base, this);
+}).call(this, base);

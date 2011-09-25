@@ -1,5 +1,5 @@
 var home = {};
-(function(namespace, global) {
+(function(namespace) {
 var Home = true;
 ;;
-})(home, this);
+}).call(this, home);

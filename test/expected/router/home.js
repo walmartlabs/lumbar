@@ -1,5 +1,5 @@
 var home = {};
-(function(namespace, global) {
+(function(namespace) {
 var allYour = true;
 
 namespace.belongToUs = function() {
@@ -19,4 +19,4 @@ namespace.belongToUs = function() {
 
   new (Backbone.Router.extend(module.exports));
 })();
-})(home, this);
+}).call(this, home);

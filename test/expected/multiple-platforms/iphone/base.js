@@ -1,5 +1,5 @@
 var base = {};
-(function(namespace, global) {
+(function(namespace) {
 var allYour = true;
 
 namespace.belongToUs = function() {
@@ -7,4 +7,4 @@ namespace.belongToUs = function() {
 ;;
 var iphone = true;
 ;;
-})(base, this);
+}).call(this, base);
