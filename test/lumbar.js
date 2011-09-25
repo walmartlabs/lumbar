@@ -96,9 +96,6 @@ exports['production-config'] = function(beforeExit, assert) {
   runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}, beforeExit, assert);
 };
 
-exports['scope-file'] = function(beforeExit, assert) {
-  runTest('test/artifacts/scope-file.json', 'test/expected/scope-file', beforeExit, assert);
-};
 exports['scope-resource'] = function(beforeExit, assert) {
   runTest('test/artifacts/scope-resource.json', 'test/expected/scope-resource', beforeExit, assert);
 };
