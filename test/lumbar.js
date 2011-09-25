@@ -102,6 +102,9 @@ exports['scope-resource'] = function(beforeExit, assert) {
 exports['scope-none'] = function(beforeExit, assert) {
   runTest('test/artifacts/scope-none.json', 'test/expected/scope-none', beforeExit, assert);
 };
+exports['scope-globals'] = function(beforeExit, assert) {
+  runTest('test/artifacts/scope-globals.json', 'test/expected/scope-globals', beforeExit, assert);
+};
 exports['application-namespace'] = function(beforeExit, assert) {
   runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', beforeExit, assert);
 };

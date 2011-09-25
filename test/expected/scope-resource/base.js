@@ -1,4 +1,9 @@
 var base = {};
+var allYour = true;
+
+namespace.belongToUs = function() {
+};
+;;
 (function(namespace) {
 var allYour = true;
 
@@ -18,3 +23,4 @@ var iphone = true;
 var web = true;
 ;;
 }).call(this, base);
+var Home = true;
