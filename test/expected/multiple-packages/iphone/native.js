@@ -1,13 +1,15 @@
-(function(){
+var base = {};
+(function(namespace, global) {
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
 var iphone = true;
 ;;
-})();
-(function(){
+})(base, this);
+var home = {};
+(function(namespace, global) {
 var Home = true;
 ;;
-})();
+})(home, this);

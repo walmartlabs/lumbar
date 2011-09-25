@@ -1,7 +1,8 @@
-(function(){
+var base = {};
+(function(namespace, global) {
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
 var Home = true;
@@ -10,4 +11,4 @@ var iphone = true;
 ;;
 var web = true;
 ;;
-})();
+})(base, this);

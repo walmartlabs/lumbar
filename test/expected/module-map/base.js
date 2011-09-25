@@ -1,9 +1,10 @@
-(function(){
+var base = {};
+(function(namespace, global) {
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
 /* lumbar module map */
 App.moduleMap({"home":"home.js"}, '');
-})();
+})(base, this);

@@ -1,7 +1,8 @@
-(function(){
+var home = {};
+(function(namespace, global) {
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
 /* lumbar router : js/home/home.js */
@@ -18,4 +19,4 @@ module.belongToUs = function() {
 
   new (Backbone.Router.extend(module.exports));
 })();
-})();
+})(home, this);

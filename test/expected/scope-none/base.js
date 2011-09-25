@@ -1,6 +1,6 @@
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
 var Home = true;

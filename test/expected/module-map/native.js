@@ -1,11 +1,13 @@
-(function(){
+var base = {};
+(function(namespace, global) {
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
-})();
-(function(){
+})(base, this);
+var home = {};
+(function(namespace, global) {
 /* lumbar router : js/home/home.js */
 (function() {
   // Load the router logic
@@ -20,4 +22,4 @@ module.belongToUs = function() {
 
   new (Backbone.Router.extend(module.exports));
 })();
-})();
+})(home, this);

@@ -1,19 +1,20 @@
-(function(){
+var base = {};
+(function(namespace, global) {
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
 ;;
-})();
-(function(){
+})(base, this);
+(function(namespace, global) {
 var Home = true;
 ;;
-})();
-(function(){
+})(base, this);
+(function(namespace, global) {
 var iphone = true;
 ;;
-})();
-(function(){
+})(base, this);
+(function(namespace, global) {
 var web = true;
 ;;
-})();
+})(base, this);

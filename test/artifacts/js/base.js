@@ -1,4 +1,4 @@
 var allYour = true;
 
-module.belongToUs = function() {
+namespace.belongToUs = function() {
 };
