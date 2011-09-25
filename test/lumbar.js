@@ -96,4 +96,14 @@ exports['production-config'] = function(beforeExit, assert) {
   runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}, beforeExit, assert);
 };
 
+exports['scope-file'] = function(beforeExit, assert) {
+  runTest('test/artifacts/scope-file.json', 'test/expected/scope-file', beforeExit, assert);
+};
+exports['scope-resource'] = function(beforeExit, assert) {
+  runTest('test/artifacts/scope-resource.json', 'test/expected/scope-resource', beforeExit, assert);
+};
+exports['scope-none'] = function(beforeExit, assert) {
+  runTest('test/artifacts/scope-none.json', 'test/expected/scope-none', beforeExit, assert);
+};
+
 // TODO : Test file not found and other cases

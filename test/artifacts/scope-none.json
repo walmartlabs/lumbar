@@ -1,0 +1,9 @@
+{
+  "modules": {
+    "base": [
+      "js"
+    ]
+  },
+
+  "scope": "none"
+}
