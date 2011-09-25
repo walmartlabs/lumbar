@@ -1,4 +1,4 @@
-(function(){;;
+(function(){
 var allYour = true;
 
 module.belongToUs = function() {
@@ -18,5 +18,4 @@ module.belongToUs = function() {
 
   new (Backbone.Router.extend(module.exports));
 })();
-;;
 })();

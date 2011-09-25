@@ -1,5 +1,4 @@
-(function(){;;
+(function(){
 App.config = {"dev": false}
 ;
-;;
 })();

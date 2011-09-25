@@ -1,22 +1,19 @@
-(function(){;;
+(function(){
 var allYour = true;
 
 module.belongToUs = function() {
 };
 ;;
 })();
-;;
-(function(){;;
+(function(){
 var Home = true;
 ;;
 })();
-;;
-(function(){;;
+(function(){
 var iphone = true;
 ;;
 })();
-;;
-(function(){;;
+(function(){
 var web = true;
 ;;
 })();
