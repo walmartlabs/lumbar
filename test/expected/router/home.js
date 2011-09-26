@@ -3,7 +3,7 @@ home = (function() {
 var module = {exports: {}};
 var exports = module.exports;
 /* router : home */
-namespace.routes = {"":"home","home":"home"};
+module.routes = {"":"home","home":"home"};
 var allYour = true;
 
 namespace.belongToUs = function() {
