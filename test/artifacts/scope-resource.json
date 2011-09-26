@@ -2,8 +2,7 @@
   "modules": {
     "base": [
       {"src": "js/base.js", "global": true},
-      "js",
-      {"src": "js/home/home.js", "global": true}
+      "js"
     ]
   },
 
