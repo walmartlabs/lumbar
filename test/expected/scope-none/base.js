@@ -1,6 +1,6 @@
 var allYour = true;
 
-namespace.belongToUs = function() {
+exports.belongToUs = function() {
 };
 ;;
 var Home = true;

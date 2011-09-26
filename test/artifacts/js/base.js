@@ -1,4 +1,4 @@
 var allYour = true;
 
-namespace.belongToUs = function() {
+exports.belongToUs = function() {
 };

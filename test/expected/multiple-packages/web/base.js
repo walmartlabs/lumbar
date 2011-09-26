@@ -4,7 +4,7 @@ var module = {exports: {}};
 var exports = module.exports;
 var allYour = true;
 
-namespace.belongToUs = function() {
+exports.belongToUs = function() {
 };
 ;;
 var web = true;

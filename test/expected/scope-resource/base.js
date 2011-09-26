@@ -1,7 +1,7 @@
 var base;
 var allYour = true;
 
-namespace.belongToUs = function() {
+exports.belongToUs = function() {
 };
 ;;
 base = (function() {
@@ -10,7 +10,7 @@ var exports = module.exports;
 (function() {
 var allYour = true;
 
-namespace.belongToUs = function() {
+exports.belongToUs = function() {
 };
 ;;
 }).call(this);

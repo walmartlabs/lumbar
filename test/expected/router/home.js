@@ -6,7 +6,7 @@ var exports = module.exports;
 module.routes = {"":"home","home":"home"};
 var allYour = true;
 
-namespace.belongToUs = function() {
+exports.belongToUs = function() {
 };
 ;;
 var Home = true;
