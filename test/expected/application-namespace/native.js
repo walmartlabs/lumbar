@@ -1,5 +1,7 @@
-var Lumbar = {};
-(function(namespace) {
+var Lumbar;
+Lumbar = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 var allYour = true;
 
 namespace.belongToUs = function() {
@@ -7,11 +9,14 @@ namespace.belongToUs = function() {
 ;;
 namespace.config = {"dev": true}
 ;
-}).call(this, Lumbar);
-Lumbar.home = {};
-(function(namespace) {
+return module.exports;
+}).call(this);
+Lumbar.home = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 /* router : home */
 namespace.routes = {"home":"home"};
 var Home = true;
 ;;
-}).call(this, Lumbar.home);
+return module.exports;
+}).call(this);

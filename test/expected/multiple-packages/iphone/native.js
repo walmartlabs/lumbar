@@ -1,5 +1,7 @@
-var base = {};
-(function(namespace) {
+var base;
+base = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 var allYour = true;
 
 namespace.belongToUs = function() {
@@ -7,9 +9,13 @@ namespace.belongToUs = function() {
 ;;
 var iphone = true;
 ;;
-}).call(this, base);
-var home = {};
-(function(namespace) {
+return module.exports;
+}).call(this);
+var home;
+home = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 var Home = true;
 ;;
-}).call(this, home);
+return module.exports;
+}).call(this);

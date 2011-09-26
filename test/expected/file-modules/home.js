@@ -1,5 +1,8 @@
-var home = {};
-(function(namespace) {
+var home;
+home = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 var Home = true;
 ;;
-}).call(this, home);
+return module.exports;
+}).call(this);

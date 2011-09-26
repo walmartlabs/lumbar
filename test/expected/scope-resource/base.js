@@ -1,26 +1,30 @@
-var base = {};
+var base;
 var allYour = true;
 
 namespace.belongToUs = function() {
 };
 ;;
-(function(namespace) {
+base = (function() {
+var module = {exports: {}};
+var exports = module.exports;
+(function() {
 var allYour = true;
 
 namespace.belongToUs = function() {
 };
 ;;
-}).call(this, base);
-(function(namespace) {
+}).call(this);
+(function() {
 var Home = true;
 ;;
-}).call(this, base);
-(function(namespace) {
+}).call(this);
+(function() {
 var iphone = true;
 ;;
-}).call(this, base);
-(function(namespace) {
+}).call(this);
+(function() {
 var web = true;
 ;;
-}).call(this, base);
-var Home = true;
+}).call(this);
+return module.exports;
+}).call(this);

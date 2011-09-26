@@ -1,5 +1,7 @@
-var Lumbar = {};
-(function(namespace) {
+var Lumbar;
+Lumbar = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 var allYour = true;
 
 namespace.belongToUs = function() {
@@ -9,4 +11,5 @@ namespace.belongToUs = function() {
 namespace.moduleMap({"home":"home.js"}, '');
 namespace.config = {"dev": true}
 ;
-}).call(this, Lumbar);
+return module.exports;
+}).call(this);

@@ -1,5 +1,8 @@
-var base = {};
-(function(namespace) {
+var base;
+base = (function() {
+var module = {exports: {}};
+var exports = module.exports;
 App.config = {"dev": false}
 ;
-}).call(this, base);
+return module.exports;
+}).call(this);
