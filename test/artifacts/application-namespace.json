@@ -7,11 +7,13 @@
   },
   "modules": {
     "base": [
-      "js/base.js"
+      "js/base.js",
+      "module-map.json"
     ],
-    "home": [
-      "js/home/home.js"
-    ]
+    "home": {
+      "router": "js/home/home.js",
+      "routes": {"home": "home"}
+    }
   },
 
   "application": {
