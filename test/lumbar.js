@@ -106,7 +106,7 @@ exports['scope-globals'] = function(beforeExit, assert) {
   runTest('test/artifacts/scope-globals.json', 'test/expected/scope-globals', beforeExit, assert);
 };
 exports['application-namespace'] = function(beforeExit, assert) {
-  runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', beforeExit, assert);
+  runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}, beforeExit, assert);
 };
 
 // TODO : Test file not found and other cases

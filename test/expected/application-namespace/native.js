@@ -5,6 +5,8 @@ var allYour = true;
 namespace.belongToUs = function() {
 };
 ;;
+namespace.config = {"dev": true}
+;
 }).call(this, Lumbar);
 Lumbar.home = {};
 (function(namespace) {
