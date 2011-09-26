@@ -12,8 +12,10 @@
       "package-config.json"
     ],
     "home": {
-      "router": "js/home/home.js",
-      "routes": {"home": "home"}
+      "routes": {"home": "home"},
+      "files": [
+        "js/home/home.js"
+      ]
     }
   },
 

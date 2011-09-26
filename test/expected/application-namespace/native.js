@@ -10,7 +10,7 @@ namespace.config = {"dev": true}
 }).call(this, Lumbar);
 Lumbar.home = {};
 (function(namespace) {
-/* router : js/home/home.js */
+/* router : home */
 namespace.routes = {"home":"home"};
 var Home = true;
 ;;
