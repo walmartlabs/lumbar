@@ -8,7 +8,7 @@ exports.belongToUs = function() {
 };
 ;;
 /* lumbar module map */
-namespace.moduleMap({"home":"home.js"}, '');
+module.exports.moduleMap({"home":"home.js"}, '');
 module.exports.config = {"dev": true}
 ;
 return module.exports;
