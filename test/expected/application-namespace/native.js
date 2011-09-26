@@ -7,7 +7,7 @@ var allYour = true;
 namespace.belongToUs = function() {
 };
 ;;
-namespace.config = {"dev": true}
+module.exports.config = {"dev": true}
 ;
 return module.exports;
 }).call(this);
