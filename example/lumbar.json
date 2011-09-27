@@ -49,7 +49,7 @@
       ]
     }
   },
-  "views": {
+  "templates": {
     "js/views/header.js": [
       "templates/header.handlebars"
     ],
