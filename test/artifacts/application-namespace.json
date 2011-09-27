@@ -20,6 +20,9 @@
   },
 
   "templates": {
+    "js/base.js": [
+      "templates/home.handlebars"
+    ],
     "js/home/home.js": [
       "templates/home.handlebars"
     ]

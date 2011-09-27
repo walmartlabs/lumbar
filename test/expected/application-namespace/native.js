@@ -7,6 +7,8 @@ var allYour = true;
 exports.belongToUs = function() {
 };
 ;;
+/* handsfree : templates/home.handlebars*/
+module.exports.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 module.exports.config = {"dev": true}
 ;
 return module.exports;
@@ -18,7 +20,5 @@ var exports = module.exports;
 module.routes = {"home":"home"};
 var Home = true;
 ;;
-/* handsfree : templates/home.handlebars*/
-Lumbar.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 return module.exports;
 }).call(this);

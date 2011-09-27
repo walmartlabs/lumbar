@@ -7,6 +7,8 @@ var allYour = true;
 exports.belongToUs = function() {
 };
 ;;
+/* handsfree : templates/home.handlebars*/
+module.exports.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 /* lumbar module map */
 module.exports.moduleMap({"home":"home.js"}, '');
 module.exports.config = {"dev": true}
