@@ -1,12 +1,11 @@
 var fs = require('fs'),
     glob = require('glob'),
+    lib = require('./lib'),
     lumbar = require('../lib/lumbar'),
     wrench = require('wrench');
 
 function runTest(configFile, expectedDir, options, beforeExit, assert) {
-  var outdir = '/tmp/lumbar-test/test-' + Date.now() + Math.random();
-  console.log('Creating test directory ' + outdir + ' for ' + configFile);
-  fs.mkdirSync(outdir, 0755);
+  var outdir = lib.testDir('lumbar', configFile);
 
   if (typeof options === 'function') {
     assert = beforeExit;
@@ -35,14 +34,7 @@ function runTest(configFile, expectedDir, options, beforeExit, assert) {
       return;
     }
 
-    var generatedFiles = glob.globSync(outdir + '/**/*.js').map(function(fileName) { return fileName.substring(outdir.length); });
-    assert.deepEqual(generatedFiles, expectedFiles, configFile + ': file list matches');
-
-    generatedFiles.forEach(function(fileName) {
-      var generatedContent = fs.readFileSync(outdir + fileName, 'utf8'),
-          expectedContent = fs.readFileSync(expectedDir + fileName, 'utf8');
-      assert.equal(generatedContent, expectedContent, configFile + ':' + fileName + ': content matches');
-    });
+    lib.assertExpected(outdir, expectedDir, configFile, assert);
 
     // Cleanup (Do cleanup here so the files remain for the failure case)
     wrench.rmdirSyncRecursive(outdir);
@@ -53,8 +45,6 @@ function runTest(configFile, expectedDir, options, beforeExit, assert) {
     assert.deepEqual(seenFiles, expectedFiles, configFile + ': seen file list matches');
   });
 }
-
-try { fs.mkdirSync('/tmp/lumbar-test', 0755); } catch (err) {}
 
 exports['single-file'] = function(beforeExit, assert) {
   runTest('test/artifacts/single-file.json', 'test/expected/single-file', beforeExit, assert);
