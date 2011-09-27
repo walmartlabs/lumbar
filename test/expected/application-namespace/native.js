@@ -18,5 +18,7 @@ var exports = module.exports;
 module.routes = {"home":"home"};
 var Home = true;
 ;;
+/* handsfree : templates/home.handlebars*/
+Lumbar.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 return module.exports;
 }).call(this);

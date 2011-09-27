@@ -19,6 +19,12 @@
     }
   },
 
+  "templates": {
+    "js/home/home.js": [
+      "templates/home.handlebars"
+    ]
+  },
+
   "application": {
     "name": "Lumbar",
     "module": "base"
