@@ -1,9 +1,12 @@
 exports.moduleMap = function(map, loadPrefix) {
-  loadPrefix = loadPrefix || '';
+  /*
+  We are ignoring load prefix here as the index files are in the same directory as the source.
+  Depending on the environment this value should be prepended to the route source file name.
+  */
 
   function loader(name) {
     return function() {
-      $script(loadPrefix + name, function() {
+      $script(name, function() {
         // Reload with the new route
         Backbone.history.loadUrl();
       });
