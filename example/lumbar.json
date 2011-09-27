@@ -1,0 +1,60 @@
+{
+  "application": {
+    "name": "Example",
+    "module": "base"
+  },
+  "platforms": [ "android", "iphone", "web" ],
+  "packages": {
+    "web": {
+      "platforms": [ "web" ],
+      "combine": false
+    },
+    "native-home": {
+      "platforms": [ "android", "iphone" ],
+      "modules": [ "base", "home" ],
+      "combine": true
+    }
+  },
+
+  "modules": {
+    "base": [
+      {"src": "lib/zepto.js", "global": true},
+      {"src": "lib/underscore.js", "global": true},
+      {"src": "lib/backbone.js", "global": true},
+      {"src": "lib/handlebars.js", "global": true},
+      {"src": "lib/script.js", "global": true, "platform": "web"},
+
+      "js/init.js",
+      "js/router.js",
+
+      {"src": "js/bridge.js", "platforms": ["iphone", "android"]},
+      {"src": "js/bridge-android.js", "platform": "android"},
+      {"src": "js/bridge-iphone.js", "platform": "iphone"},
+
+      {"src": "js/loader.js", "platform": "web"},
+
+      {"src": "js/views/header.js", "platform": "web"},
+
+      "package_config.json",
+      "module_map.json"
+    ],
+    "home": {
+      "routes": {
+        "": "home",
+        "home": "home"
+      },
+      "files": [
+        "js/views/home.js",
+        "js/routers/home.js"
+      ]
+    }
+  },
+  "views": {
+    "js/views/header.js": [
+      "templates/header.handlebars"
+    ],
+    "js/views/home.js": [
+      "templates/home.handlebars"
+    ]
+  }
+}
