@@ -7,12 +7,15 @@ Example.Views.Home = Backbone.View.extend({
   el: ".layout",
 
   render: function() {
-    $(this.el).html(Example.templates('templates/home.handlebars'));
+    $(this.el).html(Example.templates('templates/home/home.handlebars'));
+    $(this.el).append(Example.templates('templates/home/footer.handlebars'));
   }
 });
 ;;
-/* handsfree : templates/home.handlebars*/
-Example.templates['templates/home.handlebars'] = Handlebars.compile('Home\n ');
+/* handsfree : templates/home/footer.handlebars*/
+Example.templates['templates/home/footer.handlebars'] = Handlebars.compile('<div>Footer</div>\n');
+/* handsfree : templates/home/home.handlebars*/
+Example.templates['templates/home/home.handlebars'] = Handlebars.compile('Home\n ');
 Example.Router.create(module, {
   home: function() {
     var home = new Example.Views.Home();

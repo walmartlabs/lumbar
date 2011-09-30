@@ -54,7 +54,7 @@
       "templates/header.handlebars"
     ],
     "js/views/home.js": [
-      "templates/home.handlebars"
+      "templates/home"
     ]
   }
 }

@@ -52,7 +52,7 @@ exports['watch-file'] = function(beforeExit, assert) {
         },
         12: function() {
           // Modify the home template
-          appendSpace(srcdir + '/templates/home.handlebars');
+          appendSpace(srcdir + '/templates/home/home.handlebars');
         }
       },
       seenFiles = [];
