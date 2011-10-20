@@ -4303,6 +4303,7 @@ Example.home = (function() {
 var module = {exports: {}};
 var exports = module.exports;
 /* router : home */
+module.name = "home";
 module.routes = {"":"home","home":"home"};
 Example.Views.Home = Backbone.View.extend({
   el: ".layout",
