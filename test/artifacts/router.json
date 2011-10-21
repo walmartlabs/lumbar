@@ -5,7 +5,7 @@
         "": "home",
         "home": "home"
       },
-      "files": [
+      "scripts": [
         "js/base.js",
         "js/home/home.js"
       ]

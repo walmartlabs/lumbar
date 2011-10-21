@@ -13,7 +13,7 @@
     ],
     "home": {
       "routes": {"home": "home"},
-      "files": [
+      "scripts": [
         "js/home/home.js"
       ]
     }
