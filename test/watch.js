@@ -24,40 +24,13 @@ function appendRapidSpace(path1, path2) {
     fs.closeSync(fd);
   }, 1000);
 }
-
-exports['watch-file'] = function(beforeExit, assert) {
-  var srcdir = lib.testDir('watch-file', 'example'),
-      outdir = lib.testDir('watch-file', 'test');
-  wrench.copyDirSyncRecursive('example', srcdir);
-
-  var expectedDir = 'test/expected/example',
-      expectedFiles = [
-          '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
-          '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
-          '/android/native-home.js', '/iphone/native-home.js',
-          '/android/native-home.js', '/iphone/native-home.js',
-          '/android/native-home.js', '/iphone/native-home.js', '/web/home.js'
-        ],
-      operations = {
-        4: function() {
-          // Modify the config file
-          appendSpace(srcdir + '/lumbar.json');
-        },
-        8: function() {
-          // Modify the bridge file
-          appendSpace(srcdir + '/js/bridge.js');
-        },
-        10: function() {
-          appendRapidSpace(srcdir + '/js/bridge.js', srcdir + '/js/bridge-iphone.js');
-        },
-        12: function() {
-          // Modify the home template
-          appendSpace(srcdir + '/templates/home/home.handlebars');
-        }
-      },
+function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedDir, beforeExit, assert) {
+  var testdir = lib.testDir(name, 'example'),
+      outdir = lib.testDir(name, 'test'),
       seenFiles = [];
+  wrench.copyDirSyncRecursive(srcdir, testdir);
 
-  var arise = lumbar.init(srcdir + '/lumbar.json', {packageConfigFile: 'config/dev.json', outdir: outdir});
+  var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
   arise.watch(undefined, function(err, status) {
     if (err) {
       throw err;
@@ -71,7 +44,7 @@ exports['watch-file'] = function(beforeExit, assert) {
     } else {
       seenFiles.push(statusFile);
     }
-    operations[seenFiles.length] && operations[seenFiles.length]();
+    operations[seenFiles.length] && operations[seenFiles.length](testdir);
     if (seenFiles.length < expectedFiles.length) {
       return;
     }
@@ -81,7 +54,7 @@ exports['watch-file'] = function(beforeExit, assert) {
     lib.assertExpected(outdir, expectedDir, 'watchfile', assert);
 
     // Cleanup (Do cleanup here so the files remain for the failure case)
-    wrench.rmdirSyncRecursive(srcdir);
+    wrench.rmdirSyncRecursive(testdir);
     wrench.rmdirSyncRecursive(outdir);
   });
 
@@ -90,4 +63,36 @@ exports['watch-file'] = function(beforeExit, assert) {
     expectedFiles = expectedFiles.sort();
     assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
   });
+}
+
+exports['watch-script'] = function(beforeExit, assert) {
+  var expectedFiles = [
+          '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
+          '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
+          '/android/native-home.js', '/iphone/native-home.js',
+          '/android/native-home.js', '/iphone/native-home.js',
+          '/android/native-home.js', '/iphone/native-home.js', '/web/home.js'
+        ],
+      operations = {
+        4: function(testdir) {
+          // Modify the config file
+          appendSpace(testdir + '/lumbar.json');
+        },
+        8: function(testdir) {
+          // Modify the bridge file
+          appendSpace(testdir + '/js/bridge.js');
+        },
+        10: function(testdir) {
+          appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
+        },
+        12: function(testdir) {
+          // Modify the home template
+          appendSpace(testdir + '/templates/home/home.handlebars');
+        }
+      };
+
+  runWatchTest(
+    'watch-script', 'example', 'lumbar.json',
+    operations, expectedFiles, 'test/expected/example',
+    beforeExit, assert);
 };
