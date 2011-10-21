@@ -15,7 +15,7 @@ function runTest(configFile, expectedDir, options, beforeExit, assert) {
     options.outdir = outdir;
   }
 
-  var expectedFiles = glob.globSync(expectedDir + '/**/*.js').map(function(fileName) { return fileName.substring(expectedDir.length); }),
+  var expectedFiles = glob.globSync(expectedDir + '/**/*.{css,js}').map(function(fileName) { return fileName.substring(expectedDir.length); }),
       seenFiles = [];
 
   var arise = lumbar.init(configFile, options || {outdir: outdir});
@@ -97,6 +97,10 @@ exports['scope-globals'] = function(beforeExit, assert) {
 };
 exports['application-namespace'] = function(beforeExit, assert) {
   runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}, beforeExit, assert);
+};
+
+exports['styles'] = function(beforeExit, assert) {
+  runTest('test/artifacts/styles.json', 'test/expected/styles', beforeExit, assert);
 };
 
 // TODO : Test file not found and other cases
