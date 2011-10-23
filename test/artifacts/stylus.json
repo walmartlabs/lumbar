@@ -1,0 +1,24 @@
+{
+  "platforms": [ "iphone", "web" ],
+  "modules": {
+    "base": {
+      "styles": [
+        "styles/base.styl",
+        {"src": "styles/iphone.styl", "platform": "iphone"},
+        {"src": "styles/web.styl", "platforms": ["web"]}
+      ]
+    }
+  },
+
+  "styles": {
+    "pixelDensity": {
+      "iphone": [ 1, 2 ]
+    },
+    "urlSizeLimit": 103,
+    "copyFiles": true,
+    "imports": [
+      "nib",
+      "styles/global.styl"
+    ]
+  }
+}

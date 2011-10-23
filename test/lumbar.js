@@ -102,5 +102,8 @@ exports['application-namespace'] = function(beforeExit, assert) {
 exports['styles'] = function(beforeExit, assert) {
   runTest('test/artifacts/styles.json', 'test/expected/styles', beforeExit, assert);
 };
+exports['stylus'] = function(beforeExit, assert) {
+  runTest('test/artifacts/stylus.json', 'test/expected/stylus', beforeExit, assert);
+};
 
 // TODO : Test file not found and other cases
