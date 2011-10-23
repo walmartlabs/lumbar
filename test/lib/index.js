@@ -13,8 +13,8 @@ exports.testDir = function(testName, configFile) {
   return outdir;
 };
 exports.assertExpected = function(outdir, expectedDir, configFile, assert) {
-  var expectedFiles = glob.globSync(expectedDir + '/**/*.js').map(function(fileName) { return fileName.substring(expectedDir.length); }),
-      generatedFiles = glob.globSync(outdir + '/**/*.js').map(function(fileName) { return fileName.substring(outdir.length); });
+  var expectedFiles = glob.globSync(expectedDir + '/**/*.{js,css}').map(function(fileName) { return fileName.substring(expectedDir.length); }),
+      generatedFiles = glob.globSync(outdir + '/**/*.{js,css}').map(function(fileName) { return fileName.substring(outdir.length); });
   assert.deepEqual(generatedFiles, expectedFiles, configFile + ': file list matches');
 
   generatedFiles.forEach(function(fileName) {
