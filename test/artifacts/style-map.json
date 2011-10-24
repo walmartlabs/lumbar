@@ -32,5 +32,10 @@
 
   "application": {
     "module": "base"
+  },
+  "styles": {
+    "pixelDensity": {
+      "iphone": [ 1, 2 ]
+    }
   }
 }

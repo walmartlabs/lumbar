@@ -105,5 +105,8 @@ exports['styles'] = function(beforeExit, assert) {
 exports['stylus'] = function(beforeExit, assert) {
   runTest('test/artifacts/stylus.json', 'test/expected/stylus', beforeExit, assert);
 };
+exports['style-map'] = function(beforeExit, assert) {
+  runTest('test/artifacts/style-map.json', 'test/expected/style-map', beforeExit, assert);
+};
 
 // TODO : Test file not found and other cases
