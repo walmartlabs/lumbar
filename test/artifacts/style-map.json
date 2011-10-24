@@ -1,0 +1,32 @@
+{
+  "platforms": [ "iphone", "web" ],
+  "packages": {
+    "web": {
+      "platforms": [ "web", "iphone" ]
+    },
+    "native": {
+      "platforms": [ "iphone" ],
+      "modules": [ "base", "home" ],
+      "combine": true
+    }
+  },
+  "modules": {
+    "base": {
+      "scripts": [
+        "style-map.json"
+      ],
+      "styles": [
+        "styles/base.css"
+      ]
+    },
+    "home": {
+      "routes": {
+        "": "home",
+        "home": "home"
+      },
+      "styles": [
+        "styles/home.css"
+      ]
+    }
+  }
+}
