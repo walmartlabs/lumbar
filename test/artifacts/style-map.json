@@ -28,5 +28,9 @@
         "styles/home.css"
       ]
     }
+  },
+
+  "application": {
+    "module": "base"
   }
 }

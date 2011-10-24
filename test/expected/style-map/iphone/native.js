@@ -2,7 +2,7 @@ var base;
 base = (function() {
 var module = {exports: {}};
 var exports = module.exports;
-module.exports.styleMap({"":"native.css","home":"native.css"}, 'iphone/');
+module.exports.styleMap({"base":"native.css"}, 'iphone/');
 return module.exports;
 }).call(this);
 var home;
