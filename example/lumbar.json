@@ -17,33 +17,36 @@
   },
 
   "modules": {
-    "base": [
-      {"src": "lib/zepto.js", "global": true},
-      {"src": "lib/underscore.js", "global": true},
-      {"src": "lib/backbone.js", "global": true},
-      {"src": "lib/handlebars.js", "global": true},
-      {"src": "lib/script.js", "global": true, "platform": "web"},
+    "base": {
+      "script": [
+        {"src": "lib/zepto.js", "global": true},
+        {"src": "lib/underscore.js", "global": true},
+        {"src": "lib/backbone.js", "global": true},
+        {"src": "lib/handlebars.js", "global": true},
+        {"src": "lib/script.js", "global": true, "platform": "web"},
 
-      "js/init.js",
-      "js/router.js",
+        "js/init.js",
+        "js/router.js",
 
-      {"src": "js/bridge.js", "platforms": ["iphone", "android"]},
-      {"src": "js/bridge-android.js", "platform": "android"},
-      {"src": "js/bridge-iphone.js", "platform": "iphone"},
+        {"src": "js/bridge.js", "platforms": ["iphone", "android"]},
+        {"src": "js/bridge-android.js", "platform": "android"},
+        {"src": "js/bridge-iphone.js", "platform": "iphone"},
 
-      {"src": "js/loader.js", "platform": "web"},
+        {"src": "js/loader.js", "platform": "web"},
 
-      {"src": "js/views/header.js", "platform": "web"},
+        {"src": "js/views/header.js", "platform": "web"},
 
-      "package_config.json",
-      "module_map.json"
-    ],
+        "package_config.json",
+        "module_map.json",
+        "style_map.json"
+      ]
+    },
     "home": {
       "routes": {
         "": "home",
         "home": "home"
       },
-      "files": [
+      "scripts": [
         "js/views/home.js",
         "js/routers/home.js"
       ]
