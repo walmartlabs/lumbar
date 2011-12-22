@@ -38,7 +38,7 @@
 
         "package_config.json",
         "module_map.json",
-        "style_map.json"
+        {"style-map": true}
       ],
 
       "styles": [

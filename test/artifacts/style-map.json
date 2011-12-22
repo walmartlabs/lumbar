@@ -13,7 +13,7 @@
   "modules": {
     "base": {
       "scripts": [
-        "style-map.json"
+        {"style-map": true}
       ],
       "styles": [
         "styles/base.css"
