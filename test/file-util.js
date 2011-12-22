@@ -22,8 +22,7 @@ exports['file-list-file'] = function(done) {
       throw err;
     }
 
-    assert.equal(files.length, 1);
-    assert.equal(files[0], 'test/file-util.js');
+    assert.deepEqual(files, ['test/file-util.js']);
     done();
   });
 };
@@ -35,8 +34,7 @@ exports['file-list-file-lookup'] = function(done) {
       throw err;
     }
 
-    assert.equal(files.length, 1);
-    assert.equal(files[0], 'test/file-util.js');
+    assert.deepEqual(files, ['test/file-util.js']);
     done();
   });
 };
@@ -47,8 +45,7 @@ exports['file-list-file-no-filter'] = function(done) {
       throw err;
     }
 
-    assert.equal(files.length, 1);
-    assert.equal(files[0], 'test/file-util.js');
+    assert.deepEqual(files, ['test/file-util.js']);
     done();
   });
 };
