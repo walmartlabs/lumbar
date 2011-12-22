@@ -9,7 +9,6 @@ try { fs.mkdirSync('/tmp/lumbar-test', 0755); } catch (err) {}
 
 exports.testDir = function(testName, configFile) {
   var outdir = '/tmp/lumbar-test/' + testName + '-' + path.basename(configFile) + '-' + Date.now() + '-' + (counter++);
-  console.log('Creating test directory ' + outdir + ' for ' + configFile);
   fs.mkdirSync(outdir, 0755);
   return outdir;
 };

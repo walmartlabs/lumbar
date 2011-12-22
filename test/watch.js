@@ -29,6 +29,8 @@ function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedD
   var testdir = lib.testDir(name, 'example'),
       outdir = lib.testDir(name, 'test'),
       seenFiles = [];
+  this.title += ' ' + outdir;
+
   wrench.copyDirSyncRecursive(srcdir, testdir);
 
   var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
@@ -92,7 +94,7 @@ exports['watch-script'] = function(done) {
         }
       };
 
-  runWatchTest(
+  runWatchTest.call(this,
     'watch-script', 'example', 'lumbar.json',
     operations, expectedFiles, 'test/expected/example',
     done);

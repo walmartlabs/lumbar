@@ -8,6 +8,7 @@ var assert = require('assert'),
 function runTest(configFile, expectedDir, options) {
   return function(done) {
     var outdir = lib.testDir('lumbar', configFile);
+    this.title += ' ' + outdir;
 
     options = options || {};
     options.outdir = outdir;
