@@ -8,7 +8,7 @@
   "modules": {
     "base": [
       "js/base.js",
-      "module-map.json"
+      {"module-map": true}
     ],
     "home": {
       "routes": {"home": "home"},
