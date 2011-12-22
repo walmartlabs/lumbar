@@ -1,7 +1,7 @@
 {
   "modules": {
     "base": [
-      "package-config.json"
+      {"package-config": true}
     ]
   },
   "packageConfig": "App.config"

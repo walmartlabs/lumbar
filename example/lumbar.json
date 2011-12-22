@@ -36,7 +36,7 @@
 
         {"src": "js/views/header.js", "platform": "web"},
 
-        "package_config.json",
+        {"package-config": true},
         {"module-map": true},
         {"style-map": true}
       ],

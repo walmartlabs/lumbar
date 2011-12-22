@@ -8,8 +8,8 @@
   "modules": {
     "base": [
       "js/base.js",
-      "package-config.json"
       {"module-map": true},
+      {"package-config": true}
     ],
     "home": {
       "routes": {"home": "home"},
