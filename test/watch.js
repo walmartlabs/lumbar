@@ -1,4 +1,5 @@
-var fs = require('fs'),
+var assert = require('assert'),
+    fs = require('fs'),
     glob = require('glob'),
     lib = require('./lib'),
     lumbar = require('../lib/lumbar'),
@@ -24,10 +25,12 @@ function appendRapidSpace(path1, path2) {
     fs.closeSync(fd);
   }, 1000);
 }
-function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedDir, beforeExit, assert) {
+function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedDir, done) {
   var testdir = lib.testDir(name, 'example'),
       outdir = lib.testDir(name, 'test'),
       seenFiles = [];
+  this.title += ' ' + outdir;
+
   wrench.copyDirSyncRecursive(srcdir, testdir);
 
   var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
@@ -51,21 +54,21 @@ function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedD
 
     arise.unwatch();
 
-    lib.assertExpected(outdir, expectedDir, 'watchfile', assert);
+    seenFiles = seenFiles.sort();
+    expectedFiles = expectedFiles.sort();
+    assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
+
+    lib.assertExpected(outdir, expectedDir, 'watchfile');
 
     // Cleanup (Do cleanup here so the files remain for the failure case)
     wrench.rmdirSyncRecursive(testdir);
     wrench.rmdirSyncRecursive(outdir);
-  });
 
-  beforeExit(function() {
-    seenFiles = seenFiles.sort();
-    expectedFiles = expectedFiles.sort();
-    assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
+    done();
   });
 }
 
-exports['watch-script'] = function(beforeExit, assert) {
+exports['watch-script'] = function(done) {
   var expectedFiles = [
           '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
           '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
@@ -91,8 +94,8 @@ exports['watch-script'] = function(beforeExit, assert) {
         }
       };
 
-  runWatchTest(
+  runWatchTest.call(this,
     'watch-script', 'example', 'lumbar.json',
     operations, expectedFiles, 'test/expected/example',
-    beforeExit, assert);
+    done);
 };

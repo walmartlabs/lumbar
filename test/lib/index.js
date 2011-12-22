@@ -1,4 +1,5 @@
-var fs = require('fs'),
+var assert = require('assert'),
+    fs = require('fs'),
     glob = require('glob'),
     path = require('path'),
     wrench = require('wrench');
@@ -8,11 +9,10 @@ try { fs.mkdirSync('/tmp/lumbar-test', 0755); } catch (err) {}
 
 exports.testDir = function(testName, configFile) {
   var outdir = '/tmp/lumbar-test/' + testName + '-' + path.basename(configFile) + '-' + Date.now() + '-' + (counter++);
-  console.log('Creating test directory ' + outdir + ' for ' + configFile);
   fs.mkdirSync(outdir, 0755);
   return outdir;
 };
-exports.assertExpected = function(outdir, expectedDir, configFile, assert) {
+exports.assertExpected = function(outdir, expectedDir, configFile) {
   var expectedFiles = glob.globSync(expectedDir + '/**/*.*').map(function(fileName) { return fileName.substring(expectedDir.length); }),
       generatedFiles = glob.globSync(outdir + '/**/*.*').map(function(fileName) { return fileName.substring(outdir.length); });
   assert.deepEqual(generatedFiles, expectedFiles, configFile + ': file list matches' + JSON.stringify(expectedFiles) + JSON.stringify(generatedFiles));
