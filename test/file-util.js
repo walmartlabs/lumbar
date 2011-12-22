@@ -126,3 +126,29 @@ exports['file-list-resource'] = function(done) {
     done();
   });
 };
+
+exports['file-list-resource-only'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList([{router: true}], /js\/.*\.js$/, function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    assert.deepEqual(files, [{router: true}]);
+
+    done();
+  });
+};
+
+exports['file-list-none'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList([], /js\/.*\.js$/, function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    assert.deepEqual(files, []);
+
+    done();
+  });
+};
