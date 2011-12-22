@@ -90,10 +90,10 @@ exports['file-list-dir'] = function(done) {
 
     assert.deepEqual(files, [
       'file-util.js',
-      'artifacts/js/base.js',
-      'artifacts/js/home/home.js',
-      'artifacts/js/iphone.js',
-      'artifacts/js/web.js'
+      { src: 'artifacts/js/base.js', watchDir: 'artifacts/js'},
+      { src: 'artifacts/js/home/home.js', watchDir: 'artifacts/js'},
+      { src: 'artifacts/js/iphone.js', watchDir: 'artifacts/js'},
+      { src: 'artifacts/js/web.js', watchDir: 'artifacts/js'}
     ]);
     done();
   });
@@ -108,10 +108,10 @@ exports['file-list-filtered'] = function(done) {
 
     assert.deepEqual(files, [
       'file-util.js',
-      'artifacts/js/base.js',
-      'artifacts/js/home/home.js',
-      'artifacts/js/iphone.js',
-      'artifacts/js/web.js'
+      { src: 'artifacts/js/base.js', watchDir: 'artifacts'},
+      { src: 'artifacts/js/home/home.js', watchDir: 'artifacts'},
+      { src: 'artifacts/js/iphone.js', watchDir: 'artifacts'},
+      { src: 'artifacts/js/web.js', watchDir: 'artifacts'}
     ]);
     done();
   });
@@ -126,10 +126,10 @@ exports['file-list-resource'] = function(done) {
 
     assert.deepEqual(files, [
       'file-util.js',
-      {src: 'artifacts/js/base.js', global: true},
-      {src: 'artifacts/js/home/home.js', global: true},
-      {src: 'artifacts/js/iphone.js', global: true},
-      {src: 'artifacts/js/web.js', global: true},
+      {src: 'artifacts/js/base.js', watchDir: 'artifacts', global: true},
+      {src: 'artifacts/js/home/home.js', watchDir: 'artifacts', global: true},
+      {src: 'artifacts/js/iphone.js', watchDir: 'artifacts', global: true},
+      {src: 'artifacts/js/web.js', watchDir: 'artifacts', global: true},
       {router: true}
     ]);
 
