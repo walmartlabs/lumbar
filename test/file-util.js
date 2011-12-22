@@ -66,7 +66,7 @@ exports['file-list-multiple'] = function(done) {
       throw err;
     }
 
-    assert.deepEqual(files, ['test/artifacts/router.json', 'test/file-util.js']);
+    assert.deepEqual(files, ['test/file-util.js', 'test/artifacts/router.json']);
     done();
   });
 };
@@ -79,11 +79,11 @@ exports['file-list-dir'] = function(done) {
     }
 
     assert.deepEqual(files, [
+      'test/file-util.js',
       'test/artifacts/js/base.js',
       'test/artifacts/js/home/home.js',
       'test/artifacts/js/iphone.js',
-      'test/artifacts/js/web.js',
-      'test/file-util.js'
+      'test/artifacts/js/web.js'
     ]);
     done();
   });
@@ -97,11 +97,11 @@ exports['file-list-filtered'] = function(done) {
     }
 
     assert.deepEqual(files, [
+      'test/file-util.js',
       'test/artifacts/js/base.js',
       'test/artifacts/js/home/home.js',
       'test/artifacts/js/iphone.js',
-      'test/artifacts/js/web.js',
-      'test/file-util.js'
+      'test/artifacts/js/web.js'
     ]);
     done();
   });
@@ -114,13 +114,12 @@ exports['file-list-resource'] = function(done) {
       throw err;
     }
 
-    console.error(files);
     assert.deepEqual(files, [
+      'test/file-util.js',
       {src: 'test/artifacts/js/base.js', global: true},
       {src: 'test/artifacts/js/home/home.js', global: true},
       {src: 'test/artifacts/js/iphone.js', global: true},
-      {src: 'test/artifacts/js/web.js', global: true},
-      'test/file-util.js'
+      {src: 'test/artifacts/js/web.js', global: true}
     ]);
     done();
   });
