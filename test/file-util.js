@@ -109,7 +109,7 @@ exports['file-list-filtered'] = function(done) {
 
 exports['file-list-resource'] = function(done) {
   fu.lookupPath('test');
-  fu.fileList(['file-util.js', {src: 'artifacts', global: true}], /js\/.*\.js$/, function(err, files) {
+  fu.fileList(['file-util.js', {src: 'artifacts', global: true}, {router: true}], /js\/.*\.js$/, function(err, files) {
     if (err) {
       throw err;
     }
@@ -119,8 +119,10 @@ exports['file-list-resource'] = function(done) {
       {src: 'test/artifacts/js/base.js', global: true},
       {src: 'test/artifacts/js/home/home.js', global: true},
       {src: 'test/artifacts/js/iphone.js', global: true},
-      {src: 'test/artifacts/js/web.js', global: true}
+      {src: 'test/artifacts/js/web.js', global: true},
+      {router: true}
     ]);
+
     done();
   });
 };
