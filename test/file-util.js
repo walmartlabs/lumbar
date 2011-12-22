@@ -58,3 +58,15 @@ exports['file-list-file-not-found'] = function(done) {
     done();
   });
 };
+
+exports['file-list-multiple'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList(['file-util.js', 'file-util.js', 'artifacts/router.json'], function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    assert.deepEqual(files, ['test/artifacts/router.json', 'test/file-util.js']);
+    done();
+  });
+};
