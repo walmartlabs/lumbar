@@ -47,7 +47,10 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     } else {
       seenFiles.push(statusFile);
     }
-    operations[seenFiles.length] && operations[seenFiles.length](testdir);
+    var seen = seenFiles.length
+    setTimeout(function() {
+      operations[seen] && operations[seen](testdir);
+    }, 0);
     if (seenFiles.length < expectedFiles.length) {
       return;
     }
