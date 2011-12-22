@@ -2,7 +2,5 @@ node_modules
 build_package.sh
 *.log
 *.tmproj
-example/public/android/native-home.js
-example/public/iphone/native-home.js
-example/public/web/base.js
-example/public/web/home.js
+example/public/**/*.js
+example/public/**/*.css
