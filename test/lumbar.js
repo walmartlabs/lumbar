@@ -13,7 +13,9 @@ function runTest(configFile, expectedDir, options) {
     options = options || {};
     options.outdir = outdir;
 
-    var expectedFiles = glob.globSync(expectedDir + '/**/*.{css,js}').map(function(fileName) { return fileName.substring(expectedDir.length); }),
+    var expectedFiles = glob.globSync(expectedDir + '/**/*.{css,js}').map(function(fileName) {
+          return fileName.substring(expectedDir.length);
+        }).sort(),
         seenFiles = [];
 
     var arise = lumbar.init(configFile, options || {outdir: outdir});
@@ -35,7 +37,7 @@ function runTest(configFile, expectedDir, options) {
       lib.assertExpected(outdir, expectedDir, configFile);
 
       seenFiles = seenFiles.sort();
-      assert.deepEqual(seenFiles, expectedFiles, configFile + ': seen file list matches');
+      assert.deepEqual(seenFiles, expectedFiles, 'seen file list matches');
 
       // Cleanup (Do cleanup here so the files remain for the failure case)
       wrench.rmdirSyncRecursive(outdir);
