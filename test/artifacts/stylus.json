@@ -16,7 +16,7 @@
     },
     "urlSizeLimit": 103,
     "copyFiles": true,
-    "imports": [
+    "includes": [
       "nib",
       "styles/global.styl"
     ]
