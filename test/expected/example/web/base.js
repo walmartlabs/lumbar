@@ -4449,5 +4449,6 @@ module.exports.config = {
 ;
 /* lumbar module map */
 module.exports.moduleMap({"":"home.js","home":"home.js"}, 'web/');
+module.exports.styleMap({"modules":{"home":[{"href":"home.css","maxRatio":1.99},{"href":"home@2x.css","minRatio":1.01}]},"routes":{"":"home","home":"home"},"base":[{"href":"base.css","maxRatio":1.99},{"href":"base@2x.css","minRatio":1.01}]}, 'web/');
 return module.exports;
 }).call(this);
