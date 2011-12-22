@@ -15,6 +15,16 @@ exports['resolve-path'] = function() {
   assert.equal(fu.resolvePath('c:\\foo'), 'c:\\foo');
   assert.equal(fu.resolvePath('c:/foo'), 'c:/foo');
 };
+exports['make-relative'] = function() {
+  fu.lookupPath('foo/bar');
+
+  assert.equal(fu.makeRelative('foo'), 'foo');
+  assert.equal(fu.makeRelative('foo/bar/foo'), 'foo');
+  assert.equal(fu.makeRelative('foo/baro/foo'), 'foo/baro/foo');
+  assert.equal(fu.makeRelative('/foo'), '/foo');
+  assert.equal(fu.makeRelative('c:\\foo'), 'c:\\foo');
+  assert.equal(fu.makeRelative('c:/foo'), 'c:/foo');
+};
 
 exports['file-list-file'] = function(done) {
   fu.fileList('test/file-util.js', function(err, files) {
