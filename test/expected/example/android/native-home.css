@@ -1,0 +1,26 @@
+button,
+[type="submit"],
+[type="button"] {
+  appearance: none;
+  background: none;
+}
+th {
+  font-weight: normal;
+}
+body {
+  font: 0.9em "Droid Sans", Helvetica, Verdana;
+  color: #333;
+  background: #fff;
+  background: #9c9c9c;
+}
+header {
+  color: #000;
+  background-color: #0251b7;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.047, #1a75cf), color-stop(1, #0251b7));
+  background-image: -webkit-linear-gradient(top, #1a75cf 4.7%, #0251b7 100%);
+  background-image: linear-gradient(top, #1a75cf 4.7%, #0251b7 100%);
+}
+.footer {
+  background: #f00;
+  color: #fff;
+}

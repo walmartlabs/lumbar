@@ -39,6 +39,12 @@
         "package_config.json",
         "module_map.json",
         "style_map.json"
+      ],
+
+      "styles": [
+        "styles/base.styl",
+        "styles/header.styl",
+        {"src": "styles/iphone.styl", "platform": "iphone"}
       ]
     },
     "home": {
@@ -49,6 +55,9 @@
       "scripts": [
         "js/views/home.js",
         "js/routers/home.js"
+      ],
+      "styles": [
+        "styles/home.styl"
       ]
     }
   },
@@ -66,6 +75,10 @@
       "android": [ 1, 1.5 ],
       "iphone": [ 1, 2 ],
       "web": [ 1, 2 ]
-    }
+    },
+    "includes": [
+      "nib",
+      "styles/include/global.styl"
+    ]
   }
 }

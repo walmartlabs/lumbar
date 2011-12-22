@@ -70,25 +70,29 @@ function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedD
 
 exports['watch-script'] = function(done) {
   var expectedFiles = [
-          '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
-          '/android/native-home.js', '/iphone/native-home.js', '/web/base.js', '/web/home.js',
+          '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
+              '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
+              '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
+          '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
+              '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
+              '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
           '/android/native-home.js', '/iphone/native-home.js',
           '/android/native-home.js', '/iphone/native-home.js',
           '/android/native-home.js', '/iphone/native-home.js', '/web/home.js'
         ],
       operations = {
-        4: function(testdir) {
+        12: function(testdir) {
           // Modify the config file
           appendSpace(testdir + '/lumbar.json');
         },
-        8: function(testdir) {
+        24: function(testdir) {
           // Modify the bridge file
           appendSpace(testdir + '/js/bridge.js');
         },
-        10: function(testdir) {
+        26: function(testdir) {
           appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
         },
-        12: function(testdir) {
+        28: function(testdir) {
           // Modify the home template
           appendSpace(testdir + '/templates/home/home.handlebars');
         }
