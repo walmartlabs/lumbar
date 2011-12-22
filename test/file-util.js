@@ -44,7 +44,7 @@ exports['file-list-file-lookup'] = function(done) {
       throw err;
     }
 
-    assert.deepEqual(files, ['test/file-util.js']);
+    assert.deepEqual(files, ['file-util.js']);
     done();
   });
 };
@@ -76,7 +76,7 @@ exports['file-list-multiple'] = function(done) {
       throw err;
     }
 
-    assert.deepEqual(files, ['test/file-util.js', 'test/artifacts/router.json']);
+    assert.deepEqual(files, ['file-util.js', 'artifacts/router.json']);
     done();
   });
 };
@@ -89,11 +89,11 @@ exports['file-list-dir'] = function(done) {
     }
 
     assert.deepEqual(files, [
-      'test/file-util.js',
-      'test/artifacts/js/base.js',
-      'test/artifacts/js/home/home.js',
-      'test/artifacts/js/iphone.js',
-      'test/artifacts/js/web.js'
+      'file-util.js',
+      'artifacts/js/base.js',
+      'artifacts/js/home/home.js',
+      'artifacts/js/iphone.js',
+      'artifacts/js/web.js'
     ]);
     done();
   });
@@ -107,11 +107,11 @@ exports['file-list-filtered'] = function(done) {
     }
 
     assert.deepEqual(files, [
-      'test/file-util.js',
-      'test/artifacts/js/base.js',
-      'test/artifacts/js/home/home.js',
-      'test/artifacts/js/iphone.js',
-      'test/artifacts/js/web.js'
+      'file-util.js',
+      'artifacts/js/base.js',
+      'artifacts/js/home/home.js',
+      'artifacts/js/iphone.js',
+      'artifacts/js/web.js'
     ]);
     done();
   });
@@ -125,11 +125,11 @@ exports['file-list-resource'] = function(done) {
     }
 
     assert.deepEqual(files, [
-      'test/file-util.js',
-      {src: 'test/artifacts/js/base.js', global: true},
-      {src: 'test/artifacts/js/home/home.js', global: true},
-      {src: 'test/artifacts/js/iphone.js', global: true},
-      {src: 'test/artifacts/js/web.js', global: true},
+      'file-util.js',
+      {src: 'artifacts/js/base.js', global: true},
+      {src: 'artifacts/js/home/home.js', global: true},
+      {src: 'artifacts/js/iphone.js', global: true},
+      {src: 'artifacts/js/web.js', global: true},
       {router: true}
     ]);
 
