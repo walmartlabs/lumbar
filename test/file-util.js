@@ -70,3 +70,39 @@ exports['file-list-multiple'] = function(done) {
     done();
   });
 };
+
+exports['file-list-dir'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList(['file-util.js', 'artifacts/js'], function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    assert.deepEqual(files, [
+      'test/artifacts/js/base.js',
+      'test/artifacts/js/home/home.js',
+      'test/artifacts/js/iphone.js',
+      'test/artifacts/js/web.js',
+      'test/file-util.js'
+    ]);
+    done();
+  });
+};
+
+exports['file-list-filtered'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList(['file-util.js', 'artifacts'], /js\/.*\.js$/, function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    assert.deepEqual(files, [
+      'test/artifacts/js/base.js',
+      'test/artifacts/js/home/home.js',
+      'test/artifacts/js/iphone.js',
+      'test/artifacts/js/web.js',
+      'test/file-util.js'
+    ]);
+    done();
+  });
+};
