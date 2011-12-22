@@ -36,9 +36,9 @@
 
         {"src": "js/views/header.js", "platform": "web"},
 
-        "package_config.json",
-        "module_map.json",
-        "style_map.json"
+        {"package-config": true},
+        {"module-map": true},
+        {"style-map": true}
       ],
 
       "styles": [
