@@ -131,3 +131,23 @@ exports['watch-style'] = function(done) {
     operations, expectedFiles, 'test/expected/styles-watch',
     done);
 };
+
+exports['watch-remove'] = function(done) {
+  var expectedFiles = [
+          '/base.js', '/base.js'
+        ],
+      operations = {
+        1: function(testdir) {
+          console.log(testdir);
+          fs.unlinkSync(testdir + '/js/home/home.js');
+          console.log(testdir);
+          appendSpace(testdir + '/js/iphone.js');
+          console.log(testdir);
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'single-directory.json',
+    operations, expectedFiles, 'test/expected/watch-remove',
+    done);
+};
