@@ -106,3 +106,22 @@ exports['file-list-filtered'] = function(done) {
     done();
   });
 };
+
+exports['file-list-resource'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList(['file-util.js', {src: 'artifacts', global: true}], /js\/.*\.js$/, function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    console.error(files);
+    assert.deepEqual(files, [
+      {src: 'test/artifacts/js/base.js', global: true},
+      {src: 'test/artifacts/js/home/home.js', global: true},
+      {src: 'test/artifacts/js/iphone.js', global: true},
+      {src: 'test/artifacts/js/web.js', global: true},
+      'test/file-util.js'
+    ]);
+    done();
+  });
+};
