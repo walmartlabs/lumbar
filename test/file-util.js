@@ -1,6 +1,11 @@
 var assert = require('assert'),
     fu = require('../lib/fileUtil');
 
+exports['teardown'] = function(done) {
+  fu.lookupPath('');
+  done();
+};
+
 exports['resolve-path'] = function() {
   fu.lookupPath('foo/bar');
 
