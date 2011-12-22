@@ -24,6 +24,6 @@
   },
   "main": "bin/lumbar",
   "scripts": {
-    "test": "expresso test/*"
+    "test": "expresso -t 20000 -s test/*"
   }
 }
