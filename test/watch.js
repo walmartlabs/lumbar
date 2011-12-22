@@ -25,9 +25,9 @@ function appendRapidSpace(path1, path2) {
     fs.closeSync(fd);
   }, 1000);
 }
-function runWatchTest(name, srcdir, config, operations, expectedFiles, expectedDir, done) {
-  var testdir = lib.testDir(name, 'example'),
-      outdir = lib.testDir(name, 'test'),
+function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, done) {
+  var testdir = lib.testDir(this.title, 'example'),
+      outdir = lib.testDir(this.title, 'test'),
       seenFiles = [];
   this.title += ' ' + outdir;
 
@@ -99,7 +99,7 @@ exports['watch-script'] = function(done) {
       };
 
   runWatchTest.call(this,
-    'watch-script', 'example', 'lumbar.json',
+    'example', 'lumbar.json',
     operations, expectedFiles, 'test/expected/example',
     done);
 };
@@ -124,7 +124,7 @@ exports['watch-style'] = function(done) {
       };
 
   runWatchTest.call(this,
-    'watch-styles', 'test/artifacts', 'styles.json',
+    'test/artifacts', 'styles.json',
     operations, expectedFiles, 'test/expected/styles-watch',
     done);
 };
