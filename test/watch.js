@@ -103,3 +103,28 @@ exports['watch-script'] = function(done) {
     operations, expectedFiles, 'test/expected/example',
     done);
 };
+
+exports['watch-style'] = function(done) {
+  var expectedFiles = [
+          '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
+          '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
+          '/iphone/native.css', '/iphone/base.css', '/web/base.css',
+          '/iphone/native.css', '/iphone/base.css', '/web/base.css'
+        ],
+      operations = {
+        5: function(testdir) {
+          appendSpace(testdir + '/styles.json');
+        },
+        10: function(testdir) {
+          appendSpace(testdir + '/styles/base.css');
+        },
+        13: function(testdir) {
+          appendRapidSpace(testdir + '/styles/base.css', testdir + '/styles/iphone.css');
+        }
+      };
+
+  runWatchTest.call(this,
+    'watch-styles', 'test/artifacts', 'styles.json',
+    operations, expectedFiles, 'test/expected/styles-watch',
+    done);
+};
