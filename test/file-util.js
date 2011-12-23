@@ -90,10 +90,12 @@ exports['file-list-dir'] = function(done) {
 
     assert.deepEqual(files, [
       'file-util.js',
-      { src: 'artifacts/js/base.js', watchDir: 'artifacts/js'},
-      { src: 'artifacts/js/home/home.js', watchDir: 'artifacts/js'},
-      { src: 'artifacts/js/iphone.js', watchDir: 'artifacts/js'},
-      { src: 'artifacts/js/web.js', watchDir: 'artifacts/js'}
+      {dir: 'artifacts/js'},
+      'artifacts/js/base.js',
+      {dir: 'artifacts/js/home'},
+      'artifacts/js/home/home.js',
+      'artifacts/js/iphone.js',
+      'artifacts/js/web.js'
     ]);
     done();
   });
@@ -108,10 +110,17 @@ exports['file-list-filtered'] = function(done) {
 
     assert.deepEqual(files, [
       'file-util.js',
-      { src: 'artifacts/js/base.js', watchDir: 'artifacts'},
-      { src: 'artifacts/js/home/home.js', watchDir: 'artifacts'},
-      { src: 'artifacts/js/iphone.js', watchDir: 'artifacts'},
-      { src: 'artifacts/js/web.js', watchDir: 'artifacts'}
+      {dir: 'artifacts'},
+      {dir: 'artifacts/config'},
+      {dir: 'artifacts/images'},
+      {dir: 'artifacts/js'},
+      'artifacts/js/base.js',
+      {dir: 'artifacts/js/home'},
+      'artifacts/js/home/home.js',
+      'artifacts/js/iphone.js',
+      'artifacts/js/web.js',
+      {dir: 'artifacts/styles'},
+      {dir: 'artifacts/templates'}
     ]);
     done();
   });
@@ -126,10 +135,17 @@ exports['file-list-resource'] = function(done) {
 
     assert.deepEqual(files, [
       'file-util.js',
-      {src: 'artifacts/js/base.js', watchDir: 'artifacts', global: true},
-      {src: 'artifacts/js/home/home.js', watchDir: 'artifacts', global: true},
-      {src: 'artifacts/js/iphone.js', watchDir: 'artifacts', global: true},
-      {src: 'artifacts/js/web.js', watchDir: 'artifacts', global: true},
+      { dir: 'artifacts', global: true},
+      { dir: 'artifacts/config', global: true},
+      { dir: 'artifacts/images', global: true},
+      { dir: 'artifacts/js', global: true},
+      { src: 'artifacts/js/base.js', global: true},
+      { dir: 'artifacts/js/home', global: true},
+      { src: 'artifacts/js/home/home.js', global: true},
+      { src: 'artifacts/js/iphone.js', global: true},
+      { src: 'artifacts/js/web.js', global: true},
+      { dir: 'artifacts/styles', global: true},
+      { dir: 'artifacts/templates', global: true},
       {router: true}
     ]);
 
