@@ -40,14 +40,13 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     }
 
     var statusFile = status.fileName.substring(outdir.length);
-    console.error(statusFile);
     if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
       arise.unwatch();
       assert.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
     } else {
       seenFiles.push(statusFile);
     }
-    var seen = seenFiles.length
+    var seen = seenFiles.length;
     setTimeout(function() {
       operations[seen] && operations[seen](testdir);
     }, 0);
@@ -129,5 +128,53 @@ exports['watch-style'] = function(done) {
   runWatchTest.call(this,
     'test/artifacts', 'styles.json',
     operations, expectedFiles, 'test/expected/styles-watch',
+    done);
+};
+
+exports['watch-dir'] = function(done) {
+  var expectedFiles = [
+          '/base.js', '/base.js'
+        ],
+      operations = {
+        1: function(testdir) {
+          appendSpace(testdir + '/js/iphone.js');
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'single-directory.json',
+    operations, expectedFiles, 'test/expected/watch-dir',
+    done);
+};
+
+exports['watch-add'] = function(done) {
+  var expectedFiles = [
+          '/base.js', '/base.js'
+        ],
+      operations = {
+        1: function(testdir) {
+          fs.writeFileSync(testdir + '/js/home/home2.js', ' ');
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'single-directory.json',
+    operations, expectedFiles, 'test/expected/watch-add',
+    done);
+};
+
+exports['watch-remove'] = function(done) {
+  var expectedFiles = [
+          '/base.js', '/base.js'
+        ],
+      operations = {
+        1: function(testdir) {
+          fs.unlinkSync(testdir + '/js/home/home.js');
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'single-directory.json',
+    operations, expectedFiles, 'test/expected/watch-remove',
     done);
 };
