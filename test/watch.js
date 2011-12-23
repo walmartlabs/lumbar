@@ -131,6 +131,22 @@ exports['watch-style'] = function(done) {
     done);
 };
 
+exports['watch-add'] = function(done) {
+  var expectedFiles = [
+          '/base.js', '/base.js'
+        ],
+      operations = {
+        1: function(testdir) {
+          fs.writeFileSync(testdir + '/js/home/home2.js', ' ');
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'single-directory.json',
+    operations, expectedFiles, 'test/expected/watch-add',
+    done);
+};
+
 exports['watch-remove'] = function(done) {
   var expectedFiles = [
           '/base.js', '/base.js'
