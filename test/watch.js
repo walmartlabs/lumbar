@@ -131,6 +131,22 @@ exports['watch-style'] = function(done) {
     done);
 };
 
+exports['watch-dir'] = function(done) {
+  var expectedFiles = [
+          '/base.js', '/base.js'
+        ],
+      operations = {
+        1: function(testdir) {
+          appendSpace(testdir + '/js/iphone.js');
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'single-directory.json',
+    operations, expectedFiles, 'test/expected/watch-dir',
+    done);
+};
+
 exports['watch-add'] = function(done) {
   var expectedFiles = [
           '/base.js', '/base.js'
