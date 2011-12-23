@@ -12,11 +12,12 @@
     "node": ">=0.4.7"
   },
   "dependencies": {
-      "growl": "~1.1",
+      "growl": "~1.4",
       "handlebars": "~1.0",
-      "optimist": "~0.2",
-      "uglify-js": "~1.0",
-      "underscore": "~1.1"
+      "optimist": "~0.3",
+      "stylus-images": "~0.2",
+      "uglify-js": "~1.2",
+      "underscore": "~1.2"
   },
   "devDependencies": {
     "glob": "~2.0",
