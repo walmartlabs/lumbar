@@ -40,14 +40,13 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     }
 
     var statusFile = status.fileName.substring(outdir.length);
-    console.error(statusFile);
     if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
       arise.unwatch();
       assert.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
     } else {
       seenFiles.push(statusFile);
     }
-    var seen = seenFiles.length
+    var seen = seenFiles.length;
     setTimeout(function() {
       operations[seen] && operations[seen](testdir);
     }, 0);
@@ -138,11 +137,7 @@ exports['watch-remove'] = function(done) {
         ],
       operations = {
         1: function(testdir) {
-          console.log(testdir);
           fs.unlinkSync(testdir + '/js/home/home.js');
-          console.log(testdir);
-          appendSpace(testdir + '/js/iphone.js');
-          console.log(testdir);
         }
       };
 

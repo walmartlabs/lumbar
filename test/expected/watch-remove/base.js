@@ -8,7 +8,7 @@ exports.belongToUs = function() {
 };
 ;;
 var iphone = true;
- ;;
+;;
 var web = true;
 ;;
 return module.exports;
