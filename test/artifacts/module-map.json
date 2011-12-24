@@ -6,17 +6,29 @@
     }
   },
   "modules": {
-    "base": [
-      "js/base.js",
-      {"module-map": true}
-    ],
+    "base": {
+      "scripts": [
+        "js/base.js",
+        {"module-map": true}
+      ],
+      "styles": [
+        "styles/base.css"
+      ]
+    },
     "home": {
       "routes": {"home": "home"},
       "scripts": [
         "js/home/home.js"
+      ],
+      "styles": [
+        "styles/home.css"
       ]
-    }
+    },
+    "foo": {}
   },
 
-  "moduleMap": "App.moduleMap"
+  "moduleMap": "App.moduleMap",
+  "styles": {
+    "pixelDensity": [ 1, 2 ]
+  }
 }
