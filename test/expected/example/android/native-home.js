@@ -4297,7 +4297,8 @@ module.exports.config = {
   "securePort": 8081
 }
 ;
-module.exports.styleMap({"base":[{"href":"native-home.css","maxRatio":1.49},{"href":"native-home@1.5x.css","minRatio":1.01}]}, 'android/');
+/* lumbar module map */
+module.exports.moduleMap({"base":{"js":"native-home.js","css":[{"href":"native-home.css","maxRatio":1.25},{"href":"native-home@1.5x.css","minRatio":1.25}]}}, 'android/');
 return module.exports;
 }).call(this);
 Example.home = (function() {
