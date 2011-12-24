@@ -114,3 +114,9 @@ to prevent conflicts.
 
 ## Warnings
 
+As most Lumbar projects are dealing with a large number of files it is quite susceptible to
+**EMFILE** exceptions under OSX. The current recovery method for this is to utilize async
+methods and retry methods that fail due to this error. A variety of file methods that are
+protected from this case have been made available on the `lumbar.fileUtil` object. It
+is recommended that these methods are used whenever possible while dealing with files throughout
+the system.
