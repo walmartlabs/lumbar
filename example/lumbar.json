@@ -37,8 +37,7 @@
         {"src": "js/views/header.js", "platform": "web"},
 
         {"package-config": true},
-        {"module-map": true},
-        {"style-map": true}
+        {"module-map": true}
       ],
 
       "styles": [

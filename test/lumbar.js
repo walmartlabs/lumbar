@@ -72,6 +72,5 @@ exports['application-namespace'] = runTest('test/artifacts/application-namespace
 
 exports['styles'] = runTest('test/artifacts/styles.json', 'test/expected/styles');
 exports['stylus'] = runTest('test/artifacts/stylus.json', 'test/expected/stylus');
-exports['style-map'] = runTest('test/artifacts/style-map.json', 'test/expected/style-map');
 
 // TODO : Test file not found and other cases
