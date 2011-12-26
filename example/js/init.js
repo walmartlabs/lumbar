@@ -1,3 +1,4 @@
+/* BEGIN js/init.js */
 _.extend(exports, {
   Views: {},
   templates: function(name, context) {
@@ -13,3 +14,4 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+/* END js/init.js */

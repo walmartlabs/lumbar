@@ -1,21 +1,33 @@
 {
   "application": {
     "name": "Example",
+    "name_comment" : "This is global namespace variable that everything is glued to.",
     "module": "base"
   },
-  "platforms": [ "android", "iphone", "web" ],
+  "platforms": [ "android", "ipad", "iphone", "web" ],
+  "platforms_comment" : "Create a folder for each platform, if not already present.",
   "packages": {
     "web": {
       "platforms": [ "web" ],
-      "combine": false
+      "platform_comment": "What platforms does this package target? If empty then all are targeted.",
+      "module_comment": "Omitting the modules specifier defaults to all modules.",
+      "combine": false,
+      "combine_comment": "If combine is true then output one file with the name web, otherwise output a file per module."
     },
     "native-home": {
       "platforms": [ "android", "iphone" ],
+      "platform_comment": "What platforms does this package target? Here we're targetting android and iphone",
+      "modules": [ "base", "home" ],
+      "module_comment": "What modules are we going to include for these platforms?",
+      "combine": false,
+      "combine_comment": "If combine is true then output one file with the name native-home"
+    },
+    "ipad-example": {
+      "platforms": [ "ipad" ],
       "modules": [ "base", "home" ],
       "combine": true
     }
   },
-
   "modules": {
     "base": {
       "scripts": [
@@ -28,12 +40,10 @@
         "js/init.js",
         "js/router.js",
 
-        {"src": "js/bridge.js", "platforms": ["iphone", "android"]},
+        {"src": "js/bridge.js", "platforms": ["ipad", "iphone", "android"]},
         {"src": "js/bridge-android.js", "platform": "android"},
-        {"src": "js/bridge-iphone.js", "platform": "iphone"},
-
+        {"src": "js/bridge-iphone.js", "platforms": [ "iphone", "ipad" ]},
         {"src": "js/loader.js", "platform": "web"},
-
         {"src": "js/views/header.js", "platform": "web"},
 
         {"package-config": true},
@@ -55,6 +65,7 @@
         "js/views/home.js",
         "js/routers/home.js"
       ],
+      "scripts_coments": "If the script is present as a key under templates, then add the templates.",
       "styles": [
         "styles/home.styl"
       ]

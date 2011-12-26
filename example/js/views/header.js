@@ -1,3 +1,4 @@
+/* BEGIN js/views/header.js */
 exports.Views.Header = Backbone.View.extend({
   el: ".header",
 
@@ -5,3 +6,4 @@ exports.Views.Header = Backbone.View.extend({
     $(this.el).html(exports.templates('templates/header.handlebars'));
   }
 });
+/* END js/views/header.js */

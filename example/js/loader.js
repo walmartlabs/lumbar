@@ -1,3 +1,4 @@
+/* BEGIN js/loader.js */
 exports.moduleMap = function(map, loadPrefix) {
   /*
   We are ignoring load prefix here as the index files are in the same directory as the source.
@@ -28,3 +29,4 @@ exports.moduleMap = function(map, loadPrefix) {
 
   new (Backbone.Router.extend(handlers));
 };
+/* END js/loader.js */
