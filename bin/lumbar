@@ -11,21 +11,19 @@ var lumbarFile = argv._[0],
       outdir: argv._[1],
       minimize: argv.minimize
     },
-    pkg = argv.pkg, 
+    pkg = argv.package, 
     watch = !!argv.watch,
     build = !watch;
 
-var USAGE='[help|build|watch|unwatch]\n';
+var USAGE='[help|build|watch]\n';
 var LONG_USAGE="lumbar --help\n"+
 "        Print this long help message.\n"+
-"lumbar --build [--pkg name] [--config file] [--minimize] lumbarFile outputDir\n"+
+"lumbar --build [--package name] [--config file] [--minimize] lumbarFile outputDir\n"+
 "        Build out the package(s).\n"+
-"lumbar --watch [<branch>]\n"+
+"lumbar --watch [--package]\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
-"lumbar --unwatch [<branch>]\n"+
-"        Stop watching the files.\n"+
 "\n"+
-"pkg:          represents the name of a corresponding package listed\n"+
+"package:      represents the name of a corresponding package listed\n"+
 "              under 'packages' in lumbarFile.\n"+
 "\n"+
 "minimize:     to shrink the resultant file.\n"+
