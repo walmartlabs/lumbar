@@ -1,0 +1,83 @@
+{
+  "application": {
+    "name": "Example",
+    "module": "base"
+  },
+  "platforms": [ "android", "iphone", "web" ],
+  "packages": {
+    "web": {
+      "platforms": [ "web" ],
+      "combine": false
+    },
+    "native-home": {
+      "platforms": [ "android", "iphone" ],
+      "modules": [ "base", "home" ],
+      "combine": true
+    }
+  },
+
+  "modules": {
+    "base": {
+      "scripts": [
+        {"src": "lib/zepto.js", "global": true},
+        {"src": "lib/underscore.js", "global": true},
+        {"src": "lib/backbone.js", "global": true},
+        {"src": "lib/handlebars.js", "global": true},
+        {"src": "lib/script.js", "global": true, "platform": "web"},
+
+        "js/init.js",
+        "js/router.js",
+
+        {"src": "js/bridge.js", "platforms": ["iphone", "android"]},
+        {"src": "js/bridge-android.js", "platform": "android"},
+        {"src": "js/bridge-iphone.js", "platform": "iphone"},
+
+        {"src": "js/loader.js", "platform": "web"},
+
+        {"src": "js/views/header.js", "platform": "web"},
+
+        {"package-config": true},
+        {"module-map": true}
+      ],
+
+      "styles": [
+        "styles/base.styl",
+        "styles/header.styl",
+        {"src": "styles/iphone.styl", "platform": "iphone"}
+      ]
+    },
+    "home": {
+      "routes": {
+        "": "home",
+        "home": "home"
+      },
+      "scripts": [
+        "js/views/home.js",
+        "js/routers/home.js"
+      ],
+      "styles": [
+        "styles/home.styl"
+      ]
+    }
+  },
+  "templates": {
+    "js/views/header.js": [
+      "templates/header.handlebars"
+    ],
+    "js/views/home.js": [
+      "templates/home"
+    ]
+  },
+
+  "styles": {
+    "pixelDensity": {
+      "android": [ 1, 1.5 ],
+      "iphone": [ 1, 2 ],
+      "web": [ 1, 2 ]
+    },
+    "includes": [
+      "nib",
+      "styles/include/global.styl"
+    ]
+  }
+}

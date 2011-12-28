@@ -1,0 +1,5 @@
+button,[type="submit"],[type="button"]{appearance:none;background:none}
+th{font-weight:normal}
+body{font:.9em $defaultFontFamily;color:$primaryColor;background:$primaryBack;background:#9c9c9c}
+header{color:$headerFont;background-color:#0251b7;background-image:linear-gradient(top,#1a75cf 4.7%,#0251b7)}
+.footer{background:#f00;color:#fff}

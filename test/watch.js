@@ -101,7 +101,7 @@ exports['watch-script'] = function(done) {
       };
 
   runWatchTest.call(this,
-    'example', 'lumbar.json',
+    'test/example', 'lumbar.json',
     operations, expectedFiles, 'test/expected/example',
     done);
 };

@@ -1,0 +1,1 @@
+Bridge.nativeHost = 'iphone';
