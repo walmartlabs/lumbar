@@ -1,0 +1,29 @@
+{
+  "application": {
+    "name": "Application"
+  },
+  "platforms": [ "iphone", "web" ],
+  "modules": {
+    "base": {
+      "scripts": [
+        "js/base.js",
+        {"module-map": true}
+      ],
+      "styles": [
+        "styles/base.styl"
+      ]
+    }
+  },
+
+  "styles": {
+    "inline": true,
+    "pixelDensity": {
+      "iphone": [ 1, 2 ]
+    },
+    "urlSizeLimit": 1,
+    "includes": [
+      "nib",
+      "styles/global.styl"
+    ]
+  }
+}
