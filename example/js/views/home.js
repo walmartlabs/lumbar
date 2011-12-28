@@ -1,3 +1,4 @@
+/* BEGIN js/views/home.js */
 Example.Views.Home = Backbone.View.extend({
   el: ".layout",
 
@@ -6,3 +7,4 @@ Example.Views.Home = Backbone.View.extend({
     $(this.el).append(Example.templates('templates/home/footer.handlebars'));
   }
 });
+/* END js/views/home.js */

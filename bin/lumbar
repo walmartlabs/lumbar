@@ -11,17 +11,73 @@ var lumbarFile = argv._[0],
       outdir: argv._[1],
       minimize: argv.minimize
     },
-    module = argv.module,
-    watch = argv.watch;
+    pkg = argv.pkg, 
+    watch = !!argv.watch,
+    build = !watch;
 
-// Show help prompt if requested or if the 
-// incorrect usage options are supplied
-if (argv.h || argv.help || !lumbarFile || !options.outdir) {
-  console.error("Usage: lumbar [--minimize] [--watch] [--config packageConfigFile] [--module module] lumbarFile outputDir");
+var USAGE='[help|build|watch|unwatch]\n';
+var LONG_USAGE="lumbar --help\n"+
+"        Print this long help message.\n"+
+"lumbar --build [--pkg name] [--config file] [--minimize] lumbarFile outputDir\n"+
+"        Build out the package(s).\n"+
+"lumbar --watch [<branch>]\n"+
+"        Start watching the files for changes and rebuild as necessary.\n"+
+"lumbar --unwatch [<branch>]\n"+
+"        Stop watching the files.\n"+
+"\n"+
+"pkg:          represents the name of a corresponding package listed\n"+
+"              under 'packages' in lumbarFile.\n"+
+"\n"+
+"minimize:     to shrink the resultant file.\n"+
+"\n"+
+"lumbarFile:   is the name and path to the lumbar config file, if\n"+
+"              not given then lumbar.json is assumed.\n"+
+"\n"+
+"outputDir:    Required. Designates where the files will be placed.\n"+
+"\n"+
+"Please use 'man lumbar' to get the full man page.";
+
+
+if (argv.h || argv.help) {
+  console.log(LONG_USAGE);
   return;
 }
 
+if (watch && build) {
+  // You can only do one operation at a time.
+  console.log(LONG_USAGE);
+  return;
+}
+
+if (!watch && !build) {
+  // set build to the default
+  build = true;
+}
+
+if (watch || build) {
+  var l = argv._.length;
+  if (l === 0) {
+    // outputDir is required
+    console.log(LONG_USAGE);
+    return;
+  }
+
+  if (l === 1) {
+    // lumbarFile is missing, re-assign
+    options.outdir = lumbarFile;
+    lumbarFile = "lumbar.json";
+  }
+
+  if (!lumbarFile || !options.outdir) {
+    console.log(LONG_USAGE);
+    return;
+  }
+
+}
+
+// invoke init() from ../lib/lumbar.js. 
 var arise = lumbar.init(lumbarFile, options),
+    // is worker going to point to watch or build func?
     worker = watch ? arise.watch : arise.build;
 
 // First figure out what our output looks like
@@ -34,7 +90,8 @@ fs.stat(options.outdir, function(err, stat) {
         throw new Error("Output must be a directory");
     }
 
-    worker.call(arise, module, function(err, status) {
+    // execute either watch() or build() and pass lumbar as the context.
+    worker.call(arise, pkg, function(err, status) {
         if (err) {
             throw err;
         }
