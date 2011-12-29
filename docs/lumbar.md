@@ -1,10 +1,10 @@
 # LUMBAR #
 
-Lumbar generates web applications targeted at specific hardware.  
+Lumbar is a js-build tool that takes a _general application_ and list of _platforms_ to generate modular _platform specific applications_.
 
 ## Introduction ##
 
-Lumbar is a tool that generates out a list of platform specific web applications. ￼
+Lumbar is a tool that generates out a list of platform specific web applications.
 
 You can think of lumbar as a conditional compiler that targets platforms. However, it doesn’t rely on variables in your source code. There’s no #ifdef or #endifs. Rather you can include and exclude files by associating them with a platform in an external file. Keep your source files clean.
 
