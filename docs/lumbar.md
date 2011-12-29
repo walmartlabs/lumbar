@@ -151,8 +151,15 @@ The module-map plugin outputs the data necessary to load modules in response to 
 ## FAQ ##
 
 1. Do we have a visual tool available for editing lumbar.json? No
-2. Is there a lint checker for lumbar.json? No
-3. Is there a script to automatically build up lumbar.json? No
+1. Is there a lint checker for lumbar.json? No
+1. Is there a script to automatically build up lumbar.json? No
+1. Does lumbar.json have to be in the root our our application?
+
+No, not necessarily. The root is the current working directory that you are running _lumbar_ from. 
+
+However, the files mentioned in lumbar.json would have to be relative to its location. So if you dropped lumbar into a sub directory, you would have to ../ all files from the root. You would also have to run lumbar from the sub directory.
+
+So to keep it simple, keep lumbar.json in the root.
 
 ## Authors ##
 
