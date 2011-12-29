@@ -40,9 +40,9 @@ For example, if we listed two platforms for our package, say "base" and "home" w
 
 #### Platforms ####
 
-Second, lets discuss the platforms section. Each platform is given as a name in an array. Remember that each platform will have a corresponding directory. If the directory already exists then it won’t be created, otherwise it will. You should already have your main index.html and other associated resources located in these directories. As discussed prior in [directory structure] for a refresher.
+Second, lets discuss the platforms section. Each platform is given as a name in an array. Remember that each platform will have a corresponding directory. If the directory already exists then it won’t be created, otherwise it will. To keep it simple, our example has pre-loaded resources in these directories already. In each platform directory you'll find an index.html. They're not required to be there, our static resource plugin is used to copy artifacts into the platform directories.
 
-So say you have four (4) platforms listed like “android”, “ipad”, “iphone”, and “web”. Then when you run lumbar, you’re going to have four (4) corresponding sub-directories under your output folder with the same names.
+So say you have four (4) platforms listed like “android”, “ipad”, “iphone”, and “web”. Then when you run lumbar, you’re going to have four (4) corresponding sub-directories under your output dir with the same names.
 
 Platforms are what drive the next two sections, “packages” and “modules”. A “package” defines a one-to-many relationship with “platforms” and “modules”. 
 
