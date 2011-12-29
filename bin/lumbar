@@ -15,7 +15,6 @@ var lumbarFile,
     watch = false,
     build = false;
 
-var USAGE='[help|build|watch]\n';
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
 "lumbar build [--package name] [--config file] [--minimize] lumbarFile outputDir\n"+
