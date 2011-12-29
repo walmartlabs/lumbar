@@ -46,18 +46,6 @@ So say you have four (4) platforms listed like “android”, “ipad”, “iph
 
 Platforms are what drive the next two sections, “packages” and “modules”. A “package” defines a one-to-many relationship with “platforms” and “modules”. 
 
-#### Packages ####
-
-Third, lets discuss the packages section. This section lets you define how you would like the “platforms” organized. Each package is associated with a key. The purpose of this key is discussed below.
-
-Each package defines the platforms and modules its associated with. The platforms are a one-to-many relationship with a platform. Thus the package is said to target these platforms. Or rather, what platforms does this package deliver on? If no platforms are listed then all the platforms are targeted. 
-
-Each package defines a one-to-many relationship with modules. [Modules] are discussed next, but suffice it to say that modules are groupings of code, stylesheets and templates. This relationship establishes what modules the package includes. If no modules are listed than all the modules are targeted.  
-
-The last attribute is combine. Setting combine to true results in one file being output with the name given for the package. This one file will include all the output from the modules given. This one file will be output to the directories given in platforms. 
-
-For example, if we listed “foo” for the platform, and “bar”, “baz” for the modules under the “default” package, then we would combine the bar and baz modules into a file named default.js under the foo directory.
-
 #### Modules ####
 
 Next, lets discuss the modules section of the lumbar.json file. This sections lets you define logical groupings of code, static files, stylesheets, and templates (mustache / handlebars). 
@@ -66,21 +54,37 @@ Each module can have zero or many scripts listed under the scripts key. In a sim
 
 An entry in the scripts or styles array is either a plain filename with relative path and or an object that offers more granularity for the file. If its a filename then an entry like, “init.js” would be appropriate. If we wanted to introduce the init.js file only under specific conditions then we would list it as an object and give init.js the value to the src attribute. In that same object we would add a platform(s) attribute and list the platforms we wanted init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this: { “src”: “init.js”, “platforms”: “ipad”, “iphone” }.
 
-Now as we’re building our modules and pulling in the javascript files we constantly check to see if they are a match in the “templates” section. If they are then we also add those templates to our module. As an example, if we added another entry as “header.js” and also happened to have “header.js” listed underneath the templates section, then we would pull in the templates given there.
+Now as we are building our modules and pulling in the javascript files, each one is checked to see if its assocaited with an entry in the _templates_ section. The association is made if the name of the javascript src file, including path, is is a match to a key in the _templates_ seciton. If there is an association, then we also add those templates to our module. As an example, if we added another entry as “header.js” and also happened to have “header.js” listed underneath the templates section, then we would pull in the templates given there.
+
+#### Packages ####
+
+Third, lets discuss the packages section. This section lets you define how you would like the “platforms” organized. Each package is associated with a key. The purpose of this key is discussed below.
+
+Each package defines the platforms and modules its associated with. The packages are a one-to-many relationship with a platform. Thus the package is said to target these platforms. Or rather, what platforms does this package deliver on? If no platforms are listed then all the platforms are targeted. 
+
+Each package defines a one-to-many relationship with modules. [Modules] are discussed next, but suffice it to say that modules are groupings of code, stylesheets and templates. This relationship establishes what modules the package includes. If no modules are listed than all the modules are targeted.  
+
+The last attribute is combine. Setting combine to true results in one file being output with the name given for the package. This one file will include all the output from the modules given. This one file will be output to the directories given in platforms. 
+
+For example, if we listed “foo” for the platform, and “bar”, “baz” for the modules under the “default” package, then we would combine the bar and baz modules into a file named default.js under the foo directory.
+
+[TODO: Discuss reason for having multiple packages in greater detail.]
 
 #### Templates ####
 
 Next to last, is the templates section which lists out all the views for a given key. Views are a mixture of html and logic using either handlebars or mustache. When templates are found they are automatically compiled and included into the module requesting it. 
 
+[TODO Needs work. Mention keywords like 'precompile']. 
+
 #### Styles ####
 
 Finally the templates sections lists out all the views for a given key. Styles are a mixture of css and and logic using Stylus. 
 
-[Kevin-Not quite to sure what happens here yet]
+[TODO Discuss further]
 
 #### Summary ####
 
-We just discussed the six (6) major sections of the lumbar.json configuration file. The application, platforms, packages, modules, templates, and styles sections are very important instruction sets for lumbar to work properly. 
+We just discussed the six (6) major sections of the lumbar.json configuration file. The [_application_](#application), [_platforms_](#platforms), [_packages_](#packages), [_modules_](#modules), [_templates_](#templates), and [_styles_](#styles) sections are very important instruction sets for lumbar to work properly. 
 
 ### Scoping ###
 
@@ -104,22 +108,20 @@ What’s great about this approach is that you don’t have to maintain two (2),
 
 ### Command Line ###
 
-    lumbar --help
+    lumbar help
             Prints out the long help message.
 
-    lumbar --build [--pkg name] [--config file] [--minimize] lumbarFile outputDir
+    lumbar build [--package name] [--config file] [--minimize] lumbarFile outputDir
             Build out the package(s).
 
-    lumbar --watch
+    lumbar watch [--package name]
             Start watching the files for changes and rebuild as necessary.
 
-    lumbar --unwatch
-            Stop watching the files.
 
-    * pkg - represents the name of a corresponding package listed under 'packages' in lumbarFile. If not given, all packages are built.
-    * minimize - flag whether we should shrink the resultant file(s).
+    * package    - represents the name of a corresponding package listed under 'packages' in lumbarFile. If not given, all packages are built.
+    * minimize   - flag whether we should shrink the resultant file(s).
     * lumbarFile - is the name and path to the lumbar config file, if not given then lumbar.json is assumed.
-    * outputDir - Required. Designates where the files will be placed.
+    * outputDir  - _Required_-designates where the files will be placed.
 
 ### Plugins ###
 
@@ -127,7 +129,11 @@ Lumbar offers tons of customization and extensibly through its Plugin Architectu
 
 #### Module extensibility through Plugins ####
 
-The “global” flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal. 
+[TODO Move all this into their own plugin doc files]
+
+[TODO Some code doesn't like when its loaded within a scope object. might be good to have an example and explain why.]
+
+The _global_ flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal. 
 
 The package-config plugin lets you set an arbitrary config object from the command line. This lets you create dev and production config at build time. 
 
