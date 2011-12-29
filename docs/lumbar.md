@@ -1,4 +1,4 @@
-# LUMBAR #
+# Lumbar #
 
 Lumbar is a js-build tool that takes a _general application_ and list of _platforms_ to generate modular _platform specific applications_.
 
@@ -126,6 +126,8 @@ What’s great about this approach is that you don’t have to maintain two (2),
 ### Plugins ###
 
 Lumbar offers tons of customization and extensibly through its Plugin Architecture. 
+
+Read more about our architecture [here](https://github.com/walmartlabs/lumbar/blob/master/docs/plugins.md).
 
 #### Module extensibility through Plugins ####
 

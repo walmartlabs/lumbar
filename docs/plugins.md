@@ -22,17 +22,19 @@ context fields. It should return a list of resource objects.
 
 Example from the router plugin:
 
-    moduleResources: function(context, next) {
-      var ret = next();
+``` javascript 
+moduleResources: function(context, next) {
+    var ret = next();
 
-      // Generate the router if we have the info for it
-      var module = context.module;
-      if (module.routes) {
+    // Generate the router if we have the info for it
+    var module = context.module;
+    if (module.routes) {
         ret.unshift({ routes: module.routes });
-      }
+    }
 
-      return ret;
-    },
+    return ret;
+}
+```
 
 ### resourceList(context, next)
 
@@ -44,15 +46,18 @@ includes as will object that define a `src` field. Resources that define a `plat
 
 Example from the scope plugin:
 
-    resourceList: function(context, next) {
-      var resources = next();
-      if (context.config.attributes.scope === 'resource'
-          && !context.resource.global) {
+``` javascript 
+resourceList: function(context, next) {
+    var resources = next();
+    if (context.config.attributes.scope === 'resource' && 
+        !context.resource.global) {
+
         resources.unshift(generator('(function() {\n'));
         resources.push(generator('}).call(this);\n'));
-      }
-      return resources;
-    },
+    }
+    return resources;
+}
+```
 
 ### file(context, next)
 
