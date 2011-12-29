@@ -19,7 +19,7 @@ var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
 "lumbar build [--package name] [--config file] [--minimize] lumbarFile outputDir\n"+
 "        Build out the package(s).\n"+
-"lumbar watch [--package]\n"+
+"lumbar watch [--package name] [--config file] [--minimize] lumbarFile outputDir\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
 "\n"+
 "package:      represents the name of a corresponding package listed\n"+
@@ -41,35 +41,39 @@ if (argl) {
   cmd = argv._[0];
 }
 
+function parseArgs() {
+  if (argl === 1) {
+    // outputDir is required
+    return true;
+  }
+
+  if (argl === 2) {
+    // lumbarFile is missing, re-assign
+    options.outdir = argv._[1];
+    lumbarFile = "lumbar.json";
+  }
+
+  if (argl === 3) {
+    lumbarFile = argv._[1];
+    options.outdir = argv._[2];
+  }
+
+  if (!lumbarFile || !options.outdir) {
+    return true;
+  }
+}
+
 var what_step = {
   "help":function() {
     return true; // this will print the help message
   },
   "build":function(){
     build = true;
-
-    if (argl === 1) {
-      // outputDir is required
-      return true;
-    }
-
-    if (argl === 2) {
-      // lumbarFile is missing, re-assign
-      options.outdir = argv._[1];
-      lumbarFile = "lumbar.json";
-    }
-
-    if (argl === 3) {
-      lumbarFile = argv._[1];
-      options.outdir = argv._[2];
-    }
-
-    if (!lumbarFile || !options.outdir) {
-      return true;
-    }
+    return parseArgs();
   },
   "watch":function(){
     watch = true;
+    return parseArgs();
   }
 };
 
