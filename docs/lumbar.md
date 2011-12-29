@@ -4,22 +4,19 @@ Lumbar is a js-build tool that takes a _general application_ and list of _platfo
 
 ## Introduction ##
 
-Lumbar is a tool that generates out a list of platform specific web applications.
+You can think of lumbar as a conditional compiler that targets platforms. However, it doesn’t rely on variables in your source code. There’s no #ifdef or #endifs. Rather you can include and exclude files by associating them with a platform. It uses a json file, [_lumbar.json_](#lumbar.json), to describe project meta-data.
 
-You can think of lumbar as a conditional compiler that targets platforms. However, it doesn’t rely on variables in your source code. There’s no #ifdef or #endifs. Rather you can include and exclude files by associating them with a platform in an external file. Keep your source files clean.
+*  It allows you to define multiple routers in your code. 
+*  It pulls in your mustache or handlebars templates.
+*  It pulls in your stylus styles and generates css files.
+*  It outputs stand alone javascript and css files.
+*  It wraps your code in the correct scope (module pattern), or not.
 
-Lumbar works well with Backbone. 
+Lumbar works well with Backbone which can group routers, models, views and other application code into stand alone modular javascript and css files which can be lazy loaded when the route is encountered.
 
-*  It allows you to define multiple routes in your code and pulls them in automatically. 
-*  It automatically pulls in your mustache or handlebars templates.
-> *  It automatically compiles the templates.
-*  It automatically pulls in your stylus styles and generates css files.
-*  It automatically outputs combined minified javascript and css files.
-*  It automatically wraps your code in the correct context, or not.
+Best of all, if what’s included out of the box doesn’t satisfy your needs, then you should be able to build a plugin relatively easily to support it. Lumbar was built around a Plugin architecture which makes it very extensible. 
 
-Best of all, if what’s included out of the box doesn’t satisfy your needs, then you should be able to build a plugin relatively easily to support them. Lumbar was built with a Plugin architecture which makes it very extensible. 
-
-### High Level Overview ###
+## High Level Overview ##
 
 Lumbar is really modeled and built around [_platform(s)_](#platforms). Platform(s) are defined by you, to fit your representations. When a platform flag is present on a resource, such as a javascript file, then that resource will be included for that platform’s output only.
 
@@ -27,34 +24,11 @@ The next big term are [_module(s)_](#modules). A module is a grouping of multipl
 
 Following module(s) are [_package(s)_](#packages). When platform(s) are processed one by one, they are output based on rules found in the packages. Therefore, a package gives more flexibility on how to output files. Theoretically, you could have one package that referenced all your platform(s). 
 
-### Routes ###
-
-Lumbar automatically takes the routes found in module(s) and processes them. Routes are defined in each module. 
-
-## Example ##
-
-### Dependencies ###
-
-[Todo] 
-
 ### lumbar.json ###
 
-The main configuration file for lumbar is by default named lumbar.json. It is a JSON formatted document that has six (6) main sections. Quickly they are application, platforms, packages, modules, styles, and templates. 
+The main configuration file for lumbar is by default named lumbar.json. It is a JSON formatted document that has six (6) main sections. They are [_application_](#application), [_platforms_](#platforms), [_packages_](#packages), [_modules_](#modules), [_templates_](#templates), and [_styles_](#styles). 
 
 Each section of lumbar.json is discussed in more detail below. There is a lumbar.json included in the example directory.  
-
-### Directory structure ###
-
-The following diagram shows an example directory structure. This is where your actual development code and live trunk live. You will probably have three (3) distinct folders for your markup (templates), css (styles), and javascript (js). We tend to break our js folder down into backbone centric terms as you can see from the diagram below.
-
-What’s great about this approach is that you don’t have to maintain two (2), three (3), four (4), or more branches of your app for different platforms. Lumbar will handle outputting the platform specific versions for you. 
-
-
-## API Documentation ##
-
-### lumbar.json ###
-
-The cornerstone of any lumbar specifications comes from lumbar.json. This is lumbar’s main configuration file. There are six (6) main sections addressed in it. They are application, platforms, packages, modules, templates and styles.
 
 #### Application ####
 
@@ -94,14 +68,6 @@ An entry in the scripts or styles array is either a plain filename with relative
 
 Now as we’re building our modules and pulling in the javascript files we constantly check to see if they are a match in the “templates” section. If they are then we also add those templates to our module. As an example, if we added another entry as “header.js” and also happened to have “header.js” listed underneath the templates section, then we would pull in the templates given there.
 
-##### Module extensibility through Plugins #####
-
-The “global” flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal. 
-
-The package-config plugin lets you set an arbitrary config object from the command line. This lets you create dev and production config at build time. 
-
-The module-map plugin outputs the data necessary to load modules in response to routing events. Basically this creates a list of css and javascript files to load when a backbone route event occurs and the supporting module has not yet been loaded.
-
 #### Templates ####
 
 Next to last, is the templates section which lists out all the views for a given key. Views are a mixture of html and logic using either handlebars or mustache. When templates are found they are automatically compiled and included into the module requesting it. 
@@ -115,6 +81,26 @@ Finally the templates sections lists out all the views for a given key. Styles a
 #### Summary ####
 
 We just discussed the six (6) major sections of the lumbar.json configuration file. The application, platforms, packages, modules, templates, and styles sections are very important instruction sets for lumbar to work properly. 
+
+### Scoping ###
+
+Lumbar creates a private scope for all generated modules using the javascript module
+pattern.
+
+### Routes ###
+
+Lumbar automatically takes the routes found in module(s) and processes them. Routes are defined in each module. 
+
+### Dependencies ###
+
+[Todo] 
+
+### Directory structure ###
+
+The following diagram shows an example directory structure. This is where your actual development code and live trunk live. You will probably have three (3) distinct folders for your markup (templates), css (styles), and javascript (js). We tend to break our js folder down into backbone centric terms as you can see from the diagram below.
+
+What’s great about this approach is that you don’t have to maintain two (2), three (3), four (4), or more branches of your app for different platforms. Lumbar will handle outputting the platform specific versions for you. 
+
 
 ### Command Line ###
 
@@ -138,6 +124,14 @@ We just discussed the six (6) major sections of the lumbar.json configuration fi
 ### Plugins ###
 
 Lumbar offers tons of customization and extensibly through its Plugin Architecture. 
+
+#### Module extensibility through Plugins ####
+
+The “global” flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal. 
+
+The package-config plugin lets you set an arbitrary config object from the command line. This lets you create dev and production config at build time. 
+
+The module-map plugin outputs the data necessary to load modules in response to routing events. Basically this creates a list of css and javascript files to load when a backbone route event occurs and the supporting module has not yet been loaded.
 
 [Discuss Plugins]
 
