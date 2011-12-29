@@ -2,7 +2,7 @@ th {
   font-weight: normal;
 }
 body {
-  font: 0.9em "comic sans ms";
+  font: 0.9em 'comic sans ms';
   color: #fff;
 }
 .header-button.show-search {

@@ -1,7 +1,7 @@
 button,
-[type="submit"],
-[type="button"] {
-  appearance: none;
+[type='submit'],
+[type='button'] {
+  -webkit-appearance: none;
   background: none;
 }
 th {
