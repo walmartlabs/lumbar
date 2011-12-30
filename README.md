@@ -1,10 +1,6 @@
-# Lumbar
+# Lumbar #
 
-Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.
-
-## Examples
-
-See the example directory for an example of a complete lumbar project. This may be compiled using `lumbar --config config/dev.json lumbar.json public`.
+Lumbar is a js-build tool that takes a _general application_ and list of _platforms_ to generate modular _platform specific applications_.
 
 ## Watch File Limit
 

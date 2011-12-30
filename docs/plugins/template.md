@@ -1,0 +1,6 @@
+# Template Plugin #
+
+## Introduction ##
+
+## Example ##
+
