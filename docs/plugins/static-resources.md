@@ -38,19 +38,26 @@ Static resource management plug-in. Each module can have a "static" attribute wh
 
 ```
 
+## Notes ##
+
 * outputDir is obtained from a command line argument when invoking lumbar. 
   
 * platformdir is the {outputDir}/platform
 
+## Questions ##
+
 * When we say the following, the iphone and android are referring to their respective platform names. In the above example, the platforms are iphone and android.
+
 ``` javascript
 // copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html 
 ```
 
 * What if a '/' was put in front of the src? For example
+
 ``` javascript
 {"src": "/index-iphone.html", "dest": "index.html", "platform": "iphone"} 
 ```
+
 Would that mean it would get copied to {outputDir}/index.html? Instead of {outputDir}/iphone/index.html on accident?
 
 A: No, it will go {outputDir}/iphone/index.html. Beacuse, if you have an entry that was just a string, then both src and dest are that value. The dest attribute is used to determine platformDir vs ouputDir.
