@@ -131,6 +131,31 @@ exports['watch-style'] = function(done) {
     done);
 };
 
+exports['watch-stylus'] = function(done) {
+  var expectedFiles = [
+          '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
+          '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
+          '/iphone/base.css', '/iphone/base@2x.css',
+          '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css'
+        ],
+      operations = {
+        3: function(testdir) {
+          appendSpace(testdir + '/stylus.json');
+        },
+        6: function(testdir) {
+          appendSpace(testdir + '/styles/iphone.styl');
+        },
+        8: function(testdir) {
+          appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
+        }
+      };
+
+  runWatchTest.call(this,
+    'test/artifacts', 'stylus.json',
+    operations, expectedFiles, 'test/expected/stylus',
+    done);
+};
+
 exports['watch-dir'] = function(done) {
   var expectedFiles = [
           '/base.js', '/base.js'
