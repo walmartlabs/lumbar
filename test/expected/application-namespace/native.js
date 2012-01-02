@@ -10,7 +10,7 @@ exports.belongToUs = function() {
 /* handsfree : templates/home.handlebars*/
 module.exports.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 /* lumbar module map */
-module.exports.moduleMap({"base":{"js":"native.js"}}, '');
+module.exports.moduleMap({"base":{"js":".js"}}, 'native');
 module.exports.config = {"dev": true}
 ;
 return module.exports;
