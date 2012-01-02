@@ -16,10 +16,10 @@ exports.testDir = function(testName, configFile) {
 exports.assertExpected = function(outdir, expectedDir, configFile) {
   var expectedFiles = glob.globSync(expectedDir + '/**/*.*').map(function(fileName) {
         return fileName.substring(expectedDir.length);
-      }).sort(),
+      }).filter(function(file) { return !/\/$/.test(file); }).sort(),
       generatedFiles = glob.globSync(outdir + '/**/*.*').map(function(fileName) {
         return fileName.substring(outdir.length);
-      }).sort();
+      }).filter(function(file) { return !/\/$/.test(file); }).sort();
   assert.deepEqual(generatedFiles, expectedFiles, configFile + ': file list matches' + JSON.stringify(expectedFiles) + JSON.stringify(generatedFiles));
 
   generatedFiles.forEach(function(fileName) {

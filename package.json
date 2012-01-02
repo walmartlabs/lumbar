@@ -26,7 +26,8 @@
     "glob": "~2.0",
     "wrench": "~1.2"
   },
-  "main": "bin/lumbar",
+  "bin": "bin/lumbar",
+  "main": "lib/lumbar",
   "scripts": {
     "test": "expresso -t 20000 -s test/*"
   }
