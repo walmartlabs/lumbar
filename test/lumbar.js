@@ -27,4 +27,6 @@ exports['styles'] = lib.runTest('test/artifacts/styles.json', 'test/expected/sty
 exports['stylus'] = lib.runTest('test/artifacts/stylus.json', 'test/expected/stylus');
 exports['inline-styles'] = lib.runTest('test/artifacts/inline-styles.json', 'test/expected/inline-styles');
 
+exports['trailing-slash'] = lib.runTest('test/artifacts/trailing-slash.json', 'test/expected/trailing-slash');
+
 // TODO : Test file not found and other cases

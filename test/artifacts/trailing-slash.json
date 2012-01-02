@@ -1,0 +1,14 @@
+{
+  "modules": {
+    "base": [
+      {"src": "js/home/"}
+    ]
+  },
+  "templates": {
+    "js/home/home.js": [
+      "templates/"
+    ]
+  },
+
+  "templateCache": "TemplateCache"
+}
