@@ -1,25 +1,16 @@
 #!/usr/bin/env node
 
 var fs = require('fs'),
-    lumbar = require('../lib/lumbar');
+    lumbar = require('../lib/lumbar'),
+    dirname = require('path').dirname;
 
-var argv = require('optimist').argv;
-
-var lumbarFile,
-    options = {
-      packageConfigFile: argv.config,
-      minimize: argv.minimize,
-      outdir: null
-    },
-    pkg = argv['package'], 
-    watch = false,
-    build = false;
+var args = process.argv.slice(2);
 
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
-"lumbar build [--package name] [--config file] [--minimize] lumbarFile outputDir\n"+
+"lumbar build [--package name] [--config file] [--minimize] [--include path] [--use path] lumbarFile outputDir\n"+
 "        Build out the package(s).\n"+
-"lumbar watch [--package name] [--config file] [--minimize] lumbarFile outputDir\n"+
+"lumbar watch [--package name] [--config file] [--minimize] [--include path] [--use path] lumbarFile outputDir\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
 "\n"+
 "package:      represents the name of a corresponding package listed\n"+
@@ -34,54 +25,113 @@ var LONG_USAGE="lumbar help\n"+
 "\n"+
 "Please use 'man lumbar' to get the full man page.";
 
-var argl = argv._.length;
-var cmd;
+var configFile;
+var packageName;
+var minimize = false;
+var build = true; // build by default.
+var watch = false;
 
-if (argl) {
-  cmd = argv._[0];
+var lumbarFile;
+var outputDir;
+/** 
+ * Import paths.
+ */
+var paths;
+var plugins = [];
+var files = [];
+
+var arg;
+while (args.length) {
+  arg = args.shift();
+  switch (arg) {
+    case '-h':
+    case '--help':
+      console.error(LONG_USAGE);
+      process.exit(1);
+      break;
+    case '-c':
+    case '--config':
+      configFile = args.shift();
+      if (!configFile) throw new Error('--config <file> required');
+      break;
+    case '-p':
+    case '--package':
+      packageName = args.shift();
+      if (!packageName) throw new Error('--package <name> required');
+      break;
+    case '-m':
+    case '--minimize':
+      minimize = true;
+      break;
+    case '-b':
+    case '--build':
+    case 'build':
+      build = true;
+      watch = false;
+      break;
+    case '-w':
+    case '--watch':
+    case 'watch':
+      watch = true;
+      build = false;
+      break;
+    case '-i':
+    case '--include':
+      var path = args.shift();
+      if (!path) throw new Error('--include <path> required');
+      paths.push(path);
+      break;
+    case '-u':
+    case '--use':
+      var options;
+      var path = args.shift();
+      if (!path) throw new Error('--use <path> required');
+
+      // options
+      if ('--with' == args[0]) {
+        args.shift();
+        options = args.shift();
+        if (!options) throw new Error('--with <options> required');
+        options = eval('(' + options + ')');
+      }
+
+      paths.push(dirname(path));
+      var name = "PlugIn_" + new Date().getTime();
+      plugins.push({ path: path, options: options, name: name });
+
+      break;
+    default:
+      files.push(arg);
+  }
 }
 
-function parseArgs() {
-  if (argl === 1) {
-    // outputDir is required
-    return true;
+if (build || watch) {
+  switch (files.length) {
+    case 2:
+      lumbarFile = files[0];
+      outputDir = files[1];
+      break;
+    case 1:
+      outputDir = files[0];
+      lumbarFile = "lumbar.json";
+      break;
+    case 0:
+      console.error(LONG_USAGE);
+      process.exit(1);
+      return true;
   }
-
-  if (argl === 2) {
-    // lumbarFile is missing, re-assign
-    options.outdir = argv._[1];
-    lumbarFile = "lumbar.json";
-  }
-
-  if (argl === 3) {
-    lumbarFile = argv._[1];
-    options.outdir = argv._[2];
-  }
-
-  if (!lumbarFile || !options.outdir) {
-    return true;
-  }
+} else {
+  console.error(LONG_USAGE);
+  process.exit(1);
 }
 
-var what_step = {
-  "help":function() {
-    return true; // this will print the help message
-  },
-  "build":function(){
-    build = true;
-    return parseArgs();
-  },
-  "watch":function(){
-    watch = true;
-    return parseArgs();
-  }
+var options = {
+  packageConfigFile: configFile,
+  minimize: minimize,
+  outdir: outputDir,
+  paths: [process.cwd()].concat(paths),
+  plugins: plugins
 };
-
-var fn = what_step[cmd] || what_step.help;
-if (fn.apply(this)) {
-  console.log(LONG_USAGE);
-  return;
-}
 
 // invoke init() from ../lib/lumbar.js. 
 var arise = lumbar.init(lumbarFile, options),
@@ -99,7 +149,7 @@ fs.stat(options.outdir, function(err, stat) {
     }
 
     // execute either watch() or build() and pass lumbar as the context.
-    worker.call(arise, pkg, function(err, status) {
+    worker.call(arise, packageName, function(err, status) {
         if (err) {
             throw err;
         }
