@@ -1,3 +1,18 @@
+var Loader;
+Loader = (function() {
+var module = {exports: {}};
+var exports = module.exports;
+var allYour = true;
+
+exports.belongToUs = function() {
+};
+;;
+/* handsfree : templates/home.handlebars*/
+Lumbar.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
+/* lumbar module map */
+module.exports.moduleMap({"base":{"js":".js"}}, 'native');
+return module.exports;
+}).call(this);
 var Lumbar;
 Lumbar = (function() {
 var module = {exports: {}};
@@ -7,8 +22,6 @@ var allYour = true;
 exports.belongToUs = function() {
 };
 ;;
-/* handsfree : templates/home.handlebars*/
-module.exports.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 /* lumbar module map */
 module.exports.moduleMap({"base":{"js":".js"}}, 'native');
 module.exports.config = {"dev": true}

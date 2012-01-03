@@ -6,6 +6,13 @@
     }
   },
   "modules": {
+    "loader": {
+      "scripts": [
+        "js/base.js",
+        {"module-map": true}
+      ],
+      "topLevelName": "Loader"
+    },
     "base": [
       "js/base.js",
       {"module-map": true},
