@@ -19,14 +19,10 @@
   "modules": {
     "base": {
       "scripts": [
-        {"src": "lib/zepto.js", "global": true},
-        {"src": "lib/underscore.js", "global": true},
-        {"src": "lib/backbone.js", "global": true},
-        {"src": "lib/handlebars.js", "global": true},
-        {"src": "lib/script.js", "global": true, "platform": "web"},
+        {"src": "js/init.js", "global": true},
+        {"src": "js/router.js", "global": true, "platform": "web"},
 
         "js/init.js",
-        "js/router.js",
 
         {"src": "js/bridge.js", "platforms": ["iphone", "android"]},
         {"src": "js/bridge-android.js", "platform": "android"},
