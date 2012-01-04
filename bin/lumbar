@@ -8,22 +8,30 @@ var args = process.argv.slice(2);
 
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
-"lumbar build [--package name] [--config file] [--minimize] [--use path] lumbarFile outputDir\n"+
+"lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir\n"+
 "        Build out the package(s).\n"+
-"lumbar watch [--package name] [--config file] [--minimize] [--use path] lumbarFile outputDir\n"+
+"lumbar watch [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
 "\n"+
-"package:      represents the name of a corresponding package listed\n"+
+"--package:    represents the name of a corresponding package listed\n"+
 "              under 'packages' in lumbarFile.\n"+
 "\n"+
-"minimize:     to shrink the resultant file.\n"+
+"--minimize:   to shrink the resultant file.\n"+
+"\n"+
+"--config:     is the name and path to the lumbar config file, if\n"+
+"              not given then lumbar.json is assumed.\n"+
+"\n"+
+"--use:        path to your plugin to load\n"+
+"\n"+
+"    --with:   an optional json config object to pass to your plugin.\n"+
+"\n"+
+"    --name:   an optional name to assign to your plugin.\n"+
 "\n"+
 "lumbarFile:   is the name and path to the lumbar config file, if\n"+
 "              not given then lumbar.json is assumed.\n"+
 "\n"+
 "outputDir:    Required. Designates where the files will be placed.\n"+
-"\n"+
-"Please use 'man lumbar' to get the full man page.";
+"\n";
 
 var configFile;
 var packageName;
