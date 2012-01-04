@@ -8,9 +8,9 @@ var args = process.argv.slice(2);
 
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
-"lumbar build [--package name] [--config file] [--minimize] [--include path] [--use path] lumbarFile outputDir\n"+
+"lumbar build [--package name] [--config file] [--minimize] [--use path] lumbarFile outputDir\n"+
 "        Build out the package(s).\n"+
-"lumbar watch [--package name] [--config file] [--minimize] [--include path] [--use path] lumbarFile outputDir\n"+
+"lumbar watch [--package name] [--config file] [--minimize] [--use path] lumbarFile outputDir\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
 "\n"+
 "package:      represents the name of a corresponding package listed\n"+
@@ -36,7 +36,6 @@ var outputDir;
 /** 
  * Import paths.
  */
-var paths;
 var plugins = [];
 var files = [];
 
@@ -75,12 +74,6 @@ while (args.length) {
       watch = true;
       build = false;
       break;
-    case '-i':
-    case '--include':
-      var path = args.shift();
-      if (!path) throw new Error('--include <path> required');
-      paths.push(path);
-      break;
     case '-u':
     case '--use':
       var options;
@@ -95,7 +88,6 @@ while (args.length) {
         options = eval('(' + options + ')');
       }
 
-      paths.push(dirname(path));
       var name = "PlugIn_" + new Date().getTime();
       plugins.push({ path: path, options: options, name: name });
 
@@ -129,7 +121,6 @@ var options = {
   packageConfigFile: configFile,
   minimize: minimize,
   outdir: outputDir,
-  paths: [process.cwd()].concat(paths),
   plugins: plugins
 };
 
