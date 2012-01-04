@@ -80,16 +80,32 @@ while (args.length) {
       var path = args.shift();
       if (!path) throw new Error('--use <path> required');
 
-      // options
-      if ('--with' == args[0]) {
-        args.shift();
-        options = args.shift();
-        if (!options) throw new Error('--with <options> required');
-        options = eval('(' + options + ')');
+      var pluginName; 
+      if ('--name' == args[0] || '--with' == args[0]) {
+        var extractName = function() {
+          args.shift();
+          options = args.shift();
+          if (!options) throw new Error('--with <options> required');
+          options = eval('(' + options + ')');
+        };
+
+        var extractWith = function() {
+          args.shift();
+          pluginName = args.shift();
+        };
+
+        if ('--name' == args[0]) {
+          extractName();
+          if ('--with' == args[0]) { extractWith(); }
+        }
+        else if ('--with' == args[0]) {
+          extractWith();
+          if ('--name' == args[0]) { extractName(); }
+        }
       }
 
-      var name = "PlugIn_" + new Date().getTime();
-      plugins.push({ path: path, options: options, name: name });
+      var pluginName = pluginName || "PlugIn_" + new Date().getTime();
+      plugins.push({ path: path, options: options, name: pluginName });
 
       break;
     default:
