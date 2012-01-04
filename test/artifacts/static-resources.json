@@ -1,0 +1,13 @@
+{
+  "platforms": ["web", "iphone"],
+  "modules": {
+    "base": {
+      "static": [
+        {"src": "static-resources-root.txt", "root": true},
+        "static-resources-platform.txt",
+        {"src": "static-resources/all", "dest": "#{platform}", "root": true},
+        {"src": "static-resources-platform.txt", "dest": "#{platform}-file.txt"}
+      ]
+    }
+  }
+}
