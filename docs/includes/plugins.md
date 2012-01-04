@@ -23,7 +23,7 @@ context fields. It should return a list of resource objects.
 Example from the router plugin:
 
 ``` javascript 
-moduleResources: function(context, next) {
+moduleResources: function(context, next, complete) {
     var ret = next();
 
     // Generate the router if we have the info for it
