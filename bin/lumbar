@@ -104,7 +104,7 @@ while (args.length) {
         }
       }
 
-      pluginName = pluginName || "PlugIn_" + new Date().getTime();
+      pluginName = pluginName || "PlugIn_" + plugins.length;
       plugins.push({ path: path, options: options, name: pluginName });
 
       break;
