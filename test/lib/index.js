@@ -64,7 +64,13 @@ exports.runTest = function(configFile, expectedDir, options) {
 
       done();
     });
+    var retCount = 0;
     arise.build(undefined, function(err) {
+      retCount++;
+      if (retCount > 1) {
+        throw new Error('Build callback executed multiple times');
+      }
+
       throw err;
     });
   };
