@@ -70,8 +70,9 @@ exports.runTest = function(configFile, expectedDir, options) {
       if (retCount > 1) {
         throw new Error('Build callback executed multiple times');
       }
-
-      throw err;
+      if (err) {
+        throw err;
+      }
     });
   };
 }
