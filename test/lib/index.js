@@ -44,6 +44,10 @@ exports.runTest = function(configFile, expectedDir, options) {
 
     var arise = lumbar.init(configFile, options || {outdir: outdir});
     arise.on('output', function(status) {
+      if (retCount > 0) {
+        throw new Error('Output event seen after callback');
+      }
+
       var statusFile = status.fileName.substring(outdir.length);
       if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
         assert.fail(undefined, status.fileName, configFile + ':' + statusFile + ': missing from expected list');
