@@ -57,6 +57,13 @@ module.exports = function(static) {
 
   static.file(/pages\/(plugins\/)?.+\.md$/, function(file) {
     file.$(function(window) {
+      //set the title of the page to be the first h1 in the body if present
+      var title, title_element = window.$('.container h1:first')[0];
+      if (title_element) {
+        title = title_element.innerHTML;
+        window.$('title').html(title)
+      }
+
       //assign ids
       window.$('.container h2').each(function() {
         this.id = this.innerHTML.split(/\s/).shift().replace(/\./g,'-').toLowerCase();
