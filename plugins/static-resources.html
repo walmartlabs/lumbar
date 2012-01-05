@@ -1,0 +1,98 @@
+<!DOCTYPE html><html>  <head>    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title></title>
+    <script type="text/javascript" src="../scripts/main.js"></script>
+    <script type="text/javascript" src="../scripts/whitespace.js"></script>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+  <body>    <div id="sidebar" class="interface">
+      <h2>
+        <a href="#introduction">Introduction</a>
+      </h2>
+      <h2>
+        <a href="#example">Example</a>
+      </h2>
+      <h2>
+        <a href="#notes">Notes</a>
+      </h2>
+      <h2>
+        <a href="#questions">Questions</a>
+      </h2>
+    </div>
+    <div class="container">      <h1>Static Resources Plugin</h1>
+      <h2 id="introduction">Introduction</h2>
+      <p>Static resource management plug-in. Each module can have a "static" attribute which is an array of resources to be copied from the application path to the outputDir (or platformDir). Each static entry can be a simple string or a hash containing.</p>
+      <ul>
+        <li>src: the source location (specific file or directory for recursive copy). </li>
+        <li>dest: the destination location. Initial '/' indicates use of outputDir path, otherwise platformDir path. </li>
+        <li>platform: a single platform to execute the copy (optional and mutually exclusive with platforms)</li>
+        <li>platforms: an array of platforms to execute the copy (optional and mutually exclusive with platform)</li>
+      </ul>
+      <h2 id="example">Example</h2>
+      <p>
+        <code></code>
+` javascript
+"platforms": ["iphone", "android"],
+"modules": {
+  "foo": {
+    "static": [
+      // copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html
+      "index.html", </p>
+      <pre>
+        <code>  // copy {app}/index.html to {outputDir/index.html}
+  "/index.html",
+
+  // copy recursively {app}/static to {outputDir}/static
+  "/static", 
+
+  // copy {app}/index-iphone.html to {app}/iphone/index.html only for the iphone platform
+  {"src": "index-iphone.html", "dest": "index.html", "platform": "iphone"}
+
+  // copy recursively {app}/static/iphone to {outputDir}/iphone and {app}/static/android to {outputDir}/android
+  // will error if any of the platform directories are missing
+  {"src": "static/$platform", "dest": "/$platform"}
+]</code>
+      </pre>
+      <p>  }
+}</p>
+      <p>
+        <code></code>
+`</p>
+      <h2 id="notes">Notes</h2>
+      <ul>
+        <li>
+          <p>outputDir is obtained from a command line argument when invoking lumbar. </p>
+        </li>
+        <li>
+          <p>platformdir is the {outputDir}/platform</p>
+        </li>
+      </ul>
+      <h2 id="questions">Questions</h2>
+      <ul>
+        <li>When we say the following, the iphone and android are referring to their respective platform names. In the above example, the platforms are iphone and android.</li>
+      </ul>
+      <p>
+        <code> javascript
+// copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html 
+</code>
+      </p>
+      <ul>
+        <li>What if a '/' was put in front of the src? For example</li>
+      </ul>
+      <p>
+        <code> javascript
+{"src": "/index-iphone.html", "dest": "index.html", "platform": "iphone"} 
+</code>
+      </p>
+      <p>Would that mean it would get copied to {outputDir}/index.html? Instead of {outputDir}/iphone/index.html on accident?</p>
+      <p>A: No, it will go {outputDir}/iphone/index.html. Beacuse, if you have an entry that was just a string, then both src and dest are that value. The dest attribute is used to determine platformDir vs ouputDir.</p>
+      <p>If dest has a / in front of it, it will still output to the platformDir and not the outputDir if a platform is present. </p>
+      <ul>
+        <li>What does {src: "static/$platform", dest: "/${platform}"} do exactly? Will it copy all files from static/iphone to {outputDir}/iphone or {outputDir}/iphone/iphone?</li>
+      </ul>
+      <p>A: It would copy {app}/static/iphone/        <em> to {outputDir}/iphone/</em>
+ and {app}/static/android to {outputDir}/android</p>
+      <p>(this is because the initial dest / indicates outputDir but then the platform variable is used)</p>
+</div>
+</body>
+</html>
