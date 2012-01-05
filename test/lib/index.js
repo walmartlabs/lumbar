@@ -43,11 +43,7 @@ exports.runTest = function(configFile, expectedDir, options) {
         seenFiles = [];
 
     var arise = lumbar.init(configFile, options || {outdir: outdir});
-    arise.build(undefined, function(err, status) {
-      if (err) {
-        throw err;
-      }
-
+    arise.on('output', function(status) {
       var statusFile = status.fileName.substring(outdir.length);
       if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
         assert.fail(undefined, status.fileName, configFile + ':' + statusFile + ': missing from expected list');
@@ -67,6 +63,9 @@ exports.runTest = function(configFile, expectedDir, options) {
       wrench.rmdirSyncRecursive(outdir);
 
       done();
+    });
+    arise.build(undefined, function(err) {
+      throw err;
     });
   };
 }
