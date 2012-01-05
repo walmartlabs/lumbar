@@ -23,7 +23,7 @@
   "modules": {
     "base": {
       "scripts": [
-        {"src": "lib/zepto.js", "global": true},
+        {"src": "lib/zepto.js", "global": true, "env":"dev"},
         {"src": "lib/underscore.js", "global": true},
         {"src": "lib/backbone.js", "global": true},
         {"src": "lib/handlebars.js", "global": true},
