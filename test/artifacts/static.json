@@ -1,0 +1,12 @@
+{
+  "platforms": [ "web" ],
+  "modules": {
+    "base": {
+      "static": [
+        "js/base.js",
+        "js/home/home.js",
+        "images"
+      ]
+    }
+  }
+}
