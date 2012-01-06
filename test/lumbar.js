@@ -30,3 +30,5 @@ exports['inline-styles'] = lib.runTest('test/artifacts/inline-styles.json', 'tes
 exports['trailing-slash'] = lib.runTest('test/artifacts/trailing-slash.json', 'test/expected/trailing-slash');
 
 // TODO : Test file not found and other cases
+
+// exports['static-resources'] = lib.runTest('test/artifacts/static-resources.json', 'test/expected/static-resources');
