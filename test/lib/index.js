@@ -43,9 +43,9 @@ exports.runTest = function(configFile, expectedDir, options) {
         seenFiles = [];
 
     var arise = lumbar.init(configFile, options || {outdir: outdir});
-    arise.build(undefined, function(err, status) {
-      if (err) {
-        throw err;
+    arise.on('output', function(status) {
+      if (retCount > 0) {
+        throw new Error('Output event seen after callback');
       }
 
       var statusFile = status.fileName.substring(outdir.length);
@@ -67,6 +67,16 @@ exports.runTest = function(configFile, expectedDir, options) {
       wrench.rmdirSyncRecursive(outdir);
 
       done();
+    });
+    var retCount = 0;
+    arise.build(undefined, function(err) {
+      retCount++;
+      if (retCount > 1) {
+        throw new Error('Build callback executed multiple times');
+      }
+      if (err) {
+        throw err;
+      }
     });
   };
 }
