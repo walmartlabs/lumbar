@@ -166,6 +166,19 @@ exports['file-list-resource-only'] = function(done) {
   });
 };
 
+exports['file-list-not-found'] = function(done) {
+  fu.lookupPath('test');
+  fu.fileList(['foo-bar-baz'], /js\/.*\.js$/, function(err, files) {
+    if (err) {
+      throw err;
+    }
+
+    assert.deepEqual(files, [{src: 'foo-bar-baz', enoent: true}]);
+
+    done();
+  });
+};
+
 exports['file-list-none'] = function(done) {
   fu.lookupPath('test');
   fu.fileList([], /js\/.*\.js$/, function(err, files) {
