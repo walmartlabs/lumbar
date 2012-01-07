@@ -2,7 +2,8 @@
 
 var fs = require('fs'),
     lumbar = require('../lib/lumbar'),
-    dirname = require('path').dirname;
+    dirname = require('path').dirname,
+    growl = require('growl');
 
 var args = process.argv.slice(2);
 
@@ -151,7 +152,25 @@ var options = {
 // invoke init() from ../lib/lumbar.js. 
 var arise = lumbar.init(lumbarFile, options),
     // is worker going to point to watch or build func?
-    worker = watch ? arise.watch : arise.build;
+    worker = watch ? arise.watch : arise.build,
+    lastMessage;
+
+arise.on('output', function(status) {
+  if (status.watch) {
+    console.log('\t\033[90mwatching\033[0m ' + status.fileName);
+  } else {
+    console.log('\t\033[90mcompiled\033[0m ' + status.fileName);
+  }
+});
+arise.on('error', function(err) {
+  var message = err.stack || err.message;
+  if (lastMessage !== message) {
+    lastMessage = message;
+
+    console.error(message);
+    growl(err.message, { title: 'Lumbar error' });
+  }
+});
 
 // First figure out what our output looks like
 fs.stat(options.outdir, function(err, stat) {
@@ -167,12 +186,6 @@ fs.stat(options.outdir, function(err, stat) {
     worker.call(arise, packageName, function(err, status) {
         if (err) {
             throw err;
-        }
-
-        if (status.watch) {
-            console.log('\t\033[90mwatching\033[0m ' + status.fileName);
-        } else {
-            console.log('\t\033[90mcompiled\033[0m ' + status.fileName);
         }
     });
 });

@@ -34,11 +34,7 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
   wrench.copyDirSyncRecursive(srcdir, testdir);
 
   var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
-  arise.watch(undefined, function(err, status) {
-    if (err) {
-      throw err;
-    }
-
+  arise.on('output', function(status) {
     var statusFile = status.fileName.substring(outdir.length);
     if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
       arise.unwatch();
@@ -67,6 +63,12 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     wrench.rmdirSyncRecursive(outdir);
 
     done();
+  });
+
+  var retCount = 0;
+  arise.watch(undefined, function(err) {
+    err = err || new Error('Callback called without fatal error');
+    throw err;
   });
 }
 
