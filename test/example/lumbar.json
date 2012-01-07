@@ -40,6 +40,11 @@
         "styles/base.styl",
         "styles/header.styl",
         {"src": "styles/iphone.styl", "platform": "iphone"}
+      ],
+
+      "static": [
+        {"src": "public/#{platform}/index.html", "dest": "index.html"},
+        {"src": "js/bridge.js", "dest": "#{platform}-file.txt"}
       ]
     },
     "home": {
