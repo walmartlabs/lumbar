@@ -61,9 +61,8 @@ exports['file-list-file-no-filter'] = function(done) {
 };
 
 exports['file-list-file-not-found'] = function(done) {
-  fu.fileList('test/file-util.js.foo', function(err, files) {
-    assert.equal(files, undefined);
-    assert.equal(err.code, 'ENOENT');
+  fu.fileList('foo-bar-baz', function(err, files) {
+    assert.deepEqual(files, [{src: 'foo-bar-baz', enoent: true}]);
 
     done();
   });
@@ -161,19 +160,6 @@ exports['file-list-resource-only'] = function(done) {
     }
 
     assert.deepEqual(files, [{router: true}]);
-
-    done();
-  });
-};
-
-exports['file-list-not-found'] = function(done) {
-  fu.lookupPath('test');
-  fu.fileList(['foo-bar-baz'], /js\/.*\.js$/, function(err, files) {
-    if (err) {
-      throw err;
-    }
-
-    assert.deepEqual(files, [{src: 'foo-bar-baz', enoent: true}]);
 
     done();
   });
