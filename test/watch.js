@@ -77,26 +77,34 @@ exports['watch-script'] = function(done) {
           '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
               '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
               '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
+              '/web/index.html', '/web/web-file.txt',
+              '/iphone/index.html', '/iphone/iphone-file.txt',
+              '/android/index.html', '/android/android-file.txt',
           '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
               '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
               '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
+              '/web/index.html', '/web/web-file.txt',
+              '/iphone/index.html', '/iphone/iphone-file.txt',
+              '/android/index.html', '/android/android-file.txt',
           '/android/native-home.js', '/iphone/native-home.js',
+              '/web/web-file.txt', '/iphone/iphone-file.txt', '/android/android-file.txt',
           '/android/native-home.js', '/iphone/native-home.js',
+              '/web/web-file.txt', '/iphone/iphone-file.txt', '/android/android-file.txt',
           '/android/native-home.js', '/iphone/native-home.js', '/web/home.js'
         ],
       operations = {
-        12: function(testdir) {
+        18: function(testdir) {
           // Modify the config file
           appendSpace(testdir + '/lumbar.json');
         },
-        24: function(testdir) {
+        36: function(testdir) {
           // Modify the bridge file
           appendSpace(testdir + '/js/bridge.js');
         },
-        26: function(testdir) {
+        41: function(testdir) {
           appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
         },
-        28: function(testdir) {
+        46: function(testdir) {
           // Modify the home template
           appendSpace(testdir + '/templates/home/home.handlebars');
         }
