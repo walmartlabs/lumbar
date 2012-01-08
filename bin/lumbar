@@ -42,7 +42,7 @@ var watch = false;
 
 var lumbarFile;
 var outputDir;
-/** 
+/**
  * Import paths.
  */
 var plugins = [];
@@ -89,7 +89,7 @@ while (args.length) {
       var path = args.shift();
       if (!path) throw new Error('--use <path> required');
 
-      var pluginName; 
+      var pluginName;
       if ('--name' == args[0] || '--with' == args[0]) {
         function extractWith() {
           args.shift();
@@ -149,7 +149,7 @@ var options = {
   plugins: plugins
 };
 
-// invoke init() from ../lib/lumbar.js. 
+// invoke init() from ../lib/lumbar.js.
 var arise = lumbar.init(lumbarFile, options),
     // is worker going to point to watch or build func?
     worker = watch ? arise.watch : arise.build,

@@ -73,7 +73,7 @@ module.exports = function(static) {
         var header = window.$(this).prevAll('h2:first')[0];
         this.id = (header.innerHTML.replace(/\./g,'-') + '-' + name).toLowerCase();
       });
-      
+
       //build toc
       var toc_html = '';
       window.$('.container h2').each(function() {

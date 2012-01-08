@@ -3,5 +3,5 @@ window.onload = function() {
   for (var i = 0; i < pres.length; ++i) {
     var pre = pres[i];
     pre.innerHTML = pre.innerHTML.replace(/(^[\s\n]+)/m,'');
-  } 
+  }
 };
