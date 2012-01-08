@@ -103,11 +103,11 @@ For example, if the plugin has defined a mode called `'foo'` and a lumbar.json f
     {
       "modules": {
         "myModule": {
-        
+
           "foo": [
             "abc", "def"
           ],
-          
+
           "bar": [
             "ghi", "jkl"
           ]
@@ -119,7 +119,7 @@ The resources available to the plugin would be:
 
     ["abc", "def"]
 
-#### Exmple
+#### Example
 If the plugin intends to use the 'bar' value (disregarding the fact that maybe the mode should be 'bar'),
 a sample moduleResources would be:
 
@@ -199,9 +199,9 @@ The return value should be an object with the following attributes:
 
 For example, the script plugin uses the platform path and module name to create the file name:
 
-    fileName: function(context, next, complete) {  
+    fileName: function(context, next, complete) {
       var name = context.module ? context.module.name : context.package;
-      complete(undefined, {path: context.platformPath + name, extension: 'js'});  
+      complete(undefined, {path: context.platformPath + name, extension: 'js'});
     }
 
 

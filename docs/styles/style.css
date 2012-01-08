@@ -50,7 +50,7 @@
         }
 
         #sidebar li:before {
-          content: '– ';  
+          content: '– ';
         }
 
           #sidebar li a {
