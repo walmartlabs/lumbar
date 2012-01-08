@@ -1,0 +1,15 @@
+{
+  "platforms": [ "web" ],
+  "modules": {
+    "base": {
+      "static": [
+        "js/base.js",
+        "js/home/home.js",
+        "images",
+        {"src": "js/base.js", "root": true},
+        {"src": "images", "dest": "#{platform}", "root": true},
+        {"src": "js/base.js", "dest": "#{platform}-file.txt"}
+      ]
+    }
+  }
+}

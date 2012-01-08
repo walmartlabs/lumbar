@@ -29,7 +29,7 @@ exports.assertExpected = function(outdir, expectedDir, configFile) {
   });
 };
 
-exports.runTest = function(configFile, expectedDir, options) {
+exports.runTest = function(configFile, expectedDir, options, expectGlob) {
   return function(done) {
     var outdir = exports.testDir('lumbar', configFile);
     this.title += ' ' + outdir;
@@ -37,7 +37,7 @@ exports.runTest = function(configFile, expectedDir, options) {
     options = options || {};
     options.outdir = outdir;
 
-    var expectedFiles = glob.globSync(expectedDir + '/**/*.{css,js}').map(function(fileName) {
+    var expectedFiles = glob.globSync(expectedDir + (expectGlob || '/**/*.{js,css}')).map(function(fileName) {
           return fileName.substring(expectedDir.length);
         }).sort(),
         seenFiles = [];
