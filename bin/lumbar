@@ -142,6 +142,21 @@ if (build || watch) {
   process.exit(1);
 }
 
+plugins = plugins.map(function(plugin) {
+  var path = plugin.path;
+  var name = plugin.name;
+  var options = plugin.options;
+  try {
+    var fn = require(path);
+  } catch (err) {
+    // Load from the current directory if not found in the normal lookup paths
+    fn = require(process.cwd() + '/node_modules/' + path);
+  }
+
+  lumbar.plugin(name, 'function' != typeof fn ? fn : fn(options));
+  return name;
+});
+
 var options = {
   packageConfigFile: configFile,
   minimize: minimize,
