@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    {
+      "name": "test", "path": "json-plugins-test-plugin.js", "options": {
+        "fileName": "test.txt",
+        "content": "Hello"
+      }
+    }
+  ],
+  "modules": {
+    "base": [
+      "js/base.js"
+    ],
+    "home": [
+      "js/home/home.js"
+    ]
+  }
+}
