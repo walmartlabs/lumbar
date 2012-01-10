@@ -31,4 +31,5 @@ exports['trailing-slash'] = lib.runTest('test/artifacts/trailing-slash.json', 't
 
 exports['static'] = lib.runTest('test/artifacts/static.json', 'test/expected/static', undefined, '/**/*.*');
 exports['index-update'] = lib.runTest('test/artifacts/index-update.json', 'test/expected/index-update', undefined, '/**/*.{js,css,html}');
+exports['json-plugins'] = lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin');
 // TODO : Test file not found and other cases

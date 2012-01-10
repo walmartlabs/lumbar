@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    {
+      "path": "json-plugins-test-plugin", "options": {
+        "fileName": "test.js",
+        "content": "var hello = 'World';"
+      }
+    }
+  ],
+  "modules": {
+    "base": [
+      "js/base.js"
+    ],
+    "home": [
+      "js/home/home.js"
+    ]
+  }
+}
