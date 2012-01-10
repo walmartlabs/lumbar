@@ -10,12 +10,12 @@ replace the response from plugins that are later in the chain.
 A mode is an operating context or filter so that only plugins that are registered for a given mode are
 allowed to operate - otherwise they are ignored.
 
-The plugin can contribute new modes (or bind to existing modes) by exporting a "mode" value which can either
+The plugin can contribute new modes (or bind to existing modes) by exporting a `mode` value which can either
 be a string or an array of strings.  Lumber operates with 3 defined modes by default:
 
-* "scripts": Compile and copy all javascript artifacts to build
-* "styles": Compile and copy all stylus and css artifacts to build
-* "static": Copy all static resources to build
+* **scripts**: Compile and copy all javascript artifacts to build
+* **styles**: Compile and copy all stylus and css artifacts to build
+* **static**: Copy all static resources to build
 
 Lumbar will iterate a build lifecycle for each unique platform, module and mode combination.  This
 allows the plugins to filter build resources and operations to only what is meaningful for their purpose.
@@ -87,18 +87,18 @@ The resource entries will be converted to
       {src: "files/sub-files/file2.txt", srcDir: "files", foo: "bar"}
     ]
 
-The existance of `srcDir` to determine if the resource was auto-generated.
+The existance of `srcDir` to determine if the resource was auto-generated from a resource entry representing a directory.
 
 Any additional attributes that were provided will be added to all created entries as you can
 see with the `foo` attribute.
 
 Note: the `foo` attribute would not be present if the resource
-entry was just `"files"` - just `{src: "files", foo: "bar"}`.
+entry was just `files` - just `{src: "files", foo: "bar"}`.
 
-#### Default behavior
+#### Current behavior
 Without implementing this method, the resources retrieved will be the serialized JSON value referenced by the mode key on the module.
 
-For example, if the plugin has defined a mode called `'foo'` and a lumbar.json file of:
+For example, if the plugin has defined a mode called `foo` and a lumbar.json file of:
 
     {
       "modules": {
@@ -153,10 +153,9 @@ Here is an example of the router plugin:
 Allows plugins to create multiple resources from a single resource. This is called once for each
 resource generated from the `moduleResources` callback.
 
-This is useful for plugins that expand
-upon resources that were returned by other plugins operating within the same mode.
+This is useful for plugins that expand on specific resources.
 
-The expected return value is an array of values which may be any object the plugin wishes.
+The expected return value is an array of resource objects. The data associated with these objects may be anything the plugin or other plugins will operate on.
 
 Strings will be treated as file or directory includes as will object that define a `src` field.
 Resources that define a `platform` or `platforms` fields will be filtered based on the current platform being executed.
@@ -186,7 +185,7 @@ Allows plugins to apply file-level changes to the resources. Called once for eac
 generated, just prior to resources being combined. May alter the `context.resources` field
 to change the resource list.
 
-FIXME what would be a good reason for using this?
+This could be used, for example, to append JSONP callbacks to a file for example.
 
 
 ### API: fileName(context, next, complete)
@@ -259,7 +258,7 @@ This function is used for asynchronous data loading. The callback has the standa
 * **err** is used to indicate an error
 * **data** can be a string or buffer representing file contents or a hash with the following values:
   * **data**: the string or buffer file contents
-  * **noSeparator**: true/false - adds ';;' separator for when content is known to be validated javascript or css,  Resources that always end in a complete statement should utilize this field.
+  * **noSeparator**: truthy - adds ';;' separator for when content is known to be validated javascript or css,  Resources that always end in a complete statement should utilize this field.
   * **inputs**: a list of files that, if in watch mode, impact the generation of this file
 
 For example, this is how the async callback function can be used to write "Hello World!"
