@@ -1,9 +1,9 @@
 {
   "plugins": [
     {
-      "path": "json-plugins-test-plugin.js", "options": {
-        "fileName": "test.txt",
-        "content": "Hello"
+      "path": "json-plugins-test-plugin", "options": {
+        "fileName": "test.js",
+        "content": "var hello = 'World';"
       }
     }
   ],

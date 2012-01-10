@@ -1,6 +1,7 @@
 var fu = require('../../lib/fileUtil');
 
 module.exports = function(options) {
+
   return {
     mode: 'foo',
     
@@ -10,7 +11,11 @@ module.exports = function(options) {
         var fileName = options.fileName;
         fileName = outdir += '/' + fileName;
         var content = options.content;
-        fu.writeFile(fileName, content, complete);
+          
+        fu.writeFile(fileName, content, function() {
+          context.event.emit('output', {fileName: fileName});
+          complete();
+        });
       });
     }
   }
