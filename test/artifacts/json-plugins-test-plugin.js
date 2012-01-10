@@ -6,6 +6,11 @@ module.exports = function(options) {
     mode: 'foo',
     
     module: function(context, next, complete) {
+      if (context.configCache.pluginTest) {
+        return next(complete);
+      }
+
+      context.configCache.pluginTest = true;
       next(function(err) {
         var outdir = context.options.outdir;
         var fileName = options.fileName;
