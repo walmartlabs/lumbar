@@ -1,7 +1,7 @@
 {
   "plugins": [
     {
-      "name": "test", "path": "json-plugins-test-plugin.js", "options": {
+      "path": "json-plugins-test-plugin.js", "options": {
         "fileName": "test.txt",
         "content": "Hello"
       }

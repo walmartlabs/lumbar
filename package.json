@@ -23,7 +23,7 @@
       "underscore": "~1.2"
   },
   "devDependencies": {
-    "glob": "~2.0",
+    "glob": "*",
     "wrench": "~1.2"
   },
   "bin": "bin/lumbar",
