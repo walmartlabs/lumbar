@@ -127,7 +127,7 @@ What’s great about this approach is that you don’t have to maintain two (2),
 
 Lumbar offers tons of customization and extensibly through its Plugin Architecture.
 
-Read more about our architecture [here](https://github.com/walmartlabs/lumbar/blob/master/docs/plugins.md).
+Read more about our architecture [here](plugins.md).
 
 #### Module extensibility through Plugins ####
 

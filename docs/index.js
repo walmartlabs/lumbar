@@ -64,6 +64,14 @@ module.exports = function(static) {
         window.$('title').html(title)
       }
 
+      // Update all markdown links to point to the html equivalent
+      // NOTE: forEach is not supported by the return from $ in this context
+      var anchors = window.$('a[href$=".md"]');
+      for (var i = 0; i < anchors.length; i++) {
+        var anchor = anchors[i];
+        anchor.href = anchor.getAttribute('href').replace(/\.md$/, '.html');
+      }
+
       //assign ids
       window.$('.container h2').each(function() {
         this.id = this.innerHTML.split(/\s/).shift().replace(/\./g,'-').toLowerCase();
