@@ -161,6 +161,3 @@ However, the files mentioned in lumbar.json would have to be relative to its loc
 
 So to keep it simple, keep lumbar.json in the root.
 
-## Authors ##
-
-* Kevin Decker
