@@ -1,6 +1,6 @@
 {
   "name": "lumbar",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
   "keywords": ["build", "module", "mobile", "backbone"],
   "author": "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)",
@@ -23,7 +23,7 @@
       "underscore": "~1.2"
   },
   "devDependencies": {
-    "glob": "~2.0",
+    "glob": "*",
     "wrench": "~1.2"
   },
   "bin": "bin/lumbar",
