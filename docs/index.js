@@ -1,7 +1,20 @@
 var path = require('path');
 
 module.exports = function(static) {
+  var plugins = {};
   //process markdown files with handlebars then markdown
+  static.file(/pages\/plugins\/.+\.md$/, function(file) {
+    file.transform(function(buffer, next) {
+      var content = buffer.toString(),
+          title = /^#\s*(.*?)\s*#*$/m.exec(content),
+          summary = /^##\s*Introduction\s*#*\n([\s\S]*?)##/im.exec(content);
+      plugins[file.target] = {
+        title: title && title[1],
+        summary: summary && summary[1]
+      };
+      next(buffer);
+    });
+  });
   static.file(/\.(md|markdown)$/, function(file) {
     file.transform('markdown');
     file.changeExtensionTo('html');
@@ -71,7 +84,11 @@ module.exports = function(static) {
         var anchor = anchors[i];
         anchor.href = anchor.getAttribute('href').replace(/\.md$/, '.html');
       }
+    });
+  });
 
+  static.file(/pages\/[^\/]+\.md$/, function(file) {
+    file.$(function(window) {
       //assign ids
       window.$('.container h2').each(function() {
         this.id = this.innerHTML.split(/\s/).shift().replace(/\./g,'-').toLowerCase();
@@ -97,6 +114,17 @@ module.exports = function(static) {
       });
 
       //append toc
+      window.$('#sidebar').html(toc_html);
+    });
+  });
+
+  static.file(/pages\/plugins\/.+\.md$/, function(file) {
+    file.$(function(window) {
+      var toc_html = '';
+      for (var name in plugins) {
+        toc_html += '<h2><a href="' + file.get('root') + name + '">' + plugins[name].title + '</a></h2>';
+      }
+      // TODO : Add some sort of "Up" link
       window.$('#sidebar').html(toc_html);
     });
   });
