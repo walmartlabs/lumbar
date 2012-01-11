@@ -185,7 +185,7 @@ Allows plugins to apply file-level changes to the resources. Called once for eac
 generated, just prior to resources being combined. May alter the `context.resources` field
 to change the resource list.
 
-This could be used, for example, to append JSONP callbacks to a file for example.
+This could be used, for example, to append JSONP callbacks to a file.
 
 
 ### API: fileName(context, next, complete)
@@ -264,12 +264,12 @@ This function is used for asynchronous data loading. The callback has the standa
 For example, this is how the async callback function can be used to write "Hello World!"
 
     resource: function(context, next, complete) {
-      complete(undefined, function(callback) {
+      complete(undefined, function(context, complete) {
         if ( *simple* ) {
-          callback(undefined, "Hello World!");
+          complete(undefined, "Hello World!");
         } else {
           var dependantFiles = [...];
-          callback(undefined, {data: "Hello World!", inputs: dependantFiles}
+          complete(undefined, {data: "Hello World!", inputs: dependantFiles}
         }
       });
     }
@@ -278,13 +278,16 @@ For example, this is how the async callback function can be used to write "Hello
 This object should have the following attributes:
 * **src**: file path relative to the lumbar.json file
 * **dest**: only applicable for static resources - the destination path relative to the platform
-* **sourceFile**: file path that, if in watch mode, should be watched to trigger a rebuild
+* **sourceFile**: file path that, if in watch mode, should be watched to trigger a rebuild.  This is not needed if src is defined.
 
 
 ### Method parameters
 #### Context
 Each plugin method is passed a `context` parameter which describes the entire state of the build
 at the point of the call. Plugins are free to modify this structure as they please.
+
+The context is cloned at various times during the lumbar lifecycle so any modifications to the context
+can not be guaranteed to exist outside of the plugin method that made the modification.
 
  * **package** : The name of the package currently being operated on.
  * **platform** : The name of the platform currently being operated on.
