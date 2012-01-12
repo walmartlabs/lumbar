@@ -189,18 +189,18 @@ arise.on('error', function(err) {
 
 // First figure out what our output looks like
 fs.stat(options.outdir, function(err, stat) {
+  if (err) {
+    throw err;
+  }
+
+  if (!stat.isDirectory()) {
+    throw new Error("Output must be a directory");
+  }
+
+  // execute either watch() or build() and pass lumbar as the context.
+  worker.call(arise, packageName, function(err, status) {
     if (err) {
-        throw err;
+      throw err;
     }
-
-    if (!stat.isDirectory()) {
-        throw new Error("Output must be a directory");
-    }
-
-    // execute either watch() or build() and pass lumbar as the context.
-    worker.call(arise, packageName, function(err, status) {
-        if (err) {
-            throw err;
-        }
-    });
+  });
 });
