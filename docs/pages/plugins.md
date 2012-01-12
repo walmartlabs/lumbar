@@ -6,6 +6,32 @@ places in the build process.  A chaining pattern is used so each plugin can eith
 replace the response from plugins that are later in the chain.
 
 
+## Installation
+Plugins can be used in 2 ways.  Each method provides a way of passing configuration options to the plugin
+which can be accessed as the first parameter if the plugin exports a function.
+
+    module.exports = function(options) {
+      return {
+	    // plugin methods
+      }
+    }
+
+When plugins are registered, global node modules will be checked first, otherwise, if a relative path,
+will be relative to the directory containing the lumbar config file.
+
+### Command Line
+Plugins can be registered when executing the lumbar build with a command line parameter.
+
+* **--use**: the plugin path.
+* **--with**: an optional JSON structure that will be used as the plugin options.
+
+### Lumbar File
+A top level `plugin` key should be an array of plugins.  Each entry can either be a string representing the plugin path or a hash with the following values:
+
+* **path**: the plugin path
+* **options**: the plugin options
+
+
 ## Modes
 A mode is an operating context or filter so that only plugins that are registered for a given mode are
 allowed to operate - otherwise they are ignored.
@@ -27,7 +53,7 @@ allows the plugins to filter build resources and operations to only what is mean
       // if no mode is defined, the plugin will operate under all modes
     }
 
-It is recommended that, unless necessary, a mode be explicitely defined.
+It is recommended that, unless necessary, a mode be explicitly defined.
 
 ## Plugin API
 
@@ -87,7 +113,7 @@ The resource entries will be converted to
       {src: "files/sub-files/file2.txt", srcDir: "files", foo: "bar"}
     ]
 
-The existance of `srcDir` to determine if the resource was auto-generated from a resource entry representing a directory.
+The existence of `srcDir` to determine if the resource was auto-generated from a resource entry representing a directory.
 
 Any additional attributes that were provided will be added to all created entries as you can
 see with the `foo` attribute.
@@ -185,7 +211,7 @@ Allows plugins to apply file-level changes to the resources. Called once for eac
 generated, just prior to resources being combined. May alter the `context.resources` field
 to change the resource list.
 
-This could be used, for example, to append JSONP callbacks to a file for example.
+This could be used, for example, to append JSONP callbacks to a file.
 
 
 ### API: fileName(context, next, complete)
@@ -264,12 +290,12 @@ This function is used for asynchronous data loading. The callback has the standa
 For example, this is how the async callback function can be used to write "Hello World!"
 
     resource: function(context, next, complete) {
-      complete(undefined, function(callback) {
+      complete(undefined, function(context, complete) {
         if ( *simple* ) {
-          callback(undefined, "Hello World!");
+          complete(undefined, "Hello World!");
         } else {
           var dependantFiles = [...];
-          callback(undefined, {data: "Hello World!", inputs: dependantFiles}
+          complete(undefined, {data: "Hello World!", inputs: dependantFiles}
         }
       });
     }
@@ -278,13 +304,16 @@ For example, this is how the async callback function can be used to write "Hello
 This object should have the following attributes:
 * **src**: file path relative to the lumbar.json file
 * **dest**: only applicable for static resources - the destination path relative to the platform
-* **sourceFile**: file path that, if in watch mode, should be watched to trigger a rebuild
+* **sourceFile**: file path that, if in watch mode, should be watched to trigger a rebuild.  This is not needed if src is defined.
 
 
 ### Method parameters
 #### Context
 Each plugin method is passed a `context` parameter which describes the entire state of the build
 at the point of the call. Plugins are free to modify this structure as they please.
+
+The context is cloned at various times during the lumbar lifecycle so any modifications to the context
+can not be guaranteed to exist outside of the plugin method that made the modification.
 
  * **package** : The name of the package currently being operated on.
  * **platform** : The name of the platform currently being operated on.
@@ -296,6 +325,19 @@ at the point of the call. Plugins are free to modify this structure as they plea
  * **options** : Options passed to the lumbar initialize call
  * **config** : Current lumbar configuration. See _config.js_
  * **combined** : Truthy if the output content is intended to be combined when possible
+
+Some utility functions are also available:
+
+* **loadResource(resource, callback)**: Async method for retrieving file contents of a resource.
+    * **resource**: the resource that is provided as `context.resource` in the resource method
+    * **callback**: async callback method with the following parameters:
+        * **err**: error if anything went wrong
+        * **data**: buffer or what was returned if the resource provided was a function 
+
+* **outputFile(writer, callback)**: write content to a file
+    * **writer**: 
+    * **callback**: 
+FIXME: Kevin, can you document the parameter usage?
 
 #### Next and Complete
 Each plugin is responsible for completing the plugin chain by calling next() or compete().
@@ -382,19 +424,19 @@ the system.
 
 ## FileUtils
 
-All file access should be done using fileUtils.js.  With respect to the previous warning about EMFILE
-issues, fileUtils wraps many available methods in fs but with added support for EMFILE detection and
-retries.
+With respect to the previous warning about EMFILE, all file access should be done using fileUtils (fileUtils.js).
+This should be accessed from the context using the `fileUtil` key.  This wraps much of the functionality of `fs`
+with handling of EMFILE errors.
 
 FileUtils also caches files that are referenced to optimize build time.
 
 ### API: resetCache(path)
 Clear all cached file content
 
-* **path**: the file path to clear
+* **path**: Clear all or clear for a specific path. falsy or missing input for path will clear all.
 
 ### API: resolvePath(path)
-Return a file path that, if relative, is appropriatly qualitied with the build output path
+Return a file path that, if relative, is appropriatly qualitied with the build output path based on the 'lookupPath'
 
 * **path**: the file path
 
@@ -412,20 +454,14 @@ Same as fs.stat but with EMFILE handling
 * **file**: the file path
 * **callback**: the asynchronous callback
 
-### API: readFileSync(file)
-Same as fs.readFileSync with UTF-8 decoding and using resolvePath
-FIXME: this doesn't use cacheing - it probably should
-
-* **file**: the file path
-
 ### API: readFile(file, callback)
-Same as fs.readFile with UTF-8 decoding and cacheing.
+Same as fs.readFile cacheing.  A buffer is returned.
 
 * **file**: the file path
 * **callback**: the asynchronous callback
 
 ### API: readdir(dir, callback)
-same as fs.readdir with and cacheing.
+same as fs.readdir with cacheing.
 
 * **dir**: the directory path
 * **callback**: the asynchronous callback
