@@ -1,8 +1,13 @@
 {
   "name": "lumbar",
-  "version": "0.5.4",
+  "version": "1.0.0",
   "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
-  "keywords": ["build", "module", "mobile", "backbone"],
+  "keywords": [
+    "build",
+    "module",
+    "mobile",
+    "backbone"
+  ],
   "author": "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)",
   "repository": {
     "type": "git",
@@ -12,23 +17,25 @@
     "node": ">=0.4.7"
   },
   "dependencies": {
-      "async": "~0.1",
-      "growl": "~1.4",
-      "handlebars": "~1.0",
-      "htmlparser": "~1.7",
-      "jsdom": "~0.2",
-      "nib": "~0.3",
-      "optimist": "~0.3",
-      "stylus": "~0.21",
-      "stylus-images": "~0.2",
-      "uglify-js": "~1.2",
-      "underscore": "~1.2"
+    "async": "~0.1",
+    "growl": "~1.4",
+    "handlebars": "~1.0",
+    "htmlparser": "~1.7",
+    "jsdom": "~0.2",
+    "nib": "~0.3",
+    "optimist": "~0.3",
+    "stylus": "~0.21",
+    "stylus-images": "~0.2",
+    "uglify-js": "~1.2",
+    "underscore": "~1.2"
   },
   "devDependencies": {
     "glob": "*",
     "wrench": "~1.2"
   },
-  "bin": "bin/lumbar",
+  "bin": {
+    "lumbar": "bin/lumbar"
+  },
   "main": "lib/lumbar",
   "scripts": {
     "test": "expresso -t 20000 -s test/*"
