@@ -46,7 +46,7 @@ module.exports.config = {
 }
 ;
 /* lumbar module map */
-module.exports.moduleMap({"base":{"js":".js","css":[{"href":".css","maxRatio":1.25},{"href":"@1.5x.css","minRatio":1.25}]}}, 'android/native-home');
+module.exports.moduleMap({"base":{"js":".js","css":[{"href":".css","maxRatio":1.25},{"href":"@1.5x.css","minRatio":1.25}]}});
 return module.exports;
 }).call(this);
 Example.home = (function() {

@@ -10,6 +10,6 @@ exports.belongToUs = function() {
 /* handsfree : templates/home.handlebars*/
 Lumbar.templates['templates/home.handlebars'] = Handlebars.compile('home\n');
 /* lumbar module map */
-module.exports.moduleMap({"modules":{"loader":{"js":"loader.js"},"home":{"js":"home.js"}},"routes":{"home":"home"},"base":{"js":"base.js"}}, '');
+module.exports.moduleMap({"modules":{"loader":{"js":"loader.js"},"home":{"js":"home.js"}},"routes":{"home":"home"},"base":{"js":"base.js"}});
 return module.exports;
 }).call(this);

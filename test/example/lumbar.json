@@ -28,8 +28,6 @@
         {"src": "js/bridge-android.js", "platform": "android"},
         {"src": "js/bridge-iphone.js", "platform": "iphone"},
 
-        {"src": "js/loader.js", "platform": "web"},
-
         {"src": "js/views/header.js", "platform": "web"},
 
         {"package-config": true},

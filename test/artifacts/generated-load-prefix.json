@@ -1,0 +1,15 @@
+{
+  "platforms": [ "web" ],
+  "modules": {
+    "base": {
+      "scripts": [
+        "js/base.js"
+      ],
+      "static": [
+        {"src": "index.html", "update-externals": true},
+        {"src": "index.html", "update-externals": true, "dest": "subdir/index.html"},
+        {"src": "index.html", "update-externals": true, "root": true}
+      ]
+    }
+  }
+}
