@@ -143,10 +143,6 @@ The module-map plugin outputs the data necessary to load modules in response to 
 
 [Discuss Plugins]
 
-## Compare / Contrast ##
-
-* Google Closure Compiler
-* Lint.JS
 
 ## FAQ ##
 
