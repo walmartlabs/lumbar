@@ -88,8 +88,8 @@ We just discussed the six (6) major sections of the lumbar.json configuration fi
 
 ### Scoping ###
 
-Lumbar creates a private scope for all generated modules using the javascript module
-pattern.
+By default, Lumbar creates a private scope for all generated modules using the javascript module pattern. This behavior
+is controlled by the [scope plugin](plugins/scope.md) and may be adjusted as necessary.
 
 ### Routes ###
 
@@ -123,37 +123,91 @@ What’s great about this approach is that you don’t have to maintain two (2),
     * lumbarFile - is the name and path to the lumbar config file, if not given then lumbar.json is assumed.
     * outputDir  - _Required_-designates where the files will be placed.
 
-### Plugins ###
+## Plugins ##
 
-Lumbar offers tons of customization and extensibly through its Plugin Architecture.
+### Core Plugins ###
+
+The bulk of Lumbar's core functionality is implemented through core plugins, such as the [stylus](plugins/stylus.md),
+[template](plugins/template.md), and [scope](plugins/scope.md) plugins. Documentation on all of the core plugins is
+available [here](plugins/).
+
+By default each of these plugins are utilized for all builds. If this is not desired then the `ignoreCorePlugins`
+field may be specified on the build options. When doing this select core plugins may still be used by referencing
+them name. See [Using 3rd Party Plugins](#plugins-using) below for details.
+
+### Using 3rd Party Plugins ###
+
+3rd party (and core plugins in `ignoreCorePlugins` mode) may be defined through
+
+* The command line
+  Plugins may be defined on the command line with the `--use` parameter. This should be the
+  plugin module name (global or relative to the current working directory) or an explicit
+  path the the module defining the plugin. For plugins that support option passing, the
+  `--with` argument may be used immediately after the associated plugin to pass arbitrary
+  JSON objects to the plugin.
+
+* The project configuration
+  Plugins may also be defined in the plugin configuration via the `plugins` field. This
+  field should be an array of either name values or `{path: pluginPath}` objects. Path
+  objects will load global node.js modules, explicit paths, or modules in the *node_modules*
+  directory in the same directory as the configuration file.
+
+* The Lumbar API
+  Clients that are interfacing directly with the lumbar API may explicitly define plugins
+  via the `Lumbar.use` API. This API registers a particular plugin with a given name that
+  can be referenced with through the `options` parameter or the project configuration.
+
+  API clients may also pass plugins through the `plugins` field on the `options` object.
+  This field should be an array containing either the name, `{path: pluginPath}` object
+  or the plugin instance. Path objects are loaded in the same manner as plugins defined
+  in the configuration file.
+
+### Implementing Custom Plugins ###
+
+Lumbar offers many options for customization and extensibly through its Plugin Architecture.
 
 Read more about our architecture [here](plugins.md).
-
-#### Module extensibility through Plugins ####
-
-[TODO Move all this into their own plugin doc files]
-
-[TODO Some code doesn't like when its loaded within a scope object. might be good to have an example and explain why.]
-
-The _global_ flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal.
-
-The package-config plugin lets you set an arbitrary config object from the command line. This lets you create dev and production config at build time. 
-
-The module-map plugin outputs the data necessary to load modules in response to routing events. Basically this creates a list of css and javascript files to load when a backbone route event occurs and the supporting module has not yet been loaded.
-
-[Discuss Plugins]
 
 
 ## FAQ ##
 
-1. Do we have a visual tool available for editing lumbar.json? No
-1. Is there a lint checker for lumbar.json? No
-1. Is there a script to automatically build up lumbar.json? No
 1. Does lumbar.json have to be in the root our our application?
 
-No, not necessarily. The root is the current working directory that you are running _lumbar_ from.
+  No, not necessarily. The root is the current working directory that you are running _lumbar_ from.
 
-However, the files mentioned in lumbar.json would have to be relative to its location. So if you dropped lumbar into a sub directory, you would have to ../ all files from the root. You would also have to run lumbar from the sub directory.
+  However, the files mentioned in lumbar.json would have to be relative to its location. So if you dropped lumbar into a sub directory, you would have to ../ all files from the root. You would also have to run lumbar from the sub directory.
 
-So to keep it simple, keep lumbar.json in the root.
+  So to keep it simple, keep lumbar.json in the root.
 
+1. Is there a bootstrap for Lumbar?
+
+  The [thorax-example](https://github.com/walmartlabs/throax-example) project contains all of the content necessary
+to setup a Lumbar (and Thorax) project. This may be freely copied and used as a basis for new projects.
+
+1. Does Lumbar provide any options for long expires resources?
+
+  The [lumbar long expires](https://github.com/walmartlbas/lumbar-long-expires) plugin allows for
+  naming objects with arbitrary cache buster tokens, such as git SHA values. For example:
+
+  <pre>
+    <code class="no-highlight">
+      ./android/7c18fda/index.html
+      ./android/7c18fda/native-hello-world.css
+      ./android/7c18fda/native-hello-world.js
+      ./android/7c18fda/native-hello-world@1.5x.css
+      ./ipad/7c18fda/index.html
+      ./ipad/7c18fda/native-hello-world.css
+      ./ipad/7c18fda/native-hello-world.js
+      ./iphone/7c18fda/index.html
+      ./iphone/7c18fda/native-hello-world.css
+      ./iphone/7c18fda/native-hello-world.js
+      ./iphone/7c18fda/native-hello-world@2x.css
+      ./web/7c18fda/base.css
+      ./web/7c18fda/base.js
+      ./web/7c18fda/base@2x.css
+      ./web/7c18fda/hello-world.css
+      ./web/7c18fda/hello-world.js
+      ./web/7c18fda/hello-world@2x.css
+      ./web/7c18fda/index.html
+    </code>
+  </pre>
