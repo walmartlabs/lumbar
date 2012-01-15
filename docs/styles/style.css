@@ -62,16 +62,11 @@ div#sidebar {
   margin-top: 1.2em;
 }
 
-#sidebar li.header > a,a:visited {
-  font-family: 'PreloSlabBold';
-  color: #EEEF83;
+#sidebar li.header > a {
+  color: #E2E431;
   text-decoration: none;
   margin-top: 1.14em;
   font-size: 1.14em;
-}
-
-#sidebar h2 a:hover {
-  text-decoration: underline;
 }
 
 #sidebar ul {
@@ -159,6 +154,10 @@ h3 {
   font-weight: normal;
   padding-top: 0;
 }
+h3 > em {
+  display: block;
+  margin-left: 2em;
+}
 
 code, pre, em {
   font-family: Monaco, Consolas, "Lucida Console", monospace;
@@ -172,11 +171,6 @@ em {
   padding: 0 3px;
   color: #E2E431;
   zoom: 1;
-}
-
-h3 > em {
-  display: block;
-  margin-left: 2em;
 }
 
 pre {
