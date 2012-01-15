@@ -169,8 +169,13 @@ code, pre, em {
 
 em {
   padding: 0 3px;
-  color: #E2E431;
-  zoom: 1;
+  color: #EEEF83;
+}
+
+code {
+  color: #fff;
+  background: #636467;
+  padding: 1px;
 }
 
 pre {
@@ -184,6 +189,10 @@ pre {
   -webkit-box-shadow: 0 0 0.71em #666;
   -moz-box-shadow: 0 0 0.71em #666;
   box-shadow: 0 0 0.71em #666;
+}
+pre > code {
+  color: inherit;
+  background: transparent;
 }
 
 
