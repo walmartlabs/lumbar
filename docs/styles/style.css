@@ -31,12 +31,11 @@ body {
   color: #DBDBDB;
   font-family: "Helvetica Neue Medium", "Helvetica Neue", Helvetica, Arial,
     Trebuchet, sans-serif;
-  font-size: 1em;
   line-height: 1.57em;
 }
 
 div#sidebar {
-  font-family: 'PreloSlabBold', "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial,sans-serif;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial,sans-serif;
   font-size: 0.92em;
   position: fixed;
   top: 0;
@@ -66,6 +65,7 @@ div#sidebar {
   color: #E2E431;
   text-decoration: none;
   margin-top: 1.14em;
+  font-family: 'PreloSlabBold', "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial,sans-serif;
   font-size: 1.14em;
 }
 
@@ -135,7 +135,7 @@ a img {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  padding-top: 1.42em;
+  padding-top: 1em;
 }
 
 h2 {
