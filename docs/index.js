@@ -8,10 +8,10 @@ module.exports = function(static) {
   }, 1000);
 
   var plugins = {},
-      pluginIndex = static.createFile('pages/plugins/index.html');
+      pluginIndex = static.createFile('plugins/index.html');
 
   //process markdown files with handlebars then markdown
-  static.file(/pages\/plugins\/.+\.md$/, function(file) {
+  static.file(/plugins\/.+\.md$/, function(file) {
     file.transform(function(buffer, next) {
       var content = buffer.toString(),
           title = /^#\s*(.*?)\s*#*$/m.exec(content),
@@ -56,17 +56,14 @@ module.exports = function(static) {
   });
 
   //copy pages to root
-  static.file(/^pages\//, function(file) {
+  static.file(/\.(?:html?|md)$/, function(file) {
     //add package.json values to scope of file
     for (var key in static.package) {
       file.set(key, static.package[key]);
     }
 
-    //set the name of the folder the file is in
-    file.set('folder', path.dirname(file.source));
-
     //save to root of target directory
-    file.write('.');
+    file.write('.', '');
 
     //wrap pages in template
     file.transform(function(buffer, next) {
@@ -76,7 +73,7 @@ module.exports = function(static) {
     });
   });
 
-  static.file(/pages\/(plugins\/)?.+\.md$/, function(file) {
+  static.file(/(plugins\/)?.+\.md$/, function(file) {
     file.$(function(window) {
       //set the title of the page to be the first h1 in the body if present
       var title, title_element = window.$('.container h1:first')[0];
@@ -101,7 +98,7 @@ module.exports = function(static) {
     });
   });
 
-  static.file(/pages\/[^\/]+\.md$/, function(file) {
+  static.file(/[^\/]+\.md$/, function(file) {
     file.$(function(window) {
       //assign ids
       window.$('.container h2').each(function() {
@@ -133,7 +130,7 @@ module.exports = function(static) {
     });
   });
 
-  static.file(/pages\/plugins\/.+$/, function(file) {
+  static.file(/plugins\/.+$/, function(file) {
     file.$(function(window) {
       var toc_html = '<ul>'
         + '<li class="header"><a href="index.html">Plugins</a>'
@@ -149,7 +146,7 @@ module.exports = function(static) {
     });
   });
 
-  static.file(/pages\/plugins\/index\.html$/, function(file) {
+  static.file(/plugins\/index\.html$/, function(file) {
     file.$(function(window) {
       var pluginList = '';
       for (var name in plugins) {
@@ -160,7 +157,7 @@ module.exports = function(static) {
     });
   });
 
-  static.file(/pages\/plugins\/.+\.md$/, function(file) {
+  static.file(/plugins\/.+\.md$/, function(file) {
     file.on('write', function(file, next) {
       outputPluginIndex()
       next();
