@@ -82,15 +82,15 @@ div#sidebar {
 
 #sidebar ul {
   font-size: 1em;
-  line-height: 14px;
+  line-height: 1em;
   margin: 0;
-  padding-left: 0px;
+  padding-left: 0;
   list-style-type: none;
 }
 
 #sidebar li {
   cursor: pointer;
-  margin: 1.2em 0 3px 0;
+  margin: 1.2em 0 0.21 0;
 }
 
 #sidebar .sub li:before {
@@ -117,26 +117,26 @@ div.container {
   margin: 1.85em 1.85em 1.85em 20%;
   background-image: url(../assets/images/badge_lumbar.png);
   background-repeat: no-repeat;
-  background-position: 26px 0;
-  padding-top: 48px;
+  background-position: 1.62em 0;
+  padding-top: 3em;
   padding-left: 78px;
   overflow-x: hidden;
 }
 
 p,div.container ul {
-  margin: 20px 0;
+  margin: 1.42em 0;
 }
 
 p.warning {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.85em;
+  line-height: 1.28em;
   font-style: italic;
 }
 
 div.container ul {
   list-style: circle;
-  font-size: 13px;
-  padding-left: 15px;
+  font-size: 0.92em;
+  padding-left: 1.07em;
 }
 
 a,a:visited {
@@ -152,25 +152,25 @@ a img {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  padding-top: 20px;
+  padding-top: 1.42em;
 }
 
 h2 {
-  font-size: 26px;
+  font-size: 1.85em;
 }
 
 .container h2 {
   color: #E2E431;
-  font-size: 22px;
+  font-size: 1.57em;
   font-family: PreloSlabMedium;
   font-weight: normal;
 }
 
 h3 {
   font-family: PreloSlabMedium;
-  font-size: 19px;
+  font-size: 1.35em;
   color: white;
-  margin-bottom: 6px;
+  margin-bottom: 0.42em;
   font-style: normal;
   font-weight: normal;
 }
@@ -180,13 +180,13 @@ h3 {
 }
 
 span.alias {
-  font-size: 14px;
+  font-size: 1em;
   font-style: italic;
-  margin-left: 20px;
+  margin-left: 1.42em;
 }
 
 table {
-  margin: 15px 0 0;
+  margin: 1.07em 0 0;
   padding: 0;
 }
 
@@ -196,39 +196,39 @@ tr,td {
 }
 
 td {
-  padding: 0px 15px 5px 0;
+  padding: 0 1.07em 0.35em 0;
 }
 
 code,pre,p em,.container em {
   font-family: Monaco, Consolas, "Lucida Console", monospace;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.92;
+  line-height: 1.28em;
   font-style: normal;
   font-weight: normal;
 }
 
 p em {
-  padding: 0px 3px;
+  padding: 0 3px;
   color: #E2E431;
   zoom: 1;
 }
 
 .container h3>em {
   display: block;
-  margin-left: 25px;
+  margin-left: 2em;
 }
 
 pre {
-  border: 7px solid #A3A3A3;
+  border: 0.5em solid #A3A3A3;
   background-color: #242426;
   color: #fff;
-  font-size: 12px;
-  padding: 17px 17px 0 17px;
-  border: 5px solid #eee;
-  margin: 0px 0 30px;
-  -webkit-box-shadow: 0 0 10px #666;
-  -moz-box-shadow: 0 0 10px #666;
-  box-shadow: 0 0 10px #666;
+  font-size: 0.85em;
+  padding: 1.21em;
+  border: 0.35em solid #eee;
+  margin: 0 0 2.1em;
+  -webkit-box-shadow: 0 0 0.71em #666;
+  -moz-box-shadow: 0 0 0.71em #666;
+  box-shadow: 0 0 0.71em #666;
 }
 
 
