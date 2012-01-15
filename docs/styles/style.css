@@ -157,6 +157,7 @@ h3 {
 h3 > em {
   display: block;
   margin-left: 2em;
+  font-size: 0.74em;
 }
 
 code, pre, em {
