@@ -157,7 +157,7 @@ module.exports = function(static) {
     file.$(function(window) {
       var pluginList = '';
       for (var name in plugins) {
-        pluginList += '<h2><a href="' + name + '">' + plugins[name].title + '</a></h2>' + plugins[name].summary;
+        pluginList += '<h2><a href="' + file.get('root') + name + '">' + plugins[name].title + '</a></h2>' + plugins[name].summary;
       }
 
       window.$('.container').html(pluginList);
