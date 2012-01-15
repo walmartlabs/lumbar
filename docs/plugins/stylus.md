@@ -17,7 +17,7 @@ In addition to the core stylus features this lumbar plugin
 The stylus plugin will compile any resources whose name ends with '.styl' defined on the `styles` object.
 It can be configured through a `styles` object located on the root lumbar configuration project.
 
-Within the stylus pages themselves, the platform variables allow for things like
+Within the stylus pages themselves, the platform variables allow for conditional code like
 
     body
       color $primaryBack if $web
