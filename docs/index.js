@@ -81,12 +81,6 @@ module.exports = function(static) {
         window.$('title').html(title)
       }
 
-      // Code highlighting fixup
-      window.$('code').each(function() {
-        // Ensure that html embedded is properly escaped
-        this.textContent = this.textContent.replace(/&/gm, '&amp;').replace(/</gm, '&lt;');;
-      });
-
       // Update all markdown links to point to the html equivalent
       // NOTE: forEach is not supported by the return from $ in this context
       var anchors = window.$('a[href$=".md"]');
