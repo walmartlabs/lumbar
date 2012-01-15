@@ -14,7 +14,7 @@ You can think of lumbar as a conditional compiler that targets platforms. Howeve
 
 Lumbar works well with Backbone which can group routers, models, views and other application code into stand alone modular javascript and css files which can be lazy loaded when the route is encountered.
 
-Best of all, if what’s included out of the box doesn’t satisfy your needs, then you should be able to build a plugin relatively easily to support it. Lumbar was built around a Plugin architecture which makes it very extensible.
+Best of all, if what’s included out of the box doesn’t satisfy your needs, then you should be able to build a plugin relatively easily to support it. Lumbar was built around a [plugin architecture](#plugins) which makes it very extensible.
 
 ## High Level Overview ##
 
