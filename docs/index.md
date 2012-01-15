@@ -168,7 +168,6 @@ Lumbar offers many options for customization and extensibly through its Plugin A
 
 Read more about our architecture [here](plugins.md).
 
-
 ## FAQ ##
 
 1. Does lumbar.json have to be in the root our our application?
@@ -211,3 +210,12 @@ to setup a Lumbar (and Thorax) project. This may be freely copied and used as a 
       ./web/7c18fda/index.html
     </code>
   </pre>
+
+1. What do I do about **EMFILE** errors?
+
+  For larger projects watch mode may run into issues relating to too many open files depending
+  on the size of the project and environment settings. If **EMFILE** errors are encountered while
+  running in watch mode there are two options:
+
+  1. Increate the maximum number of open files. On most systems this can be achieved via the `ulimit -n <value>` command.
+  1. Use an outside recompile method such as an IDE or general execution.
