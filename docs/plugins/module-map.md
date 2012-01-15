@@ -9,7 +9,7 @@ application however it is possible to create a custom module loader.
 To output the module mapping javascript code in your project, you need to add a
 resource reference in the `files` data.  This reference should be in the base
 module after the `lumbar-loader.js` reference but before an loader implementation
-references.  See https://github.com/walmartlabs/lumbar-loader for more details.
+references.  See [lumbar-loader](https://github.com/walmartlabs/lumbar-loader) for more details.
 
 ## Example ##
 
