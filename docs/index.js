@@ -14,11 +14,10 @@ module.exports = function(static) {
   static.file(/plugins\/.+\.md$/, function(file) {
     file.transform(function(buffer, next) {
       var content = buffer.toString(),
-          title = /^#\s*(.*?)\s*#*$/m.exec(content),
-          summary = /^##\s*Introduction\s*#*\n([\s\S]*?)##/im.exec(content);
+          title = /^#\s*(.*?)\s*#*$/m.exec(content);
       plugins[file.target] = {
         title: title && title[1],
-        summary: summary && summary[1]
+        summary: ''
       };
       next(buffer);
     });
@@ -139,10 +138,18 @@ module.exports = function(static) {
         toc_html += '<li><a href="' + file.get('root') + name + '">' + plugins[name].title + '</a></li>';
       }
       toc_html += '</ul></li>'
-        + '<li class="header"><a href="' + file.get('root') + '">Up</a></li>'
+        + '<li class="header"><a href="' + file.get('root') + '">Home</a></li>'
         + '</ul>';
-      // TODO : Add some sort of "Up" link
       window.$('#sidebar').html(toc_html);
+
+      // Collect the intro info (ignoring the index file)
+      var plugin = plugins[file.target];
+      if (plugin) {
+        plugin.summary = '';
+        window.$('#introduction').nextUntil('h2').each(function() {
+          plugin.summary += this.outerHTML;
+        });
+      }
     });
   });
 
@@ -150,7 +157,7 @@ module.exports = function(static) {
     file.$(function(window) {
       var pluginList = '';
       for (var name in plugins) {
-        pluginList += '<h2><a href="' + name + '">' + plugins[name].title + '</a></h2><p>' + plugins[name].summary + '</p>';
+        pluginList += '<h2><a href="' + name + '">' + plugins[name].title + '</a></h2>' + plugins[name].summary;
       }
 
       window.$('.container').html(pluginList);
