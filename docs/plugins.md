@@ -7,30 +7,20 @@ replace the response from plugins that are later in the chain.
 
 
 ## Installation
-Plugins can be used in 2 ways.  Each method provides a way of passing configuration options to the plugin
+Plugins can be used in 2 ways. The first allows passing configuration options to the plugin
 which can be accessed as the first parameter if the plugin exports a function.
 
     module.exports = function(options) {
       return {
-	    // plugin methods
-      }
-    }
+        // plugin methods
+      };
+    };
 
-When plugins are registered, global node modules will be checked first, otherwise, if a relative path,
-will be relative to the directory containing the lumbar config file.
+For plugins that do not require instance options, a singleton exports pattern can be used
 
-### Command Line
-Plugins can be registered when executing the lumbar build with a command line parameter.
-
-* **--use**: the plugin path.
-* **--with**: an optional JSON structure that will be used as the plugin options.
-
-### Lumbar File
-A top level `plugin` key should be an array of plugins.  Each entry can either be a string representing the plugin path or a hash with the following values:
-
-* **path**: the plugin path
-* **options**: the plugin options
-
+    module.exports = {
+      // plugin methods
+    };
 
 ## Modes
 A mode is an operating context or filter so that only plugins that are registered for a given mode are
