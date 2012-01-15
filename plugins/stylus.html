@@ -1,21 +1,77 @@
-<!DOCTYPE html><html>  <head>    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title></title>
-    <script type="text/javascript" src="../scripts/main.js"></script>
-    <script type="text/javascript" src="../scripts/whitespace.js"></script>
-    <link rel="stylesheet" href="../styles/style.css">
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Stylus Plugin</title>
+  
+  <script type="text/javascript" src="../scripts/highlight.js"></script>
+<script type="text/javascript" src="../scripts/main.js"></script>
+  <link rel="stylesheet" href="../styles/style.css">
 </head>
-  <body>    <div id="sidebar" class="interface">
-      <h2>
-        <a href="#introduction">Introduction</a>
-      </h2>
-      <h2>
-        <a href="#example">Example</a>
-      </h2>
-    </div>
-    <div class="container">      <h1>Stylus Plugin</h1>
-      <h2 id="introduction">Introduction</h2>
-      <h2 id="example">Example</h2>
-</div>
+<body>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li></ul></li><li class="header"><a href="../">Up</a></li></ul></div>
+  <div class="container"><div class="page">
+    <h1>Stylus Plugin</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>The stylus plugin allows for generation of CSS from <a href="http://learnboost.github.com/stylus/">stylus</a> input.</p>
+
+<p>In addition to the core stylus features this lumbar plugin</p>
+
+<ul><li>Defines platform variables to allow conditional stylus generation.</li><li>Allows for generate of pixelDensity targeted stylesheets.</li><li>Manages image dependencies within the build.</li><li>Includes the <a href="http://visionmedia.github.com/nib/">nib</a> and
+<a href="https://github.com/kpdecker/stylus-images">stylus-images</a> plugins by default.</li></ul>
+
+<h2 id="usage">Usage</h2>
+
+<p>The stylus plugin will compile any resources whose name ends with '.styl' defined on the <code>styles</code> object.
+It can be configured through a <code>styles</code> object located on the root lumbar configuration project.</p>
+
+<p>Within the stylus pages themselves, the platform variables allow for things like</p>
+
+<pre><code>body
+  color $primaryBack if $web</code></pre>
+
+<p>Note that if multiple stylus files are defined for a given module they are all combined into a single
+stylus build. As a consequence the stylus variable state will be common across the module.</p>
+
+<h3 id="usage-configuration">Configuration</h3>
+
+<ul><li><code>pixelDensity</code> : Defines the pixel densities, either per-platform as a hash of arrays containing density
+  targets or for all platforms as an array containing the density targets, that will be generated. For
+  each pixel density a file <strong>name@{density}x.css</strong> will be generated, where <strong>{density}</strong> is the value
+  defined in the array. This value is used by stylus-image to select the appropriate source image for
+  the <code>url()</code> method.</li><li><code>urlSizeLimit</code> : Maximum size of images that will be inlined as data URIs. Larger images will be left
+  as url('path') references.</li><li><code>copyFiles</code> : Truthy to copy non-inlined source files into a build directory relative to the output</li><li><code>includes</code> : List of paths that are included in all generated stylus files</li><li><code>styleRoot</code> : Directory to add to the stylus lookup path. This is relative to the configuration file.</li></ul>
+
+<h2 id="example">Example</h2>
+
+<pre><code>{
+  "platforms": [ "iphone", "web" ],
+  "modules": {
+    "base": {
+      "styles": [
+        "styles/base.styl",
+        {"src": "styles/iphone.styl", "platform": "iphone"},
+        {"src": "styles/web.styl", "platform": "web"}
+      ]
+    }
+  },
+
+  "styles": {
+    "pixelDensity": {
+      "iphone": [ 1, 2 ]
+    },
+    "urlSizeLimit": 103,
+    "copyFiles": true,
+    "styleRoot": "static",
+    "includes": [
+      "nib",
+      "styles/global.styl"
+    ]
+  }
+}</code></pre>
+  </div></div>
 </body>
 </html>

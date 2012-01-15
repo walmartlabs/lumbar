@@ -1,219 +1,479 @@
-<!DOCTYPE html><html>  <head>    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title></title>
-    <script type="text/javascript" src="scripts/main.js"></script>
-    <script type="text/javascript" src="scripts/whitespace.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Plugins</title>
+  
+  <script type="text/javascript" src="scripts/highlight.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+  <link rel="stylesheet" href="styles/style.css">
 </head>
-  <body>    <div id="sidebar" class="interface">
-      <h2>
-        <a href="#plugin">Plugin Points</a>
-      </h2>
-      <ul>
-        <li>
-          <a href="#plugin points-moduleresources(context,">moduleResources(context, next)</a>
-        </li>
-        <li>
-          <a href="#plugin points-resourcelist(context,">resourceList(context, next)</a>
-        </li>
-        <li>
-          <a href="#plugin points-file(context,">file(context, next)</a>
-        </li>
-        <li>
-          <a href="#plugin points-module(context,">module(context, next)</a>
-        </li>
-        <li>
-          <a href="#plugin points-resource(context,">resource(context, msg)</a>
-        </li>
-      </ul>
-      <h2>
-        <a href="#context">Context</a>
-      </h2>
-      <ul>
-        <li>
-          <a href="#context-caches">Caches</a>
-        </li>
-      </ul>
-      <h2>
-        <a href="#warnings">Warnings</a>
-      </h2>
-    </div>
-    <div class="container">      <h1>Plugins</h1>
-      <p>Lumbar may be extended through plugins that can inject or modify the behavior at numerous different
-places in the build process.</p>
-      <h2 id="plugin">Plugin Points</h2>
-      <p>Plugins primary method of interaction with Lumbar it through the         <code>moduleResources</code>
-,         <code>resourceList</code>
-,
-        <code>file</code>
-,         <code>module</code>
-, and         <code>resource</code>
- callbacks. Each of these callbacks are implemented as a chain,
+<body>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="#overview">Overview</a><li class="header"><a href="#installation">Installation</a><ul class="sub"><li><a href="#installation-command">Command Line</a></li><li><a href="#installation-lumbar">Lumbar File</a></li></ul></li><li class="header"><a href="#modes">Modes</a><li class="header"><a href="#plugin">Plugin API</a><ul class="sub"><li><a href="#plugin api-api:">API: moduleResources(context, next, complete)</a></li><li><a href="#plugin api-api:">API: resourceList(context, next, complete)</a></li><li><a href="#plugin api-api:">API: file(context, next, complete)</a></li><li><a href="#plugin api-api:">API: fileName(context, next, complete)</a></li><li><a href="#plugin api-api:">API: module(context, next, complete)</a></li><li><a href="#plugin api-api:">API: resource(context, next, complete)</a></li><li><a href="#plugin api-method">Method parameters</a></li><li><a href="#plugin api-lifecycle">Lifecycle Pseudocode</a></li><li><a href="#plugin api-caches">Caches</a></li></ul></li><li class="header"><a href="#warnings">Warnings</a><li class="header"><a href="#fileutils">FileUtils</a><ul class="sub"><li><a href="#fileutils-api:">API: resetCache(path)</a></li><li><a href="#fileutils-api:">API: resolvePath(path)</a></li><li><a href="#fileutils-api:">API: readFileSync(path)</a></li><li><a href="#fileutils-api:">API: makeRelative(path)</a></li><li><a href="#fileutils-api:">API: stat(file, callback)</a></li><li><a href="#fileutils-api:">API: readFile(file, callback)</a></li><li><a href="#fileutils-api:">API: readdir(dir, callback)</a></li><li><a href="#fileutils-api:">API: ensureDirs(pathname, callback)</a></li><li><a href="#fileutils-api:">API: writeFile(file, data, callback)</a></li><li><a href="#fileutils-api:">API: loadResource(resource, callback)</a></li></ul></li></li></li></li></ul></div>
+  <div class="container"><div class="page">
+    <h1>Plugins</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>Lumbar may be extended through plugins that can inject or modify the behavior at numerous different
+places in the build process.  A chaining pattern is used so each plugin can either return, modify or
+replace the response from plugins that are later in the chain.</p>
+
+<h2 id="installation">Installation</h2>
+
+<p>Plugins can be used in 2 ways.  Each method provides a way of passing configuration options to the plugin
+which can be accessed as the first parameter if the plugin exports a function.</p>
+
+<pre><code>module.exports = function(options) {
+  return {
+    // plugin methods
+  }
+}</code></pre>
+
+<p>When plugins are registered, global node modules will be checked first, otherwise, if a relative path,
+will be relative to the directory containing the lumbar config file.</p>
+
+<h3 id="installation-command">Command Line</h3>
+
+<p>Plugins can be registered when executing the lumbar build with a command line parameter.</p>
+
+<ul><li><strong>--use</strong>: the plugin path.</li><li><strong>--with</strong>: an optional JSON structure that will be used as the plugin options.</li></ul>
+
+<h3 id="installation-lumbar">Lumbar File</h3>
+
+<p>A top level <code>plugin</code> key should be an array of plugins.  Each entry can either be a string representing the plugin path or a hash with the following values:</p>
+
+<ul><li><strong>path</strong>: the plugin path</li><li><strong>options</strong>: the plugin options</li></ul>
+
+<h2 id="modes">Modes</h2>
+
+<p>A mode is an operating context or filter so that only plugins that are registered for a given mode are
+allowed to operate - otherwise they are ignored.</p>
+
+<p>The plugin can contribute new modes (or bind to existing modes) by exporting a <code>mode</code> value which can either
+be a string or an array of strings.  Lumber operates with 3 defined modes by default:</p>
+
+<ul><li><strong>scripts</strong>: Compile and copy all javascript artifacts to build</li><li><strong>styles</strong>: Compile and copy all stylus and css artifacts to build</li><li><strong>static</strong>: Copy all static resources to build</li></ul>
+
+<p>Lumbar will iterate a build lifecycle for each unique platform, module and mode combination.  This
+allows the plugins to filter build resources and operations to only what is meaningful for their purpose.</p>
+
+<pre><code>module.exports = {
+  mode: 'scripts' // operate within the scripts mode along with other core plugins
+  mode: ['scripts', 'foo'] // scripts mode and add a new mode called 'foo'
+  mode: ['foo', 'all'] // add a new 'foo' mode and also operate under all modes
+  // if no mode is defined, the plugin will operate under all modes
+}</code></pre>
+
+<p>It is recommended that, unless necessary, a mode be explicitly defined.</p>
+
+<h2 id="plugin">Plugin API</h2>
+
+<p>Plugins primary method of interaction with Lumbar it through the <code>moduleResources</code>, <code>resourceList</code>,
+<code>file</code>, <code>module</code>, and <code>resource</code> callbacks.</p>
+
+<p>Each of these callbacks are implemented as a chain,
 allowing for a plugin to modify the current context object and determine if subsequent plugins are
-allowed to operate, via the         <code>next</code>
- parameter passed to the callback.</p>
-      <h3 id="plugin points-moduleresources(context,">moduleResources(context, next)</h3>
-      <p>Called when generating a list of all resources that a given module will need. This method may be
-used to add additional content to the module one time such as the router declaration for router
+allowed to operate, via the <code>next</code> parameter passed to the callback.</p>
+
+<p>Almost all plugin methods are asynchronous and have the same signature - (context, next, complete)</p>
+
+<ul><li>context: provides access to all data that a plugin should need.</li><li>next: the chaining callback used to execute the remaining plugins</li><li>complete: the completion callback</li></ul>
+
+<p>All parameters are described in more detail after the method documentation.</p>
+
+<h3 id="plugin api-api:">API: moduleResources(context, next, complete)</h3>
+
+<p>Called when generating a list of all resources that a given module will need. This method may be
+used to add additional content to the module such as the router declaration for router
 modules.</p>
-      <p>This callback is called when generating the         <code>moduleResources</code>
- list and has access to the
-        <code>module</code>
-,         <code>platformPath</code>
-,         <code>options</code>
-,         <code>config</code>
-,         <code>configCache</code>
-,         <code>fileCache</code>
-, and         <code>moduleCache</code>
 
-context fields. It should return a list of resource objects.</p>
-      <p>Example from the router plugin:</p>
-      <p>
-        <code></code>
-` javascript 
-moduleResources: function(context, next, complete) {
-    var ret = next();</p>
-      <pre>
-        <code>// Generate the router if we have the info for it
-var module = context.module;
-if (module.routes) {
-    ret.unshift({ routes: module.routes });
-}
+<p>The expected return value is an array.  The contents of the array can be whatever is meaningful to the plugin.
+Other plugin methods can be used to take action on individual entries in the returned list.</p>
 
-return ret;</code>
-      </pre>
-      <p>}
-        <code></code>
-`</p>
-      <h3 id="plugin points-resourcelist(context,">resourceList(context, next)</h3>
-      <p>Allows plugins to create multiple resources from a single resource. Called once for each
-resource generated from the         <code>moduleResources</code>
- callback. Returns an array of resources.
-Resources may be any object the plugin wishes. Strings will be treated as file or directory
-includes as will object that define a         <code>src</code>
- field. Resources that define a         <code>platform</code>
- or
-        <code>platforms</code>
- fields will be filtered based on the current platform settings.</p>
-      <p>Example from the scope plugin:</p>
-      <p>
-        <code></code>
-` javascript 
-resourceList: function(context, next) {
-    var resources = next();
-    if (context.config.attributes.scope === 'resource' &amp;&amp; 
-        !context.resource.global) {</p>
-      <pre>
-        <code>    resources.unshift(generator('(function() {\n'));
-    resources.push(generator('}).call(this);\n'));
-}
-return resources;</code>
-      </pre>
-      <p>}
-        <code></code>
-`</p>
-      <h3 id="plugin points-file(context,">file(context, next)</h3>
-      <p>Allows plugins to apply file-level changes to the resources. Called once for each file
-generated, just prior to resources being combined. May alter the         <code>context.resources</code>
- field
+<h4>Resource expansion</h4>
+
+<p>Each value in the returned array will be expanded if that value represents a directory structure.
+This is done by either using a simple string or using the <code>src</code> attribute.  In this case, every
+child directory and file will automatically be added as a resource entry.</p>
+
+<p>For example, if the application structure is:</p>
+
+<pre><code>app
+  - lumbar.json
+  - files
+  --- file1.txt
+  --- sub-files
+  ----- file2.txt</code></pre>
+
+<p>And a resource entry is returned with the value of</p>
+
+<pre><code>{src: "files", foo: "bar"}</code></pre>
+
+<p>or</p>
+
+<pre><code>"files"</code></pre>
+
+<p>The resource entries will be converted to</p>
+
+<pre><code>[
+  {dir: "files", foo: "bar"},
+  {src: "files/file1.txt", srcDir: "files", foo: "bar"}
+  {dir: "files/sub-files", srcDir: "files", foo: "bar"}
+  {src: "files/sub-files/file2.txt", srcDir: "files", foo: "bar"}
+]</code></pre>
+
+<p>The existence of <code>srcDir</code> to determine if the resource was auto-generated from a resource entry representing a directory.</p>
+
+<p>Any additional attributes that were provided will be added to all created entries as you can
+see with the <code>foo</code> attribute.</p>
+
+<p>Note: the <code>foo</code> attribute would not be present if the resource
+entry was just <code>files</code> - just <code>{src: "files", foo: "bar"}</code>.</p>
+
+<h4>Current behavior</h4>
+
+<p>Without implementing this method, the resources retrieved will be the serialized JSON value referenced by the mode key on the module.</p>
+
+<p>For example, if the plugin has defined a mode called <code>foo</code> and a lumbar.json file of:</p>
+
+<pre><code>{
+  "modules": {
+    "myModule": {
+
+      "foo": [
+        "abc", "def"
+      ],
+
+      "bar": [
+        "ghi", "jkl"
+      ]
+    }
+  }
+}</code></pre>
+
+<p>The resources available to the plugin would be:</p>
+
+<pre><code>["abc", "def"]</code></pre>
+
+<h4>Example</h4>
+
+<p>If the plugin intends to use the 'bar' value (disregarding the fact that maybe the mode should be 'bar'),
+a sample moduleResources would be:</p>
+
+<pre><code>module.exports = {
+  moduleResources: function(context, next, complete) {
+    complete(undefined, context.module.bar);
+  }
+}</code></pre>
+
+<p>It is also possible to add to the module resources when multiple plugins operate within the same mode.
+Here is an example of the router plugin:</p>
+
+<pre><code>moduleResources: function(context, next, complete) {
+  next(function(err, ret) {
+    if (err) {
+      return complete(err);
+    }
+
+    // Generate the router if we have the info for it
+    var module = context.module;
+    if (module.routes) {
+      ret.unshift({ routes: module.routes });
+    }
+
+    complete(undefined, ret);
+  });</code></pre>
+
+<h3 id="plugin api-api:">API: resourceList(context, next, complete)</h3>
+
+<p>Allows plugins to create multiple resources from a single resource. This is called once for each
+resource generated from the <code>moduleResources</code> callback.</p>
+
+<p>This is useful for plugins that expand on specific resources.</p>
+
+<p>The expected return value is an array of resource objects. The data associated with these objects may be anything the plugin or other plugins will operate on.</p>
+
+<p>Strings will be treated as file or directory includes as will object that define a <code>src</code> field.
+Resources that define a <code>platform</code> or <code>platforms</code> fields will be filtered based on the current platform being executed.</p>
+
+<p>For example, the scope plugin wraps the returned resources add a execution scope.</p>
+
+<pre><code>resourceList: function(context, next, complete) {
+  next(function(err, resources) {
+    if (err) {
+      return complete(err);
+    }
+
+    if (context.config.attributes.scope === 'resource'
+        && !context.resource.global
+        && !context.resource.dir) {
+      resources.unshift(generator('(function() {\n'));
+      resources.push(generator('}).call(this);\n'));
+    }
+    complete(undefined, resources);
+  });
+}</code></pre>
+
+<h3 id="plugin api-api:">API: file(context, next, complete)</h3>
+
+<p>Allows plugins to apply file-level changes to the resources. Called once for each file
+generated, just prior to resources being combined. May alter the <code>context.resources</code> field
 to change the resource list.</p>
-      <h3 id="plugin points-module(context,">module(context, next)</h3>
-      <p>Allow plugins to apply module-level changes to the resources. Called once for each module.
-May alter the resource list associated with the module by altering the         <code>context.moduleResources</code>
 
+<p>This could be used, for example, to append JSONP callbacks to a file.</p>
+
+<h3 id="plugin api-api:">API: fileName(context, next, complete)</h3>
+
+<p>Allows for plugins to override the default file name used for output file creation.</p>
+
+<p>The return value should be an object with the following attributes:</p>
+
+<ul><li><strong>path</strong>: the file path relative to the output directory (minus the extension)</li><li><strong>extension</strong>: the file extension</li></ul>
+
+<p>For example, the script plugin uses the platform path and module name to create the file name:</p>
+
+<pre><code>fileName: function(context, next, complete) {
+  var name = context.module ? context.module.name : context.package;
+  complete(undefined, {path: name, extension: 'js'});
+}</code></pre>
+
+<h3 id="plugin api-api:">API: module(context, next, complete)</h3>
+
+<p>Allow plugins to apply module-level changes to the resources. Called once for each module.
+May alter the resource list associated with the module by altering the <code>context.moduleResources</code>
 field.</p>
-      <h3 id="plugin points-resource(context,">resource(context, msg)</h3>
-      <p>Allows plugins to include content other than direct file references. Called once per each resource
-to be included in the output. Should return a function accepting one         <code>callback(err, data)</code>
- parameter.
-On execution the function should take any steps needed to generate the resource's content and call
-the callback on completion or error.</p>
-      <p>
-        <code>data</code>
- may be a         <code>String</code>
-,         <code>Buffer</code>
-, or object defining a         <code>data</code>
- field whose value is a         <code>String</code>
- or
-        <code>Buffer</code>
-.</p>
-      <p>If the content of the resource is directly associated with a source file or files the function may
-define a         <code>sourceFile</code>
- field which will be watched in watch mode and trigger a rebuild if it changed.
-If multiple files are needed or are not known until execution time, the returned         <code>data</code>
- object may
-define an         <code>inputs</code>
- field containing an array of the files that should be watched.</p>
-      <p>The         <code>data</code>
- object may also specify a         <code>noSeparator</code>
- field, which if truthy will prevent the combiner
-logic from emitting a separator after this content. Resources that always end in a complete statement
-should utilize this field.</p>
-      <h2 id="context">Context</h2>
-      <p>Each plugin method is passed a         <code>context</code>
- parameter which describes the entire state of the build
+
+<p>This can be useful for writing resources to the output directory.  For example, this is how the
+static-output plugin adds the static files to the output directory:</p>
+
+<pre><code>module: function(context, next, complete) {
+  next(function(err) {
+    async.forEach(context.moduleResources, function(resource, callback) {
+        var fileContext = context.clone();
+        fileContext.resource = resource;
+        var fileInfo = fu.loadResource(resource, function(err, data) {
+          if (err || !data || !data.content) {
+            return callback(err);
+          }
+
+          fileContext.outputFile(function(callback) {
+            var ret = {
+              fileName: fileContext.fileName,
+              inputs: fileInfo.inputs || [ fileInfo.name ],
+              fileConfig: context.fileConfig,
+              platform: context.platform,
+              package: context.package,
+              mode: context.mode
+            };
+
+            fu.writeFile(fileContext.fileName, data.content, function(err) {
+              callback(err, ret);
+            });
+          },
+          callback);
+        });
+      },
+      complete);
+  });
+}</code></pre>
+
+<h3 id="plugin api-api:">API: resource(context, next, complete)</h3>
+
+<p>Allows plugins to include content other than direct file references as well as chain resource modifications.</p>
+
+<p>The current resource can be referenced using <code>context.resource</code>.</p>
+
+<p>In general, the plugin should have one of the following return values:</p>
+
+<h4>Return: callback function</h4>
+
+<p>This function is used for asynchronous data loading. The callback has the standard <code>(err, data)</code> signature</p>
+
+<ul><li><strong>err</strong> is used to indicate an error</li><li><strong>data</strong> can be a string or buffer representing file contents or a hash with the following values:<ul><li><strong>data</strong>: the string or buffer file contents</li><li><strong>noSeparator</strong>: truthy - adds ';;' separator for when content is known to be validated javascript or css,  Resources that always end in a complete statement should utilize this field.</li><li><strong>inputs</strong>: a list of files that, if in watch mode, impact the generation of this file</li></ul></li></ul>
+
+<p>For example, this is how the async callback function can be used to write "Hello World!"</p>
+
+<pre><code>resource: function(context, next, complete) {
+  complete(undefined, function(context, complete) {
+    if ( *simple* ) {
+      complete(undefined, "Hello World!");
+    } else {
+      var dependantFiles = [...];
+      complete(undefined, {data: "Hello World!", inputs: dependantFiles}
+    }
+  });
+}</code></pre>
+
+<h4>Return: An object</h4>
+
+<p>This object should have the following attributes:
+<em> <strong>src</strong>: file path relative to the lumbar.json file
+</em> <strong>dest</strong>: only applicable for static resources - the destination path relative to the platform
+* <strong>sourceFile</strong>: file path that, if in watch mode, should be watched to trigger a rebuild.  This is not needed if src is defined.</p>
+
+<h3 id="plugin api-method">Method parameters</h3>
+
+<h4>Context</h4>
+
+<p>Each plugin method is passed a <code>context</code> parameter which describes the entire state of the build
 at the point of the call. Plugins are free to modify this structure as they please.</p>
-      <ul>
-        <li>
-          <strong>package</strong>
- : The name of the package currently being operated on.</li>
-        <li>
-          <strong>platform</strong>
- : The name of the platform currently being operated on.</li>
-        <li>
-          <strong>module</strong>
- : The module currently being operated on, as defined in the JSON file.</li>
-        <li>
-          <strong>resource</strong>
- : The resource currently being operated on, if applicable. Definition depends on plugins.</li>
-        <li>
-          <strong>moduleResources</strong>
- : All resources associated with the current module, if available.</li>
-        <li>
-          <strong>resources</strong>
- : All resources associated with a file. For non-combined cases this is identical to           <code>moduleResources</code>
-        </li>
-        <li>
-          <strong>platformPath</strong>
- : Path to the output path for the current platform</li>
-        <li>
-          <strong>options</strong>
- : Options passed to the lumbar initialize call</li>
-        <li>
-          <strong>config</strong>
- : Current lumbar configuration. See           <em>config.js</em>
-        </li>
-        <li>
-          <strong>combined</strong>
- : Truthy if the output content is intended to be combined when possible</li>
-      </ul>
-      <h3 id="context-caches">Caches</h3>
-      <p>Each context object defines a variety of caches that are reset at specific points through the
+
+<p>The context is cloned at various times during the lumbar lifecycle so any modifications to the context
+can not be guaranteed to exist outside of the plugin method that made the modification.</p>
+
+<ul><li><strong>package</strong> : The name of the package currently being operated on.</li><li><strong>platform</strong> : The name of the platform currently being operated on.</li><li><strong>module</strong> : The module currently being operated on, as defined in the JSON file.</li><li><strong>resource</strong> : The resource currently being operated on, if applicable. Definition depends on plugins.</li><li><strong>moduleResources</strong> : All resources associated with the current module, if available.</li><li><strong>resources</strong> : All resources associated with a file. For non-combined cases this is identical to <code>moduleResources</code></li><li><strong>platformPath</strong> : Path to the output path for the current platform</li><li><strong>options</strong> : Options passed to the lumbar initialize call</li><li><strong>config</strong> : Current lumbar configuration. See <em>config.js</em></li><li><strong>combined</strong> : Truthy if the output content is intended to be combined when possible</li></ul>
+
+<p>Some utility functions are also available:</p>
+
+<ul><li><p><strong>loadResource(resource, callback)</strong>: Async method for retrieving file contents of a resource.</p><ul><li><strong>resource</strong>: the resource that is provided as <code>context.resource</code> in the resource method</li><li><p><strong>callback</strong>: async callback method with the following parameters:</p><ul><li><strong>err</strong>: error if anything went wrong</li><li><p><strong>data</strong>: buffer or what was returned if the resource provided was a function </p></li></ul></li></ul></li><li><p><strong>outputFile(writer, callback)</strong>: write content to a file</p><ul><li><strong>writer</strong>: </li><li><strong>callback</strong>: 
+FIXME: Kevin, can you document the parameter usage?</li></ul></li></ul>
+
+<h4>Next and Complete</h4>
+
+<p>Each plugin is responsible for completing the plugin chain by calling next() or compete().
+Next is called to let the other plugins respond while complete is used to stop the plugin
+chain and directly return a result.</p>
+
+<p>The complete callback can be provided as a parameter to next if desired but not necessary.</p>
+
+<p>see examples below:</p>
+
+<pre><code>module.exports = {
+  moduleResources: function(context, next, complete) {
+    if ( *continue with chain* ) {
+      next();
+
+    } else if ( *modify plugin result* ) {
+      // define a new complete function
+      function _complete (err, data) {
+        if (err) {
+          // something bad happened
+          complete(err, data);
+        } else {
+          data.push("something new");
+          complete(undefined, data);
+        }
+      }
+      // call next and override the existing complete function
+      next(_complete);
+
+    } else if ( *stop the plugin chain and return something* ) {
+      var something = [...];
+      complete(undefined, something);
+
+    } else {
+      // we're asyncronous - *always* make sure to call next or complete!
+      next();
+    }
+  }
+}</code></pre>
+
+<h3 id="plugin api-lifecycle">Lifecycle Pseudocode</h3>
+
+<p>For an understanding of how these methods work together, see the following <em>extremely simplified</em> pseudocode:</p>
+
+<pre><code>for each defined platform
+  for each mode {added by `plugin.mode`}
+    for each module in platform {as determined by package}
+      resources = `plugin.moduleResources`
+      for each resource in resources
+        if resource matches `plugin.fileFilter`
+          replace/expand resource if it matches a directory
+        else
+          remove from the list of resources
+
+      for each resource in resources
+        replace/flatten resource with `plugin.resourceList`
+
+      call `plugin.module`
+      for each resource in resources
+        resource = 'plugin.resource'</code></pre>
+
+<h3 id="plugin api-caches">Caches</h3>
+
+<p>Each context object defines a variety of caches that are reset at specific points through the
 build process. This allows plugins to cache any relevant data for specific timeframes. Note
 that these objects are shared across all plugins so proper naming conventions should be followed
 to prevent conflicts.</p>
-      <ul>
-        <li>
-          <strong>configCache</strong>
- : Reset when the configuration file changes</li>
-        <li>
-          <strong>fileCache</strong>
- : Reset when the current file processing completes</li>
-        <li>
-          <strong>moduleCache</strong>
- : Reset when the current module processing completes</li>
-      </ul>
-      <h2 id="warnings">Warnings</h2>
-      <p>As most Lumbar projects are dealing with a large number of files it is quite susceptible to
-        <strong>EMFILE</strong>
- exceptions under OSX. The current recovery method for this is to utilize async
+
+<ul><li><strong>configCache</strong> : Reset when the configuration file changes</li><li><strong>fileCache</strong> : Reset when the current file processing completes</li><li><strong>moduleCache</strong> : Reset when the current module processing completes</li></ul>
+
+<h2 id="warnings">Warnings</h2>
+
+<p>As most Lumbar projects are dealing with a large number of files it is quite susceptible to
+<strong>EMFILE</strong> exceptions under OSX. The current recovery method for this is to utilize async
 methods and retry methods that fail due to this error. A variety of file methods that are
-protected from this case have been made available on the         <code>lumbar.fileUtil</code>
- object. It
+protected from this case have been made available on the <code>lumbar.fileUtil</code> object. It
 is recommended that these methods are used whenever possible while dealing with files throughout
 the system.</p>
-      <p>TODO : Document the fileUtils APIs.
-TODO : Discuss the file read cache.</p>
-</div>
+
+<h2 id="fileutils">FileUtils</h2>
+
+<p>With respect to the previous warning about EMFILE, all file access should be done using fileUtils (fileUtils.js).
+This should be accessed from the context using the <code>fileUtil</code> key.  This wraps much of the functionality of <code>fs</code>
+with handling of EMFILE errors.</p>
+
+<p>FileUtils also caches files that are referenced to optimize build time.</p>
+
+<h3 id="fileutils-api:">API: resetCache(path)</h3>
+
+<p>Clear all cached file content</p>
+
+<ul><li><strong>path</strong>: Clear all or clear for a specific path. falsy or missing input for path will clear all.</li></ul>
+
+<h3 id="fileutils-api:">API: resolvePath(path)</h3>
+
+<p>Return a file path that, if relative, is appropriatly qualitied with the build output path based on the 'lookupPath'</p>
+
+<ul><li><strong>path</strong>: the file path</li></ul>
+
+<h3 id="fileutils-api:">API: readFileSync(path)</h3>
+
+<p>Same as fs.readFileSync but uses <code>resolvePath</code></p>
+
+<ul><li><strong>path</strong>: the file path</li></ul>
+
+<h3 id="fileutils-api:">API: makeRelative(path)</h3>
+
+<p>The opposite of resolvePath.  This will remove the lookup path if the path has that as a prefix.</p>
+
+<h3 id="fileutils-api:">API: stat(file, callback)</h3>
+
+<p>Same as fs.stat but with EMFILE handling</p>
+
+<ul><li><strong>file</strong>: the file path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
+
+<h3 id="fileutils-api:">API: readFile(file, callback)</h3>
+
+<p>Same as fs.readFile cacheing.  A buffer is returned.</p>
+
+<ul><li><strong>file</strong>: the file path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
+
+<h3 id="fileutils-api:">API: readdir(dir, callback)</h3>
+
+<p>same as fs.readdir with cacheing.</p>
+
+<ul><li><strong>dir</strong>: the directory path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
+
+<h3 id="fileutils-api:">API: ensureDirs(pathname, callback)</h3>
+
+<p>Ensure that the parent directories for the provided file path exist and create otherwise.</p>
+
+<ul><li><strong>pathname</strong>: the file path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
+
+<h3 id="fileutils-api:">API: writeFile(file, data, callback)</h3>
+
+<p>Same as fs.writefile but will also ensure directories, cache file contents, and handle EMFILE errors gracefully.</p>
+
+<ul><li><strong>file</strong>: the file path</li><li><strong>data</strong>: the file contents</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
+
+<h3 id="fileutils-api:">API: loadResource(resource, callback)</h3>
+
+<p>Specifically designed to load a lumbar resource (see the lumbar API <code>resource</code> method).</p>
+
+<ul><li><strong>resource</strong>: the lumbar resource</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
+  </div></div>
 </body>
 </html>
