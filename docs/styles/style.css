@@ -186,6 +186,7 @@ pre {
   padding: 1.21em;
   border: 0.35em solid #eee;
   margin: 0 0 2.1em;
+  overflow: auto;
   -webkit-box-shadow: 0 0 0.71em #666;
   -moz-box-shadow: 0 0 0.71em #666;
   box-shadow: 0 0 0.71em #666;
