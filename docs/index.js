@@ -128,9 +128,9 @@ module.exports = function(static) {
       var toc_html = '<ul>'
         + '<li class="header"><a href="index.html">Plugins</a>'
         + '<ul class="sub">';
-      for (var name in plugins) {
+      _.chain(plugins).keys().sort().each(function(name) {
         toc_html += '<li><a href="' + file.get('root') + name + '">' + plugins[name].title + '</a></li>';
-      }
+      });
       toc_html += '</ul></li>'
         + '<li class="header"><a href="' + file.get('root') + '">Home</a></li>'
         + '</ul>';
