@@ -1,7 +1,15 @@
-var path = require('path');
+var _ = require('underscore'),
+    fs = require('fs'),
+    path = require('path');
 
 module.exports = function(static) {
-  var plugins = {};
+  var outputPluginIndex = _.debounce(function() {
+    pluginIndex.update();
+  }, 1000);
+
+  var plugins = {},
+      pluginIndex = static.createFile('pages/plugins/index.html');
+
   //process markdown files with handlebars then markdown
   static.file(/pages\/plugins\/.+\.md$/, function(file) {
     file.transform(function(buffer, next) {
@@ -125,15 +133,37 @@ module.exports = function(static) {
     });
   });
 
-  static.file(/pages\/plugins\/.+\.md$/, function(file) {
+  static.file(/pages\/plugins\/.+$/, function(file) {
     file.$(function(window) {
-      var toc_html = '';
+      var toc_html = '<ul>'
+        + '<li class="header"><a href="index.html">Plugins</a>'
+        + '<ul class="sub">';
       for (var name in plugins) {
-        toc_html += '<h2><a href="' + file.get('root') + name + '">' + plugins[name].title + '</a></h2>';
+        toc_html += '<li><a href="' + file.get('root') + name + '">' + plugins[name].title + '</a></li>';
       }
+      toc_html += '</ul></li>'
+        + '<li class="header"><a href="' + file.get('root') + '">Up</a></li>'
+        + '</ul>';
       // TODO : Add some sort of "Up" link
       window.$('#sidebar').html(toc_html);
     });
   });
 
+  static.file(/pages\/plugins\/index\.html$/, function(file) {
+    file.$(function(window) {
+      var pluginList = '';
+      for (var name in plugins) {
+        pluginList += '<h2><a href="' + name + '">' + plugins[name].title + '</a></h2><p>' + plugins[name].summary + '</p>';
+      }
+
+      window.$('.container').html(pluginList);
+    });
+  });
+
+  static.file(/pages\/plugins\/.+\.md$/, function(file) {
+    file.on('write', function(file, next) {
+      outputPluginIndex()
+      next();
+    });
+  });
 };
