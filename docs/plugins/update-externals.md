@@ -16,7 +16,8 @@ When enabled the plugin will update any `<script>` and `<link>` elements that re
 modules in the form of `module:${name}` where `${name}` is the name of the module to
 reference.
 
-Combined modules may be loaded by setting the `href` or `src` attribute to `module:`.
+Combined modules may be loaded by setting the `href` or `src` attribute to any module
+reference within the combined package.
 
 Note that this plugin is required to use [lumbar-loader](https://github.com/walmartlabs/lumbar-loader)
 as this configures the `lumbarLoadPrefix` variable.
