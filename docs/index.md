@@ -319,34 +319,6 @@ Read more about our architecture [here](plugins.md).
   The [thorax-example](https://github.com/walmartlabs/throax-example) project contains all of the content necessary
 to setup a Lumbar (and Thorax) project. This may be freely copied and used as a basis for new projects.
 
-1. Does Lumbar provide any options for long expires resources?
-
-  The [lumbar long expires](https://github.com/walmartlbas/lumbar-long-expires) plugin allows for
-  naming objects with arbitrary cache buster tokens, such as git SHA values. For example:
-
-  <pre>
-    <code class="no-highlight">
-      ./android/7c18fda/index.html
-      ./android/7c18fda/native-hello-world.css
-      ./android/7c18fda/native-hello-world.js
-      ./android/7c18fda/native-hello-world@1.5x.css
-      ./ipad/7c18fda/index.html
-      ./ipad/7c18fda/native-hello-world.css
-      ./ipad/7c18fda/native-hello-world.js
-      ./iphone/7c18fda/index.html
-      ./iphone/7c18fda/native-hello-world.css
-      ./iphone/7c18fda/native-hello-world.js
-      ./iphone/7c18fda/native-hello-world@2x.css
-      ./web/7c18fda/base.css
-      ./web/7c18fda/base.js
-      ./web/7c18fda/base@2x.css
-      ./web/7c18fda/hello-world.css
-      ./web/7c18fda/hello-world.js
-      ./web/7c18fda/hello-world@2x.css
-      ./web/7c18fda/index.html
-    </code>
-  </pre>
-
 1. What do I do about **EMFILE** errors?
 
   For larger projects watch mode may run into issues relating to too many open files depending
@@ -355,3 +327,27 @@ to setup a Lumbar (and Thorax) project. This may be freely copied and used as a 
 
   1. Increate the maximum number of open files. On most systems this can be achieved via the `ulimit -n <value>` command.
   1. Use an outside recompile method such as an IDE or general execution.
+
+1. Does Lumbar provide any options for long expires resources?
+
+  The [lumbar long expires](https://github.com/walmartlbas/lumbar-long-expires) plugin allows for
+  naming objects with arbitrary cache buster tokens, such as git SHA values. For example:
+
+> ./android/7c18fda/index.html
+> ./android/7c18fda/native-hello-world.css
+> ./android/7c18fda/native-hello-world.js
+> ./android/7c18fda/native-hello-world@1.5x.css
+> ./ipad/7c18fda/index.html
+> ./ipad/7c18fda/native-hello-world.css
+> ./ipad/7c18fda/native-hello-world.js
+> ./iphone/7c18fda/index.html
+> ./iphone/7c18fda/native-hello-world.css
+> ./iphone/7c18fda/native-hello-world.js
+> ./iphone/7c18fda/native-hello-world@2x.css
+> ./web/7c18fda/base.css
+> ./web/7c18fda/base.js
+> ./web/7c18fda/base@2x.css
+> ./web/7c18fda/hello-world.css
+> ./web/7c18fda/hello-world.js
+> ./web/7c18fda/hello-world@2x.css
+> ./web/7c18fda/index.html

@@ -196,6 +196,9 @@ pre > code {
   background: transparent;
 }
 
+blockquote {
+  white-space: pre;
+}
 
 /*
 
