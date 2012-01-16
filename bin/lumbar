@@ -149,8 +149,13 @@ plugins = plugins.map(function(plugin) {
   try {
     var fn = require(path);
   } catch (err) {
-    // Load from the current directory if not found in the normal lookup paths
-    fn = require(process.cwd() + '/node_modules/' + path);
+    try {
+      // Load from the current directory if not found in the normal lookup paths
+      fn = require(process.cwd() + '/node_modules/' + path);
+    } catch (err) {
+      // Last case, attempt to load from the plugins dir
+      fn = require('../lib/plugins/' + path);
+    }
   }
 
   lumbar.plugin(name, 'function' != typeof fn ? fn : fn(options));
