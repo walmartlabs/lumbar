@@ -3,14 +3,14 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Static Resources Plugin</title>
   
   <script type="text/javascript" src="../scripts/highlight.js"></script>
-<script type="text/javascript" src="../scripts/main.js"></script>
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li></ul></li><li class="header"><a href="../">Up</a></li></ul></div>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li><li><a href="../plugins/update-externals.html">Update Externals Plugin</a></li></ul></li><li class="header"><a href="../">Home</a></li></ul></div>
   <div class="container"><div class="page">
     <h1>Static Resources Plugin</h1>
 
@@ -22,50 +22,37 @@
 
 <h2 id="example">Example</h2>
 
-<p><code></code>` javascript
-"platforms": ["iphone", "android"],
-"modules": {
-  "foo": {
-    "static": [
-      // copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html
-      "index.html",</p>
+<pre><code>{
+  "platforms": ["iphone", "android"],
+  "modules": {
+    "foo": {
+      "static": [
+        // copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html
+        "index.html",
 
-<pre><code>  // copy {app}/index.html to {outputDir/index.html}
-  "/index.html",
+        // copy {app}/index.html to {outputDir/index.html}
+        "/index.html",
 
-  // copy recursively {app}/static to {outputDir}/static
-  "/static",
+        // copy recursively {app}/static to {outputDir}/static
+        "/static",
 
-  // copy {app}/index-iphone.html to {app}/iphone/index.html only for the iphone platform
-  {"src": "index-iphone.html", "dest": "index.html", "platform": "iphone"}
+        // copy {app}/index-iphone.html to {app}/iphone/index.html only for the iphone platform
+        {"src": "index-iphone.html", "dest": "index.html", "platform": "iphone"}
 
-  // copy recursively {app}/static/iphone to {outputDir}/iphone and {app}/static/android to {outputDir}/android
-  // will error if any of the platform directories are missing
-  {"src": "static/$platform", "dest": "/$platform"}
-]</code></pre>
-
-<p>  }
-}</p>
-
-<p><code></code>`</p>
+        // copy recursively {app}/static/iphone to {outputDir}/iphone and {app}/static/android to {outputDir}/android
+        // will error if any of the platform directories are missing
+        {"src": "static/$platform", "dest": "/$platform"}
+      ]
+   }
+}</code></pre>
 
 <h2 id="notes">Notes</h2>
 
-<ul><li><p>outputDir is obtained from a command line argument when invoking lumbar.</p></li><li><p>platformdir is the {outputDir}/platform</p></li></ul>
+<ul><li>outputDir is obtained from a command line argument when invoking lumbar.</li><li>platformdir is the {outputDir}/platform</li></ul>
 
 <h2 id="questions">Questions</h2>
 
-<ul><li>When we say the following, the iphone and android are referring to their respective platform names. In the above example, the platforms are iphone and android.</li></ul>
-
-<p><code> javascript
-// copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html
-</code></p>
-
-<ul><li>What if a '/' was put in front of the src? For example</li></ul>
-
-<p><code> javascript
-{"src": "/index-iphone.html", "dest": "index.html", "platform": "iphone"}
-</code></p>
+<ul><li><p>When we say the following, the iphone and android are referring to their respective platform names. In the above example, the platforms are iphone and android.</p><p>&lt;pre&gt;&lt;code class="javascript"&gt;// copy {app}/index.html to {outputDir}/iphone/index.html and {outputDir}/android/index.html&lt;/code&gt;&lt;/pre&gt;</p></li><li><p>What if a '/' was put in front of the src? For example</p><p>&lt;pre&gt;&lt;code class="javascript"&gt;{"src": "/index-iphone.html", "dest": "index.html", "platform": "iphone"}&lt;/code&gt;&lt;/pre&gt;</p></li></ul>
 
 <p>Would that mean it would get copied to {outputDir}/index.html? Instead of {outputDir}/iphone/index.html on accident?</p>
 
@@ -73,7 +60,7 @@
 
 <p>If dest has a / in front of it, it will still output to the platformDir and not the outputDir if a platform is present.</p>
 
-<ul><li>What does {src: "static/$platform", dest: "/${platform}"} do exactly? Will it copy all files from static/iphone to {outputDir}/iphone or {outputDir}/iphone/iphone?</li></ul>
+<ul><li>What does <code>{src: "static/$platform", dest: "/${platform}"}</code> do exactly? Will it copy all files from static/iphone to {outputDir}/iphone or {outputDir}/iphone/iphone?</li></ul>
 
 <p>A: It would copy {app}/static/iphone/<em> to {outputDir}/iphone/</em> and {app}/static/android to {outputDir}/android</p>
 

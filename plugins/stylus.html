@@ -3,14 +3,14 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stylus Plugin</title>
   
   <script type="text/javascript" src="../scripts/highlight.js"></script>
-<script type="text/javascript" src="../scripts/main.js"></script>
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li></ul></li><li class="header"><a href="../">Up</a></li></ul></div>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li><li><a href="../plugins/update-externals.html">Update Externals Plugin</a></li></ul></li><li class="header"><a href="../">Home</a></li></ul></div>
   <div class="container"><div class="page">
     <h1>Stylus Plugin</h1>
 
@@ -28,7 +28,7 @@
 <p>The stylus plugin will compile any resources whose name ends with '.styl' defined on the <code>styles</code> object.
 It can be configured through a <code>styles</code> object located on the root lumbar configuration project.</p>
 
-<p>Within the stylus pages themselves, the platform variables allow for things like</p>
+<p>Within the stylus pages themselves, the platform variables allow for conditional code like</p>
 
 <pre><code>body
   color $primaryBack if $web</code></pre>
@@ -36,7 +36,7 @@ It can be configured through a <code>styles</code> object located on the root lu
 <p>Note that if multiple stylus files are defined for a given module they are all combined into a single
 stylus build. As a consequence the stylus variable state will be common across the module.</p>
 
-<h3 id="usage-configuration">Configuration</h3>
+<h3 id="configuration">Configuration</h3>
 
 <ul><li><code>pixelDensity</code> : Defines the pixel densities, either per-platform as a hash of arrays containing density
   targets or for all platforms as an array containing the density targets, that will be generated. For

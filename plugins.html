@@ -3,14 +3,14 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plugins</title>
   
   <script type="text/javascript" src="scripts/highlight.js"></script>
-<script type="text/javascript" src="scripts/main.js"></script>
   <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="#overview">Overview</a><li class="header"><a href="#installation">Installation</a><ul class="sub"><li><a href="#installation-command">Command Line</a></li><li><a href="#installation-lumbar">Lumbar File</a></li></ul></li><li class="header"><a href="#modes">Modes</a><li class="header"><a href="#plugin">Plugin API</a><ul class="sub"><li><a href="#plugin api-api:">API: moduleResources(context, next, complete)</a></li><li><a href="#plugin api-api:">API: resourceList(context, next, complete)</a></li><li><a href="#plugin api-api:">API: file(context, next, complete)</a></li><li><a href="#plugin api-api:">API: fileName(context, next, complete)</a></li><li><a href="#plugin api-api:">API: module(context, next, complete)</a></li><li><a href="#plugin api-api:">API: resource(context, next, complete)</a></li><li><a href="#plugin api-method">Method parameters</a></li><li><a href="#plugin api-lifecycle">Lifecycle Pseudocode</a></li><li><a href="#plugin api-caches">Caches</a></li></ul></li><li class="header"><a href="#warnings">Warnings</a><li class="header"><a href="#fileutils">FileUtils</a><ul class="sub"><li><a href="#fileutils-api:">API: resetCache(path)</a></li><li><a href="#fileutils-api:">API: resolvePath(path)</a></li><li><a href="#fileutils-api:">API: readFileSync(path)</a></li><li><a href="#fileutils-api:">API: makeRelative(path)</a></li><li><a href="#fileutils-api:">API: stat(file, callback)</a></li><li><a href="#fileutils-api:">API: readFile(file, callback)</a></li><li><a href="#fileutils-api:">API: readdir(dir, callback)</a></li><li><a href="#fileutils-api:">API: ensureDirs(pathname, callback)</a></li><li><a href="#fileutils-api:">API: writeFile(file, data, callback)</a></li><li><a href="#fileutils-api:">API: loadResource(resource, callback)</a></li></ul></li></li></li></li></ul></div>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="#overview">Overview</a><li class="header"><a href="#installation">Installation</a><li class="header"><a href="#modes">Modes</a><li class="header"><a href="#plugin">Plugin API</a><ul class="sub"><li><a href="#moduleresources">moduleResources </a></li><li><a href="#resourcelist">resourceList </a></li><li><a href="#file">file </a></li><li><a href="#filename">fileName </a></li><li><a href="#module">module </a></li><li><a href="#resource">resource </a></li><li><a href="#method">Method parameters</a></li><li><a href="#lifecycle">Lifecycle Pseudocode</a></li><li><a href="#caches">Caches</a></li></ul></li><li class="header"><a href="#warnings">Warnings</a><li class="header"><a href="#fileutils">FileUtils</a><ul class="sub"><li><a href="#resetcache">resetCache </a></li><li><a href="#resolvepath">resolvePath </a></li><li><a href="#readfilesync">readFileSync </a></li><li><a href="#makerelative">makeRelative </a></li><li><a href="#stat">stat </a></li><li><a href="#readfile">readFile </a></li><li><a href="#readdir">readdir </a></li><li><a href="#ensuredirs">ensureDirs </a></li><li><a href="#writefile">writeFile </a></li><li><a href="#loadresource">loadResource </a></li></ul></li></li></li></li></li></ul></div>
   <div class="container"><div class="page">
     <h1>Plugins</h1>
 
@@ -22,29 +22,20 @@ replace the response from plugins that are later in the chain.</p>
 
 <h2 id="installation">Installation</h2>
 
-<p>Plugins can be used in 2 ways.  Each method provides a way of passing configuration options to the plugin
+<p>Plugins can be used in 2 ways. The first allows passing configuration options to the plugin
 which can be accessed as the first parameter if the plugin exports a function.</p>
 
 <pre><code>module.exports = function(options) {
   return {
     // plugin methods
-  }
-}</code></pre>
+  };
+};</code></pre>
 
-<p>When plugins are registered, global node modules will be checked first, otherwise, if a relative path,
-will be relative to the directory containing the lumbar config file.</p>
+<p>For plugins that do not require instance options, a singleton exports pattern can be used</p>
 
-<h3 id="installation-command">Command Line</h3>
-
-<p>Plugins can be registered when executing the lumbar build with a command line parameter.</p>
-
-<ul><li><strong>--use</strong>: the plugin path.</li><li><strong>--with</strong>: an optional JSON structure that will be used as the plugin options.</li></ul>
-
-<h3 id="installation-lumbar">Lumbar File</h3>
-
-<p>A top level <code>plugin</code> key should be an array of plugins.  Each entry can either be a string representing the plugin path or a hash with the following values:</p>
-
-<ul><li><strong>path</strong>: the plugin path</li><li><strong>options</strong>: the plugin options</li></ul>
+<pre><code>module.exports = {
+  // plugin methods
+};</code></pre>
 
 <h2 id="modes">Modes</h2>
 
@@ -83,7 +74,7 @@ allowed to operate, via the <code>next</code> parameter passed to the callback.<
 
 <p>All parameters are described in more detail after the method documentation.</p>
 
-<h3 id="plugin api-api:">API: moduleResources(context, next, complete)</h3>
+<h3 id="moduleresources">moduleResources <em>moduleResources(context, next, complete)</em></h3>
 
 <p>Called when generating a list of all resources that a given module will need. This method may be
 used to add additional content to the module such as the router declaration for router
@@ -92,7 +83,7 @@ modules.</p>
 <p>The expected return value is an array.  The contents of the array can be whatever is meaningful to the plugin.
 Other plugin methods can be used to take action on individual entries in the returned list.</p>
 
-<h4>Resource expansion</h4>
+<h4 id="resource">Resource expansion</h4>
 
 <p>Each value in the returned array will be expanded if that value represents a directory structure.
 This is done by either using a simple string or using the <code>src</code> attribute.  In this case, every
@@ -132,7 +123,7 @@ see with the <code>foo</code> attribute.</p>
 <p>Note: the <code>foo</code> attribute would not be present if the resource
 entry was just <code>files</code> - just <code>{src: "files", foo: "bar"}</code>.</p>
 
-<h4>Current behavior</h4>
+<h4 id="current">Current behavior</h4>
 
 <p>Without implementing this method, the resources retrieved will be the serialized JSON value referenced by the mode key on the module.</p>
 
@@ -157,7 +148,7 @@ entry was just <code>files</code> - just <code>{src: "files", foo: "bar"}</code>
 
 <pre><code>["abc", "def"]</code></pre>
 
-<h4>Example</h4>
+<h4 id="example">Example</h4>
 
 <p>If the plugin intends to use the 'bar' value (disregarding the fact that maybe the mode should be 'bar'),
 a sample moduleResources would be:</p>
@@ -186,7 +177,7 @@ Here is an example of the router plugin:</p>
     complete(undefined, ret);
   });</code></pre>
 
-<h3 id="plugin api-api:">API: resourceList(context, next, complete)</h3>
+<h3 id="resourcelist">resourceList <em>resourceList(context, next, complete)</em></h3>
 
 <p>Allows plugins to create multiple resources from a single resource. This is called once for each
 resource generated from the <code>moduleResources</code> callback.</p>
@@ -207,8 +198,8 @@ Resources that define a <code>platform</code> or <code>platforms</code> fields w
     }
 
     if (context.config.attributes.scope === 'resource'
-        && !context.resource.global
-        && !context.resource.dir) {
+        &amp;&amp; !context.resource.global
+        &amp;&amp; !context.resource.dir) {
       resources.unshift(generator('(function() {\n'));
       resources.push(generator('}).call(this);\n'));
     }
@@ -216,7 +207,7 @@ Resources that define a <code>platform</code> or <code>platforms</code> fields w
   });
 }</code></pre>
 
-<h3 id="plugin api-api:">API: file(context, next, complete)</h3>
+<h3 id="file">file <em>file(context, next, complete)</em></h3>
 
 <p>Allows plugins to apply file-level changes to the resources. Called once for each file
 generated, just prior to resources being combined. May alter the <code>context.resources</code> field
@@ -224,7 +215,7 @@ to change the resource list.</p>
 
 <p>This could be used, for example, to append JSONP callbacks to a file.</p>
 
-<h3 id="plugin api-api:">API: fileName(context, next, complete)</h3>
+<h3 id="filename">fileName <em>fileName(context, next, complete)</em></h3>
 
 <p>Allows for plugins to override the default file name used for output file creation.</p>
 
@@ -239,7 +230,7 @@ to change the resource list.</p>
   complete(undefined, {path: name, extension: 'js'});
 }</code></pre>
 
-<h3 id="plugin api-api:">API: module(context, next, complete)</h3>
+<h3 id="module">module <em>module(context, next, complete)</em></h3>
 
 <p>Allow plugins to apply module-level changes to the resources. Called once for each module.
 May alter the resource list associated with the module by altering the <code>context.moduleResources</code>
@@ -279,7 +270,7 @@ static-output plugin adds the static files to the output directory:</p>
   });
 }</code></pre>
 
-<h3 id="plugin api-api:">API: resource(context, next, complete)</h3>
+<h3 id="resource">resource <em>resource(context, next, complete)</em></h3>
 
 <p>Allows plugins to include content other than direct file references as well as chain resource modifications.</p>
 
@@ -287,7 +278,7 @@ static-output plugin adds the static files to the output directory:</p>
 
 <p>In general, the plugin should have one of the following return values:</p>
 
-<h4>Return: callback function</h4>
+<h4 id="return:">Return: callback function</h4>
 
 <p>This function is used for asynchronous data loading. The callback has the standard <code>(err, data)</code> signature</p>
 
@@ -306,16 +297,16 @@ static-output plugin adds the static files to the output directory:</p>
   });
 }</code></pre>
 
-<h4>Return: An object</h4>
+<h4 id="return:">Return: An object</h4>
 
 <p>This object should have the following attributes:
 <em> <strong>src</strong>: file path relative to the lumbar.json file
 </em> <strong>dest</strong>: only applicable for static resources - the destination path relative to the platform
 * <strong>sourceFile</strong>: file path that, if in watch mode, should be watched to trigger a rebuild.  This is not needed if src is defined.</p>
 
-<h3 id="plugin api-method">Method parameters</h3>
+<h3 id="method">Method parameters</h3>
 
-<h4>Context</h4>
+<h4 id="context">Context</h4>
 
 <p>Each plugin method is passed a <code>context</code> parameter which describes the entire state of the build
 at the point of the call. Plugins are free to modify this structure as they please.</p>
@@ -330,7 +321,7 @@ can not be guaranteed to exist outside of the plugin method that made the modifi
 <ul><li><p><strong>loadResource(resource, callback)</strong>: Async method for retrieving file contents of a resource.</p><ul><li><strong>resource</strong>: the resource that is provided as <code>context.resource</code> in the resource method</li><li><p><strong>callback</strong>: async callback method with the following parameters:</p><ul><li><strong>err</strong>: error if anything went wrong</li><li><p><strong>data</strong>: buffer or what was returned if the resource provided was a function </p></li></ul></li></ul></li><li><p><strong>outputFile(writer, callback)</strong>: write content to a file</p><ul><li><strong>writer</strong>: </li><li><strong>callback</strong>: 
 FIXME: Kevin, can you document the parameter usage?</li></ul></li></ul>
 
-<h4>Next and Complete</h4>
+<h4 id="next">Next and Complete</h4>
 
 <p>Each plugin is responsible for completing the plugin chain by calling next() or compete().
 Next is called to let the other plugins respond while complete is used to stop the plugin
@@ -370,7 +361,7 @@ chain and directly return a result.</p>
   }
 }</code></pre>
 
-<h3 id="plugin api-lifecycle">Lifecycle Pseudocode</h3>
+<h3 id="lifecycle">Lifecycle Pseudocode</h3>
 
 <p>For an understanding of how these methods work together, see the following <em>extremely simplified</em> pseudocode:</p>
 
@@ -391,7 +382,7 @@ chain and directly return a result.</p>
       for each resource in resources
         resource = 'plugin.resource'</code></pre>
 
-<h3 id="plugin api-caches">Caches</h3>
+<h3 id="caches">Caches</h3>
 
 <p>Each context object defines a variety of caches that are reset at specific points through the
 build process. This allows plugins to cache any relevant data for specific timeframes. Note
@@ -417,59 +408,59 @@ with handling of EMFILE errors.</p>
 
 <p>FileUtils also caches files that are referenced to optimize build time.</p>
 
-<h3 id="fileutils-api:">API: resetCache(path)</h3>
+<h3 id="resetcache">resetCache <em>resetCache(path)</em></h3>
 
 <p>Clear all cached file content</p>
 
 <ul><li><strong>path</strong>: Clear all or clear for a specific path. falsy or missing input for path will clear all.</li></ul>
 
-<h3 id="fileutils-api:">API: resolvePath(path)</h3>
+<h3 id="resolvepath">resolvePath <em>resolvePath(path)</em></h3>
 
 <p>Return a file path that, if relative, is appropriatly qualitied with the build output path based on the 'lookupPath'</p>
 
 <ul><li><strong>path</strong>: the file path</li></ul>
 
-<h3 id="fileutils-api:">API: readFileSync(path)</h3>
+<h3 id="readfilesync">readFileSync <em>readFileSync(path)</em></h3>
 
 <p>Same as fs.readFileSync but uses <code>resolvePath</code></p>
 
 <ul><li><strong>path</strong>: the file path</li></ul>
 
-<h3 id="fileutils-api:">API: makeRelative(path)</h3>
+<h3 id="makerelative">makeRelative <em>makeRelative(path)</em></h3>
 
 <p>The opposite of resolvePath.  This will remove the lookup path if the path has that as a prefix.</p>
 
-<h3 id="fileutils-api:">API: stat(file, callback)</h3>
+<h3 id="stat">stat <em>stat(file, callback)</em></h3>
 
 <p>Same as fs.stat but with EMFILE handling</p>
 
 <ul><li><strong>file</strong>: the file path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
 
-<h3 id="fileutils-api:">API: readFile(file, callback)</h3>
+<h3 id="readfile">readFile <em>readFile(file, callback)</em></h3>
 
 <p>Same as fs.readFile cacheing.  A buffer is returned.</p>
 
 <ul><li><strong>file</strong>: the file path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
 
-<h3 id="fileutils-api:">API: readdir(dir, callback)</h3>
+<h3 id="readdir">readdir <em>readdir(dir, callback)</em></h3>
 
 <p>same as fs.readdir with cacheing.</p>
 
 <ul><li><strong>dir</strong>: the directory path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
 
-<h3 id="fileutils-api:">API: ensureDirs(pathname, callback)</h3>
+<h3 id="ensuredirs">ensureDirs <em>ensureDirs(pathname, callback)</em></h3>
 
 <p>Ensure that the parent directories for the provided file path exist and create otherwise.</p>
 
 <ul><li><strong>pathname</strong>: the file path</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
 
-<h3 id="fileutils-api:">API: writeFile(file, data, callback)</h3>
+<h3 id="writefile">writeFile <em>writeFile(file, data, callback)</em></h3>
 
 <p>Same as fs.writefile but will also ensure directories, cache file contents, and handle EMFILE errors gracefully.</p>
 
 <ul><li><strong>file</strong>: the file path</li><li><strong>data</strong>: the file contents</li><li><strong>callback</strong>: the asynchronous callback</li></ul>
 
-<h3 id="fileutils-api:">API: loadResource(resource, callback)</h3>
+<h3 id="loadresource">loadResource <em>loadResource(resource, callback)</em></h3>
 
 <p>Specifically designed to load a lumbar resource (see the lumbar API <code>resource</code> method).</p>
 

@@ -3,20 +3,58 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inline Styles Plugin</title>
   
   <script type="text/javascript" src="../scripts/highlight.js"></script>
-<script type="text/javascript" src="../scripts/main.js"></script>
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li></ul></li><li class="header"><a href="../">Up</a></li></ul></div>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li><li><a href="../plugins/update-externals.html">Update Externals Plugin</a></li></ul></li><li class="header"><a href="../">Home</a></li></ul></div>
   <div class="container"><div class="page">
     <h1>Inline Styles Plugin</h1>
 
 <h2 id="introduction">Introduction</h2>
 
+<p>The inline styles plugin allows for css associated with a module to be included as part of the javascript
+associated with the module, reducing the number of requests needed to load the given module.</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>This plugin is configured through the <code>styles</code> object on the root of the lumbar configuration file and
+may be enabled by setting the <code>inline</code> key to a truthy value.</p>
+
+<h2 id="configuration">Configuration</h2>
+
+<ul><li><code>inline</code> : Truthy enables the plugin. Falsey or undefined disables.</li><li><code>inlineLoader</code> : Name of the javascript method that will load the CSS. Defaults to <code>${AppModule}.loader.loadInlineCSS</code></li></ul>
+
 <h2 id="example">Example</h2>
+
+<pre><code>{
+  "modules": {
+    "base": {
+      "scripts": [
+        "base.js"
+      ],
+      "styles": [
+        "styles/base.css"
+      ]
+    }
+  },
+
+  "styles": {
+    "inline": true
+  }
+}</code></pre>
+
+<h2 id="notes">Notes</h2>
+
+<p>This plugin alters the build flow for styles mode. Some additional work may be required by styles plugins
+to support this. Such plugins can determine the plugin's status through the <code>isInline(context)</code> API exposed
+by the plugin. The plugin instance may be accessed by the <code>context.plugins.get('inline-styles')</code> API.</p>
+
+<p>This is a two phase plugin. When overriding core plugins, but the <em>inline-styles</em> and <em>inline-styles-resources</em>
+plugins must be included for this to function properly.</p>
   </div></div>
 </body>
 </html>

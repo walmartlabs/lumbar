@@ -3,73 +3,28 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title></title>
   
   <script type="text/javascript" src="../scripts/highlight.js"></script>
-<script type="text/javascript" src="../scripts/main.js"></script>
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li></ul></li><li class="header"><a href="../">Up</a></li></ul></div>
-  <div class="container"><h2><a href="plugins/conditional.html">Conditional Plugin</a></h2><p>
-This plugin makes it easy to distinguish between a dev and production build in lumbar. It came about after working with locla storage loaders and having to maunally clear local storage every time we
-made a change. With this plugin we choose between two different files for lumbar loader, the localstorage and standard versions. In our lumbar.json configuration we have two entries like this
-
-``` javascript
-{"src":"lumber-loader-localstorage.js", "env":"production"},
-{"src":"lumber-loader-storage.js", "env":"dev"}
-```
-
-</p><h2><a href="plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></h2><p>
-</p><h2><a href="plugins/inline-styles.html">Inline Styles Plugin</a></h2><p>
-</p><h2><a href="plugins/module-map.html">Module Map Plugin</a></h2><p>
-This plugin will write the lumbar module mapping code used to load modules in a
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li><li><a href="../plugins/update-externals.html">Update Externals Plugin</a></li></ul></li><li class="header"><a href="../">Home</a></li></ul></div>
+  <div class="container"><h2><a href="../plugins/conditional.html">Conditional Plugin</a></h2><p>This plugin makes it easy to distinguish between a dev and production build in lumbar. It came about after working with local storage loaders and having to manually clear local storage every time we
+made a change. With this plugin we choose between two different files for lumbar loader, the <code>localStorage</code> and standard versions. In our <em>lumbar.json</em> configuration we have two entries like this</p><pre><code>{"src":"lumber-loader-localstorage.js", "env":"production"},
+{"src":"lumber-loader-storage.js", "env":"dev"}</code></pre><h2><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></h2><p>The inline styles plugin allows for css associated with a module to be included as part of the javascript
+associated with the module, reducing the number of requests needed to load the given module.</p><h2><a href="../plugins/module-map.html">Module Map Plugin</a></h2><p>This plugin will write the lumbar module mapping code used to load modules in a
 meaningful way.  The easiest way to use the module loader is with a backbone
-application however it is possible to create a custom module loader.
-
-To output the module mapping javascript code in your project, you need to add a
-resource reference in the `files` data.  This reference should be in the base
-module after the `lumbar-loader.js` reference but before an loader implementation
-references.  See https://github.com/walmartlabs/lumbar-loader for more details.
-
-</p><h2><a href="plugins/package-config.html">Package Config Plugin</a></h2><p>
-This plugin allows a file containing a JSON payload to be inserted into the build.  The config value can be referenced using the `config`
-key on the application object (defined by the application name in the lumbar.json file).
-
-This is useful to build your application for different environments like a dev machine or QA or production.
-
-</p><h2><a href="plugins/router.html">Router Plugin</a></h2><p>
-</p><h2><a href="plugins/scope.html">Scope Plugin</a></h2><p>
-
-[TODO Some code doesn't like when its loaded within a scope object. might be good to have an example and explain why.]
-
-The _global_ flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal.
-
-</p><h2><a href="plugins/static-resources.html">Static Resources Plugin</a></h2><p>
-Static resource management plug-in. Each module can have a "static" attribute which is an array of resources to be copied from the application path to the outputDir (or platformDir). Each static entry can be a simple string or a hash containing.
-
-* src: the source location (specific file or directory for recursive copy).
-* dest: the destination location. Initial '/' indicates use of outputDir path, otherwise platformDir path.
-* platform: a single platform to execute the copy (optional and mutually exclusive with platforms)
-* platforms: an array of platforms to execute the copy (optional and mutually exclusive with platform)
-
-
-</p><h2><a href="plugins/stylus.html">Stylus Plugin</a></h2><p>
-The stylus plugin allows for generation of CSS from [stylus](http://learnboost.github.com/stylus/) input.
-
-In addition to the core stylus features this lumbar plugin
-
-* Defines platform variables to allow conditional stylus generation.
-* Allows for generate of pixelDensity targeted stylesheets.
-* Manages image dependencies within the build.
-* Includes the [nib](http://visionmedia.github.com/nib/) and
-    [stylus-images](https://github.com/kpdecker/stylus-images) plugins by default.
-
-</p><h2><a href="plugins/template.html">Template Plugin</a></h2><p>
-The template plugin provides allows for bundling of handlebars templates with the dependent javascript
+application however it is possible to create a custom module loader.</p><p>To output the module mapping javascript code in your project, you need to add a
+resource reference in the <code>files</code> data.  This reference should be in the base
+module after the <code>lumbar-loader.js</code> reference but before an loader implementation
+references.  See <a href="https://github.com/walmartlabs/lumbar-loader">lumbar-loader</a> for more details.</p><h2><a href="../plugins/package-config.html">Package Config Plugin</a></h2><p>This plugin allows a file containing a JSON payload to be inserted into the build.  The config value can be referenced using the <code>config</code>
+key on the application object (defined by the application name in the lumbar.json file).</p><p>This is useful to build your application for different environments like a dev machine or QA or production.</p><h2><a href="../plugins/router.html">Router Plugin</a></h2><h2><a href="../plugins/scope.html">Scope Plugin</a></h2><p>The scope plugin implements a CommonJS-like module system. This allows for simple sharing of
+code and state across different resources.</p><h2><a href="../plugins/static-resources.html">Static Resources Plugin</a></h2><p>Static resource management plug-in. Each module can have a "static" attribute which is an array of resources to be copied from the application path to the outputDir (or platformDir). Each static entry can be a simple string or a hash containing.</p><ul><li>src: the source location (specific file or directory for recursive copy).</li><li>dest: the destination location. Initial '/' indicates use of outputDir path, otherwise platformDir path.</li><li>platform: a single platform to execute the copy (optional and mutually exclusive with platforms)</li><li>platforms: an array of platforms to execute the copy (optional and mutually exclusive with platform)</li></ul><h2><a href="../plugins/stylus.html">Stylus Plugin</a></h2><p>The stylus plugin allows for generation of CSS from <a href="http://learnboost.github.com/stylus/">stylus</a> input.</p><p>In addition to the core stylus features this lumbar plugin</p><ul><li>Defines platform variables to allow conditional stylus generation.</li><li>Allows for generate of pixelDensity targeted stylesheets.</li><li>Manages image dependencies within the build.</li><li>Includes the <a href="http://visionmedia.github.com/nib/">nib</a> and
+<a href="https://github.com/kpdecker/stylus-images">stylus-images</a> plugins by default.</li></ul><h2><a href="../plugins/template.html">Template Plugin</a></h2><p>The template plugin provides allows for bundling of handlebars templates with the dependent javascript
 code, allowing templates to be kept in separate files and removing any need for additional requests to
-load the templates required by a given module.
-
-</p></div>
+load the templates required by a given module.</p><h2><a href="../plugins/update-externals.html">Update Externals Plugin</a></h2><p>The update externals plugin allows for updates to html files that need to
+reference external resources generated by lumbar.</p></div>
 </body>
 </html>

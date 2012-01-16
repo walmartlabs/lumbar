@@ -3,22 +3,45 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scope Plugin</title>
   
   <script type="text/javascript" src="../scripts/highlight.js"></script>
-<script type="text/javascript" src="../scripts/main.js"></script>
   <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles-resources.html">Inline Styles Resources Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li></ul></li><li class="header"><a href="../">Up</a></li></ul></div>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="index.html">Plugins</a><ul class="sub"><li><a href="../plugins/conditional.html">Conditional Plugin</a></li><li><a href="../plugins/inline-styles.html">Inline Styles Plugin</a></li><li><a href="../plugins/module-map.html">Module Map Plugin</a></li><li><a href="../plugins/package-config.html">Package Config Plugin</a></li><li><a href="../plugins/router.html">Router Plugin</a></li><li><a href="../plugins/scope.html">Scope Plugin</a></li><li><a href="../plugins/static-resources.html">Static Resources Plugin</a></li><li><a href="../plugins/stylus.html">Stylus Plugin</a></li><li><a href="../plugins/template.html">Template Plugin</a></li><li><a href="../plugins/update-externals.html">Update Externals Plugin</a></li></ul></li><li class="header"><a href="../">Home</a></li></ul></div>
   <div class="container"><div class="page">
     <h1>Scope Plugin</h1>
 
 <h2 id="introduction">Introduction</h2>
 
-<p>[TODO Some code doesn't like when its loaded within a scope object. might be good to have an example and explain why.]</p>
+<p>The scope plugin implements a CommonJS-like module system. This allows for simple sharing of
+code and state across different resources.</p>
 
-<p>The <em>global</em> flag controls the scoping rules that are applied by the scope plugin. For example, some code doesn’t like when its loaded within a scope object. This is particularly true usually for browser focused 3rd party libraries. With this flag set, it will force the library to be loaded as normal.</p>
+<h2 id="usage">Usage</h2>
+
+<p>The scope plugin operates by default in module-level scope mode. This behavior can be changed
+through the <code>scope</code> field on the lumbar configuration object.</p>
+
+<h3 id="configuration">Configuration</h3>
+
+<p>The <code>scope</code> field may either a string specifying the scoping mode or an object. If an object,
+it may have the following fields:</p>
+
+<ul><li><code>mode</code>: One of<ul><li><strong>module</strong> : Specifies scoping on the combined module level. All files within the same
+module will execute in the same scope and share the same <code>module</code> instance. This is
+the default behavior.</li><li><strong>resource</strong> : Each individual resource executes within a single scope. This mode creates
+additional overhead due to multiple scoping objects but prevents variable name conflicts
+between files in the same module. All resources within the same module share the same
+<code>module</code> instance, unless overridden in the resource's local scope.</li><li><strong>none</strong> : All resources are executed in the global scope. No <code>module</code> instance is created.
+This effectively disables the scope plugin. Note that other plugins may fail or require
+additional configuration if operating in this mode.</li></ul></li></ul>
+
+<p>Additionally the scope plugin allows for specific resources to be loaded in the global scope by
+specifying <code>"global": true</code> on the specific resource. This is useful for 3rd party libraries such
+as zepto and backbone that expect to be loaded in the global scope. Global scoped files must
+appear at the beginning of a module.</p>
 
 <h2 id="example">Example</h2>
   </div></div>
