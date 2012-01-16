@@ -4,7 +4,7 @@ Lumbar is a js-build tool that takes a _general application_ and list of _platfo
 
 ## Introduction ##
 
-You can think of lumbar as a conditional compiler that targets platforms. However, it doesn’t rely on variables in your source code. There’s no #ifdef or #endifs. Rather you can include and exclude files by associating them with a platform. It uses a json file, [_lumbar.json_](#lumbar.json), to describe project meta-data.
+You can think of lumbar as a conditional compiler that targets platforms. However, it doesn’t rely on variables in your source code. There’s no #ifdef or #endifs. Rather you can include and exclude files by associating them with a platform. It uses a json file, [lumbar.json](#lumbar.json), to describe project meta-data.
 
 *  It allows you to define multiple routers in your code.
 *  It pulls in your mustache or handlebars templates.
@@ -18,15 +18,15 @@ Best of all, if what’s included out of the box doesn’t satisfy your needs, t
 
 ## High Level Overview ##
 
-Lumbar is really modeled and built around [_platform(s)_](#platforms). Platform(s) are defined by you, to fit your representations. When a platform flag is present on a resource, such as a javascript file, then that resource will be included for that platform’s output only.
+Lumbar is really modeled and built around [platform(s)](#platforms). Platform(s) are defined by you, to fit your representations. When a platform flag is present on a resource, such as a javascript file, then that resource will be included for that platform’s output only.
 
-The next big term are [_module(s)_](#modules). A module is a grouping of multiple resources, such as static files, stylesheets, templates, and routes, into a logical unit. Lumbar will process all the resources in each module and output them appropriately for each platform.
+The next big term are [module(s)](#modules). A module is a grouping of multiple resources, such as static files, stylesheets, templates, and routes, into a logical unit. Lumbar will process all the resources in each module and output them appropriately for each platform.
 
-Following module(s) are [_package(s)_](#packages). When platform(s) are processed one by one, they are output based on rules found in the packages. Therefore, a package gives more flexibility on how to output files. Theoretically, you could have one package that referenced all your platform(s).
+Following module(s) are [package(s)](#packages). When platform(s) are processed one by one, they are output based on rules found in the packages. Therefore, a package gives more flexibility on how to output files. Theoretically, you could have one package that referenced all your platform(s).
 
 ### lumbar.json ###
 
-The main configuration file for lumbar is by default named lumbar.json. It is a JSON formatted document that has six (6) main sections. They are [_application_](#application), [_platforms_](#platforms), [_packages_](#packages), [_modules_](#modules), [_templates_](#templates), and [_styles_](#styles).
+The main configuration file for lumbar is by default named lumbar.json. It is a JSON formatted document that has six (6) main sections. They are [application](#application), [platforms](#platforms), [packages](#packages), [modules](#modules), [templates](#templates), and [styles](#styles).
 
 Each section of lumbar.json is discussed in more detail below. There is a lumbar.json included in the example directory.
 
@@ -52,7 +52,7 @@ Next, lets discuss the modules section of the lumbar.json file. This sections le
 
 Each module can have zero or many scripts listed under the scripts key. In a similar manner, they can have zero or many styles listed under the styles key.
 
-An entry in the scripts or styles array is either a plain filename with relative path and or an object that offers more granularity for the file. If its a filename then an entry like, “init.js” would be appropriate. If we wanted to introduce the init.js file only under specific conditions then we would list it as an object and give init.js the value to the src attribute. In that same object we would add a platform(s) attribute and list the platforms we wanted init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this: { “src”: “init.js”, “platforms”: “ipad”, “iphone” }.
+An entry in the scripts or styles array is either a plain filename with relative path and or an object that offers more granularity for the file. If its a filename then an entry like, “init.js” would be appropriate. If we wanted to introduce the init.js file only under specific conditions then we would list it as an object and give init.js the value to the src attribute. In that same object we would add a platform(s) attribute and list the platforms we wanted init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this: `{ “src”: “init.js”, “platforms”: “ipad”, “iphone” }`.
 
 Now as we are building our modules and pulling in the javascript files, each one is checked to see if its assocaited with an entry in the _templates_ section. The association is made if the name of the javascript src file, including path, is is a match to a key in the _templates_ seciton. If there is an association, then we also add those templates to our module. As an example, if we added another entry as “header.js” and also happened to have “header.js” listed underneath the templates section, then we would pull in the templates given there.
 
@@ -84,7 +84,7 @@ Finally the templates sections lists out all the views for a given key. Styles a
 
 #### Summary ####
 
-We just discussed the six (6) major sections of the lumbar.json configuration file. The [_application_](#application), [_platforms_](#platforms), [_packages_](#packages), [_modules_](#modules), [_templates_](#templates), and [_styles_](#styles) sections are very important instruction sets for lumbar to work properly.
+We just discussed the six (6) major sections of the lumbar.json configuration file. The [application](#application), [platforms](#platforms), [packages](#packages), [modules](#modules), [templates](#templates), and [styles](#styles) sections are very important instruction sets for lumbar to work properly.
 
 ### Scoping ###
 
