@@ -80,7 +80,7 @@ div#sidebar {
 
 #sidebar li {
   cursor: pointer;
-  margin: 1.2em 0 0.21 0;
+  margin: 1.2em 0 0.21em 0;
 }
 
 #sidebar .sub li:before {
@@ -194,116 +194,6 @@ pre {
 pre > code {
   color: inherit;
   background: transparent;
-}
-
-
-/*
-
-Zenburn style from voldmar.ru (c) Vladimir Epifanov <voldmar@voldmar.ru>
-based on dark.css by Ivan Sagalaev
-
-*/
-
-.keyword,
-.tag,
-.django .tag,
-.django .keyword,
-.css .class,
-.css .id,
-.lisp .title {
-  color: #E3CEAB;
-}
-
-.django .template_tag,
-.django .variable,
-.django .filter .argument {
-  color: #DCDCDC;
-}
-
-.number,
-.date {
-  color: #8CD0D3;
-}
-
-.dos .envvar,
-.dos .stream,
-.variable,
-.apache .sqbracket {
-  color: #EFDCBC;
-}
-
-.dos .flow,
-.diff .change,
-.python .exception,
-.python .built_in,
-.literal,
-.tex .special {
-  color: #EFEFAF;
-}
-
-.diff .chunk,
-.ruby .subst {
-  color: #8F8F8F;
-}
-
-.dos .keyword,
-.python .decorator,
-.class .title,
-.haskell .label,
-.function .title,
-.ini .title,
-.diff .header,
-.ruby .class .parent,
-.apache .tag,
-.nginx .built_in,
-.tex .command,
-.input_number {
-    color: #efef8f;
-}
-
-.dos .winutils,
-.ruby .symbol,
-.ruby .symbol .string,
-.ruby .symbol .keyword,
-.ruby .symbol .keymethods,
-.ruby .string,
-.ruby .instancevar {
-  color: #DCA3A3;
-}
-
-.diff .deletion,
-.string,
-.tag .value,
-.preprocessor,
-.built_in,
-.sql .aggregate,
-.javadoc,
-.smalltalk .class,
-.smalltalk .localvars,
-.smalltalk .array,
-.css .rules .value,
-.attr_selector,
-.pseudo,
-.apache .cbracket,
-.tex .formula {
-  color: #CC9393;
-}
-
-.shebang,
-.diff .addition,
-.comment,
-.java .annotation,
-.template_comment,
-.pi,
-.doctype {
-  color: #7F9F7F;
-}
-
-.xml .css,
-.xml .javascript,
-.xml .vbscript,
-.tex .formula {
-  opacity: 0.5;
 }
 
 
