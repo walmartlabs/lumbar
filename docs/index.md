@@ -9,121 +9,233 @@ You can think of lumbar as a conditional compiler that targets platforms. Howeve
 *  It allows you to define multiple routers in your code.
 *  It pulls in your mustache or handlebars templates.
 *  It pulls in your stylus styles and generates css files.
-*  It outputs stand alone javascript and css files.
+*  It outputs standalone javascript and css files.
 *  It wraps your code in the correct scope (module pattern), or not.
 
-Lumbar works well with Backbone which can group routers, models, views and other application code into stand alone modular javascript and css files which can be lazy loaded when the route is encountered.
+Lumbar works well with [Backbone](http://documentcloud.github.com/backbone/) allowing for grouping of routers, models, views, and other application code into stand alone modular javascript and css files which can be lazy loaded when the route is encountered.
 
 Best of all, if what’s included out of the box doesn’t satisfy your needs, then you should be able to build a plugin relatively easily to support it. Lumbar was built around a [plugin architecture](#plugins) which makes it very extensible.
 
 ## High Level Overview ##
 
-Lumbar is really modeled and built around [platform(s)](#platforms). Platform(s) are defined by you, to fit your representations. When a platform flag is present on a resource, such as a javascript file, then that resource will be included for that platform’s output only.
+Lumbar is modeled and built around [platforms](#platforms). Platforms are defined by you, to fit your representations. When a platform flag is present on a resource, such as a javascript file, then that resource will be included for that platform’s output only.
 
 The next big term are [module(s)](#modules). A module is a grouping of multiple resources, such as static files, stylesheets, templates, and routes, into a logical unit. Lumbar will process all the resources in each module and output them appropriately for each platform.
 
 Following module(s) are [package(s)](#packages). When platform(s) are processed one by one, they are output based on rules found in the packages. Therefore, a package gives more flexibility on how to output files. Theoretically, you could have one package that referenced all your platform(s).
 
-### lumbar.json ###
+## lumbar.json ##
 
-The main configuration file for lumbar is by default named lumbar.json. It is a JSON formatted document that has six (6) main sections. They are [application](#application), [platforms](#platforms), [packages](#packages), [modules](#modules), [templates](#templates), and [styles](#styles).
+The main configuration file for lumbar is by default named *lumbar.json*. It is a JSON formatted document that has six main sections. They are [application](#application), [platforms](#platforms), [packages](#packages), [modules](#modules), [templates](#templates), and [styles](#styles).
 
-Each section of lumbar.json is discussed in more detail below. There is a lumbar.json included in the example directory.
-
-#### Application ####
-
-First lets discuss the application section. The “name” key is used to give your resultant application a global variable to hang everything from. If I were to use the name “Example” then the first line in my resultant javascript file would be var Example;
-
-There’s also a “module” key used to identify the module that will be loaded into the root namespace. It is the only one that can be relied on when running code in any other modules. This is a special module that kicks off everything and presumably contains the core library code for your application.
-
-For example, if we listed two platforms for our package, say "base" and "home" we would get two files called home.js and base.js. If we chose “base” as the value for module then our base.js file would declare Example and home.js would use it. If we chose “home” as the value for module then our base.js file would use Example while home.js would declare it.
-
-#### Platforms ####
-
-Second, lets discuss the platforms section. Each platform is given as a name in an array. Remember that each platform will have a corresponding directory. If the directory already exists then it won’t be created, otherwise it will. To keep it simple, our example has pre-loaded resources in these directories already. In each platform directory you'll find an index.html. They're not required to be there, our static resource plugin is used to copy artifacts into the platform directories.
-
-So say you have four (4) platforms listed like “android”, “ipad”, “iphone”, and “web”. Then when you run lumbar, you’re going to have four (4) corresponding sub-directories under your output dir with the same names.
-
-Platforms are what drive the next two sections, “packages” and “modules”. A “package” defines a one-to-many relationship with “platforms” and “modules”.
-
-#### Modules ####
-
-Next, lets discuss the modules section of the lumbar.json file. This sections lets you define logical groupings of code, static files, stylesheets, and templates (mustache / handlebars).
-
-Each module can have zero or many scripts listed under the scripts key. In a similar manner, they can have zero or many styles listed under the styles key.
-
-An entry in the scripts or styles array is either a plain filename with relative path and or an object that offers more granularity for the file. If its a filename then an entry like, “init.js” would be appropriate. If we wanted to introduce the init.js file only under specific conditions then we would list it as an object and give init.js the value to the src attribute. In that same object we would add a platform(s) attribute and list the platforms we wanted init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this: `{ “src”: “init.js”, “platforms”: “ipad”, “iphone” }`.
-
-Now as we are building our modules and pulling in the javascript files, each one is checked to see if its assocaited with an entry in the _templates_ section. The association is made if the name of the javascript src file, including path, is is a match to a key in the _templates_ seciton. If there is an association, then we also add those templates to our module. As an example, if we added another entry as “header.js” and also happened to have “header.js” listed underneath the templates section, then we would pull in the templates given there.
-
-#### Packages ####
-
-Third, lets discuss the packages section. This section lets you define how you would like the “platforms” organized. Each package is associated with a key. The purpose of this key is discussed below.
-
-Each package defines the platforms and modules its associated with. The packages are a one-to-many relationship with a platform. Thus the package is said to target these platforms. Or rather, what platforms does this package deliver on? If no platforms are listed then all the platforms are targeted.
-
-Each package defines a one-to-many relationship with modules. [Modules] are discussed next, but suffice it to say that modules are groupings of code, stylesheets and templates. This relationship establishes what modules the package includes. If no modules are listed than all the modules are targeted.
-
-The last attribute is combine. Setting combine to true results in one file being output with the name given for the package. This one file will include all the output from the modules given. This one file will be output to the directories given in platforms.
-
-For example, if we listed “foo” for the platform, and “bar”, “baz” for the modules under the “default” package, then we would combine the bar and baz modules into a file named default.js under the foo directory.
-
-[TODO: Discuss reason for having multiple packages in greater detail.]
-
-#### Templates ####
-
-Next to last, is the templates section which lists out all the views for a given key. Views are a mixture of html and logic using either handlebars or mustache. When templates are found they are automatically compiled and included into the module requesting it.
-
-[TODO Needs work. Mention keywords like 'precompile'].
-
-#### Styles ####
-
-Finally the templates sections lists out all the views for a given key. Styles are a mixture of css and and logic using Stylus.
-
-[TODO Discuss further]
-
-#### Summary ####
-
-We just discussed the six (6) major sections of the lumbar.json configuration file. The [application](#application), [platforms](#platforms), [packages](#packages), [modules](#modules), [templates](#templates), and [styles](#styles) sections are very important instruction sets for lumbar to work properly.
-
-### Scoping ###
-
-By default, Lumbar creates a private scope for all generated modules using the javascript module pattern. This behavior
-is controlled by the [scope plugin](plugins/scope.md) and may be adjusted as necessary.
-
-### Routes ###
-
-Lumbar automatically takes the routes found in module(s) and processes them. Routes are defined in each module.
-
-### Dependencies ###
-
-[Todo]
-
-### Directory structure ###
-
-The following diagram shows an example directory structure. This is where your actual development code and live trunk live. You will probably have three (3) distinct folders for your markup (templates), css (styles), and javascript (js). We tend to break our js folder down into backbone centric terms as you can see from the diagram below.
-
-What’s great about this approach is that you don’t have to maintain two (2), three (3), four (4), or more branches of your app for different platforms. Lumbar will handle outputting the platform specific versions for you.
+Each section of lumbar.json is discussed in more detail below. There is an example lumbar.json included in the [thorax-example](https://github.com/walmartlabs/thorax-example) project.
 
 
-### Command Line ###
+### Platforms ###
 
-    lumbar help
-            Prints out the long help message.
+    "platforms": [ "android", "iphone", "ipad", "web" ],
 
-    lumbar build [--package name] [--config file] [--minimize] lumbarFile outputDir
-            Build out the package(s).
+Platforms define the target environments that a particular lumbar build may target. This could range
+from separate builds targeted to different browsing environments (I.e. embedded webview vs. full
+browser) all the way up to builds targeted for specific business units.
 
-    lumbar watch [--package name]
-            Start watching the files for changes and rebuild as necessary.
+Platforms are defined through the `platforms` field in the lumbar.json file. This is an array of names,
+each of which produce a subdirectory in the build that contains all of the resources needed by that
+platform.
 
+### Packages ###
 
-    * package    - represents the name of a corresponding package listed under 'packages' in lumbarFile. If not given, all packages are built.
-    * minimize   - flag whether we should shrink the resultant file(s).
-    * lumbarFile - is the name and path to the lumbar config file, if not given then lumbar.json is assumed.
-    * outputDir  - _Required_-designates where the files will be placed.
+    "packages": {
+      "web": {
+        "platforms": [ "web" ],
+        "combine": false
+      },
+      "native-hello-world": {
+        "platforms": [ "android", "iphone", "ipad" ],
+        "modules": [ "base", "hello-world" ],
+        "combine": true
+      }
+    },
+
+Where platforms specify what you are going to build for, packages define what will be in each platform,
+at a macro level. This allows for creating applications for specific environments that are optimized
+subsets of the larger codebase. For example a native+web application may have a package for all modules
+that is utilized for web users and a package containing only a subset of modules that are combined
+into a single HTTP request for users that are coming from the native implementation.
+
+Packages are defined as objects on the `packages` object. Each package may define `platforms` and
+`modules` keys which will limit the platforms and modules that are associated with that package to
+a given set. If these fields are omitted then all platforms and modules are involved with the package.
+
+The platforms list can be viewed as the platforms that the package will deliver on and the modules
+list can be viewed as what resources will be included in the package.
+
+The resources in a package may also be optionally combined into a single file via the `combine`
+attribute. When combined the generated file will have the same name as the package name.
+
+### Modules ###
+
+    "modules": {
+      "base": {
+        "scripts": [
+          {"src": "js/lib/zepto.js", "global": true},
+          {"src": "js/lib/underscore.js", "global": true},
+          {"src": "js/lib/backbone.js", "global": true},
+          {"src": "js/lib/handlebars.js", "global": true},
+          {"src": "js/lib/thorax.js", "global": true},
+          {"src": "js/lib/script.js", "global": true},
+          {"src": "js/lib/lumbar-loader.js", "platform": "web"},
+          {"src": "js/lib/lumbar-loader-events.js", "platform": "web"},
+          {"src": "js/lib/lumbar-loader-standard.js", "platform": "web"},
+          {"src": "js/lib/lumbar-loader-backbone.js", "platform": "web"},
+          "js/init.js",
+          "js/router.js",
+          "js/model.js",
+          "js/collection.js",
+          "js/view.js",
+          {"src": "js/bridge.js", "platforms": ["iphone", "ipad", "android"]},
+          {"src": "js/bridge-android.js", "platform": "android"},
+          {"src": "js/bridge-ios.js", "platforms": ["ipad","iphone"]},
+          {"module-map": true}
+        ],
+        "styles": [
+          "styles/base.styl"
+        ],
+        "static": [
+          {"src": "static/#{platform}/index.html", "dest": "index.html"}
+        ]
+      },
+      "hello-world": {
+        "routes": {
+          "": "index",
+          "hello": "index"
+        },
+        "scripts": [
+          "js/views/hello-world",
+          "js/routers/hello-world.js"
+        ],
+        "styles": [
+          "styles/hello-world.styl"
+        ]
+      }
+    },
+
+Next, lets discuss the `modules` section of the *lumbar.json* file. This section lets you define logical
+groupings of code, static files, stylesheets, and templates (mustache / handlebars).
+
+A modules content is primarily defined by the `scripts`, `styles` and `static` fields which define arrays
+of resources that will be included within the module. For the `scripts` and `styles` entries all resources
+will be combined into a single script and single style file at build time. `static` resources will be copied
+to the build target on build. Each of these fields are optional and omitting a given field will prevent
+final output of that given file.
+
+#### Resources ####
+
+While left somewhat vague as plugins can provide their own definition of what a resource is, at the core
+level it is content that will be output in the resulting module. In general a resource is a file on the
+file system that may be transformed by plugins, but in some cases plugins define their own resources. The [module-map](plugins/module-map.md) plugin for example defines it's own resource type that outputs the 
+collective routes and associated modules for the entire package.
+
+File resources can be a simple string with relative path and or an object that offers more granularity for
+the file. If it's a simple filename then an entry like, **init.js** would be appropriate. If additional
+requirements are needed such as limiting to specific platforms or scope then an object with the `src` field
+set to the relative path should be used, along with any plugin specific filter values. The
+[conditional plugin](plugins/conditional.md) for example can define conditional inclusion via contstructs
+like this following:
+
+    {"src":"lumber-loader-localstorage.js", "env":"production"},
+    {"src":"lumber-loader-storage.js", "env":"dev"}
+
+The core implementation provides platform-specific filtering by specifying the `platform` or `platforms`
+fields on the resource object; the singular form being a string reference to a platform and the plural
+being an array of platform names. list the platforms we wanted init.js to be included with.
+If we were targeting the ipad and iphone platforms our entry would look like this:
+
+    { "src": "init.js", "platforms": ["ipad", "iphone"] }
+
+#### Scoping ####
+
+By default, Lumbar creates a private scope for all generated modules using the javascript module pattern.
+This behavior is controlled by the [scope plugin](plugins/scope.md) and may be adjusted as necessary.
+
+The scopes are somewhat akin to CommonJS modules, generating a `module` instance variable which acts as a
+general input from plugins and the `exports` or `module.exports` variable allowing for the module to
+expose functionality to the outside world.
+
+#### Routes ####
+
+Modules may optionally define backbone routes that it manages via the `routes` field. When paired with
+[lumbar-loader](https://github.com/walmartlabs/lumbar-loader) the given module will be loaded on demand
+when the user navigates to a route serviced by that module.
+
+Any routes defined for the module are available to javascript code via the `module.routes` field.
+
+### Application ###
+
+    "application": {
+      "name": "Example",
+      "module": "base"
+    },
+
+The `application` section defines the module that serves as the root namespace for all other modules.
+This is generally the module that provides the core framework for the application while other modules
+implement specific subsections of the application functionality.
+
+On this object, the `name` key defines the javascript name that other modules may access the module's
+exports from. (Note that code running within this module must address itself using the `exports` object
+directly until it has been fully initialized).
+
+All other modules will namespace themselves based on this name. With the example above a module named
+home would name itself `Example.home`.
+
+There’s also a `module` key used to identify the module that will be loaded into the root namespace.
+Without explicit loading this is the only one that can be relied on when running code in any other
+modules. This is a special module that kicks off everything and presumably contains the core library
+code for your application.
+
+For example, if we listed two modules for our package, say "base" and "home" we would get two files called *home.js* and *base.js*. If we chose "base" as the value for module then our *base.js* file would declare `Example` and *home.js* would use it. If we chose "home" as the value for module then our *base.js* file would use `Example` while *home.js* would declare it.
+
+### Templates ###
+
+    "templates": {
+      "js/views/hello-world/index.js": [
+        "templates/hello-world/index.handlebars"
+      ]
+    },
+
+Lumbar also support inclusion of templates via the `templates` field. Each entry in this object will be
+matched against the files that are included in a particular module. When a match occurs all templates will
+be included in the associated module (not more than once).
+
+These templates may also be precompiled and have other optimizations applied to them. See the
+[template plugin](plugins/template.md) documentation for additional information.
+
+### Styles ###
+
+    "styles": {
+      "pixelDensity": {
+        "android": [ 1, 1.5 ],
+        "iphone": [ 1, 2 ],
+        "web": [ 1, 2 ]
+      },
+      "includes": [
+        "nib",
+        "styles/include/global.styl"
+      ]
+    }
+
+Finally the `styles` section controls how CSS is generated and included within the generated content. When
+combined with [stylus](http://learnboost.github.com/stylus/), lumbar can allow for things like:
+
+  * Platform conditional styles via stylus conditionals and `$platform` variables
+  * Data URI inlined images
+  * Pixel density targeted stylesheets
+
+For more information see the [stylus plugin](plugins/stylus.md).
 
 ## Plugins ##
+
+Lumbar offers many options for customization and extensibly through its Plugin Architecture.
 
 ### Core Plugins ###
 
@@ -164,9 +276,33 @@ them name. See [Using 3rd Party Plugins](#plugins-using) below for details.
 
 ### Implementing Custom Plugins ###
 
-Lumbar offers many options for customization and extensibly through its Plugin Architecture.
-
 Read more about our architecture [here](plugins.md).
+
+## Command Line ##
+
+    lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir
+            Build out the package(s).
+    lumbar watch [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir
+            Start watching the files for changes and rebuild as necessary.
+
+    --package:    represents the name of a corresponding package listed
+                  under 'packages' in lumbarFile.
+
+    --minimize:   to shrink the resultant file.
+
+    --config:     is the name and path to the lumbar config file, if
+                  not given then lumbar.json is assumed.
+
+    --use:        path to your plugin to load
+
+        --with:   an optional json config object to pass to your plugin.
+
+        --name:   an optional name to assign to your plugin.
+
+    lumbarFile:   is the name and path to the lumbar config file, if
+                  not given then lumbar.json is assumed.
+
+    outputDir:    Required. Designates where the files will be placed.
 
 ## FAQ ##
 
