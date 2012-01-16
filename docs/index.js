@@ -94,18 +94,13 @@ module.exports = function(static) {
   static.file(/[^\/]+\.md$/, function(file) {
     file.$(function(window) {
       //assign ids
-      window.$('.container h2').each(function() {
+      window.$('h2, h3, h4').each(function() {
         this.id = this.innerHTML.split(/\s/).shift().replace(/\./g,'-').toLowerCase();
-      });
-      window.$('.container h3').each(function() {
-        var name = this.innerHTML.split(/\s/).shift();
-        var header = window.$(this).prevAll('h2:first')[0];
-        this.id = (header.innerHTML.replace(/\./g,'-') + '-' + name).toLowerCase();
       });
 
       //build toc
       var toc_html = '<ul>';
-      window.$('.container h2').each(function() {
+      window.$('h2').each(function() {
         toc_html += '<li class="header"><a href="#' + this.id + '">' + this.innerHTML + '</a>';
         var signatures = window.$(this).nextUntil('h2').filter('h3');
         if (signatures.length) {
