@@ -118,6 +118,8 @@ exports['file-list-filtered'] = function(done) {
       {src: 'artifacts/js/home/home.js', srcDir: 'artifacts'},
       {src: 'artifacts/js/iphone.js', srcDir: 'artifacts'},
       {src: 'artifacts/js/web.js', srcDir: 'artifacts'},
+      {dir: 'artifacts/node_modules', srcDir: 'artifacts'},
+      {dir: 'artifacts/node_modules/json-plugins-test-plugin', srcDir: 'artifacts'},
       {dir: 'artifacts/styles', srcDir: 'artifacts'},
       {dir: 'artifacts/templates', srcDir: 'artifacts'}
     ]);
@@ -143,6 +145,8 @@ exports['file-list-resource'] = function(done) {
       { src: 'artifacts/js/home/home.js', global: true, srcDir: 'artifacts'},
       { src: 'artifacts/js/iphone.js', global: true, srcDir: 'artifacts'},
       { src: 'artifacts/js/web.js', global: true, srcDir: 'artifacts'},
+      { dir: 'artifacts/node_modules', global: true, srcDir: 'artifacts'},
+      { dir: 'artifacts/node_modules/json-plugins-test-plugin', global: true, srcDir: 'artifacts'},
       { dir: 'artifacts/styles', global: true, srcDir: 'artifacts'},
       { dir: 'artifacts/templates', global: true, srcDir: 'artifacts'},
       {router: true}
