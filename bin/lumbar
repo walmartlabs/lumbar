@@ -181,8 +181,6 @@ var options = {
 
 // invoke init() from ../lib/lumbar.js.
 var arise = lumbar.init(lumbarFile, options),
-    // is worker going to point to watch or build func?
-    worker = watch ? arise.watch : arise.build,
     lastMessage;
 
 arise.on('output', function(status) {
@@ -212,10 +210,14 @@ fs.stat(options.outdir, function(err, stat) {
     throw new Error("Output must be a directory");
   }
 
-  // execute either watch() or build() and pass lumbar as the context.
-  worker.call(arise, packageName, moduleName, function(err, status) {
-    if (err) {
-      throw err;
-    }
-  });
+  // is worker going to point to watch or build func?
+  if (watch) {
+    arise.watch.call(arise, packageName, function(err, status) {
+      if (err) { throw err; }
+    });
+  } else {
+    arise.build.call(arise, packageName, moduleName, function(err, status) {
+      if (err) { throw err; }
+    });
+  }
 });
