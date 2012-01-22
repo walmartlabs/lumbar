@@ -7,30 +7,20 @@ replace the response from plugins that are later in the chain.
 
 
 ## Installation
-Plugins can be used in 2 ways.  Each method provides a way of passing configuration options to the plugin
+Plugins can be used in 2 ways. The first allows passing configuration options to the plugin
 which can be accessed as the first parameter if the plugin exports a function.
 
     module.exports = function(options) {
       return {
-	    // plugin methods
-      }
-    }
+        // plugin methods
+      };
+    };
 
-When plugins are registered, global node modules will be checked first, otherwise, if a relative path,
-will be relative to the directory containing the lumbar config file.
+For plugins that do not require instance options, a singleton exports pattern can be used
 
-### Command Line
-Plugins can be registered when executing the lumbar build with a command line parameter.
-
-* **--use**: the plugin path.
-* **--with**: an optional JSON structure that will be used as the plugin options.
-
-### Lumbar File
-A top level `plugin` key should be an array of plugins.  Each entry can either be a string representing the plugin path or a hash with the following values:
-
-* **path**: the plugin path
-* **options**: the plugin options
-
+    module.exports = {
+      // plugin methods
+    };
 
 ## Modes
 A mode is an operating context or filter so that only plugins that are registered for a given mode are
@@ -73,7 +63,7 @@ Almost all plugin methods are asynchronous and have the same signature - (contex
 All parameters are described in more detail after the method documentation.
 
 
-### API: moduleResources(context, next, complete)
+### moduleResources *moduleResources(context, next, complete)*
 
 Called when generating a list of all resources that a given module will need. This method may be
 used to add additional content to the module such as the router declaration for router
@@ -174,7 +164,7 @@ Here is an example of the router plugin:
       });
 
 
-### API: resourceList(context, next, complete)
+### resourceList *resourceList(context, next, complete)*
 
 Allows plugins to create multiple resources from a single resource. This is called once for each
 resource generated from the `moduleResources` callback.
@@ -205,7 +195,7 @@ For example, the scope plugin wraps the returned resources add a execution scope
     }
 
 
-### API: file(context, next, complete)
+### file *file(context, next, complete)*
 
 Allows plugins to apply file-level changes to the resources. Called once for each file
 generated, just prior to resources being combined. May alter the `context.resources` field
@@ -214,7 +204,7 @@ to change the resource list.
 This could be used, for example, to append JSONP callbacks to a file.
 
 
-### API: fileName(context, next, complete)
+### fileName *fileName(context, next, complete)*
 Allows for plugins to override the default file name used for output file creation.
 
 The return value should be an object with the following attributes:
@@ -230,7 +220,7 @@ For example, the script plugin uses the platform path and module name to create 
     }
 
 
-### API: module(context, next, complete)
+### module *module(context, next, complete)*
 
 Allow plugins to apply module-level changes to the resources. Called once for each module.
 May alter the resource list associated with the module by altering the `context.moduleResources`
@@ -271,7 +261,7 @@ static-output plugin adds the static files to the output directory:
     }
 
 
-### API: resource(context, next, complete)
+### resource *resource(context, next, complete)*
 Allows plugins to include content other than direct file references as well as chain resource modifications.
 
 The current resource can be referenced using `context.resource`.
@@ -430,56 +420,56 @@ with handling of EMFILE errors.
 
 FileUtils also caches files that are referenced to optimize build time.
 
-### API: resetCache(path)
+### resetCache *resetCache(path)*
 Clear all cached file content
 
 * **path**: Clear all or clear for a specific path. falsy or missing input for path will clear all.
 
-### API: resolvePath(path)
+### resolvePath *resolvePath(path)*
 Return a file path that, if relative, is appropriatly qualitied with the build output path based on the 'lookupPath'
 
 * **path**: the file path
 
-### API: readFileSync(path)
+### readFileSync *readFileSync(path)*
 Same as fs.readFileSync but uses `resolvePath`
 
 * **path**: the file path
 
-### API: makeRelative(path)
+### makeRelative *makeRelative(path)*
 The opposite of resolvePath.  This will remove the lookup path if the path has that as a prefix.
 
-### API: stat(file, callback)
+### stat *stat(file, callback)*
 Same as fs.stat but with EMFILE handling
 
 * **file**: the file path
 * **callback**: the asynchronous callback
 
-### API: readFile(file, callback)
+### readFile *readFile(file, callback)*
 Same as fs.readFile cacheing.  A buffer is returned.
 
 * **file**: the file path
 * **callback**: the asynchronous callback
 
-### API: readdir(dir, callback)
+### readdir *readdir(dir, callback)*
 same as fs.readdir with cacheing.
 
 * **dir**: the directory path
 * **callback**: the asynchronous callback
 
-### API: ensureDirs(pathname, callback)
+### ensureDirs *ensureDirs(pathname, callback)*
 Ensure that the parent directories for the provided file path exist and create otherwise.
 
 * **pathname**: the file path
 * **callback**: the asynchronous callback
 
-### API: writeFile(file, data, callback)
+### writeFile *writeFile(file, data, callback)*
 Same as fs.writefile but will also ensure directories, cache file contents, and handle EMFILE errors gracefully.
 
 * **file**: the file path
 * **data**: the file contents
 * **callback**: the asynchronous callback
 
-### API: loadResource(resource, callback)
+### loadResource *loadResource(resource, callback)*
 Specifically designed to load a lumbar resource (see the lumbar API `resource` method).
 
 * **resource**: the lumbar resource

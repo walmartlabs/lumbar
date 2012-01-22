@@ -36,6 +36,7 @@ var LONG_USAGE="lumbar help\n"+
 
 var configFile;
 var packageName;
+var moduleName;
 var minimize = false;
 var build = true; // build by default.
 var watch = false;
@@ -67,6 +68,10 @@ while (args.length) {
       packageName = args.shift();
       if (!packageName) throw new Error('--package <name> required');
       break;
+    case '--module':
+      moduleName = args.shift();
+      if (!moduleName) throw new Error('--module <name> required');
+      break;
     case '-m':
     case '--minimize':
       minimize = true;
@@ -95,7 +100,12 @@ while (args.length) {
           args.shift();
           options = args.shift();
           if (!options) throw new Error('--with <options> required');
-          options = eval('(' + options + ')');
+          try {
+            options = eval('(' + options + ')');
+          } catch (err) {
+            console.error('Failed to parse plugin options:', options);
+            throw err;
+          }
         }
 
         function extractName() {
@@ -149,8 +159,13 @@ plugins = plugins.map(function(plugin) {
   try {
     var fn = require(path);
   } catch (err) {
-    // Load from the current directory if not found in the normal lookup paths
-    fn = require(process.cwd() + '/node_modules/' + path);
+    try {
+      // Load from the current directory if not found in the normal lookup paths
+      fn = require(process.cwd() + '/node_modules/' + path);
+    } catch (err) {
+      // Last case, attempt to load from the plugins dir
+      fn = require('../lib/plugins/' + path);
+    }
   }
 
   lumbar.plugin(name, 'function' != typeof fn ? fn : fn(options));
@@ -198,7 +213,7 @@ fs.stat(options.outdir, function(err, stat) {
   }
 
   // execute either watch() or build() and pass lumbar as the context.
-  worker.call(arise, packageName, function(err, status) {
+  worker.call(arise, packageName, moduleName, function(err, status) {
     if (err) {
       throw err;
     }

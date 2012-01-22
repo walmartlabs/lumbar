@@ -1,6 +1,0 @@
-# Scope Plugin #
-
-## Introduction ##
-
-## Example ##
-
