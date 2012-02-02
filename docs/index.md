@@ -297,8 +297,6 @@ Read more about our architecture [here](plugins.md).
 
         --with:   an optional json config object to pass to your plugin.
 
-        --name:   an optional name to assign to your plugin.
-
     lumbarFile:   is the name and path to the lumbar config file, if
                   not given then lumbar.json is assumed.
 
