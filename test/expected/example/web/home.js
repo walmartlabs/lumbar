@@ -1,4 +1,4 @@
-Example.home = (function() {
+Example['home'] = (function() {
 var module = {exports: {}};
 var exports = module.exports;
 /* router : home */

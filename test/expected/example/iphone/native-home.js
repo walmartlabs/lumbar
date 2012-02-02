@@ -49,7 +49,7 @@ module.exports.config = {
 module.exports.moduleMap({"base":{"js":".js","css":[{"href":".css","maxRatio":1.5},{"href":"@2x.css","minRatio":1.5}]}});
 return module.exports;
 }).call(this);
-Example.home = (function() {
+Example['home'] = (function() {
 var module = {exports: {}};
 var exports = module.exports;
 /* router : home */
