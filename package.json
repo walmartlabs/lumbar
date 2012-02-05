@@ -21,7 +21,7 @@
     "growl": "~1.4",
     "handlebars": "~1.0",
     "htmlparser": "~1.7",
-    "jsdom": "~0.2",
+    "jsdom-nocontextifiy": "~0.2",
     "nib": "~0.3",
     "optimist": "~0.3",
     "stylus": "~0.21",
