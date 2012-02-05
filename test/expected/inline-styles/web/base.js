@@ -1,4 +1,4 @@
-Application.base = (function() {
+Application['base'] = (function() {
 var module = {exports: {}};
 var exports = module.exports;
 var allYour = true;
