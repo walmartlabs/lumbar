@@ -328,7 +328,7 @@ to setup a Lumbar (and Thorax) project. This may be freely copied and used as a 
 
 1. Does Lumbar provide any options for long expires resources?
 
-  The [lumbar long expires](https://github.com/walmartlbas/lumbar-long-expires) plugin allows for
+  The [lumbar long expires](https://github.com/walmartlabs/lumbar-long-expires) plugin allows for
   naming objects with arbitrary cache buster tokens, such as git SHA values. For example:
 
 > ./android/7c18fda/index.html
