@@ -165,9 +165,17 @@ var options = {
 var arise = lumbar.init(lumbarFile, options),
     // is worker going to point to watch or build func?
     worker = watch ? arise.watch : arise.build,
-    lastMessage;
+    lastMessage,
+    watchOutput = {};
 
+arise.on('watch-change', function(status) {
+  if (!watchOutput[status.fileName]) {
+    console.log('\t\033[90mchanged\033[0m ' + status.fileName);
+    watchOutput[status.fileName] = true;
+  }
+});
 arise.on('output', function(status) {
+  watchOutput = {};
   if (status.watch) {
     console.log('\t\033[90mwatching\033[0m ' + status.fileName);
   } else {
