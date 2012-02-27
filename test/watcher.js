@@ -119,3 +119,22 @@ exports['overwrite'] = function(done) {
     });
   }, 100);
 };
+
+exports['create-child'] = function(done) {
+  var outdir = lib.testDir('watcher', 'touch'),
+      count = 0;
+
+  wrench.copyDirSyncRecursive('test/artifacts', outdir);
+
+  var testFile = outdir + '/foo';
+  watcher.watchFile(outdir, [], function(type, fileName, sourceChange) {
+    assert.equal(1, ++count);
+    assert.equal('create', type);
+    assert.equal(outdir, fileName);
+    assert.equal(outdir, sourceChange);
+    watcher.unwatchAll();
+    done();
+  });
+
+  fs.writeFile(testFile, 'foo');
+};
