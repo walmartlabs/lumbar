@@ -110,12 +110,14 @@ exports['overwrite'] = function(done) {
 
   setTimeout(function() {
     fs.rename(outdir + '/static.json', testFile, function() {
-      fs.open(testFile, 'w', function(err, fd) {
-        var buffer = new Buffer([1, 2, 3, 4]);
-        fs.write(fd, buffer, 0, buffer.length, 0, function(err, written, buffer) {
-          fs.close(fd);
+      setTimeout(function() {
+        fs.open(testFile, 'w', function(err, fd) {
+          var buffer = new Buffer([1, 2, 3, 4]);
+          fs.write(fd, buffer, 0, buffer.length, 0, function(err, written, buffer) {
+            fs.close(fd);
+          });
         });
-      });
+      }, 100);
     });
   }, 100);
 };
