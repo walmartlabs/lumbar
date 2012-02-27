@@ -89,3 +89,33 @@ exports['rename'] = function(done) {
     fs.rename(testFile, outdir + '/foo');
   }, 100);
 };
+
+exports['overwrite'] = function(done) {
+  var outdir = lib.testDir('watcher', 'touch'),
+      count = 0;
+
+  wrench.copyDirSyncRecursive('test/artifacts', outdir);
+
+  var testFile = outdir + '/index.html';
+  watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
+    assert.ok(2 >= ++count, 'Unexpected count:' + count);
+    assert.equal(count === 1 ? 'rename' : 'change', type);
+    assert.equal(testFile, fileName);
+    assert.equal(testFile, sourceChange);
+    if (count >= 2) {
+      watcher.unwatchAll();
+      done();
+    }
+  });
+
+  setTimeout(function() {
+    fs.rename(outdir + '/static.json', testFile, function() {
+      fs.open(testFile, 'w', function(err, fd) {
+        var buffer = new Buffer([1, 2, 3, 4]);
+        fs.write(fd, buffer, 0, buffer.length, 0, function(err, written, buffer) {
+          fs.close(fd);
+        });
+      });
+    });
+  }, 100);
+};
