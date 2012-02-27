@@ -47,3 +47,45 @@ exports['write'] = function(done) {
     });
   });
 };
+
+exports['unlink'] = function(done) {
+  var outdir = lib.testDir('watcher', 'touch'),
+      count = 0;
+
+  wrench.copyDirSyncRecursive('test/artifacts', outdir);
+
+  var testFile = outdir + '/index.html';
+  watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
+    assert.equal(1, ++count);
+    assert.equal('remove', type);
+    assert.equal(testFile, fileName);
+    assert.equal(testFile, sourceChange);
+    watcher.unwatchAll();
+    done();
+  });
+
+  setTimeout(function() {
+    fs.unlink(testFile);
+  }, 100);
+};
+
+exports['rename'] = function(done) {
+  var outdir = lib.testDir('watcher', 'touch'),
+      count = 0;
+
+  wrench.copyDirSyncRecursive('test/artifacts', outdir);
+
+  var testFile = outdir + '/index.html';
+  watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
+    assert.equal(1, ++count);
+    assert.equal('remove', type);
+    assert.equal(testFile, fileName);
+    assert.equal(testFile, sourceChange);
+    watcher.unwatchAll();
+    done();
+  });
+
+  setTimeout(function() {
+    fs.rename(testFile, outdir + '/foo');
+  }, 100);
+};
