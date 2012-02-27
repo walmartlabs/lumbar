@@ -4,6 +4,11 @@ var assert = require('assert'),
     watcher = require('../lib/watcher'),
     wrench = require('wrench');
 
+exports['teardown'] = function(done) {
+  watcher.unwatchAll();
+  done();
+};
+
 exports['read'] = function(done) {
   var outdir = lib.testDir('watcher', 'touch');
 
@@ -17,7 +22,6 @@ exports['read'] = function(done) {
     var buffer = new Buffer(4);
     fs.read(fd, buffer, 0, buffer.length, 0, function(err, bytesRead, buffer) {
       fs.close(fd, function() {
-        watcher.unwatchAll();
         setTimeout(done, 500);
       });
     });
@@ -36,7 +40,6 @@ exports['write'] = function(done) {
     assert.equal('change', type);
     assert.equal(testFile, fileName);
     assert.equal(testFile, sourceChange);
-    watcher.unwatchAll();
     done();
   });
 
@@ -60,7 +63,6 @@ exports['unlink'] = function(done) {
     assert.equal('remove', type);
     assert.equal(testFile, fileName);
     assert.equal(testFile, sourceChange);
-    watcher.unwatchAll();
     done();
   });
 
@@ -81,7 +83,6 @@ exports['rename'] = function(done) {
     assert.equal('remove', type);
     assert.equal(testFile, fileName);
     assert.equal(testFile, sourceChange);
-    watcher.unwatchAll();
     done();
   });
 
@@ -103,7 +104,6 @@ exports['overwrite'] = function(done) {
     assert.equal(testFile, fileName);
     assert.equal(testFile, sourceChange);
     if (count >= 2) {
-      watcher.unwatchAll();
       done();
     }
   });
@@ -132,7 +132,6 @@ exports['create-child'] = function(done) {
     assert.equal('create', type);
     assert.equal(outdir, fileName);
     assert.equal(outdir, sourceChange);
-    watcher.unwatchAll();
     done();
   });
 
