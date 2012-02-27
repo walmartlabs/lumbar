@@ -136,5 +136,7 @@ exports['create-child'] = function(done) {
     done();
   });
 
-  fs.writeFile(testFile, 'foo');
+  setTimeout(function() {
+    fs.writeFile(testFile, 'foo');
+  }, 100);
 };
