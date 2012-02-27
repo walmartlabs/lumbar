@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs'),
+    fu = require('../lib/fileUtil'),
     lumbar = require('../lib/lumbar'),
     dirname = require('path').dirname,
     growl = require('growl');
@@ -192,12 +193,9 @@ arise.on('error', function(err) {
   }
 });
 
-// First figure out what our output looks like
-fs.stat(options.outdir, function(err, stat) {
-  if (err) {
-    throw err;
-  }
-
+// Ensure that we have the proper build output
+fu.ensureDirs(options.outdir + '/.', function(err) {
+  var stat = fs.statSync(options.outdir);
   if (!stat.isDirectory()) {
     throw new Error("Output must be a directory");
   }
