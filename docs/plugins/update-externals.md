@@ -36,5 +36,5 @@ update-externals will generate the following output
     <link rel="stylesheet" type="text/css" href="base.css">
     <link rel="stylesheet" type="text/css" href="/r/phoenix/web/base.css">
     <script type="text/javascript" src="base.js"></script>
-    <script type="text/javascript">var lumbarLoadPrefix = '/r/phoenix/web/base';</script>
+    <script type="text/javascript">var lumbarLoadPrefix = '/r/phoenix/web/';</script>
     <script type="text/javascript" src="/r/phoenix/web/base.js"></script>

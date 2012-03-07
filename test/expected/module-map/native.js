@@ -8,7 +8,7 @@ exports.belongToUs = function() {
 };
 ;;
 /* lumbar module map */
-App.moduleMap({"base":{"js":".js","css":[{"href":".css","maxRatio":1.5},{"href":"@2x.css","minRatio":1.5}]}});
+App.moduleMap({"base":{"js":"native.js","css":[{"href":"native.css","maxRatio":1.5},{"href":"native@2x.css","minRatio":1.5}]}});
 return module.exports;
 }).call(this);
 var home;
