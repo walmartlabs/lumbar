@@ -10,6 +10,7 @@
     }
   },
 
+  "loadPrefix": "/foo/",
   "styles": {
     "pixelDensity": {
       "iphone": [ 1, 2 ]

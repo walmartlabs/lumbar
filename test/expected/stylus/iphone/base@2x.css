@@ -6,7 +6,7 @@ body {
   background: #fff;
 }
 .header-button.show-search {
-  background-image: url("images/barrowLoRez@2x.png");
+  background-image: url("/foo/iphone/images/barrowLoRez@2x.png");
 }
 body {
   background: #fff;
