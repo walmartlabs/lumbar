@@ -46,7 +46,7 @@ module.exports.config = {
 }
 ;
 /* lumbar module map */
-module.exports.moduleMap({"base":{"js":"native-home.js","css":[{"href":"native-home.css","maxRatio":1.5},{"href":"native-home@2x.css","minRatio":1.5}]}});
+module.exports.moduleMap({"base":{"css":[{"href":"native-home.css","maxRatio":1.5},{"href":"native-home@2x.css","minRatio":1.5}],"js":"native-home.js"}});
 return module.exports;
 }).call(this);
 Example['home'] = (function() {
