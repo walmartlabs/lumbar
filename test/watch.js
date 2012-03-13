@@ -200,7 +200,7 @@ exports['watch-add'] = function(done) {
 
 exports['watch-remove'] = function(done) {
   var expectedFiles = [
-          '/base.js', '/base.js'
+          '/base.js', '/base.js', '/base.js' /* Extra event for directory modification */
         ],
       operations = {
         1: function(testdir) {
