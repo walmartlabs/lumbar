@@ -189,7 +189,7 @@ arise.on('error', function(err) {
     lastMessage = message;
 
     console.error(message);
-    growl(err.message, { title: 'Lumbar error' });
+    growl(err.message, { title: 'Lumbar error', sticky: true });
   }
 });
 
