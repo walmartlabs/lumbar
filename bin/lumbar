@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var fs = require('fs'),
+var _ = require('underscore'),
+    fs = require('fs'),
     fu = require('../lib/fileUtil'),
     lumbar = require('../lib/lumbar'),
     dirname = require('path').dirname,
@@ -167,7 +168,13 @@ var arise = lumbar.init(lumbarFile, options),
     // is worker going to point to watch or build func?
     worker = watch ? arise.watch : arise.build,
     lastMessage,
-    watchOutput = {};
+    watchOutput = {},
+    growlList = [];
+
+var pingGrowl = _.debounce(function() {
+  growl('compiled: ' + growlList.map(function(file) { return file.substring(outputDir.length); }).join('\n\t'), {title: 'Lumbar'});
+  growlList = [];
+}, 1000);
 
 arise.on('watch-change', function(status) {
   if (!watchOutput[status.fileName]) {
@@ -181,6 +188,11 @@ arise.on('output', function(status) {
     console.log('\t\033[90mwatching\033[0m ' + status.fileName);
   } else {
     console.log('\t\033[90mcompiled\033[0m ' + status.fileName);
+  }
+
+  if (watch) {
+    growlList.push(status.fileName);
+    pingGrowl();
   }
 });
 arise.on('error', function(err) {
