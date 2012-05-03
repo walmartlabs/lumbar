@@ -41,6 +41,12 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
 
   wrench.copyDirSyncRecursive(srcdir, testdir);
 
+  function complete(err) {
+    process.removeListener('uncaughtException', complete);
+    done();
+  }
+  process.on('uncaughtException', complete);
+
   var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
   arise.on('output', function(status) {
     var statusFile = status.fileName.substring(outdir.length);
@@ -70,7 +76,7 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     wrench.rmdirSyncRecursive(testdir);
     wrench.rmdirSyncRecursive(outdir);
 
-    done();
+    complete();
   });
 
   var retCount = 0;
