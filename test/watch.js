@@ -7,6 +7,9 @@ var assert = require('assert'),
 
 if (!fs.watch) {
   // Watch is unsupported on 0.4 and earlier, no tests for this case
+  exports['nop'] = function(done) {
+    done();
+  };
   return;
 }
 
