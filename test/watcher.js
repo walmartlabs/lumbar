@@ -12,12 +12,23 @@ if (!fs.watch) {
   return;
 }
 
+function cleanupTimeout(callback) {
+  return function(done) {
+    function complete(err) {
+      process.removeListener('uncaughtException', complete);
+      done();
+    }
+    process.on('uncaughtException', complete);
+    callback.call(this, complete);
+  };
+}
+
 exports['teardown'] = function(done) {
   watcher.unwatchAll();
   done();
 };
 
-exports['read'] = function(done) {
+exports['read'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch');
 
   wrench.copyDirSyncRecursive('test/artifacts', outdir);
@@ -34,9 +45,9 @@ exports['read'] = function(done) {
       });
     });
   });
-};
+});
 
-exports['write'] = function(done) {
+exports['write'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch'),
       count = 0;
 
@@ -57,9 +68,9 @@ exports['write'] = function(done) {
       fs.close(fd);
     });
   });
-};
+});
 
-exports['unlink'] = function(done) {
+exports['unlink'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch'),
       count = 0;
 
@@ -77,9 +88,9 @@ exports['unlink'] = function(done) {
   setTimeout(function() {
     fs.unlink(testFile);
   }, 100);
-};
+});
 
-exports['rename'] = function(done) {
+exports['rename'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch'),
       count = 0;
 
@@ -97,9 +108,9 @@ exports['rename'] = function(done) {
   setTimeout(function() {
     fs.rename(testFile, outdir + '/foo');
   }, 100);
-};
+});
 
-exports['overwrite'] = function(done) {
+exports['overwrite'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch'),
       count = 0;
 
@@ -128,9 +139,9 @@ exports['overwrite'] = function(done) {
       }, 100);
     });
   }, 100);
-};
+});
 
-exports['create-child'] = function(done) {
+exports['create-child'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch'),
       count = 0;
 
@@ -148,4 +159,4 @@ exports['create-child'] = function(done) {
   setTimeout(function() {
     fs.writeFile(testFile, 'foo');
   }, 100);
-};
+});
