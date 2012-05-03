@@ -23,6 +23,16 @@ exports.assertExpected = function(outdir, expectedDir, configFile) {
   assert.deepEqual(generatedFiles, expectedFiles, configFile + ': file list matches' + JSON.stringify(expectedFiles) + JSON.stringify(generatedFiles));
 
   generatedFiles.forEach(function(fileName) {
+    var generatedStat = fs.statSync(outdir + fileName),
+        expectedStat = fs.statSync(expectedDir + fileName);
+
+    assert.equal(generatedStat.isFile(), expectedStat.isFile());
+    assert.equal(generatedStat.isDirectory(), expectedStat.isDirectory());
+
+    if (generatedStat.isDirectory()) {
+      return;
+    }
+
     var generatedContent = fs.readFileSync(outdir + fileName, 'utf8'),
         expectedContent = fs.readFileSync(expectedDir + fileName, 'utf8');
     assert.equal(generatedContent, expectedContent, configFile + ':' + fileName + ': content matches');
