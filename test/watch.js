@@ -1,6 +1,5 @@
 var assert = require('assert'),
     fs = require('fs'),
-    glob = require('glob'),
     lib = require('./lib'),
     lumbar = require('../lib/lumbar'),
     wrench = require('wrench');

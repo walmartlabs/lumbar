@@ -14,10 +14,10 @@ exports.testDir = function(testName, configFile) {
   return outdir;
 };
 exports.assertExpected = function(outdir, expectedDir, configFile) {
-  var expectedFiles = glob.globSync(expectedDir + '/**/*.*').map(function(fileName) {
+  var expectedFiles = glob.sync(expectedDir + '/**/*.*').map(function(fileName) {
         return fileName.substring(expectedDir.length);
       }).filter(function(file) { return !/\/$/.test(file); }).sort(),
-      generatedFiles = glob.globSync(outdir + '/**/*.*').map(function(fileName) {
+      generatedFiles = glob.sync(outdir + '/**/*.*').map(function(fileName) {
         return fileName.substring(outdir.length);
       }).filter(function(file) { return !/\/$/.test(file); }).sort();
   assert.deepEqual(generatedFiles, expectedFiles, configFile + ': file list matches' + JSON.stringify(expectedFiles) + JSON.stringify(generatedFiles));
@@ -37,7 +37,7 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
     options = options || {};
     options.outdir = outdir;
 
-    var expectedFiles = glob.globSync(expectedDir + (expectGlob || '/**/*.{js,css}')).map(function(fileName) {
+    var expectedFiles = glob.sync(expectedDir + (expectGlob || '/**/*.{js,css}')).map(function(fileName) {
           return fileName.substring(expectedDir.length);
         }).sort(),
         seenFiles = [];
