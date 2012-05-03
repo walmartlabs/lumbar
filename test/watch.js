@@ -5,6 +5,11 @@ var assert = require('assert'),
     lumbar = require('../lib/lumbar'),
     wrench = require('wrench');
 
+if (!fs.watch) {
+  // Watch is unsupported on 0.4 and earlier, no tests for this case
+  return;
+}
+
 function appendSpace(path) {
   setTimeout(function() {
     console.error('append:', path);

@@ -4,6 +4,11 @@ var assert = require('assert'),
     watcher = require('../lib/watcher'),
     wrench = require('wrench');
 
+if (!fs.watch) {
+  // Watch is unsupported on 0.4 and earlier, no tests for this case
+  return;
+}
+
 exports['teardown'] = function(done) {
   watcher.unwatchAll();
   done();
