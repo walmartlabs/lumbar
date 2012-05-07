@@ -112,7 +112,7 @@ exports['rename'] = cleanupTimeout(function(done) {
 
 exports['overwrite'] = cleanupTimeout(function(done) {
   var outdir = lib.testDir('watcher', 'touch'),
-      count = 0;
+      count = require('os').platform() === 'darwin' ? 0 : 1;
 
   wrench.copyDirSyncRecursive('test/artifacts', outdir);
 
