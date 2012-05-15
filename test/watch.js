@@ -69,7 +69,7 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     expectedFiles = expectedFiles.sort();
     assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
 
-    lib.assertExpected(outdir, expectedDir, 'watchfile');
+    lib.assertExpected(outdir, expectedDir, 'watchfile: ' + outdir);
 
     // Cleanup (Do cleanup here so the files remain for the failure case)
     wrench.rmdirSyncRecursive(testdir);
@@ -166,7 +166,14 @@ exports['watch-stylus'] = function(done) {
           appendSpace(testdir + '/stylus.json');
         },
         6: function(testdir) {
-          appendSpace(testdir + '/styles/iphone.styl');
+          var path = testdir + '/styles/iphone.styl';
+
+          setTimeout(function() {
+            console.error('append class:', path);
+            var fd = fs.openSync(path, 'a');
+            fs.writeSync(fd, '\nfoo\n  bar 1');
+            fs.closeSync(fd);
+          }, 1000);
         },
         8: function(testdir) {
           appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
@@ -175,7 +182,7 @@ exports['watch-stylus'] = function(done) {
 
   runWatchTest.call(this,
     'test/artifacts', 'stylus.json',
-    operations, expectedFiles, 'test/expected/stylus',
+    operations, expectedFiles, 'test/expected/stylus-watch',
     done);
 };
 

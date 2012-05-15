@@ -1,0 +1,16 @@
+th {
+  font-weight: normal;
+}
+body {
+  font: 0.9em 'comic sans ms';
+  background: #fff;
+}
+.header-button.show-search {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAYAQMAAADAhU81AAAABlBMVEUAAADPz894LXwSAAAAAXRSTlMAQObYZgAAAA9JREFUCB1jbGhgYKQhBgCRTBgZ0kUqFwAAAABJRU5ErkJggg==");
+}
+body {
+  background: #fff;
+}
+foo {
+  bar: 1;
+}
