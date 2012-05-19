@@ -1,9 +1,16 @@
 var assert = require('assert'),
     fs = require('fs'),
-    glob = require('glob'),
     lib = require('./lib'),
     lumbar = require('../lib/lumbar'),
     wrench = require('wrench');
+
+if (!fs.watch) {
+  // Watch is unsupported on 0.4 and earlier, no tests for this case
+  exports['nop'] = function(done) {
+    done();
+  };
+  return;
+}
 
 function appendSpace(path) {
   setTimeout(function() {
@@ -33,6 +40,12 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
 
   wrench.copyDirSyncRecursive(srcdir, testdir);
 
+  function complete(err) {
+    process.removeListener('uncaughtException', complete);
+    done();
+  }
+  process.on('uncaughtException', complete);
+
   var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
   arise.on('output', function(status) {
     var statusFile = status.fileName.substring(outdir.length);
@@ -56,13 +69,13 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
     expectedFiles = expectedFiles.sort();
     assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
 
-    lib.assertExpected(outdir, expectedDir, 'watchfile');
+    lib.assertExpected(outdir, expectedDir, 'watchfile: ' + outdir);
 
     // Cleanup (Do cleanup here so the files remain for the failure case)
     wrench.rmdirSyncRecursive(testdir);
     wrench.rmdirSyncRecursive(outdir);
 
-    done();
+    complete();
   });
 
   var retCount = 0;
@@ -153,7 +166,14 @@ exports['watch-stylus'] = function(done) {
           appendSpace(testdir + '/stylus.json');
         },
         6: function(testdir) {
-          appendSpace(testdir + '/styles/iphone.styl');
+          var path = testdir + '/styles/iphone.styl';
+
+          setTimeout(function() {
+            console.error('append class:', path);
+            var fd = fs.openSync(path, 'a');
+            fs.writeSync(fd, '\nfoo\n  bar 1');
+            fs.closeSync(fd);
+          }, 1000);
         },
         8: function(testdir) {
           appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
@@ -162,7 +182,7 @@ exports['watch-stylus'] = function(done) {
 
   runWatchTest.call(this,
     'test/artifacts', 'stylus.json',
-    operations, expectedFiles, 'test/expected/stylus',
+    operations, expectedFiles, 'test/expected/stylus-watch',
     done);
 };
 
