@@ -1,6 +1,6 @@
 {
   "name": "lumbar",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
   "keywords": [
     "build",
@@ -40,5 +40,6 @@
   "main": "lib/lumbar",
   "scripts": {
     "test": "node_modules/.bin/expresso -t 20000 -s test/*"
-  }
+  },
+  "optionalDependencies": {}
 }
