@@ -162,10 +162,10 @@ The scopes are somewhat akin to CommonJS modules, generating a `module` instance
 general input from plugins and the `exports` or `module.exports` variable allowing for the module to
 expose functionality to the outside world.
 
-The output of a module can be customized 
+The output of a module can be customized with two templates each of which will receive `scope` (the current module scope) and `name` (the current application name) as variables.
 
-  * `moduleStartTemplate` : The code to be inserted in the compiled module source before the module content. Will recieve `scope`     as the only variable. This is in a format such as "Application['ModuleName']". 
-  * `moduleEndTemplate` : The code to be inserted in the compiled module source after the module content. Will recieve `scope`     as the only variable. This is in a format such as "Application['ModuleName']". 
+  * `moduleStartTemplate` : The code to be inserted in the compiled module source before the module content.
+  * `moduleEndTemplate` : The code to be inserted in the compiled module source after the module content.
 
 An example in the config file (with the default values) would be:
 
