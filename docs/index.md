@@ -170,7 +170,7 @@ The output of a module can be customized with two templates each of which will r
 An example in the config file (with the default values) would be:
 
     {
-      "moduleStartTemplate": "{{{scope}}} = (function() {var module = {exports: {}}; var exports = module.exports;"
+      "moduleStartTemplate": "{{{scope}}} = (function() {var module = {exports: {}}; var exports = module.exports;",
       "moduleEndTemplate": "return module.exports;}).call(this);"
     }
 
