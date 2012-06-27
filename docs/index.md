@@ -162,6 +162,18 @@ The scopes are somewhat akin to CommonJS modules, generating a `module` instance
 general input from plugins and the `exports` or `module.exports` variable allowing for the module to
 expose functionality to the outside world.
 
+The output of a module can be customized 
+
+  * `moduleStartTemplate` : The code to be inserted in the compiled module source before the module content. Will recieve `scope`     as the only variable. This is in a format such as "Application['ModuleName']". 
+  * `moduleEndTemplate` : The code to be inserted in the compiled module source after the module content. Will recieve `scope`     as the only variable. This is in a format such as "Application['ModuleName']". 
+
+An example in the config file (with the default values) would be:
+
+    {
+      "moduleStartTemplate": "{{{scope}}} = (function() {var module = {exports: {}}; var exports = module.exports;"
+      "moduleEndTemplate": "return module.exports;}).call(this);"
+    }
+
 #### Routes ####
 
 Modules may optionally define backbone routes that it manages via the `routes` field. When paired with
