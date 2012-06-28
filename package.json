@@ -24,7 +24,7 @@
     "jsdom-nocontextifiy": "~0.2",
     "nib": "~0.3",
     "optimist": "~0.3",
-    "stylus": "~0.25",
+    "stylus": "~0.27",
     "stylus-images": "~0.2",
     "uglify-js": "~1.2",
     "underscore": "~1.3"
