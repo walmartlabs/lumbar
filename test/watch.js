@@ -2,9 +2,10 @@ var assert = require('assert'),
     fs = require('fs'),
     lib = require('./lib'),
     lumbar = require('../lib/lumbar'),
+    watch = require('./lib/watch'),
     wrench = require('wrench');
 
-if (!fs.watch) {
+if (!watch.canWatch()) {
   // Watch is unsupported on 0.4 and earlier, no tests for this case
   exports['nop'] = function(done) {
     done();
