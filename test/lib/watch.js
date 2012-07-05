@@ -73,6 +73,10 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
     expectedFiles = expectedFiles.sort();
     assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
 
+    if (options.expectedDir) {
+      lib.assertExpected(outdir, options.expectedDir, 'watchfile: ' + outdir);
+    }
+
     // Cleanup (Do cleanup here so the files remain for the failure case)
     wrench.rmdirSyncRecursive(testdir);
     wrench.rmdirSyncRecursive(outdir);
