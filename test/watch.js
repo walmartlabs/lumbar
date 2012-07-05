@@ -13,26 +13,6 @@ if (!watch.canWatch()) {
   return;
 }
 
-function appendSpace(path) {
-  setTimeout(function() {
-    console.error('append:', path);
-    var fd = fs.openSync(path, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-  }, 1000);
-}
-function appendRapidSpace(path1, path2) {
-  setTimeout(function() {
-    console.error('append rapid:', path1, path2);
-    var fd = fs.openSync(path1, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-
-    var fd = fs.openSync(path2, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-  }, 1000);
-}
 function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, done) {
   var testdir = lib.testDir(this.title, 'example'),
       outdir = lib.testDir(this.title, 'test'),
@@ -109,18 +89,18 @@ exports['watch-script'] = function(done) {
       operations = {
         18: function(testdir) {
           // Modify the config file
-          appendSpace(testdir + '/lumbar.json');
+          watch.appendSpace(testdir + '/lumbar.json');
         },
         36: function(testdir) {
           // Modify the bridge file
-          appendSpace(testdir + '/js/bridge.js');
+          watch.appendSpace(testdir + '/js/bridge.js');
         },
         41: function(testdir) {
-          appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
+          watch.appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
         },
         46: function(testdir) {
           // Modify the home template
-          appendSpace(testdir + '/templates/home/home.handlebars');
+          watch.appendSpace(testdir + '/templates/home/home.handlebars');
         }
       };
 
@@ -139,13 +119,13 @@ exports['watch-style'] = function(done) {
         ],
       operations = {
         5: function(testdir) {
-          appendSpace(testdir + '/styles.json');
+          watch.appendSpace(testdir + '/styles.json');
         },
         10: function(testdir) {
-          appendSpace(testdir + '/styles/base.css');
+          watch.appendSpace(testdir + '/styles/base.css');
         },
         13: function(testdir) {
-          appendRapidSpace(testdir + '/styles/base.css', testdir + '/styles/iphone.css');
+          watch.appendRapidSpace(testdir + '/styles/base.css', testdir + '/styles/iphone.css');
         }
       };
 
@@ -164,20 +144,13 @@ exports['watch-stylus'] = function(done) {
         ],
       operations = {
         3: function(testdir) {
-          appendSpace(testdir + '/stylus.json');
+          watch.appendSpace(testdir + '/stylus.json');
         },
         6: function(testdir) {
-          var path = testdir + '/styles/iphone.styl';
-
-          setTimeout(function() {
-            console.error('append class:', path);
-            var fd = fs.openSync(path, 'a');
-            fs.writeSync(fd, '\nfoo\n  bar 1');
-            fs.closeSync(fd);
-          }, 1000);
+          watch.append(testdir + '/styles/iphone.styl', '\nfoo\n  bar 1');
         },
         8: function(testdir) {
-          appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
+          watch.appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
         }
       };
 
@@ -193,7 +166,7 @@ exports['watch-dir'] = function(done) {
         ],
       operations = {
         1: function(testdir) {
-          appendSpace(testdir + '/js/iphone.js');
+          watch.appendSpace(testdir + '/js/iphone.js');
         }
       };
 

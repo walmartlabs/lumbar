@@ -17,7 +17,7 @@ exports.append = function(path, content) {
   }, 500);
 };
 exports.appendSpace = function(path) {
-  exports.append(' ');
+  exports.append(path, ' ');
 };
 
 exports.appendRapidSpace = function(path1, path2) {
