@@ -1,7 +1,7 @@
 var assert = require('assert'),
     fs = require('fs'),
     lib = require('./index'),
-    lumbar = require('lumbar'),
+    lumbar = require('../../lib/lumbar'),
     wrench = require('wrench');
 
 exports.canWatch = function() {
