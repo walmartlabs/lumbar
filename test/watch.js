@@ -1,10 +1,9 @@
-var assert = require('assert'),
-    fs = require('fs'),
+var fs = require('fs'),
     lib = require('./lib'),
-    lumbar = require('../lib/lumbar'),
+    watch = require('./lib/watch'),
     wrench = require('wrench');
 
-if (!fs.watch) {
+if (!watch.canWatch()) {
   // Watch is unsupported on 0.4 and earlier, no tests for this case
   exports['nop'] = function(done) {
     done();
@@ -12,77 +11,10 @@ if (!fs.watch) {
   return;
 }
 
-function appendSpace(path) {
-  setTimeout(function() {
-    console.error('append:', path);
-    var fd = fs.openSync(path, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-  }, 1000);
-}
-function appendRapidSpace(path1, path2) {
-  setTimeout(function() {
-    console.error('append rapid:', path1, path2);
-    var fd = fs.openSync(path1, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-
-    var fd = fs.openSync(path2, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-  }, 1000);
-}
 function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, done) {
-  var testdir = lib.testDir(this.title, 'example'),
-      outdir = lib.testDir(this.title, 'test'),
-      seenFiles = [];
-  this.title += ' ' + outdir;
+  var options = {packageConfigFile: 'config/dev.json', expectedDir: expectedDir};
 
-  wrench.copyDirSyncRecursive(srcdir, testdir);
-
-  function complete(err) {
-    process.removeListener('uncaughtException', complete);
-    done();
-  }
-  process.on('uncaughtException', complete);
-
-  var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
-  arise.on('output', function(status) {
-    var statusFile = status.fileName.substring(outdir.length);
-    if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
-      arise.unwatch();
-      assert.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
-    } else {
-      seenFiles.push(statusFile);
-    }
-    var seen = seenFiles.length;
-    setTimeout(function() {
-      operations[seen] && operations[seen](testdir);
-    }, 0);
-    if (seenFiles.length < expectedFiles.length) {
-      return;
-    }
-
-    arise.unwatch();
-
-    seenFiles = seenFiles.sort();
-    expectedFiles = expectedFiles.sort();
-    assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
-
-    lib.assertExpected(outdir, expectedDir, 'watchfile: ' + outdir);
-
-    // Cleanup (Do cleanup here so the files remain for the failure case)
-    wrench.rmdirSyncRecursive(testdir);
-    wrench.rmdirSyncRecursive(outdir);
-
-    complete();
-  });
-
-  var retCount = 0;
-  arise.watch(undefined, function(err) {
-    err = err || new Error('Callback called without fatal error');
-    throw err;
-  });
+  watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
 }
 
 exports['watch-script'] = function(done) {
@@ -108,18 +40,18 @@ exports['watch-script'] = function(done) {
       operations = {
         18: function(testdir) {
           // Modify the config file
-          appendSpace(testdir + '/lumbar.json');
+          watch.appendSpace(testdir + '/lumbar.json');
         },
         36: function(testdir) {
           // Modify the bridge file
-          appendSpace(testdir + '/js/bridge.js');
+          watch.appendSpace(testdir + '/js/bridge.js');
         },
         41: function(testdir) {
-          appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
+          watch.appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
         },
         46: function(testdir) {
           // Modify the home template
-          appendSpace(testdir + '/templates/home/home.handlebars');
+          watch.appendSpace(testdir + '/templates/home/home.handlebars');
         }
       };
 
@@ -138,13 +70,13 @@ exports['watch-style'] = function(done) {
         ],
       operations = {
         5: function(testdir) {
-          appendSpace(testdir + '/styles.json');
+          watch.appendSpace(testdir + '/styles.json');
         },
         10: function(testdir) {
-          appendSpace(testdir + '/styles/base.css');
+          watch.appendSpace(testdir + '/styles/base.css');
         },
         13: function(testdir) {
-          appendRapidSpace(testdir + '/styles/base.css', testdir + '/styles/iphone.css');
+          watch.appendRapidSpace(testdir + '/styles/base.css', testdir + '/styles/iphone.css');
         }
       };
 
@@ -163,20 +95,13 @@ exports['watch-stylus'] = function(done) {
         ],
       operations = {
         3: function(testdir) {
-          appendSpace(testdir + '/stylus.json');
+          watch.appendSpace(testdir + '/stylus.json');
         },
         6: function(testdir) {
-          var path = testdir + '/styles/iphone.styl';
-
-          setTimeout(function() {
-            console.error('append class:', path);
-            var fd = fs.openSync(path, 'a');
-            fs.writeSync(fd, '\nfoo\n  bar 1');
-            fs.closeSync(fd);
-          }, 1000);
+          watch.append(testdir + '/styles/iphone.styl', '\nfoo\n  bar 1');
         },
         8: function(testdir) {
-          appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
+          watch.appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
         }
       };
 
@@ -192,7 +117,7 @@ exports['watch-dir'] = function(done) {
         ],
       operations = {
         1: function(testdir) {
-          appendSpace(testdir + '/js/iphone.js');
+          watch.appendSpace(testdir + '/js/iphone.js');
         }
       };
 
