@@ -164,14 +164,16 @@ expose functionality to the outside world.
 
 The output of a module can be customized with two templates each of which will receive `scope` (the current module scope) and `name` (the current application name) as variables.
 
-  * `moduleStartTemplate` : The code to be inserted in the compiled module source before the module content.
-  * `moduleEndTemplate` : The code to be inserted in the compiled module source after the module content.
+  * `scope.etartTemplate` : The code to be inserted in the compiled module source before the module content.
+  * `scope.endTemplate` : The code to be inserted in the compiled module source after the module content.
 
 An example in the config file (with the default values) would be:
 
     {
-      "moduleStartTemplate": "{{{scope}}} = (function() {var module = {exports: {}}; var exports = module.exports;",
-      "moduleEndTemplate": "return module.exports;}).call(this);"
+      "scope": {
+        "startTemplate": "{{{scope}}} = (function() {var module = {exports: {}}; var exports = module.  exports;",
+        "endTemplate": "return module.exports;}).call(this);"
+      }
     }
 
 #### Routes ####
