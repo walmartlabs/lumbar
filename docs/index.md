@@ -162,6 +162,25 @@ The scopes are somewhat akin to CommonJS modules, generating a `module` instance
 general input from plugins and the `exports` or `module.exports` variable allowing for the module to
 expose functionality to the outside world.
 
+The output of a module can be customized with a template which will receive `scope` (the current module scope) and `name` (the current application name) as variables.
+
+To specify this in your lumbar file set:
+
+    {
+      "scope": {
+        "template": "templates/module.template"
+      }
+    }
+
+The template can be a handlebars template string or a path to a file that ends in `.handlebars`. This template **must** contain `{{yield}}`. The built in module template looks more or less like:
+
+    {{{scope}}} = (function() {
+      var module = {exports: {}};
+      var exports = module.  exports;
+      {{yield}}
+      return module.exports;
+    }).call(this);
+
 #### Routes ####
 
 Modules may optionally define backbone routes that it manages via the `routes` field. When paired with
