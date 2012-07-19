@@ -21,6 +21,7 @@ exports['production-config'] = lib.runTest('test/artifacts/package-config.json',
 exports['scope-resource'] = lib.runTest('test/artifacts/scope-resource.json', 'test/expected/scope-resource');
 exports['scope-none'] = lib.runTest('test/artifacts/scope-none.json', 'test/expected/scope-none');
 exports['scope-globals'] = lib.runTest('test/artifacts/scope-globals.json', 'test/expected/scope-globals');
+exports['scope-yield'] = lib.runTest('test/artifacts/scope-yield.json', 'test/expected/scope-yield');
 exports['application-namespace'] = lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'});
 
 exports['styles'] = lib.runTest('test/artifacts/styles.json', 'test/expected/styles');

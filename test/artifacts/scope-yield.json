@@ -1,0 +1,10 @@
+{
+  "modules": {
+    "base": [
+      {"src": "js/base.js"}
+    ]
+  },
+  "scope": {
+    "template": "module.handlebars"
+  }
+}
