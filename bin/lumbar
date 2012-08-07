@@ -11,9 +11,9 @@ var args = process.argv.slice(2);
 
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
-"lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir\n"+
+"lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile [outputDir]\n"+
 "        Build out the package(s).\n"+
-"lumbar watch [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir\n"+
+"lumbar watch [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile [outputDir]\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
 "\n"+
 "--package:    represents the name of a corresponding package listed\n"+
@@ -43,7 +43,7 @@ var minimize = false;
 var build = true; // build by default.
 var watch = false;
 
-var lumbarFile;
+var lumbarFile = 'lumbar.json';
 var outputDir;
 /**
  * Import paths.
@@ -117,19 +117,28 @@ while (args.length) {
 }
 
 if (build || watch) {
-  switch (files.length) {
-    case 2:
-      lumbarFile = files[0];
-      outputDir = files[1];
-      break;
-    case 1:
-      outputDir = files[0];
-      lumbarFile = "lumbar.json";
-      break;
-    case 0:
-      console.error(LONG_USAGE);
-      process.exit(1);
-      return true;
+  var file = files.shift();
+  try {
+    var stat = fs.statSync(file);
+
+    if (stat.isFile()) {
+      lumbarFile = file;
+
+      file = files.shift();
+      if (file) {
+        outputDir = file;
+      }
+    } else {
+      outputDir = file;
+    }
+  } catch (err) {
+    outputDir = file;
+  }
+
+  if (files.length) {
+    console.error(LONG_USAGE);
+    process.exit(1);
+    return true;
   }
 } else {
   console.error(LONG_USAGE);
