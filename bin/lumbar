@@ -181,7 +181,7 @@ var arise = lumbar.init(lumbarFile, options),
     growlList = [];
 
 var pingGrowl = _.debounce(function() {
-  growl('compiled: ' + growlList.map(function(file) { return file.substring(outputDir.length); }).join('\n\t'), {title: 'Lumbar'});
+  growl('compiled: ' + growlList.map(function(file) { return file.substring(options.outdir.length); }).join('\n\t'), {title: 'Lumbar'});
   growlList = [];
 }, 1000);
 
