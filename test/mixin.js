@@ -1,4 +1,5 @@
-var assert = require('assert'),
+var _ = require('underscore'),
+    assert = require('assert'),
     build = require('../lib/build'),
     Context = require('../lib/context'),
     plugin = require('../lib/plugin').create({});
@@ -156,15 +157,16 @@ exports['mixins merge file arrays'] = function() {
 };
 
 exports['mixin files can be overriden'] = function() {
+  var mixinDecl = {
+    name: 'mixin1',
+    overrides: {
+      'baz1.1': 'foo',
+      'baz1.2': true
+    }
+  };
   var module = {
     mixins: [
-      {
-        name: 'mixin1',
-        overrides: {
-          'baz1.1': 'foo',
-          'baz1.2': true
-        }
-      },
+      mixinDecl,
       'mixin2'
     ],
     static: [ 'baz1.1' ]
@@ -186,9 +188,11 @@ exports['mixin files can be overriden'] = function() {
   };
 
   exec(module, mixins, function() {
+      var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
+
       assert.deepEqual(module.static, [
-        {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixins.mixin1},
-        {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixins.mixin1},
+        {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixin1},
+        {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixin1},
         {src: 'mixin2/baz1.1', mixin: mixins.mixin2},
         {src: 'mixin2/baz1.2', mixin: mixins.mixin2},
         'baz1.1'
