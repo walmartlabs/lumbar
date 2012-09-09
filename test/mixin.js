@@ -6,14 +6,17 @@ var _ = require('underscore'),
 
 plugin.initialize({ attributes: {} });
 
-var mixin = plugin.get('mixin');
+function exec(module, mixins, config, callback) {
+  if (_.isFunction(config)) {
+    callback = config;
+    config = undefined;
+  }
 
-function exec(module, mixins, callback) {
   var context = new Context({
       mode: 'scripts',
       module: module
     },
-    { attributes: {} },
+    { attributes: config || {} },
     plugin);
   context.mixins = mixins;
   build.loadResources(context, callback);
@@ -202,3 +205,76 @@ exports['mixin files can be overriden'] = function() {
       assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz1.1', 'baz1.2' ]);
     });
 };
+
+exports['mixins pull in templates'] = function() {
+  var config = {
+    templates: {
+      'baz1.1': [
+        'foo1.1',
+        'foo1.2'
+      ]
+    }
+  };
+
+  var mixinDecl = {
+    name: 'mixin1',
+    overrides: {
+      'baz1.1': 'foo',
+      'baz1.2': true,
+      'foo1.1': true
+    }
+  };
+  var module = {
+    mixins: [
+      mixinDecl,
+      'mixin2'
+    ],
+    scripts: [ 'baz1.1' ]
+  };
+
+  var mixins = {
+    mixin1: {
+      root: 'mixin1/',
+      attributes: {
+        scripts: [ 'baz1.1', 'baz1.2' ]
+      },
+      templates: {
+        'baz1.1': [
+          'foo1.1',
+          'foo1.2'
+        ]
+      }
+    },
+    mixin2: {
+      root: 'mixin2/',
+      attributes: {
+        scripts: [ 'baz1.1', 'baz1.2' ]
+      },
+      templates: {
+        'baz1.1': [
+          'foo1.1',
+          'foo1.2'
+        ]
+      }
+    }
+  };
+
+  exec(module, mixins, config, function(err, resources) {
+      var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
+
+      assert.deepEqual(resources, [
+        {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixin1, enoent: true},
+        {template: 'foo1.1', name: 'foo1.1'},
+        {template: 'mixin1/foo1.2', name: 'foo1.2'},
+        {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixin1, enoent: true},
+        {src: 'mixin2/baz1.1', mixin: mixins.mixin2, enoent: true},
+        {template: 'mixin2/foo1.1', name: 'foo1.1'},
+        {template: 'mixin2/foo1.2', name: 'foo1.2'},
+        {src: 'mixin2/baz1.2', mixin: mixins.mixin2, enoent: true},
+        {src: 'baz1.1', enoent: true},
+        {template: 'foo1.1', name: 'foo1.1'},
+        {template: 'foo1.2', name: 'foo1.2'}
+      ]);
+    });
+};
+
