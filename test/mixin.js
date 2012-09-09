@@ -1,9 +1,22 @@
 var assert = require('assert'),
+    build = require('../lib/build'),
+    Context = require('../lib/context'),
     plugin = require('../lib/plugin').create({});
 
 plugin.initialize({ attributes: {} });
 
 var mixin = plugin.get('mixin');
+
+function exec(module, mixins, callback) {
+  var context = new Context({
+      mode: 'scripts',
+      module: module
+    },
+    { attributes: {} },
+    plugin);
+  context.mixins = mixins;
+  build.loadResources(context, callback);
+}
 
 exports['mixins apply attributes'] = function() {
   var module = {
@@ -20,11 +33,7 @@ exports['mixins apply attributes'] = function() {
     }
   };
 
-  mixin.moduleResources({
-      module: module,
-      mixins: mixins
-    },
-    function() {
+  exec(module, mixins, function() {
       assert.equal(module.foo, 1, 'foo should be written');
       assert.equal(module.bar, 2, 'bar should be written');
       assert.equal(module.baz, 2, 'baz should be overwritten');
@@ -54,11 +63,7 @@ exports['mixins merge routes'] = function() {
     }
   };
 
-  mixin.moduleResources({
-      module: module,
-      mixins: mixins
-    },
-    function() {
+  exec(module, mixins, function() {
       assert.equal(module.routes.foo, 1);//, 'foo should be written');
       assert.equal(module.routes.bar, 2, 'bar should be written');
       assert.equal(module.routes.baz, 2, 'baz should be overwritten');
@@ -87,11 +92,7 @@ exports['mixins merge routes without modification'] = function() {
     }
   };
 
-  mixin.moduleResources({
-      module: module,
-      mixins: mixins
-    },
-    function() {
+  exec(module, mixins, function() {
       assert.equal(module.routes.foo, 1, 'foo should be written');
       assert.equal(module.routes.bar, 2, 'bar should be written');
       assert.equal(module.routes.baz, 2, 'baz should be overwritten');
@@ -125,11 +126,7 @@ exports['mixins merge file arrays'] = function() {
     }
   };
 
-  mixin.moduleResources({
-      module: module,
-      mixins: mixins
-    },
-    function() {
+  exec(module, mixins, function() {
       assert.deepEqual(module.scripts, [
         {src: 'foo1.1', global: true}, {src: 'foo1.2', global: true},
         {src: 'foo2.1', global: true}, {src: 'foo2.2', global: true},
