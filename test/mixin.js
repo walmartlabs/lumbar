@@ -154,3 +154,47 @@ exports['mixins merge file arrays'] = function() {
       assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz2.1', 'baz2.2' ]);
     });
 };
+
+exports['mixin files can be overriden'] = function() {
+  var module = {
+    mixins: [
+      {
+        name: 'mixin1',
+        overrides: {
+          'baz1.1': 'foo',
+          'baz1.2': true
+        }
+      },
+      'mixin2'
+    ],
+    static: [ 'baz1.1' ]
+  };
+
+  var mixins = {
+    mixin1: {
+      root: 'mixin1/',
+      attributes: {
+        static: [ 'baz1.1', 'baz1.2' ]
+      }
+    },
+    mixin2: {
+      root: 'mixin2/',
+      attributes: {
+        static: [ 'baz1.1', 'baz1.2' ]
+      }
+    }
+  };
+
+  exec(module, mixins, function() {
+      assert.deepEqual(module.static, [
+        {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixins.mixin1},
+        {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixins.mixin1},
+        {src: 'mixin2/baz1.1', mixin: mixins.mixin2},
+        {src: 'mixin2/baz1.2', mixin: mixins.mixin2},
+        'baz1.1'
+      ]);
+
+      assert.deepEqual(mixins.mixin1.attributes.static, [ 'baz1.1', 'baz1.2' ]);
+      assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz1.1', 'baz1.2' ]);
+    });
+};
