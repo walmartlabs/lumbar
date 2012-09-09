@@ -112,12 +112,14 @@ exports['mixins merge file arrays'] = function() {
 
   var mixins = {
     mixin1: {
+      root: 'mixin1/',
       attributes: {
         scripts: [ {src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2'],
         static: [ 'baz1.1', 'baz1.2' ]
       }
     },
     mixin2: {
+      root: 'mixin2/',
       attributes: {
         scripts: [ {src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2'],
         styles: [ 'foo2', 'bar2' ],
@@ -128,20 +130,20 @@ exports['mixins merge file arrays'] = function() {
 
   exec(module, mixins, function() {
       assert.deepEqual(module.scripts, [
-        {src: 'foo1.1', global: true}, {src: 'foo1.2', global: true},
-        {src: 'foo2.1', global: true}, {src: 'foo2.2', global: true},
+        {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1},
+        {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2},
         {src: 'foo0', global: true }, {src: 'foo0.1', global: true},
-        'bar1.1', 'bar1.2',
-        'bar2.1', 'bar2.2',
+        {src: 'mixin1/bar1.1', mixin: mixins.mixin1}, {src: 'mixin1/bar1.2', mixin: mixins.mixin1},
+        {src: 'mixin2/bar2.1', mixin: mixins.mixin2}, {src: 'mixin2/bar2.2', mixin: mixins.mixin2},
         'bar0.1', 'bar0.2'
       ]);
       assert.deepEqual(module.styles, [
-        'foo2', 'bar2',
+        {src: 'mixin2/foo2', mixin: mixins.mixin2}, {src: 'mixin2/bar2', mixin: mixins.mixin2},
         'foo0', 'bar0'
       ]);
       assert.deepEqual(module.static, [
-        'baz1.1', 'baz1.2',
-        'baz2.1', 'baz2.2'
+        {src: 'mixin1/baz1.1', mixin: mixins.mixin1}, {src: 'mixin1/baz1.2', mixin: mixins.mixin1},
+        {src: 'mixin2/baz2.1', mixin: mixins.mixin2}, {src: 'mixin2/baz2.2', mixin: mixins.mixin2}
       ]);
 
       assert.deepEqual(mixins.mixin1.attributes.scripts, [ {src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2']);
