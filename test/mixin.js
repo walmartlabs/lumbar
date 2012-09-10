@@ -1,6 +1,7 @@
 var _ = require('underscore'),
     assert = require('assert'),
     build = require('../lib/build'),
+    Config = require('../lib/config'),
     Context = require('../lib/context'),
     plugin = require('../lib/plugin').create({});
 
@@ -12,14 +13,11 @@ function exec(module, mixins, config, callback) {
     config = undefined;
   }
 
-  var context = new Context({
-      mode: 'scripts',
-      module: module
-    },
-    { attributes: config || {} },
-    plugin);
-  context.mixins = mixins;
-  build.loadResources(context, callback);
+  var context = new Context({},
+    Config.create(_.defaults({modules: {module: module}}, config)),
+    plugin,
+    mixins);
+  plugin.loadConfig(context, callback);
 }
 
 exports['mixins apply attributes'] = function() {
@@ -207,15 +205,6 @@ exports['mixin files can be overriden'] = function() {
 };
 
 exports['mixins pull in templates'] = function() {
-  var config = {
-    templates: {
-      'baz1.1': [
-        'foo1.1',
-        'foo1.2'
-      ]
-    }
-  };
-
   var mixinDecl = {
     name: 'mixin1',
     overrides: {
@@ -230,6 +219,15 @@ exports['mixins pull in templates'] = function() {
       'mixin2'
     ],
     scripts: [ 'baz1.1' ]
+  };
+  var config = {
+    modules: {module: module},
+    templates: {
+      'baz1.1': [
+        'foo1.1',
+        'foo1.2'
+      ]
+    }
   };
 
   var mixins = {
@@ -259,7 +257,10 @@ exports['mixins pull in templates'] = function() {
     }
   };
 
-  exec(module, mixins, config, function(err, resources) {
+  var context = new Context({module: module}, Config.create(config), plugin, mixins);
+  plugin.loadConfig(context, function() {
+    context.mode = 'scripts';
+    build.loadResources(context, function(err, resources) {
       var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
 
       assert.deepEqual(resources, [
@@ -276,5 +277,6 @@ exports['mixins pull in templates'] = function() {
         {template: 'foo1.2', name: 'foo1.2'}
       ]);
     });
+  });
 };
 
