@@ -13,7 +13,7 @@
   "modules": {
     "base": [
       "js/base.js",
-      {"src": "js/iphone.js", "platform": "iphone"},
+      {"src": "js/iphone.js", "package": "native"},
       {"src": "js/web.js", "platforms": ["web"]}
     ],
     "home": [
