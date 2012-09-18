@@ -13,11 +13,13 @@ function exec(module, mixins, config, callback) {
     config = undefined;
   }
 
-  var context = new Context({},
+  var context = new Context({module: module},
     Config.create(_.defaults({modules: {module: module}}, config)),
-    plugin,
-    mixins);
-  plugin.loadConfig(context, callback);
+    plugin);
+  context.mixins = mixins;
+  plugin.loadConfig(context, function() {
+    callback(mixins, context);
+  });
 }
 
 exports['mixins apply attributes'] = function(done) {
@@ -262,8 +264,7 @@ exports['mixins pull in templates'] = function(done) {
     }
   };
 
-  var context = new Context({module: module}, Config.create(config), plugin, mixins);
-  plugin.loadConfig(context, function() {
+  exec(module, mixins, config, function(mixins, context) {
     context.mode = 'scripts';
     build.loadResources(context, function(err, resources) {
       var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
