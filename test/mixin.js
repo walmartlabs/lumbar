@@ -3,6 +3,7 @@ var _ = require('underscore'),
     build = require('../lib/build'),
     Config = require('../lib/config'),
     Context = require('../lib/context'),
+    Mixins = require('../lib/mixins'),
     plugin = require('../lib/plugin').create({});
 
 plugin.initialize({ attributes: {} });
@@ -13,10 +14,18 @@ function exec(module, mixins, config, callback) {
     config = undefined;
   }
 
-  var context = new Context({module: module},
-    Config.create(_.defaults({modules: {module: module}}, config)),
-    plugin);
-  context.mixins = mixins;
+  config = Config.create(_.defaults({modules: {module: module}}, config));
+  if (!mixins.mixins) {
+    var mixinData = mixins;
+    mixins = new Mixins({});
+    _.each(mixinData, function(data, name) {
+      var instance = {};
+      instance[name] = data.attributes || data;
+      mixins.load({mixins: instance}, data.root || '');
+    });
+  }
+
+  var context = new Context({module: module}, config, plugin, mixins);
   plugin.loadConfig(context, function() {
     callback(mixins, context);
   });
@@ -29,12 +38,8 @@ exports['mixins apply attributes'] = function(done) {
   };
 
   var mixins = {
-    mixin1: {
-      attributes: { foo: 1, baz: 1, bat: 1 }
-    },
-    mixin2: {
-      attributes: { bar: 2, baz: 2, bat: 2 }
-    }
+    mixin1: { foo: 1, baz: 1, bat: 1 },
+    mixin2: { bar: 2, baz: 2, bat: 2 }
   };
 
   exec(module, mixins, function() {
@@ -43,8 +48,9 @@ exports['mixins apply attributes'] = function(done) {
       assert.equal(module.baz, 2, 'baz should be overwritten');
       assert.equal(module.bat, 3, 'bat should not be overwritten');
 
-      assert.deepEqual(mixins.mixin1.attributes, {foo: 1, baz: 1, bat: 1});
-      assert.deepEqual(mixins.mixin2.attributes, {bar: 2, baz: 2, bat: 2});
+      assert.deepEqual(mixins.mixin1, {foo: 1, baz: 1, bat: 1});
+      assert.deepEqual(mixins.mixin2, {bar: 2, baz: 2, bat: 2});
+
       done();
     });
 };
@@ -56,16 +62,8 @@ exports['mixins merge routes'] = function(done) {
   };
 
   var mixins = {
-    mixin1: {
-      attributes: {
-        routes: { foo: 1, baz: 1, bat: 1 }
-      }
-    },
-    mixin2: {
-      attributes: {
-        routes: { bar: 2, baz: 2, bat: 2 }
-      }
-    }
+    mixin1: {routes: { foo: 1, baz: 1, bat: 1 }},
+    mixin2: {routes: { bar: 2, baz: 2, bat: 2 }}
   };
 
   exec(module, mixins, function() {
@@ -74,8 +72,9 @@ exports['mixins merge routes'] = function(done) {
       assert.equal(module.routes.baz, 2, 'baz should be overwritten');
       assert.equal(module.routes.bat, 3, 'bat should not be overwritten');
 
-      assert.deepEqual(mixins.mixin1.attributes.routes, {foo: 1, baz: 1, bat: 1});
-      assert.deepEqual(mixins.mixin2.attributes.routes, {bar: 2, baz: 2, bat: 2});
+      assert.deepEqual(mixins.mixin1.routes, {foo: 1, baz: 1, bat: 1});
+      assert.deepEqual(mixins.mixin2.routes, {bar: 2, baz: 2, bat: 2});
+
       done();
     });
 };
@@ -86,16 +85,8 @@ exports['mixins merge routes without modification'] = function(done) {
   };
 
   var mixins = {
-    mixin1: {
-      attributes: {
-        routes: { foo: 1, baz: 1, bat: 1 }
-      }
-    },
-    mixin2: {
-      attributes: {
-        routes: { bar: 2, baz: 2, bat: 2 }
-      }
-    }
+    mixin1: {routes: { foo: 1, baz: 1, bat: 1 }},
+    mixin2: {routes: { bar: 2, baz: 2, bat: 2 }}
   };
 
   exec(module, mixins, function() {
@@ -104,8 +95,9 @@ exports['mixins merge routes without modification'] = function(done) {
       assert.equal(module.routes.baz, 2, 'baz should be overwritten');
       assert.equal(module.routes.bat, 2, 'bat should not be overwritten');
 
-      assert.deepEqual(mixins.mixin1.attributes.routes, {foo: 1, baz: 1, bat: 1});
-      assert.deepEqual(mixins.mixin2.attributes.routes, {bar: 2, baz: 2, bat: 2});
+      assert.deepEqual(mixins.mixin1.routes, {foo: 1, baz: 1, bat: 1});
+      assert.deepEqual(mixins.mixin2.routes, {bar: 2, baz: 2, bat: 2});
+
       done();
     });
 };
@@ -135,7 +127,9 @@ exports['mixins merge file arrays'] = function(done) {
     }
   };
 
-  exec(module, mixins, function() {
+  exec(module, mixins, function(mixins) {
+      mixins = mixins.mixins;
+
       assert.deepEqual(module.scripts, [
         {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1},
         {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2},
@@ -194,7 +188,9 @@ exports['mixin files can be overriden'] = function(done) {
     }
   };
 
-  exec(module, mixins, function() {
+  exec(module, mixins, function(mixins) {
+      mixins = mixins.mixins;
+
       var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
 
       assert.deepEqual(module.static, [
@@ -264,7 +260,9 @@ exports['mixins pull in templates'] = function(done) {
     }
   };
 
-  exec(module, mixins, config, function(mixins, context) {
+  exec(module, {mixins: mixins, get: function(name) { return this.mixins[name]; }}, config, function(mixins, context) {
+    mixins = mixins.mixins;
+
     context.mode = 'scripts';
     build.loadResources(context, function(err, resources) {
       var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
