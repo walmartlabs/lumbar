@@ -20,7 +20,7 @@ function exec(module, mixins, config, callback) {
   plugin.loadConfig(context, callback);
 }
 
-exports['mixins apply attributes'] = function() {
+exports['mixins apply attributes'] = function(done) {
   var module = {
     mixins: ['mixin1', 'mixin2'],
     bat: 3
@@ -43,10 +43,11 @@ exports['mixins apply attributes'] = function() {
 
       assert.deepEqual(mixins.mixin1.attributes, {foo: 1, baz: 1, bat: 1});
       assert.deepEqual(mixins.mixin2.attributes, {bar: 2, baz: 2, bat: 2});
+      done();
     });
 };
 
-exports['mixins merge routes'] = function() {
+exports['mixins merge routes'] = function(done) {
   var module = {
     mixins: ['mixin1', 'mixin2'],
     routes: { bat: 3 }
@@ -73,10 +74,11 @@ exports['mixins merge routes'] = function() {
 
       assert.deepEqual(mixins.mixin1.attributes.routes, {foo: 1, baz: 1, bat: 1});
       assert.deepEqual(mixins.mixin2.attributes.routes, {bar: 2, baz: 2, bat: 2});
+      done();
     });
 };
 
-exports['mixins merge routes without modification'] = function() {
+exports['mixins merge routes without modification'] = function(done) {
   var module = {
     mixins: ['mixin1', 'mixin2']
   };
@@ -102,10 +104,11 @@ exports['mixins merge routes without modification'] = function() {
 
       assert.deepEqual(mixins.mixin1.attributes.routes, {foo: 1, baz: 1, bat: 1});
       assert.deepEqual(mixins.mixin2.attributes.routes, {bar: 2, baz: 2, bat: 2});
+      done();
     });
 };
 
-exports['mixins merge file arrays'] = function() {
+exports['mixins merge file arrays'] = function(done) {
   var module = {
     mixins: ['mixin1', 'mixin2'],
     scripts: [ {src: 'foo0', global: true }, {src: 'foo0.1', global: true}, 'bar0.1', 'bar0.2' ],
@@ -154,10 +157,11 @@ exports['mixins merge file arrays'] = function() {
       assert.deepEqual(mixins.mixin2.attributes.scripts, [ {src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2']);
       assert.deepEqual(mixins.mixin2.attributes.styles, [ 'foo2', 'bar2' ]);
       assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz2.1', 'baz2.2' ]);
+      done();
     });
 };
 
-exports['mixin files can be overriden'] = function() {
+exports['mixin files can be overriden'] = function(done) {
   var mixinDecl = {
     name: 'mixin1',
     overrides: {
@@ -201,10 +205,11 @@ exports['mixin files can be overriden'] = function() {
 
       assert.deepEqual(mixins.mixin1.attributes.static, [ 'baz1.1', 'baz1.2' ]);
       assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz1.1', 'baz1.2' ]);
+      done();
     });
 };
 
-exports['mixins pull in templates'] = function() {
+exports['mixins pull in templates'] = function(done) {
   var mixinDecl = {
     name: 'mixin1',
     overrides: {
@@ -276,6 +281,7 @@ exports['mixins pull in templates'] = function() {
         {template: 'foo1.1', name: 'foo1.1'},
         {template: 'foo1.2', name: 'foo1.2'}
       ]);
+      done();
     });
   });
 };
