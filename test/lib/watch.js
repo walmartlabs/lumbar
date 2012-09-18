@@ -33,7 +33,9 @@ exports.appendRapidSpace = function(path1, path2) {
 };
 
 exports.runWatchTest = function(srcdir, config, operations, expectedFiles, options, done) {
-  var title = this.title || config,
+  // Mocha: this.test.title
+  // Expresso: this.title
+  var title = (this.test && this.test.title) || this.title || config,
       testdir = lib.testDir(title, 'example'),
       outdir = lib.testDir(title, 'test'),
       seenFiles = [];

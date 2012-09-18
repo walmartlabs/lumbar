@@ -181,3 +181,96 @@ exports['file-list-none'] = function(done) {
     done();
   });
 };
+
+exports['readFile'] = function() {
+  var fs = require('fs'),
+      originalReadFile = fs.readFile,
+      count = 0;
+
+  fs.readFile = function(path, callback) {
+    count++;
+    callback(undefined, 'data');
+  };
+
+  fu.resetCache();
+  fu.readFile('foo', function(err, data) {
+    assert.equal(data, 'data');
+  });
+  assert.equal(count, 1);
+  fu.readFile('foo', function(err, data) {
+    assert.equal(data, 'data');
+  });
+  assert.equal(count, 1);
+
+  fu.resetCache();
+  fu.readFile('foo', function(err, data) {
+    assert.equal(data, 'data');
+  });
+  assert.equal(count, 2);
+
+  fs.readFile = originalReadFile;
+};
+
+exports['readdir'] = function() {
+  var fs = require('fs'),
+      originalReaddir = fs.readdir,
+      count = 0;
+
+  fs.readdir = function(path, callback) {
+    count++;
+    callback(undefined, 'data');
+  };
+
+  fu.resetCache();
+  fu.readdir('foo', function(err, data) {
+    assert.equal(data, 'data');
+  });
+  assert.equal(count, 1);
+  fu.readdir('foo', function(err, data) {
+    assert.equal(data, 'data');
+  });
+  assert.equal(count, 1);
+
+  fu.resetCache();
+  fu.readdir('foo', function(err, data) {
+    assert.equal(data, 'data');
+  });
+  assert.equal(count, 2);
+
+  fs.readdir = originalReaddir;
+};
+
+exports['readFileArtifact'] = function() {
+  var fs = require('fs'),
+      originalReadFile = fs.readFile,
+      count = 0;
+
+  fs.readFile = function(path, callback) {
+    count++;
+    callback(undefined, 'data');
+  };
+
+  fu.resetCache();
+  fu.readFileArtifact('foo', 'bar', function(err, data) {
+    assert.equal(data.data, 'data');
+    assert.equal(data.artifact, undefined);
+  });
+  assert.equal(count, 1);
+  fu.setFileArtifact('foo', 'bar', 'baz');
+
+
+  fu.readFileArtifact('foo', 'bar', function(err, data) {
+    assert.equal(data.data, 'data');
+    assert.equal(data.artifact, 'baz');
+  });
+  assert.equal(count, 1);
+
+  fu.resetCache();
+  fu.readFileArtifact('foo', 'bar', function(err, data) {
+    assert.equal(data.data, 'data');
+    assert.equal(data.artifact, undefined);
+  });
+  assert.equal(count, 2);
+
+  fs.readFile = originalReadFile;
+};
