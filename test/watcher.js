@@ -43,10 +43,10 @@ describe('watcher', function() {
 
     var testFile = outdir + '/file-modules.json';
     watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
-      assert.equal(1, ++count);
       assert.equal('change', type);
       assert.equal(testFile, fileName);
       assert.equal(testFile, sourceChange);
+      assert.equal(1, ++count);
       done();
     });
 
@@ -132,10 +132,10 @@ describe('watcher', function() {
 
     var testFile = outdir + '/bar';
     watcher.watchFile(outdir, [], function(type, fileName, sourceChange) {
-      assert.equal(1, ++count);
       assert.equal('create', type);
       assert.equal(outdir, fileName);
       assert.equal(outdir, sourceChange);
+      assert.equal(1, ++count);
       done();
     });
 
