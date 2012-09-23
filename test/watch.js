@@ -16,7 +16,7 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
 
 describe('watch integration', function() {
   it('should watch script files', function(done) {
-    this.timeout(10000);
+    this.timeout(15000);
 
     var expectedFiles = [
             '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
@@ -62,7 +62,7 @@ describe('watch integration', function() {
   });
 
   it('should watch style files', function(done) {
-    this.timeout(10000);
+    this.timeout(15000);
 
     var expectedFiles = [
             '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
@@ -89,7 +89,7 @@ describe('watch integration', function() {
   });
 
   it('should watch stylus files', function(done) {
-    this.timeout(10000);
+    this.timeout(15000);
 
     var expectedFiles = [
             '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
