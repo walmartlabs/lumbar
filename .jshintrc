@@ -1,4 +1,8 @@
 {
+  "predef": [
+    "describe", "it", "before", "after", "beforeEach", "afterEach"
+  ],
+
   "node": true,
   "es5": true,
   "esnext": true,
