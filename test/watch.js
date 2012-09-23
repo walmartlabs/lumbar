@@ -116,6 +116,8 @@ describe('watch integration', function() {
   });
 
   it('should watch directories', function(done) {
+    this.timeout(15000);
+
     var expectedFiles = [
             '/base.js', '/base.js'
           ],
@@ -132,6 +134,8 @@ describe('watch integration', function() {
   });
 
   it('should watch added files', function(done) {
+    this.timeout(15000);
+
     var expectedFiles = [
             '/base.js', '/base.js'
           ],
@@ -148,6 +152,8 @@ describe('watch integration', function() {
   });
 
   it('should watch removed files', function(done) {
+    this.timeout(15000);
+
     var expectedFiles = [
             '/base.js', '/base.js', '/base.js' /* Extra event for directory modification */
           ],
