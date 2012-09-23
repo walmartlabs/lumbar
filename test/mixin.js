@@ -1,36 +1,6 @@
 var _ = require('underscore'),
     assert = require('assert'),
-    build = require('../lib/build'),
-    Config = require('../lib/config'),
-    Context = require('../lib/context'),
-    Mixins = require('../lib/mixins'),
-    plugin = require('../lib/plugin').create({});
-
-plugin.initialize({ attributes: {} });
-
-function exec(module, mixins, config, callback) {
-  if (_.isFunction(config)) {
-    callback = config;
-    config = undefined;
-  }
-
-  config = Config.create(_.defaults({modules: {module: module}}, config));
-  var context = new Context({module: module}, config, plugin, new Mixins({mixins: mixins}));
-
-  context.mixins.initialize(context, function(err) {
-    if (err) {
-      throw err;
-    }
-
-    plugin.loadConfig(context, function(err) {
-      if (err) {
-        throw err;
-      }
-
-      callback(context.mixins, context);
-    });
-  });
-}
+    lib = require('./lib');
 
 describe('mixins', function() {
   describe('modules', function() {
@@ -45,7 +15,7 @@ describe('mixins', function() {
         mixin2: { bar: 2, baz: 2, bat: 2 }
       };
 
-      exec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{mixins: mixins}], function() {
           assert.equal(module.foo, 1, 'foo should be written');
           assert.equal(module.bar, 2, 'bar should be written');
           assert.equal(module.baz, 2, 'baz should be overwritten');
@@ -69,7 +39,7 @@ describe('mixins', function() {
         mixin2: {routes: { bar: 2, baz: 2, bat: 2 }}
       };
 
-      exec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{mixins: mixins}], function() {
           assert.equal(module.routes.foo, 1);//, 'foo should be written');
           assert.equal(module.routes.bar, 2, 'bar should be written');
           assert.equal(module.routes.baz, 2, 'baz should be overwritten');
@@ -92,7 +62,7 @@ describe('mixins', function() {
         mixin2: {routes: { bar: 2, baz: 2, bat: 2 }}
       };
 
-      exec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{mixins: mixins}], function() {
           assert.equal(module.routes.foo, 1, 'foo should be written');
           assert.equal(module.routes.bar, 2, 'bar should be written');
           assert.equal(module.routes.baz, 2, 'baz should be overwritten');
@@ -134,7 +104,7 @@ describe('mixins', function() {
         }
       ];
 
-      exec(module, mixins, function(mixins) {
+      lib.mixinExec(module, mixins, function(mixins) {
           mixins = mixins.mixins;
 
           assert.deepEqual(module.scripts, [
@@ -199,7 +169,7 @@ describe('mixins', function() {
         }
       ];
 
-      exec(module, mixins, function(mixins) {
+      lib.mixinExec(module, mixins, function(mixins) {
           mixins = mixins.mixins;
 
           var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
