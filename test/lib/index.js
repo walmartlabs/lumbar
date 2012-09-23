@@ -1,7 +1,12 @@
-var assert = require('assert'),
+var _ = require('underscore'),
+    assert = require('assert'),
+    build = require('../../lib/build'),
+    Config = require('../../lib/config'),
+    Context = require('../../lib/context'),
     fs = require('fs'),
     glob = require('glob'),
     lumbar = require('../../lib/lumbar'),
+    Mixins = require('../../lib/mixins'),
     path = require('path'),
     wrench = require('wrench');
 
@@ -89,4 +94,31 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
       }
     });
   };
-}
+};
+
+exports.mixinExec = function(module, mixins, config, callback) {
+  var plugin = require('../../lib/plugin').create({});
+  plugin.initialize({ attributes: {} });
+
+  if (_.isFunction(config)) {
+    callback = config;
+    config = undefined;
+  }
+
+  config = Config.create(_.defaults({modules: {module: module}}, config));
+  var context = new Context({module: module}, config, plugin, new Mixins({mixins: mixins}));
+
+  context.mixins.initialize(context, function(err) {
+    if (err) {
+      throw err;
+    }
+
+    plugin.loadConfig(context, function(err) {
+      if (err) {
+        throw err;
+      }
+
+      callback(context.mixins, context);
+    });
+  });
+};
