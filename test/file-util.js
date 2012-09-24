@@ -1,5 +1,5 @@
-var assert = require('assert'),
-    fu = require('../lib/fileUtil');
+var fu = require('../lib/fileUtil'),
+    should = require('should');
 
 describe('file-util', function() {
   afterEach(function() {
@@ -10,11 +10,11 @@ describe('file-util', function() {
     it('should resolve paths', function() {
       fu.lookupPath('foo/bar');
 
-      assert.equal(fu.resolvePath('foo'), 'foo/bar/foo');
-      assert.equal(fu.resolvePath('foo/bar/foo'), 'foo/bar/foo');
-      assert.equal(fu.resolvePath('/foo'), '/foo');
-      assert.equal(fu.resolvePath('c:\\foo'), 'c:\\foo');
-      assert.equal(fu.resolvePath('c:/foo'), 'c:/foo');
+      fu.resolvePath('foo').should.equal('foo/bar/foo');
+      fu.resolvePath('foo/bar/foo').should.equal('foo/bar/foo');
+      fu.resolvePath('/foo').should.equal('/foo');
+      fu.resolvePath('c:\\foo').should.equal('c:\\foo');
+      fu.resolvePath('c:/foo').should.equal('c:/foo');
     });
   });
 
@@ -22,12 +22,12 @@ describe('file-util', function() {
     it('should make paths relative', function() {
       fu.lookupPath('foo/bar');
 
-      assert.equal(fu.makeRelative('foo'), 'foo');
-      assert.equal(fu.makeRelative('foo/bar/foo'), 'foo');
-      assert.equal(fu.makeRelative('foo/baro/foo'), 'foo/baro/foo');
-      assert.equal(fu.makeRelative('/foo'), '/foo');
-      assert.equal(fu.makeRelative('c:\\foo'), 'c:\\foo');
-      assert.equal(fu.makeRelative('c:/foo'), 'c:/foo');
+      fu.makeRelative('foo').should.equal('foo');
+      fu.makeRelative('foo/bar/foo').should.equal('foo');
+      fu.makeRelative('foo/baro/foo').should.equal('foo/baro/foo');
+      fu.makeRelative('/foo').should.equal('/foo');
+      fu.makeRelative('c:\\foo').should.equal('c:\\foo');
+      fu.makeRelative('c:/foo').should.equal('c:/foo');
     });
   });
 
@@ -38,7 +38,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, ['test/file-util.js']);
+        files.should.eql(['test/file-util.js']);
         done();
       });
     });
@@ -50,7 +50,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, ['file-util.js']);
+        files.should.eql(['file-util.js']);
         done();
       });
     });
@@ -61,14 +61,14 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, ['test/file-util.js']);
+        files.should.eql(['test/file-util.js']);
         done();
       });
     });
 
     it('should mark missing files as enoent', function(done) {
       fu.fileList('foo-bar-baz', function(err, files) {
-        assert.deepEqual(files, [{src: 'foo-bar-baz', enoent: true}]);
+        files.should.eql([{src: 'foo-bar-baz', enoent: true}]);
 
         done();
       });
@@ -81,7 +81,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, ['file-util.js', 'artifacts/router.json']);
+        files.should.eql(['file-util.js', 'artifacts/router.json']);
         done();
       });
     });
@@ -93,7 +93,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, [
+        files.should.eql([
           'file-util.js',
           {dir: 'artifacts/js'},
           {src: 'artifacts/js/base.js', srcDir: 'artifacts/js'},
@@ -113,7 +113,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, [
+        files.should.eql([
           'file-util.js',
           {dir: 'artifacts'},
           {dir: 'artifacts/config', srcDir: 'artifacts'},
@@ -140,7 +140,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, [
+        files.should.eql([
           'file-util.js',
           { dir: 'artifacts', global: true},
           { dir: 'artifacts/config', global: true, srcDir: 'artifacts'},
@@ -169,7 +169,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, [{router: true}]);
+        files.should.eql([{router: true}]);
 
         done();
       });
@@ -182,7 +182,7 @@ describe('file-util', function() {
           throw err;
         }
 
-        assert.deepEqual(files, []);
+        files.should.eql([]);
 
         done();
       });
@@ -215,19 +215,19 @@ describe('file-util', function() {
       it('should read using cache', function() {
         fu.resetCache();
         fu.readFile('foo', function(err, data) {
-          assert.equal(data, 'data');
+          data.should.equal('data');
         });
-        assert.equal(count, 1);
+        count.should.equal(1);
         fu.readFile('foo', function(err, data) {
-          assert.equal(data, 'data');
+          data.should.equal('data');
         });
-        assert.equal(count, 1);
+        count.should.equal(1);
 
         fu.resetCache();
         fu.readFile('foo', function(err, data) {
-          assert.equal(data, 'data');
+          data.should.equal('data');
         });
-        assert.equal(count, 2);
+        count.should.equal(2);
       });
     });
 
@@ -235,19 +235,19 @@ describe('file-util', function() {
       it('should read from dir cache', function() {
         fu.resetCache();
         fu.readdir('foo', function(err, data) {
-          assert.equal(data, 'data');
+          data.should.equal('data');
         });
-        assert.equal(count, 1);
+        count.should.equal(1);
         fu.readdir('foo', function(err, data) {
-          assert.equal(data, 'data');
+          data.should.equal('data');
         });
-        assert.equal(count, 1);
+        count.should.equal(1);
 
         fu.resetCache();
         fu.readdir('foo', function(err, data) {
-          assert.equal(data, 'data');
+          data.should.equal('data');
         });
-        assert.equal(count, 2);
+        count.should.equal(2);
 
         fs.readdir = originalReaddir;
       });
@@ -257,25 +257,25 @@ describe('file-util', function() {
       it('should maintain cached artifact', function() {
         fu.resetCache();
         fu.readFileArtifact('foo', 'bar', function(err, data) {
-          assert.equal(data.data, 'data');
-          assert.equal(data.artifact, undefined);
+          data.data.should.equal('data');
+          should.not.exist(data.artifact);
         });
-        assert.equal(count, 1);
+        count.should.equal(1);
         fu.setFileArtifact('foo', 'bar', 'baz');
 
 
         fu.readFileArtifact('foo', 'bar', function(err, data) {
-          assert.equal(data.data, 'data');
-          assert.equal(data.artifact, 'baz');
+          data.data.should.equal('data');
+          data.artifact.should.equal('baz');
         });
-        assert.equal(count, 1);
+        count.should.equal(1);
 
         fu.resetCache();
         fu.readFileArtifact('foo', 'bar', function(err, data) {
-          assert.equal(data.data, 'data');
-          assert.equal(data.artifact, undefined);
+          data.data.should.equal('data');
+          should.not.exist(data.artifact);
         });
-        assert.equal(count, 2);
+        count.should.equal(2);
       });
     });
   });
