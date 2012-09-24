@@ -7,6 +7,14 @@ var _ = require('underscore'),
     should = require('should');
 
 describe('stylus plugin', function() {
+  var readFileSync = fs.readFileSync,
+      statSync = fs.statSync,
+      read = [];
+  after(function() {
+    fs.readFileSync = readFileSync;
+    fs.statSync = statSync;
+  });
+
   describe('mixin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
@@ -116,14 +124,6 @@ describe('stylus plugin', function() {
 
     it('should lookup files from mixins', function(done) {
       fu.lookupPath('');
-
-      var readFileSync = fs.readFileSync,
-          statSync = fs.statSync,
-          read = [];
-      after(function() {
-        fs.readFileSync = readFileSync;
-        fs.statSync = statSync;
-      });
 
       fs.readFileSync = function(path) {
         if (path === 'mixinRoot/mixin-import.styl') {
