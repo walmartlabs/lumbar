@@ -85,12 +85,13 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
     });
     var retCount = 0;
     arise.build(undefined, function(err) {
+      if (err) {
+        throw err;
+      }
+
       retCount++;
       if (retCount > 1) {
         throw new Error('Build callback executed multiple times');
-      }
-      if (err) {
-        throw err;
       }
     });
   };
