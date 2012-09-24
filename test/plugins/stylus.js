@@ -2,10 +2,11 @@ var _ = require('underscore'),
     assert = require('assert'),
     build = require('../../lib/build'),
     fs = require('fs'),
+    fu = require('../../lib/fileUtil'),
     lib = require('../lib'),
     should = require('should');
 
-describe('template plugin', function() {
+describe('stylus plugin', function() {
   describe('mixin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
@@ -114,6 +115,8 @@ describe('template plugin', function() {
     });
 
     it('should lookup files from mixins', function(done) {
+      fu.lookupPath('');
+
       var readFileSync = fs.readFileSync,
           statSync = fs.statSync,
           read = [];
