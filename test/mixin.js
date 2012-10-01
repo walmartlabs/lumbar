@@ -141,7 +141,14 @@ describe('mixins', function() {
           root: 'mixin1/',
           mixins: {
             mixin1: {
-              scripts: [ {src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2'],
+              scripts: [
+                {src: 'foo1.1', global: true},
+                {src: 'foo1.2', global: true},
+                'bar1.1',
+                'bar1.2',
+                {dir: 'dir!'},
+                {notAFile: true}
+              ],
               static: [ 'baz1.1', 'baz1.2' ]
             }
           }
@@ -166,6 +173,7 @@ describe('mixins', function() {
             {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2},
             {src: 'foo0', global: true }, {src: 'foo0.1', global: true},
             {src: 'mixin1/bar1.1', mixin: mixins.mixin1}, {src: 'mixin1/bar1.2', mixin: mixins.mixin1},
+            {dir: 'mixin1/dir!', mixin: mixins.mixin1}, {notAFile: true, mixin: mixins.mixin1},
             {src: 'mixin2/bar2.1', mixin: mixins.mixin2}, {src: 'mixin2/bar2.2', mixin: mixins.mixin2},
             'bar0.1', 'bar0.2'
           ]);
@@ -178,7 +186,7 @@ describe('mixins', function() {
             {src: 'mixin2/baz2.1', mixin: mixins.mixin2}, {src: 'mixin2/baz2.2', mixin: mixins.mixin2}
           ]);
 
-          mixins.mixin1.attributes.scripts.should.eql([{src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2']);
+          mixins.mixin1.attributes.scripts.should.eql([{src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2', {dir: 'dir!'}, {notAFile: true}]);
           mixins.mixin1.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
 
           mixins.mixin2.attributes.scripts.should.eql([{src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2']);
