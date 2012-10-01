@@ -1,8 +1,60 @@
 var _ = require('underscore'),
     assert = require('assert'),
-    lib = require('./lib');
+    fs = require('fs'),
+    lib = require('./lib'),
+    should = require('should');
 
 describe('mixins', function() {
+  describe('loading', function() {
+    var readFileSync = fs.readFileSync,
+        statSync = fs.statSync,
+        read = [];
+    beforeEach(function() {
+      read = [];
+    });
+    before(function() {
+      fs.readFileSync = function(path) {
+        if (/mixin.*\.json$/.test(path)) {
+          read.push(path);
+          return '{"foo": "bar"}';
+        } else {
+          return readFileSync.apply(this, arguments);
+        }
+      };
+      fs.statSync = function(path) {
+        if (/mixin/.test(path)) {
+          return {isDirectory: function() { return !/\.json$/.test(path); }};
+        } else {
+          return statSync.apply(this, arguments);
+        }
+      };
+    });
+    after(function() {
+      fs.readFileSync = readFileSync;
+      fs.statSync = statSync;
+    });
+
+    it('should load direct mixin file references', function() {
+      lib.mixinExec({}, ['mixin/file.json'], function(mixins, context) {
+        read.should.eql(['mixin/file.json']);
+
+        mixins.configs.length.should.eql(1);
+        mixins.configs[0].root.should.equal('mixin/');
+        context.config.attributes.foo.should.equal('bar');
+      });
+    });
+
+    it('should load mixin directory references', function() {
+      lib.mixinExec({}, ['mixin'], function(mixins, context) {
+        read.should.eql(['mixin/lumbar.json']);
+
+        mixins.configs.length.should.eql(1);
+        mixins.configs[0].root.should.equal('mixin/');
+        context.config.attributes.foo.should.equal('bar');
+      });
+    });
+  });
+
   describe('modules', function() {
     it('should mixin module attributes', function(done) {
       var module = {
