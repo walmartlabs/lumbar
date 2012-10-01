@@ -1,5 +1,6 @@
 var _ = require('underscore'),
     assert = require('assert'),
+    fu = require('../lib/fileUtil'),
     fs = require('fs'),
     lib = require('./lib'),
     should = require('should');
@@ -11,6 +12,7 @@ describe('mixins', function() {
         read = [];
     beforeEach(function() {
       read = [];
+      fu.lookupPath('');
     });
     before(function() {
       fs.readFileSync = function(path) {
