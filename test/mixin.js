@@ -161,7 +161,7 @@ describe('mixins', function() {
       lib.mixinExec(module, mixins, function(mixins) {
           mixins = mixins.mixins;
 
-          assert.deepEqual(module.scripts, [
+          module.scripts.should.eql([
             {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1},
             {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2},
             {src: 'foo0', global: true }, {src: 'foo0.1', global: true},
@@ -169,21 +169,21 @@ describe('mixins', function() {
             {src: 'mixin2/bar2.1', mixin: mixins.mixin2}, {src: 'mixin2/bar2.2', mixin: mixins.mixin2},
             'bar0.1', 'bar0.2'
           ]);
-          assert.deepEqual(module.styles, [
+          module.styles.should.eql([
             {src: 'mixin2/foo2', mixin: mixins.mixin2}, {src: 'mixin2/bar2', mixin: mixins.mixin2},
             'foo0', 'bar0'
           ]);
-          assert.deepEqual(module.static, [
+          module.static.should.eql([
             {src: 'mixin1/baz1.1', mixin: mixins.mixin1}, {src: 'mixin1/baz1.2', mixin: mixins.mixin1},
             {src: 'mixin2/baz2.1', mixin: mixins.mixin2}, {src: 'mixin2/baz2.2', mixin: mixins.mixin2}
           ]);
 
-          assert.deepEqual(mixins.mixin1.attributes.scripts, [ {src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2']);
-          assert.deepEqual(mixins.mixin1.attributes.static, [ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin1.attributes.scripts.should.eql([{src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2']);
+          mixins.mixin1.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
 
-          assert.deepEqual(mixins.mixin2.attributes.scripts, [ {src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2']);
-          assert.deepEqual(mixins.mixin2.attributes.styles, [ 'foo2', 'bar2' ]);
-          assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz2.1', 'baz2.2' ]);
+          mixins.mixin2.attributes.scripts.should.eql([{src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2']);
+          mixins.mixin2.attributes.styles.should.eql([ 'foo2', 'bar2' ]);
+          mixins.mixin2.attributes.static.should.eql([ 'baz2.1', 'baz2.2' ]);
           done();
         });
     });
@@ -228,7 +228,7 @@ describe('mixins', function() {
 
           var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
 
-          assert.deepEqual(module.static, [
+          module.static.should.eql([
             {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixin1},
             {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixin1},
             {src: 'mixin2/baz1.1', mixin: mixins.mixin2},
@@ -236,8 +236,8 @@ describe('mixins', function() {
             'baz1.1'
           ]);
 
-          assert.deepEqual(mixins.mixin1.attributes.static, [ 'baz1.1', 'baz1.2' ]);
-          assert.deepEqual(mixins.mixin2.attributes.static, [ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin1.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin2.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
           done();
         });
     });
