@@ -240,5 +240,9 @@ describe('mixins', function() {
         });
     });
   });
+
+  describe('integration', function() {
+    it('should mixin all content', lib.runTest('test/artifacts/mixin.json', 'test/expected/mixin'));
+  });
 });
 
