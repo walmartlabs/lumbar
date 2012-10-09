@@ -9,3 +9,7 @@ Lumbar is a js-build tool that takes a _general codebase_ and list of _platforms
     npm install -g lumbar
 
 See [thorax-example](https://github.com/walmartlabs/thorax-example) for an example project.
+
+## History
+
+See [release-notes](release-notes.md) for release history.
