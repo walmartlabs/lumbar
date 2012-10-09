@@ -74,8 +74,8 @@
       "iphone": [ 1, 2 ],
       "web": [ 1, 2 ]
     },
+    "useNib": true,
     "includes": [
-      "nib",
       "styles/include/global.styl"
     ]
   }

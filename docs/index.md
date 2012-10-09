@@ -237,8 +237,8 @@ These templates may also be precompiled and have other optimizations applied to 
         "iphone": [ 1, 2 ],
         "web": [ 1, 2 ]
       },
+      "useNib": true,
       "includes": [
-        "nib",
         "styles/include/global.styl"
       ]
     }

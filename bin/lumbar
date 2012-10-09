@@ -2,7 +2,6 @@
 
 var _ = require('underscore'),
     fs = require('fs'),
-    fu = require('../lib/fileUtil'),
     lumbar = require('../lib/lumbar'),
     dirname = require('path').dirname,
     growl = require('growl');

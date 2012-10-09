@@ -1,0 +1,11 @@
+{
+  "modules": {
+    "home": {
+      "mixins": ["base"]
+    }
+  },
+
+  "mixins": [
+    "mixin/mixin.json"
+  ]
+}

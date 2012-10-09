@@ -1,0 +1,10 @@
+{
+  "mixins": {
+    "base": {
+      "scripts": [
+        "global.js",
+        "base.js"
+      ]
+    }
+  }
+}

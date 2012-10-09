@@ -1,37 +1,39 @@
 var lib = require('./lib');
 
-exports['single-file'] = lib.runTest('test/artifacts/single-file.json', 'test/expected/single-file');
-exports['single-dir'] = lib.runTest('test/artifacts/single-directory.json', 'test/expected/js-dir');
-exports['multiple-files'] = lib.runTest('test/artifacts/multiple-files.json', 'test/expected/js-dir');
-exports['file-modules'] = lib.runTest('test/artifacts/file-modules.json', 'test/expected/file-modules');
-exports['multiple-platforms'] = lib.runTest('test/artifacts/multiple-platforms.json', 'test/expected/multiple-platforms');
-exports['multiple-packages'] = lib.runTest('test/artifacts/multiple-packages.json', 'test/expected/multiple-packages');
+describe('integration', function() {
+  it('should output a single file', lib.runTest('test/artifacts/single-file.json', 'test/expected/single-file'));
+  it('should output a single dir', lib.runTest('test/artifacts/single-directory.json', 'test/expected/js-dir'));
+  it('should output multiple files', lib.runTest('test/artifacts/multiple-files.json', 'test/expected/js-dir'));
+  it('should output files in multiple modules', lib.runTest('test/artifacts/file-modules.json', 'test/expected/file-modules'));
+  it('should handle multiple platforms', lib.runTest('test/artifacts/multiple-platforms.json', 'test/expected/multiple-platforms'));
+  it('should handle multiple packages', lib.runTest('test/artifacts/multiple-packages.json', 'test/expected/multiple-packages'));
 
-exports['module-map'] = lib.runTest('test/artifacts/module-map.json', 'test/expected/module-map');
-exports['router'] = lib.runTest('test/artifacts/router.json', 'test/expected/router');
-exports['template'] = lib.runTest('test/artifacts/template.json', 'test/expected/template');
+  it('should output module-map', lib.runTest('test/artifacts/module-map.json', 'test/expected/module-map'));
+  it('should output router', lib.runTest('test/artifacts/router.json', 'test/expected/router'));
+  it('should output template', lib.runTest('test/artifacts/template.json', 'test/expected/template'));
 
-// TODO : Templates that are dependent on the platform
-// TODO : Error handling for Missing template cache definitions
-// TODO : Test multiple template references in the same file
+  // TODO : Templates that are dependent on the platform
+  // TODO : Error handling for Missing template cache definitions
+  // TODO : Test multiple template references in the same file
 
-exports['dev-config'] = lib.runTest('test/artifacts/package-config.json', 'test/expected/dev-config', {packageConfigFile: 'config/dev.json'});
-exports['production-config'] = lib.runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'});
+  it('should output dev-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/dev-config', {packageConfigFile: 'config/dev.json'}));
+  it('should output production-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}));
 
-exports['scope-resource'] = lib.runTest('test/artifacts/scope-resource.json', 'test/expected/scope-resource');
-exports['scope-none'] = lib.runTest('test/artifacts/scope-none.json', 'test/expected/scope-none');
-exports['scope-globals'] = lib.runTest('test/artifacts/scope-globals.json', 'test/expected/scope-globals');
-exports['scope-yield'] = lib.runTest('test/artifacts/scope-yield.json', 'test/expected/scope-yield');
-exports['application-namespace'] = lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'});
+  it('should output scope-resource', lib.runTest('test/artifacts/scope-resource.json', 'test/expected/scope-resource'));
+  it('should output scope-none', lib.runTest('test/artifacts/scope-none.json', 'test/expected/scope-none'));
+  it('should output scope-globals', lib.runTest('test/artifacts/scope-globals.json', 'test/expected/scope-globals'));
+  it('should output scope-yield', lib.runTest('test/artifacts/scope-yield.json', 'test/expected/scope-yield'));
+  it('should output application-namespace', lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}));
 
-exports['styles'] = lib.runTest('test/artifacts/styles.json', 'test/expected/styles');
-exports['stylus'] = lib.runTest('test/artifacts/stylus.json', 'test/expected/stylus');
-exports['inline-styles'] = lib.runTest('test/artifacts/inline-styles.json', 'test/expected/inline-styles');
+  it('should output styles', lib.runTest('test/artifacts/styles.json', 'test/expected/styles'));
+  it('should output stylus', lib.runTest('test/artifacts/stylus.json', 'test/expected/stylus'));
+  it('should output inline-styles', lib.runTest('test/artifacts/inline-styles.json', 'test/expected/inline-styles'));
 
-exports['trailing-slash'] = lib.runTest('test/artifacts/trailing-slash.json', 'test/expected/trailing-slash');
+  it('should output trailing-slash', lib.runTest('test/artifacts/trailing-slash.json', 'test/expected/trailing-slash'));
 
-exports['static'] = lib.runTest('test/artifacts/static.json', 'test/expected/static', undefined, '/**/*.*');
-exports['index-update'] = lib.runTest('test/artifacts/index-update.json', 'test/expected/index-update', undefined, '/**/*.{js,css,html}');
-exports['generated-load-prefix'] = lib.runTest('test/artifacts/generated-load-prefix.json', 'test/expected/generated-load-prefix', undefined, '/**/*.{js,css,html}');
-exports['json-plugins'] = lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin');
-// TODO : Test file not found and other cases
+  it('should output static', lib.runTest('test/artifacts/static.json', 'test/expected/static', undefined, '/**/*.*'));
+  it('should output index-update', lib.runTest('test/artifacts/index-update.json', 'test/expected/index-update', undefined, '/**/*.{js,css,html}'));
+  it('should output generated-load-prefix', lib.runTest('test/artifacts/generated-load-prefix.json', 'test/expected/generated-load-prefix', undefined, '/**/*.{js,css,html}'));
+  it('should output json-plugins', lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin'));
+  // TODO : Test file not found and other cases
+});
