@@ -57,6 +57,24 @@ describe('mixins', function() {
     });
   });
 
+  describe('config', function() {
+    it('should mixin undefined modules', function(done) {
+      var modules = {
+        'baz': 'bat',
+        'foo': 'bah'
+      };
+
+      lib.mixinExec(undefined, [{modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+          context.config.moduleList().should.eql(['foo', 'baz']);
+          context.config.attributes.modules.foo.should.eql('bar');
+          context.config.attributes.modules.baz.should.eql('bat');
+
+          done();
+        });
+
+    });
+  });
+
   describe('modules', function() {
     it('should mixin module attributes', function(done) {
       var module = {

@@ -107,7 +107,7 @@ exports.mixinExec = function(module, mixins, config, callback) {
     config = undefined;
   }
 
-  config = Config.create(_.defaults({modules: {module: module}}, config));
+  config = Config.create(_.extend({modules: {module: module}}, config));
   var context = new Context({module: module}, config, plugin, new Mixins({mixins: mixins}));
   context.options = {};
 
