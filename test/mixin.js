@@ -269,6 +269,76 @@ describe('mixins', function() {
     });
   });
 
+  describe('conditional include', function() {
+    var module,
+        mixins;
+    beforeEach(function() {
+      module = {
+        mixins: [
+          {'name': 'mixin1', 'platform': 'web', 'env': 'dev'},
+          {'name': 'mixin2', 'package': 'native'}
+        ],
+        bat: 3,
+        scripts: [ {src: 'foo0.1', global: true}, 'bar0.1'],
+        styles: [ 'foo0' ],
+        static: [ 'baz0.1' ]
+      };
+
+      mixins = {
+        mixin1: {
+          foo: 1,
+          scripts: [ {src: 'foo1.1', global: true}, 'bar1.1'],
+          styles: [ 'foo1' ],
+          static: [ 'baz1.1' ]
+        },
+        mixin2: {
+          bar: 2,
+          scripts: [ {src: 'foo2.1', global: true}, 'bar2.1'],
+          styles: [ 'foo2' ],
+          static: [ 'baz2.1' ]
+        }
+      };
+    });
+
+    function stripper(resources) {
+      // Drop the mixin reference to make testing easier
+      _.each(resources, function(resource) { delete resource.mixin; });
+    }
+
+    it('should conditionally include platform mixins', function(done) {
+      lib.mixinExec(module, [{mixins: mixins}], function(mixins, context) {
+          module.foo.should.eql(1, 'foo should be written');
+          module.bar.should.eql(2, 'bar should be written');
+          module.bat.should.eql(3, 'bat should not be overwritten');
+
+          stripper(module.scripts);
+          stripper(module.styles);
+          stripper(module.static);
+
+          module.scripts.should.eql([
+            {src: 'foo1.1', global: true, platform: 'web', env: 'dev'},
+            {src: 'foo2.1', global: true, package: 'native'},
+            {src: 'foo0.1', global: true},
+            {src: 'bar1.1', platform: 'web', env: 'dev'},
+            {src: 'bar2.1', package: 'native'},
+            'bar0.1'
+          ]);
+          module.styles.should.eql([
+            {src: 'foo1', platform: 'web', env: 'dev'},
+            {src: 'foo2', package: 'native'},
+            'foo0'
+          ]);
+          module.static.should.eql([
+            {src: 'baz1.1', platform: 'web', env: 'dev'},
+            {src: 'baz2.1', package: 'native'},
+            'baz0.1'
+          ]);
+
+          done();
+        });
+    });
+  });
+
   describe('integration', function() {
     it('should mixin all content', lib.runTest('test/artifacts/mixin.json', 'test/expected/mixin'));
   });
