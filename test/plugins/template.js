@@ -2,9 +2,24 @@ var _ = require('underscore'),
     assert = require('assert'),
     build = require('../../lib/build'),
     lib = require('../lib'),
-    should = require('should');
+    should = require('should'),
+    template = require('../../lib/plugins/template');
 
 describe('template plugin', function() {
+  describe('auto-include', function() {
+    it('should remap files', function() {
+      template.remapFile({
+          regex: /foo(.*)bar(.*)/,
+          templates: ['$1$2$3', '', '$11', 'bat']
+        }, 'foo123bar')
+        .should.eql(['123$3', '', '1231', 'bat']);
+
+      should.not.exist(template.remapFile({
+          regex: /foo(.*)bar(.*)/,
+          templates: 'baz'
+        }, 'bat'));
+    });
+  });
   describe('mixin', function() {
     it('should pull in templates from mixins', function(done) {
       var mixinDecl = {
