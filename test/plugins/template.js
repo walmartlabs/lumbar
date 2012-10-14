@@ -1,12 +1,31 @@
 var _ = require('underscore'),
     assert = require('assert'),
     build = require('../../lib/build'),
+    fu = require('../../lib/fileUtil'),
     lib = require('../lib'),
     should = require('should'),
     template = require('../../lib/plugins/template');
 
 describe('template plugin', function() {
   describe('auto-include', function() {
+    var fileList = fu.fileList;
+    before(function() {
+      fu.fileList = function(list, extension, callback) {
+        callback = _.isFunction(extension) ? extension : callback;
+        callback(undefined, _.chain(list)
+            .map(function(file) {
+              if (!/.*bar.handlebars$/.test(file)) {
+                return file;
+              }
+            })
+            .filter(function(file) { return file; })
+            .value());
+      };
+    });
+    after(function() {
+      fu.fileList = fileList;
+    });
+
     it('should remap files', function() {
       template.remapFile({
           regex: /foo(.*)bar(.*)/,
@@ -18,6 +37,74 @@ describe('template plugin', function() {
           regex: /foo(.*)bar(.*)/,
           templates: 'baz'
         }, 'bat'));
+    });
+
+    it('should pull in from auto-include pattern', function(done) {
+      var module = {
+        scripts: [
+          'js/init.js',
+          'js/views/test.js',
+          'js/views/foo/bar.js'
+        ]
+      };
+      var config = {
+        templates: {
+          'auto-include': {
+            'js/views/(.*)\\.js': [
+              'templates/$1.handlebars',
+              'templates/$1-item.handlebars'
+            ]
+          }
+        }
+      };
+
+      lib.mixinExec(module, [], config, function(mixins, context) {
+        context.mode = 'scripts';
+        build.loadResources(context, function(err, resources) {
+          // Drop the mixin reference to make testing easier
+          _.each(resources, function(resource) { delete resource.mixin; });
+
+          resources.should.eql([
+            {src: 'js/init.js'},
+            {src: 'js/views/test.js'},
+            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', template: true},
+            {src: 'templates/test-item.handlebars', name: 'templates/test-item.handlebars', template: true},
+            {src: 'js/views/foo/bar.js'},
+            {src: 'templates/foo/bar-item.handlebars', name: 'templates/foo/bar-item.handlebars', template: true}
+          ]);
+          done();
+        });
+      });
+    });
+    it('explicitly defined paths should be additive', function(done) {
+      var module = {
+        scripts: [
+          'js/views/test.js'
+        ]
+      };
+      var config = {
+        templates: {
+          'js/views/test.js': ['foo.handlebars'],
+
+          'auto-include': {
+            'js/views/(.*)\\.js': [
+              'templates/$1.handlebars'
+            ]
+          }
+        }
+      };
+
+      lib.mixinExec(module, [], config, function(mixins, context) {
+        context.mode = 'scripts';
+        build.loadResources(context, function(err, resources) {
+          resources.should.eql([
+            {src: 'js/views/test.js'},
+            {src: 'foo.handlebars', name: 'foo.handlebars', template: true},
+            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', template: true}
+          ]);
+          done();
+        });
+      });
     });
   });
   describe('mixin', function() {
