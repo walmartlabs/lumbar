@@ -1,7 +1,7 @@
-var assert = require('assert'),
-    fs = require('fs'),
+var fs = require('fs'),
     lib = require('./index'),
     lumbar = require('../../lib/lumbar'),
+    should = require('should'),
     wrench = require('wrench');
 
 exports.canWatch = function() {
@@ -57,7 +57,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
     var statusFile = status.fileName.substring(outdir.length);
     if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
       arise.unwatch();
-      assert.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
+      should.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
     } else {
       seenFiles.push(statusFile);
     }
@@ -73,7 +73,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
 
     seenFiles = seenFiles.sort();
     expectedFiles = expectedFiles.sort();
-    assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
+    seenFiles.should.eql(expectedFiles, 'watchFile: seen file list matches');
 
     if (options.expectedDir) {
       lib.assertExpected(outdir, options.expectedDir, 'watchfile: ' + outdir);

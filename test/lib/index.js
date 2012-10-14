@@ -66,7 +66,7 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
 
       var statusFile = status.fileName.substring(outdir.length);
       if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
-        assert.fail(undefined, status.fileName, configFile + ':' + statusFile + ': missing from expected list');
+        should.fail(undefined, status.fileName, configFile + ':' + statusFile + ': missing from expected list');
       } else {
         seenFiles.push(statusFile);
       }
