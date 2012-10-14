@@ -41,7 +41,7 @@
   },
   "main": "lib/lumbar",
   "scripts": {
-    "test": "node_modules/.bin/mocha --reporter spec test/* test/plugins/*"
+    "test": "node_modules/.bin/mocha test/*.js test/plugins/*.js"
   },
   "optionalDependencies": {}
 }
