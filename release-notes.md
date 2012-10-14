@@ -1,3 +1,11 @@
+# 2.0.0 Beta 2
+
+Changes:
+
+- Separated handlebars processing from template includes
+  Handlebar templates may now be included in script array or the template lookup field. Templates
+  in the lookup field are no longer required to be handlebars templates.
+
 # 2.0.0 Beta 1 - Oct 9th 2012
 
 Changes:
