@@ -7,25 +7,25 @@ var _ = require('underscore'),
     template = require('../../lib/plugins/template');
 
 describe('template plugin', function() {
-  describe('auto-include', function() {
-    var fileList = fu.fileList;
-    before(function() {
-      fu.fileList = function(list, extension, callback) {
-        callback = _.isFunction(extension) ? extension : callback;
-        callback(undefined, _.chain(list)
-            .map(function(file) {
-              if (!/.*bar.handlebars$/.test(file)) {
-                return file;
-              }
-            })
-            .filter(function(file) { return file; })
-            .value());
-      };
-    });
-    after(function() {
-      fu.fileList = fileList;
-    });
+  var fileList = fu.fileList;
+  before(function() {
+    fu.fileList = function(list, extension, callback) {
+      callback = _.isFunction(extension) ? extension : callback;
+      callback(undefined, _.chain(list)
+          .map(function(file) {
+            if (!/.*bar.handlebars$/.test(file)) {
+              return file;
+            }
+          })
+          .filter(function(file) { return file; })
+          .value());
+    };
+  });
+  after(function() {
+    fu.fileList = fileList;
+  });
 
+  describe('auto-include', function() {
     it('should remap files', function() {
       template.remapFile({
           regex: /foo(.*)bar(.*)/,
