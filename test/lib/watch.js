@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    fu = require('../../lib/fileUtil'),
     lib = require('./index'),
     lumbar = require('../../lib/lumbar'),
     should = require('should'),
@@ -37,8 +38,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
   // Expresso: this.title
   var title = (this.test && this.test.title) || this.title || config,
       testdir = lib.testDir(title, 'example'),
-      outdir = lib.testDir(title, 'test'),
-      seenFiles = [];
+      outdir = lib.testDir(title, 'test');
   if (this.title) {
     this.title += ' ' + outdir;
   }
@@ -53,8 +53,25 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
 
   options.outdir = outdir;
   var arise = lumbar.init(testdir + '/' + config, options);
-  arise.on('output', function(status) {
-    var statusFile = status.fileName.substring(outdir.length);
+  arise.on('output', checkOutput(operations, expectedFiles, arise, options, function() {
+    // Cleanup (Do cleanup here so the files remain for the failure case)
+    wrench.rmdirSyncRecursive(testdir);
+    wrench.rmdirSyncRecursive(outdir);
+
+    complete();
+  }));
+
+  arise.watch(undefined, function(err) {
+    err = err || new Error('Callback called without fatal error');
+    throw err;
+  });
+};
+
+function checkOutput(operations, expectedFiles, arise, options, cleanup) {
+  var seenFiles = [];
+
+  return function(status) {
+    var statusFile = status.fileName.substring(options.outdir.length);
     if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
       arise.unwatch();
       should.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
@@ -63,7 +80,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
     }
     var seen = seenFiles.length;
     setTimeout(function() {
-      operations[seen] && operations[seen](testdir);
+      operations[seen] && operations[seen](fu.lookupPath());
     }, 0);
     if (seenFiles.length < expectedFiles.length) {
       return;
@@ -76,19 +93,9 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
     seenFiles.should.eql(expectedFiles, 'watchFile: seen file list matches');
 
     if (options.expectedDir) {
-      lib.assertExpected(outdir, options.expectedDir, 'watchfile: ' + outdir);
+      lib.assertExpected(options.outdir, options.expectedDir, 'watchfile: ' + options.outdir);
     }
 
-    // Cleanup (Do cleanup here so the files remain for the failure case)
-    wrench.rmdirSyncRecursive(testdir);
-    wrench.rmdirSyncRecursive(outdir);
-
-    complete();
-  });
-
-  var retCount = 0;
-  arise.watch(undefined, function(err) {
-    err = err || new Error('Callback called without fatal error');
-    throw err;
-  });
-};
+    cleanup();
+  };
+}
