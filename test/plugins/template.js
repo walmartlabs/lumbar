@@ -108,6 +108,33 @@ describe('template plugin', function() {
     });
   });
   describe('mixin', function() {
+    it('should include special values from mixins', function(done) {
+      var mixins = [
+        {
+          templates: {
+            'auto-include': {'foo': 'bar'}
+          }
+        },
+        {
+          templates: {
+            'auto-include': {'baz': 'bat'}
+          }
+        }
+      ];
+
+      var config = {
+        templates: {
+          'auto-include': {'bar': 'bar', 'baz': 'bar'}
+        }
+      };
+
+      lib.mixinExec({}, mixins, config, function(mixins, context) {
+        context.config.attributes.templates.should.eql({
+          'auto-include': {'foo': 'bar', 'bar': 'bar', 'baz': 'bar'}
+        });
+        done();
+      });
+    });
     it('should pull in templates from mixins', function(done) {
       var mixinDecl = {
         name: 'mixin1',
