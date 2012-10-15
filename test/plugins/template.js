@@ -201,15 +201,15 @@ describe('template plugin', function() {
           _.each(resources, function(resource) { delete resource.mixin; });
 
           resources.should.eql([
-            {src: 'foo', originalSrc: 'mixin1/baz1.1', enoent: true},
+            {src: 'foo', originalSrc: 'mixin1/baz1.1'},
             {template: true, src: 'foo1.1', name: 'foo1.1'},
             {template: true, src: 'mixin1/foo1.2', name: 'foo1.2'},
-            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', enoent: true},
-            {src: 'mixin2/baz1.1', enoent: true},
+            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2'},
+            {src: 'mixin2/baz1.1'},
             {template: true, src: 'mixin2/foo1.1', name: 'foo1.1'},
             {template: true, src: 'mixin2/foo1.2', name: 'foo1.2'},
-            {src: 'mixin2/baz1.2', enoent: true},
-            {src: 'baz1.1', enoent: true},
+            {src: 'mixin2/baz1.2'},
+            {src: 'baz1.1'},
             {template: true, src: 'foo1.1', name: 'foo1.1'},
             {template: true, src: 'foo1.2', name: 'foo1.2'}
           ]);
