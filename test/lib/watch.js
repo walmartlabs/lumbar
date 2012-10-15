@@ -3,6 +3,7 @@ var fs = require('fs'),
     lib = require('./index'),
     lumbar = require('../../lib/lumbar'),
     should = require('should'),
+    watcher = require('../../lib/watcher'),
     wrench = require('wrench');
 
 exports.canWatch = function() {
@@ -31,6 +32,31 @@ exports.appendRapidSpace = function(path1, path2) {
     fs.writeSync(fd, ' ');
     fs.closeSync(fd);
   }, 500);
+};
+
+exports.mockWatch = function() {
+  var original = watcher.watchFile;
+
+  watcher.watchFile = function(filename, dependencies, callback) {
+    function makeVirtual(filename) {
+      if (!filename.virtual) {
+        filename = {virtual: filename};
+      }
+      return filename;
+    }
+    filename = makeVirtual(filename);
+    dependencies = dependencies.map(makeVirtual);
+    return original.call(this, filename, dependencies, callback);
+  };
+
+  return {
+    trigger: function(type, filename) {
+      watcher.trigger(type, filename);
+    },
+    cleanup: function() {
+      watcher.watchFile = original;
+    }
+  };
 };
 
 exports.runWatchTest = function(srcdir, config, operations, expectedFiles, options, done) {
