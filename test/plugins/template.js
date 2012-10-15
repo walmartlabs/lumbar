@@ -18,14 +18,15 @@ describe('template plugin', function() {
       if (!_.isArray(list)) {
         list = [list];
       }
-      callback(undefined, _.chain(list)
-          .map(function(file) {
-            if (!fileFilter.test(file)) {
+      callback(
+          undefined,
+          _.map(list, function(file) {
+            if (fileFilter.test(file)) {
+              return {src: file, enoent: true};
+            } else {
               return file;
             }
-          })
-          .filter(function(file) { return file; })
-          .value());
+          }));
     };
   });
   after(function() {
@@ -80,7 +81,8 @@ describe('template plugin', function() {
             {src: 'templates/test.handlebars', name: 'templates/test.handlebars', template: true},
             {src: 'templates/test-item.handlebars', name: 'templates/test-item.handlebars', template: true},
             {src: 'js/views/foo/bar.js'},
-            {src: 'templates/foo/bar-item.handlebars', name: 'templates/foo/bar-item.handlebars', template: true}
+            {src: 'templates/foo/bar-item.handlebars', name: 'templates/foo/bar-item.handlebars', template: true},
+            {watch: 'templates/foo'}
           ]);
           done();
         });
@@ -159,7 +161,7 @@ describe('template plugin', function() {
         watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
       }
 
-      it.skip('should add newly created templates', function(done) {
+      it('should add newly created templates', function(done) {
         var expectedFiles = ['/module.js', '/module.js'],
             operations = {
               1: function(testdir) {
