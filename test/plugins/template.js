@@ -1,19 +1,26 @@
 var _ = require('underscore'),
     assert = require('assert'),
     build = require('../../lib/build'),
+    fs = require('fs'),
     fu = require('../../lib/fileUtil'),
     lib = require('../lib'),
     should = require('should'),
-    template = require('../../lib/plugins/template');
+    template = require('../../lib/plugins/template'),
+    watch = require('../lib/watch');
+
 
 describe('template plugin', function() {
-  var fileList = fu.fileList;
+  var fileList = fu.fileList,
+      fileFilter;
   before(function() {
     fu.fileList = function(list, extension, callback) {
       callback = _.isFunction(extension) ? extension : callback;
+      if (!_.isArray(list)) {
+        list = [list];
+      }
       callback(undefined, _.chain(list)
           .map(function(file) {
-            if (!/.*bar.handlebars$/.test(file)) {
+            if (!fileFilter.test(file)) {
               return file;
             }
           })
@@ -23,6 +30,9 @@ describe('template plugin', function() {
   });
   after(function() {
     fu.fileList = fileList;
+  });
+  beforeEach(function() {
+    fileFilter = /.*bar.handlebars$/;
   });
 
   describe('auto-include', function() {
@@ -76,6 +86,7 @@ describe('template plugin', function() {
         });
       });
     });
+
     it('explicitly defined paths should be additive', function(done) {
       var module = {
         scripts: [
@@ -106,7 +117,82 @@ describe('template plugin', function() {
         });
       });
     });
+
+    describe('watch', function() {
+      var mock,
+          originalRead,
+          originalReadSync;
+      before(function() {
+        mock = watch.mockWatch();
+        originalRead = fs.readFile;
+        originalReadSync = fs.readFileSync;
+
+        fs.readFileSync = function(path) {
+          return JSON.stringify({
+            modules: {
+              module: {scripts: ['js/views/test.js']}
+            },
+            templates: {
+              'auto-include': {
+                'js/views/(.*)\\.js': 'templates/$1.foo'
+              }
+            }
+          });
+        };
+
+        fs.readFile = function(path, callback) {
+          if (/test.(js|foo)$/.test(path)) {
+            return callback(undefined, 'foo');
+          } else {
+            return originalRead.apply(this, arguments);
+          }
+        };
+      });
+      after(function() {
+        mock.cleanup();
+      });
+
+
+      function runWatchTest(srcdir, config, operations, expectedFiles, done) {
+        var options = {packageConfigFile: 'config/dev.json'};
+
+        watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
+      }
+
+      it.skip('should add newly created templates', function(done) {
+        var expectedFiles = ['/module.js', '/module.js'],
+            operations = {
+              1: function(testdir) {
+                fileFilter = /.*\.baz$/;
+                mock.trigger('create', testdir + 'templates');
+              }
+            };
+
+        fileFilter = /.*\.foo$/;
+
+        runWatchTest.call(this,
+          'test/artifacts', 'lumbar.json',
+          operations, expectedFiles,
+          done);
+      });
+
+      it('should remove deleted templates', function(done) {
+        var expectedFiles = ['/module.js', '/module.js'],
+            operations = {
+              1: function(testdir) {
+                fileFilter = /.*\.foo$/;
+                mock.trigger('remove', testdir + 'templates/test.foo');
+              }
+            };
+
+        runWatchTest.call(this,
+          'test/artifacts', 'lumbar.json',
+          operations, expectedFiles,
+          done);
+      });
+    });
   });
+
   describe('mixin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
