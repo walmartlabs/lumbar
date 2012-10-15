@@ -135,6 +135,55 @@ describe('template plugin', function() {
         done();
       });
     });
+    it('should auto-include within mixins', function(done) {
+      var module = {
+        mixins: [{
+          name: 'mixin1',
+          overrides: {
+            'baz1.1.handlebars': 'foo'
+          }
+        }],
+        scripts: [ 'baz1.1' ]
+      };
+
+      var mixins = [
+        {
+          root: 'mixin1/',
+          mixins: {
+            mixin1: {
+              scripts: [ 'baz1.1' ]
+            },
+          },
+          templates: {
+            'auto-include': {
+              '.*': [
+                'templates/$0.handlebars',
+                '$0.handlebars'
+              ]
+            }
+          }
+        }
+      ];
+
+      lib.mixinExec(module, mixins, function(mixins, context) {
+        context.mode = 'scripts';
+        build.loadResources(context, function(err, resources) {
+          // Drop the mixin reference to make testing easier
+          _.each(resources, function(resource) { delete resource.mixin; });
+
+          resources.should.eql([
+            {src: 'mixin1/baz1.1'},
+            {src: 'mixin1/templates/baz1.1.handlebars', name: 'templates/baz1.1.handlebars', template: true},
+            {src: 'foo', name: 'baz1.1.handlebars', template: true},
+            {src: 'baz1.1'},
+            {src: 'templates/baz1.1.handlebars', name: 'templates/baz1.1.handlebars', template: true},
+            {src: 'baz1.1.handlebars', name: 'baz1.1.handlebars', template: true},
+          ]);
+          done();
+        });
+      });
+    });
+
     it('should pull in templates from mixins', function(done) {
       var mixinDecl = {
         name: 'mixin1',
