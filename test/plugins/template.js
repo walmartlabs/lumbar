@@ -10,31 +10,10 @@ var _ = require('underscore'),
 
 
 describe('template plugin', function() {
-  var fileList = fu.fileList,
-      fileFilter;
-  before(function() {
-    fu.fileList = function(list, extension, callback) {
-      callback = _.isFunction(extension) ? extension : callback;
-      if (!_.isArray(list)) {
-        list = [list];
-      }
-      callback(
-          undefined,
-          _.map(list, function(file) {
-            if (fileFilter.test(file)) {
-              return {src: file, enoent: true};
-            } else {
-              return file;
-            }
-          }));
-    };
-  });
-  after(function() {
-    fu.fileList = fileList;
-  });
-  beforeEach(function() {
-    fileFilter = /.*bar.handlebars$/;
-  });
+  var config = {
+    defaultFilter: /.*bar.handlebars$/
+  };
+  lib.mockFileList(config);
 
   describe('auto-include', function() {
     it('should remap files', function() {
@@ -165,12 +144,12 @@ describe('template plugin', function() {
         var expectedFiles = ['/module.js', '/module.js'],
             operations = {
               1: function(testdir) {
-                fileFilter = /.*\.baz$/;
+                config.fileFilter = /.*\.baz$/;
                 mock.trigger('create', testdir + 'templates');
               }
             };
 
-        fileFilter = /.*\.foo$/;
+        config.fileFilter = /.*\.foo$/;
 
         runWatchTest.call(this,
           'test/artifacts', 'lumbar.json',
@@ -182,7 +161,7 @@ describe('template plugin', function() {
         var expectedFiles = ['/module.js', '/module.js'],
             operations = {
               1: function(testdir) {
-                fileFilter = /.*\.foo$/;
+                config.fileFilter = /.*\.foo$/;
                 mock.trigger('remove', testdir + 'templates/test.foo');
               }
             };

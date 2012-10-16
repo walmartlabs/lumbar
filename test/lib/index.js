@@ -3,6 +3,7 @@ var _ = require('underscore'),
     build = require('../../lib/build'),
     Config = require('../../lib/config'),
     Context = require('../../lib/context'),
+    fu = require('../../lib/fileUtil'),
     fs = require('fs'),
     glob = require('glob'),
     lumbar = require('../../lib/lumbar'),
@@ -42,6 +43,33 @@ exports.assertExpected = function(outdir, expectedDir, configFile) {
     var generatedContent = fs.readFileSync(outdir + fileName, 'utf8'),
         expectedContent = fs.readFileSync(expectedDir + fileName, 'utf8');
     generatedContent.should.eql(expectedContent, configFile + ':' + fileName + ': content matches');
+  });
+};
+
+exports.mockFileList = function(config) {
+  var fileList = fu.fileList;
+  before(function() {
+    fu.fileList = function(list, extension, callback) {
+      callback = _.isFunction(extension) ? extension : callback;
+      if (!_.isArray(list)) {
+        list = [list];
+      }
+      callback(
+          undefined,
+          _.map(list, function(file) {
+            if (config.fileFilter && config.fileFilter.test(file)) {
+              return {src: file, enoent: true};
+            } else {
+              return file;
+            }
+          }));
+    };
+  });
+  after(function() {
+    fu.fileList = fileList;
+  });
+  beforeEach(function() {
+    config.fileFilter = config.defaultFilter;
   });
 };
 
