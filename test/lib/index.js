@@ -179,6 +179,9 @@ exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
         context.moduleCache = {};
 
         plugin = context.plugins.get(plugin);
+        if (!plugin.module) {
+          return callback(context.moduleResources, context);
+        }
         plugin.module(context, function(complete) { complete(); }, function(err) {
           if (err) {
             throw err;

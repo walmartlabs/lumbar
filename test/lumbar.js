@@ -8,7 +8,6 @@ describe('integration', function() {
   it('should handle multiple packages', lib.runTest('test/artifacts/multiple-packages.json', 'test/expected/multiple-packages'));
 
   it('should output module-map', lib.runTest('test/artifacts/module-map.json', 'test/expected/module-map'));
-  it('should output router', lib.runTest('test/artifacts/router.json', 'test/expected/router'));
   it('should output template', lib.runTest('test/artifacts/template.json', 'test/expected/template'));
 
   // TODO : Templates that are dependent on the platform

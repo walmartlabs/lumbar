@@ -76,12 +76,12 @@ describe('file-util', function() {
 
     it('should return duplicates only once', function(done) {
       fu.lookupPath('test');
-      fu.fileList(['file-util.js', 'file-util.js', 'artifacts/router.json', 'file-util.js'], function(err, files) {
+      fu.fileList(['file-util.js', 'file-util.js', 'example/lumbar.json', 'file-util.js'], function(err, files) {
         if (err) {
           throw err;
         }
 
-        files.should.eql(['file-util.js', 'artifacts/router.json']);
+        files.should.eql(['file-util.js', 'example/lumbar.json']);
         done();
       });
     });
