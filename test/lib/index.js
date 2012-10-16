@@ -154,3 +154,39 @@ exports.mixinExec = function(module, mixins, config, callback) {
     });
   });
 };
+
+exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
+  if (_.isFunction(config)) {
+    callback = config;
+    config = undefined;
+  }
+
+  exports.mixinExec(module, mixins, config, function(mixins, context) {
+    context.mode = mode;
+    context.fileConfig = {};
+
+    build.loadResources(context, function(err, resources) {
+      if (err) {
+        throw err;
+      }
+
+      build.processResources(resources, context, function(err, resources) {
+        if (err) {
+          throw err;
+        }
+
+        context.moduleResources = resources;
+        context.moduleCache = {};
+
+        plugin = context.plugins.get(plugin);
+        plugin.module(context, function(complete) { complete(); }, function(err) {
+          if (err) {
+            throw err;
+          }
+
+          callback(context.moduleResources, context);
+        });
+      });
+    });
+  });
+};

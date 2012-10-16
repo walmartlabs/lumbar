@@ -179,52 +179,32 @@ describe('stylus plugin', function() {
         }
       };
 
-      lib.mixinExec(config.modules.test, mixins, config, function(mixins, context) {
-        context.mode = 'styles';
-        context.fileConfig = {};
-
-        build.loadResources(context, function(err, resources) {
+      lib.pluginExec('stylus', 'styles', config.modules.test, mixins, config, function(resources, context) {
+        context.loadResource(resources[0], function(err, data) {
           if (err) {
             throw err;
           }
 
-          build.processResources(resources, context, function(err, resources) {
-            if (err) {
-              throw err;
-            }
-
-            context.moduleResources = resources;
-
-            var stylus = context.plugins.get('stylus');
-            stylus.module(context, function(complete) { complete(); }, function() {
-              context.loadResource(context.moduleResources[0], function(err, data) {
-                if (err) {
-                  throw err;
-                }
-
-                read.should.eql([
-                  'mixinRoot/stylusRoot/mixin-import.styl',
-                  'mixinRoot/mixin-import.styl',
-                  'mixinRoot/stylusRoot/foo.styl',
-                  'mixinRoot/foo.styl',
-                  'mixinRoot/stylusRoot/img.png',
-                  'mixinRoot/img.png',
-                  'bar1.styl',
-                  'mixinRoot/stylusRoot/img.png',
-                  'mixinRoot/img.png',
-                  'mixinRoot/stylusRoot/file2.styl',
-                  'mixinRoot/file2.styl',
-                  'mixinRoot/stylusRoot/img.png',
-                  'mixinRoot/img.png',
-                  'file1.styl',
-                  'img.png',
-                  'file2.styl',
-                  'img.png'
-                ]);
-                done();
-              });
-            });
-          });
+          read.should.eql([
+            'mixinRoot/stylusRoot/mixin-import.styl',
+            'mixinRoot/mixin-import.styl',
+            'mixinRoot/stylusRoot/foo.styl',
+            'mixinRoot/foo.styl',
+            'mixinRoot/stylusRoot/img.png',
+            'mixinRoot/img.png',
+            'bar1.styl',
+            'mixinRoot/stylusRoot/img.png',
+            'mixinRoot/img.png',
+            'mixinRoot/stylusRoot/file2.styl',
+            'mixinRoot/file2.styl',
+            'mixinRoot/stylusRoot/img.png',
+            'mixinRoot/img.png',
+            'file1.styl',
+            'img.png',
+            'file2.styl',
+            'img.png'
+          ]);
+          done();
         });
       });
     });
