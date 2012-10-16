@@ -1,7 +1,6 @@
 var lib = require('./lib');
 
 describe('integration', function() {
-  it('should output a single file', lib.runTest('test/artifacts/single-file.json', 'test/expected/single-file'));
   it('should output a single dir', lib.runTest('test/artifacts/single-directory.json', 'test/expected/js-dir'));
   it('should output multiple files', lib.runTest('test/artifacts/multiple-files.json', 'test/expected/js-dir'));
   it('should output files in multiple modules', lib.runTest('test/artifacts/file-modules.json', 'test/expected/file-modules'));
