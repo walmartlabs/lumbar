@@ -18,9 +18,6 @@ describe('integration', function() {
   it('should output template', lib.runTest('test/artifacts/template.json', 'test/expected/template'));
 
   // TODO : Error handling for Missing template cache definitions
-  it('should output dev-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/dev-config', {packageConfigFile: 'config/dev.json'}));
-  it('should output production-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}));
-
   it('should output application-namespace', lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}));
 
   it('should output trailing-slash', lib.runTest('test/artifacts/trailing-slash.json', 'test/expected/trailing-slash'));
