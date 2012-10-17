@@ -9,5 +9,6 @@
     "home": [
       "js/home/home.js"
     ]
-  }
+  },
+  "scope": "none"
 }
