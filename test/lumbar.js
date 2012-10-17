@@ -17,7 +17,6 @@ describe('integration', function() {
   it('should output dev-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/dev-config', {packageConfigFile: 'config/dev.json'}));
   it('should output production-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}));
 
-  it('should output scope-yield', lib.runTest('test/artifacts/scope-yield.json', 'test/expected/scope-yield'));
   it('should output application-namespace', lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}));
 
   it('should output styles', lib.runTest('test/artifacts/styles.json', 'test/expected/styles'));
