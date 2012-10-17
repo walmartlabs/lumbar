@@ -15,7 +15,6 @@ describe('integration', function() {
   it('should output stylus', lib.runTest('test/artifacts/stylus.json', 'test/expected/stylus'));
   it('should output inline-styles', lib.runTest('test/artifacts/inline-styles.json', 'test/expected/inline-styles'));
   it('should output module-map', lib.runTest('test/artifacts/module-map.json', 'test/expected/module-map'));
-  it('should output template', lib.runTest('test/artifacts/template.json', 'test/expected/template'));
 
   // TODO : Error handling for Missing template cache definitions
   it('should output application-namespace', lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}));
