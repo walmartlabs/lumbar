@@ -20,8 +20,6 @@ describe('router plugin', function() {
 
   it('should output routes', function(done) {
     lib.pluginExec('router', 'scripts', module, [], config, function(resources, context) {
-      //var plugin = context.plugins.get('router');
-
       resources[0](context, function(err, data) {
         if (err) {
           throw err;
