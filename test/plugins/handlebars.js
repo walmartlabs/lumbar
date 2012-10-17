@@ -5,6 +5,9 @@ var _ = require('underscore'),
     should = require('should');
 
 describe('handlebars plugin', function() {
+  // TODO : More explict test for normal output
+  // TODO : Precompiled test with mocks
+
   describe('directory include', function() {
     it('should drop trailing slashes in template names', function(done) {
       var module = {
