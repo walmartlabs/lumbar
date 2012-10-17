@@ -6,5 +6,6 @@
         "base.js"
       ]
     }
-  }
+  },
+  "scope": "none"
 }
