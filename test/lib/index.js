@@ -164,6 +164,7 @@ exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
   exports.mixinExec(module, mixins, config, function(mixins, context) {
     context.mode = mode;
     context.fileConfig = {};
+    context.fileCache = {};
 
     build.loadResources(context, function(err, resources) {
       if (err) {

@@ -4,7 +4,40 @@ var _ = require('underscore'),
     lib = require('../lib'),
     should = require('should');
 
-describe('template plugin', function() {
+describe('handlebars plugin', function() {
+  describe('directory include', function() {
+    it('should drop trailing slashes in template names', function(done) {
+      var module = {
+        scripts: [
+          'js/views/test.js'
+        ]
+      };
+      var config = {
+        templates: {
+          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+        }
+      };
+
+      lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
+        resources[1].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', template: true});
+
+        resources[1](context, function(err, data) {
+          if (err) {
+            throw err;
+          }
+
+          var name = __dirname + '/../artifacts/templates/home.handlebars';
+          data.should.eql({
+            inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+            data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.compile(\'home\\n\');\n',
+            noSeparator: true
+          });
+          done();
+        });
+      });
+    });
+  });
+
   describe('mixin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
