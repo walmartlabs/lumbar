@@ -14,6 +14,7 @@ describe('file output', function() {
 describe('integration', function() {
   it('should output stylus', lib.runTest('test/artifacts/stylus.json', 'test/expected/stylus'));
   it('should output inline-styles', lib.runTest('test/artifacts/inline-styles.json', 'test/expected/inline-styles'));
+  it('should output json-plugins', lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin'));
   it('should output module-map', lib.runTest('test/artifacts/module-map.json', 'test/expected/module-map'));
 
   // TODO : Error handling for Missing template cache definitions
@@ -21,6 +22,5 @@ describe('integration', function() {
 
   it('should output index-update', lib.runTest('test/artifacts/index-update.json', 'test/expected/index-update', undefined, '/**/*.{js,css,html}'));
   it('should output generated-load-prefix', lib.runTest('test/artifacts/generated-load-prefix.json', 'test/expected/generated-load-prefix', undefined, '/**/*.{js,css,html}'));
-  it('should output json-plugins', lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin'));
   // TODO : Test file not found and other cases
 });
