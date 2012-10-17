@@ -1,3 +1,5 @@
+// TODO : Templates that are dependent on the platform
+// TODO : Test multiple template references in the same file
 var _ = require('underscore'),
     assert = require('assert'),
     build = require('../../lib/build'),

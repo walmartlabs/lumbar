@@ -10,10 +10,7 @@ describe('integration', function() {
   it('should output module-map', lib.runTest('test/artifacts/module-map.json', 'test/expected/module-map'));
   it('should output template', lib.runTest('test/artifacts/template.json', 'test/expected/template'));
 
-  // TODO : Templates that are dependent on the platform
   // TODO : Error handling for Missing template cache definitions
-  // TODO : Test multiple template references in the same file
-
   it('should output dev-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/dev-config', {packageConfigFile: 'config/dev.json'}));
   it('should output production-config', lib.runTest('test/artifacts/package-config.json', 'test/expected/production-config', {packageConfigFile: 'config/production.json'}));
 
