@@ -85,7 +85,7 @@ describe('watcher', function() {
 
     var count = 0;
 
-    var testFile = outdir + '/generated-load-prefix.json';
+    var testFile = outdir + '/stylus.json';
     watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
       assert.equal(1, ++count);
       assert.equal('remove', type);
@@ -102,7 +102,7 @@ describe('watcher', function() {
   it('should notify on overwrite', function(done) {
     var count = require('os').platform() === 'darwin' ? 0 : 1;
 
-    var testFile = outdir + '/index-update.json';
+    var testFile = outdir + '/multiple-files.json';
     watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
       assert.ok(2 >= ++count, 'Unexpected count:' + count);
       assert.equal(count === 1 ? 'rename' : 'change', type);

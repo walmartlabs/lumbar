@@ -17,8 +17,5 @@ describe('integration', function() {
   it('should output json-plugins', lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin'));
 
   it('should output application-namespace', lib.runTest('test/artifacts/application-namespace.json', 'test/expected/application-namespace', {packageConfigFile: 'config/dev.json'}));
-
-  it('should output index-update', lib.runTest('test/artifacts/index-update.json', 'test/expected/index-update', undefined, '/**/*.{js,css,html}'));
-  it('should output generated-load-prefix', lib.runTest('test/artifacts/generated-load-prefix.json', 'test/expected/generated-load-prefix', undefined, '/**/*.{js,css,html}'));
   // TODO : Test file not found and other cases
 });
