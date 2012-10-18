@@ -149,6 +149,43 @@ describe('scope plugin', function() {
           done();
         });
       });
+
+      it('should pull aliases from module', function(done) {
+        var module = {
+          topLevelName: 'foo',
+          aliases: {
+            'View': 'Application.View',
+            'foo': 'foo'
+          },
+          scripts: [
+            'js/init.js'
+          ]
+        };
+        var config = {
+          scope: {
+            template: 'moduleStart({{{aliasVars}}}){{yield}}moduleEnd({{{callSpec}}})',
+            aliases: {
+              'View': 'Application.Views',
+              'foo': 'food',
+              'Application': 'Application'
+            }
+          }
+        };
+
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+          resources = _.map(resources, function(resource) {
+            return resource.stringValue || resource.src;
+          });
+
+          resources.should.eql([
+            'var foo;\n',
+            'moduleStart(View, Application)',
+            'js/init.js',
+            'moduleEnd(this, Application.View, Application)'
+          ]);
+          done();
+        });
+      });
     });
   });
 
@@ -253,6 +290,31 @@ describe('scope plugin', function() {
               'foo': 'bar',
               'baz': 'bar'
             }
+          });
+          done();
+        });
+      });
+    });
+    it('should mixin module aliases', function(done) {
+      var mixins = [
+        {
+          root: 'mixin1/',
+          mixins: {
+            mixin1: {
+              aliases: {
+                'foo': 'bar',
+                'baz': 'bar'
+              }
+            }
+          }
+        }
+      ];
+
+      lib.mixinExec({mixins: ['mixin1'], aliases: {'foo': 'bat'}}, mixins, {}, function(mixins, context) {
+        mixins.load(context, mixins, function() {
+          context.module.aliases.should.eql({
+            'foo': 'bat',
+            'baz': 'bar'
           });
           done();
         });
