@@ -1,5 +1,5 @@
-{{{scope}}} = (function() {
+{{{scope}}} = (function({{aliasVars}}) {
 var module = {exports: {}};
 var exports = module.exports;
 {{yield}}return module.exports;
-}).call(this);
+}).call({{{callSpec}}});
