@@ -27,7 +27,7 @@
     "stylus": "~0.30",
     "stylus-images": "~0.2",
     "uglify-js": "~1.3",
-    "underscore": "~1.3",
+    "underscore": "~1.4",
     "coffee-script": "1.3.3"
   },
   "devDependencies": {
