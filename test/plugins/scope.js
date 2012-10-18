@@ -92,7 +92,54 @@ describe('scope plugin', function() {
           root: 'mixin1/',
           scope: {
             scope: 'module',
-            template: 'module.handlebars'
+            template: 'module.handlebars',
+            aliases: {
+              'foo': 'bar',
+              'baz': 'bar'
+            }
+          }
+        },
+        {
+          scope: 'none'
+        }
+      ];
+
+      var config = {
+        scope: {
+          scope: 'resource',
+          aliases: {
+            'foo': 'bat',
+            'bat': 'baz'
+          }
+        }
+      };
+
+      lib.mixinExec({}, mixins, config, function(mixins, context) {
+        mixins.load(context, mixins, function() {
+          context.config.attributes.scope.should.eql({
+            scope: 'resource',
+            template: 'mixin1/module.handlebars',
+            aliases: {
+              'foo': 'bat',
+              'baz': 'bar',
+              'bat': 'baz'
+            }
+          });
+          done();
+        });
+      });
+    });
+    it('should merge with shorthand', function(done) {
+      var mixins = [
+        {
+          root: 'mixin1/',
+          scope: {
+            scope: 'module',
+            template: 'module.handlebars',
+            aliases: {
+              'foo': 'bar',
+              'baz': 'bar'
+            }
           }
         },
         {
@@ -108,7 +155,11 @@ describe('scope plugin', function() {
         mixins.load(context, mixins, function() {
           context.config.attributes.scope.should.eql({
             scope: 'resource',
-            template: 'mixin1/module.handlebars'
+            template: 'mixin1/module.handlebars',
+            aliases: {
+              'foo': 'bar',
+              'baz': 'bar'
+            }
           });
           done();
         });
@@ -118,7 +169,11 @@ describe('scope plugin', function() {
       var mixin = {
         scope: {
           scope: 'module',
-          template: 'module.handlebars'
+          template: 'module.handlebars',
+          aliases: {
+            'foo': 'bar',
+            'baz': 'bar'
+          }
         }
       };
 
@@ -126,7 +181,11 @@ describe('scope plugin', function() {
         mixins.load(context, mixin, function() {
           context.config.attributes.scope.should.eql({
             scope: 'module',
-            template: 'module.handlebars'
+            template: 'module.handlebars',
+            aliases: {
+              'foo': 'bar',
+              'baz': 'bar'
+            }
           });
           done();
         });
