@@ -176,6 +176,7 @@ exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
           throw err;
         }
 
+        module.name = module.name || 'module';
         context.moduleResources = resources;
         context.moduleCache = {};
 

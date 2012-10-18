@@ -87,6 +87,75 @@ describe('scope plugin', function() {
   });
 
   describe('modules', function() {
+    describe('object', function() {
+      it('should expose top level object inside scope', function(done) {
+        var module = {
+          topLevelName: 'foo',
+          scripts: [
+            'js/init.js'
+          ]
+        };
+        var config = {
+          scope: {
+            scope: 'file',
+            template: 'moduleStart;{{{internalScope}}}{{yield}}moduleEnd'
+          }
+        };
+
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+          resources = _.map(resources, function(resource) {
+            return resource.stringValue || resource.src;
+          });
+
+          resources.should.eql([
+            'var foo;\n',
+            'moduleStart;var foo = exports',
+            'js/init.js',
+            'moduleEnd'
+          ]);
+          done();
+        });
+      });
+      it('should map child module alias', function(done) {
+        var module = {
+          scripts: [
+            'js/init.js'
+          ]
+        };
+        var config = {
+          modules: {
+            module: module
+          },
+          application: {
+            'name': 'Application',
+            'module': 'base'
+          },
+          scope: {
+            scope: 'file',
+            aliases: {
+              'View': 'Application.module',
+              'View2': 'Application["module"]',
+              'foo': 'foo',
+              'Application': 'Application'
+            },
+            template: 'moduleStart;{{{internalScope}}}{{yield}}moduleEnd'
+          }
+        };
+
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+          resources = _.map(resources, function(resource) {
+            return resource.stringValue || resource.src;
+          });
+
+          resources.should.eql([
+            'moduleStart;Application[\'module\'] = exports;var View = exports, View2 = exports',
+            'js/init.js',
+            'moduleEnd'
+          ]);
+          done();
+        });
+      });
+    });
     describe('aliases', function() {
       it('should define aliases as parameters', function(done) {
         var module = {
