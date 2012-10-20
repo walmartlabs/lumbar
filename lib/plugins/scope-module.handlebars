@@ -1,5 +1,12 @@
 {{{scope}}} = (function({{aliasVars}}) {
-var module = {exports: {}};
-var exports = module.exports;
-{{yield}}return module.exports;
+  var module = {exports: {}};
+  var exports = module.exports;
+  {{{internalScope}}}
+
+  {{{yield}}}
+
+  if ({{{scope}}} !== module.exports) {
+    console.warn("{{{scope}}} internally differs from global");
+  }
+  return module.exports;
 }).call({{{callSpec}}});

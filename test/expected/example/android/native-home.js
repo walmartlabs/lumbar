@@ -16,9 +16,11 @@ $(document).ready(function() {
 });
 ;;
 Example = (function() {
-var module = {exports: {}};
-var exports = module.exports;
-_.extend(exports, {
+  var module = {exports: {}};
+  var exports = module.exports;
+  var Example = exports;
+
+  _.extend(exports, {
   Views: {},
   templates: function(name, context) {
     return exports.templates[name](context);
@@ -47,12 +49,19 @@ module.exports.config = {
 ;
 /* lumbar module map */
 module.exports.moduleMap({"base":{"css":[{"href":"native-home.css","maxRatio":1.25},{"href":"native-home@1.5x.css","minRatio":1.25}],"js":"native-home.js"}});
-return module.exports;
+
+
+  if (Example !== module.exports) {
+    console.warn("Example internally differs from global");
+  }
+  return module.exports;
 }).call(this);
 Example['home'] = (function() {
-var module = {exports: {}};
-var exports = module.exports;
-/* router : home */
+  var module = {exports: {}};
+  var exports = module.exports;
+  Example['home'] = exports;
+
+  /* router : home */
 module.name = "home";
 module.routes = {"":"home","home":"home"};
 Example.Views.Home = Backbone.View.extend({
@@ -75,5 +84,10 @@ Example.Router.create(module, {
   }
 });
 ;;
-return module.exports;
+
+
+  if (Example['home'] !== module.exports) {
+    console.warn("Example['home'] internally differs from global");
+  }
+  return module.exports;
 }).call(this);

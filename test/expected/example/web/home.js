@@ -1,7 +1,9 @@
 Example['home'] = (function() {
-var module = {exports: {}};
-var exports = module.exports;
-/* router : home */
+  var module = {exports: {}};
+  var exports = module.exports;
+  Example['home'] = exports;
+
+  /* router : home */
 module.name = "home";
 module.routes = {"":"home","home":"home"};
 Example.Views.Home = Backbone.View.extend({
@@ -24,5 +26,10 @@ Example.Router.create(module, {
   }
 });
 ;;
-return module.exports;
+
+
+  if (Example['home'] !== module.exports) {
+    console.warn("Example['home'] internally differs from global");
+  }
+  return module.exports;
 }).call(this);

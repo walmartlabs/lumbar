@@ -22,6 +22,17 @@ Changes:
     }
   ```
 
+- Local module reference support
+
+  Module variables are now aliased internally meaning that a module with a top level name
+  `Application` can access it's exported members by accessing the `Application` object at any point
+  in time. Previously initialization logic was only able to access this through the `exports` or
+  `module.exports` references.
+
+  Note that for top level objects this is an alias so assigning to this variable will not update the
+  external reference. The default template is configured to warn in the event that it detects this
+  situation.
+
 # 2.0.0 Beta 1 - Oct 9th 2012
 
 Changes:
