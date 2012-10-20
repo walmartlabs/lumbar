@@ -109,7 +109,7 @@ describe('scope plugin', function() {
 
           resources.should.eql([
             'var foo;\n',
-            'moduleStart;var foo = exports',
+            'moduleStart;var foo = exports;',
             'js/init.js',
             'moduleEnd'
           ]);
@@ -148,7 +148,7 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'moduleStart;Application[\'module\'] = exports;var View = exports, View2 = exports',
+            'moduleStart;Application[\'module\'] = exports;var View = exports, View2 = exports;',
             'js/init.js',
             'moduleEnd'
           ]);
