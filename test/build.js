@@ -11,6 +11,14 @@ describe('build utils', function() {
       build.filterResource({platforms: ['web', 'iphone']}, {platform: 'iphone'}).should.be.true;
       build.filterResource({platforms: ['web', 'iphone']}, {platform: 'ipad'}).should.be.false;
     });
+    it('should filter on not platform', function() {
+      build.filterResource({platform: {not: 'ipad'}}, {platform: 'web'}).should.be.true;
+
+      build.filterResource({platform: {not: 'ipad'}}, {platform: 'ipad'}).should.be.false;
+
+      build.filterResource({platforms: {not: ['ipad', 'iphone']}}, {platform: 'web'}).should.be.true;
+      build.filterResource({platforms: {not: ['ipad', 'iphone']}}, {platform: 'ipad'}).should.be.false;
+    });
 
     it('should filter on package', function() {
       build.filterResource({}, {package: 'web'}).should.be.true;
@@ -20,6 +28,14 @@ describe('build utils', function() {
 
       build.filterResource({packages: ['web', 'iphone']}, {package: 'iphone'}).should.be.true;
       build.filterResource({packages: ['web', 'iphone']}, {package: 'ipad'}).should.be.false;
+    });
+    it('should filter on not package', function() {
+      build.filterResource({package: {not: 'ipad'}}, {package: 'web'}).should.be.true;
+
+      build.filterResource({package: {not: 'ipad'}}, {package: 'ipad'}).should.be.false;
+
+      build.filterResource({packages: {not: ['ipad', 'iphone']}}, {package: 'web'}).should.be.true;
+      build.filterResource({packages: {not: ['ipad', 'iphone']}}, {package: 'ipad'}).should.be.false;
     });
 
     it('should combine filters', function() {

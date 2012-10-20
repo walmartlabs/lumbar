@@ -49,6 +49,9 @@ Changes:
     }
   ```
 
+- Allow filtering of resources via not structures, i.e. `"platform": {"not": "web"}` and
+  `"packages": {"not": ["foo", "bar"]}`.
+
 - Significant rework of tests to focus more on unit testing with better edge case coverage
 
 # 2.0.0 Beta 1 - Oct 9th 2012
