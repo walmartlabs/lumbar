@@ -33,6 +33,24 @@ Changes:
   external reference. The default template is configured to warn in the event that it detects this
   situation.
 
+- Scope aliases
+
+  It's now possible to define aliases globally via the scope.alias config object and locally by
+  defining the alias object on specific modules. These alias will create local variable references
+  to any javascript statement, allowing for minimization of frequently used references.
+
+  Example global aliases:
+  ```javascript
+    "scope": {
+      "aliases": {
+        "View": "Application.View",
+        "Application": "Application"
+      }
+    }
+  ```
+
+- Significant rework of tests to focus more on unit testing with better edge case coverage
+
 # 2.0.0 Beta 1 - Oct 9th 2012
 
 Changes:
