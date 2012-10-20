@@ -52,6 +52,9 @@ Changes:
 - Allow filtering of resources via not structures, i.e. `"platform": {"not": "web"}` and
   `"packages": {"not": ["foo", "bar"]}`.
 
+- Allow filtering of resources based on combined module or not via the `combined` attribute.
+  Undefined for all modes, true for combined mode only, false for non-combined only.
+
 - Significant rework of tests to focus more on unit testing with better edge case coverage
 
 # 2.0.0 Beta 1 - Oct 9th 2012

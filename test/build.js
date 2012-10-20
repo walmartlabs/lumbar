@@ -38,6 +38,17 @@ describe('build utils', function() {
       build.filterResource({packages: {not: ['ipad', 'iphone']}}, {package: 'ipad'}).should.be.false;
     });
 
+    it('should filter on combined mode', function() {
+      build.filterResource({}, {combined: true}).should.be.true;
+      build.filterResource({}, {combined: false}).should.be.true;
+
+      build.filterResource({combined: true}, {combined: true}).should.be.true;
+      build.filterResource({combined: false}, {combined: false}).should.be.true;
+
+      build.filterResource({combined: true}, {combined: false}).should.be.false;
+      build.filterResource({combined: false}, {combined: true}).should.be.false;
+    });
+
     it('should combine filters', function() {
       build.filterResource({}, {package: 'web', platform: 'foo'}).should.be.true;
       build.filterResource({package: 'web', platform: 'foo'}, {package: 'web', platform: 'foo'}).should.be.true;
