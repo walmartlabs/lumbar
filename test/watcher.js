@@ -61,7 +61,7 @@ describe('watcher', function() {
   it('should notify on unlink', function(done) {
     var count = 0;
 
-    var testFile = outdir + '/application-namespace.json';
+    var testFile = outdir + '/styles.json';
     watcher.watchFile(testFile, [], function(type, fileName, sourceChange) {
       assert.equal(1, ++count);
       assert.equal('remove', type);
