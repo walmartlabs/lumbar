@@ -73,6 +73,24 @@ describe('update-externals plugin', function() {
       done();
     });
 
+    it('should output doctype', function(done) {
+      test(
+          {fileName: '1.html'},
+
+          '<!DOCTYPE html>\
+          <html lang="en">\
+            <head><title>Test Foo</title></head>\
+            <body><script type="text/javascript" src="module:module"></script></body>\
+          </html>',
+
+          '<!DOCTYPE html>\
+          <html lang="en">\
+            <head><title>Test Foo</title></head>\
+            <body><script type="text/javascript">var lumbarLoadPrefix = \'bar/\';</script><script type="text/javascript" src="bar/module.js"></script></body>\
+          </html>',
+          done);
+    });
+
     it('should insert loadPrefix module references', function(done) {
       config.loadPrefix = 'foo/';
       testScript('1.html', 'foo/bar/', done);
