@@ -123,6 +123,31 @@ describe('mixins', function() {
         done();
       });
     });
+    it('should apply mixins from mixin modules', function(done) {
+      var mixinModules = {
+        'baz': {
+          'scripts': ['foo.js'],
+          'styles': ['foo.css'],
+          'static': ['foo.html'],
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': ['baz'],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [{root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['bar', 'baz']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql([{src: 'bar/foo.js'}, 'baz.js']);
+        stripper(module.styles).should.eql([{src: 'bar/foo.css'}]);
+        stripper(module.static).should.eql([{src: 'bar/foo.html'}]);
+
+        done();
+      });
     });
   });
 
