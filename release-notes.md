@@ -1,4 +1,4 @@
-# 2.0.0 Beta 2
+# 2.0.0 Beta 2 - Under development
 
 Changes:
 
@@ -63,7 +63,10 @@ Changes:
 
 - Mixin support
 
-- Breaking: Stylus useNib flag
+- Stylus useNib flag
+
+  UPDATE: As of beta 2 this is no longer a breaking change. Includes referencing nib directly will
+  have this flag applied.
 
   Updates nib include in stylus to utilize a named attribute. This was necessary to support mixins
   of the nib plugin. Update path for nib users is to remove the `nib` entry from the styles includes
