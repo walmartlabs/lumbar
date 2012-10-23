@@ -7,6 +7,8 @@ describe('watch-manager', function() {
     var watch;
     beforeEach(function() {
       watch = new WatchManager();
+      sinon.stub(watch, '_exec');
+      watch.queue.should.be.empty;
     });
 
     it('should track changes', function() {
@@ -34,7 +36,6 @@ describe('watch-manager', function() {
     });
 
     it('should begin exec on push', function() {
-      sinon.stub(watch, '_exec');
       watch.pushChange({'config': true});
       watch._exec.callCount.should.equal(1);
     });
