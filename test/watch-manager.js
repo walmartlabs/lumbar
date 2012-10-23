@@ -1,4 +1,5 @@
-var WatchManager = require('../lib/watch-manager'),
+var sinon = require('sinon'),
+    WatchManager = require('../lib/watch-manager'),
     watcher = require('../lib/watcher');
 
 describe('watch-manager', function() {
@@ -30,6 +31,19 @@ describe('watch-manager', function() {
       watch.pushChange({'fileName': 'foo'});
       watch.pushChange({'fileName': 'foo'});
       watch.queue.should.eql([{'fileName': 'foo'}]);
+    });
+
+    it('should begin exec on push', function() {
+      sinon.stub(watch, '_exec');
+      watch.pushChange({'config': true});
+      watch._exec.callCount.should.equal(1);
+    });
+    it('should execute callbacks on flushQueue', function() {
+      var stub = sinon.stub();
+      watch.pushChange({callback: stub});
+      watch.pushChange({callback: stub});
+      watch.flushQueue();
+      stub.callCount.should.equal(2);
     });
   });
 });

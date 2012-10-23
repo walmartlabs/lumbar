@@ -34,6 +34,7 @@
     "mocha": "~1.5",
     "glob": "~3.0",
     "should": "*",
+    "sinon": "*",
     "wrench": "~1.2"
   },
   "bin": {
