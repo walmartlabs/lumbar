@@ -6,6 +6,12 @@ var _ = require('underscore'),
     should = require('should');
 
 describe('mixins', function() {
+  function stripper(resources) {
+    // Drop the mixin reference to make testing easier
+    _.each(resources, function(resource) { delete resource.mixin; });
+    return resources;
+  }
+
   describe('loading', function() {
     var readFileSync = fs.readFileSync,
         statSync = fs.statSync,
@@ -65,13 +71,58 @@ describe('mixins', function() {
       };
 
       lib.mixinExec(undefined, [{modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
-          context.config.moduleList().should.eql(['foo', 'baz']);
-          context.config.attributes.modules.foo.should.eql('bar');
-          context.config.attributes.modules.baz.should.eql('bat');
+        context.config.moduleList().should.eql(['foo', 'baz']);
+        context.config.attributes.modules.foo.should.eql('bar');
+        context.config.attributes.modules.baz.should.eql('bat');
 
-          done();
-        });
+        done();
+      });
+    });
+    it('should update paths for mixin modules', function(done) {
+      var modules = {
+        'baz': {
+          'scripts': ['foo.js'],
+          'styles': ['foo.css'],
+          'static': ['foo.html'],
+        }
+      };
 
+      lib.mixinExec(undefined, [{root: 'bar', modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+        context.config.moduleList().should.eql(['foo', 'baz']);
+
+        var module = context.config.attributes.modules.baz;
+        stripper(module.scripts).should.eql([{src: 'bar/foo.js'}]);
+        stripper(module.styles).should.eql([{src: 'bar/foo.css'}]);
+        stripper(module.static).should.eql([{src: 'bar/foo.html'}]);
+
+        done();
+      });
+    });
+    it('should apply mixins for mixin modules', function(done) {
+      var mixins = {
+        'baz': {
+          'scripts': ['foo.js'],
+          'styles': ['foo.css'],
+          'static': ['foo.html'],
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': ['baz']
+        }
+      };
+
+      lib.mixinExec(undefined, [{root: 'bar', modules: modules, mixins: mixins}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+        context.config.moduleList().should.eql(['foo', 'bar']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql([{src: 'bar/foo.js'}]);
+        stripper(module.styles).should.eql([{src: 'bar/foo.css'}]);
+        stripper(module.static).should.eql([{src: 'bar/foo.html'}]);
+
+        done();
+      });
+    });
     });
   });
 
@@ -299,11 +350,6 @@ describe('mixins', function() {
         }
       };
     });
-
-    function stripper(resources) {
-      // Drop the mixin reference to make testing easier
-      _.each(resources, function(resource) { delete resource.mixin; });
-    }
 
     it('should conditionally include platform mixins', function(done) {
       lib.mixinExec(module, [{mixins: mixins}], function(mixins, context) {
