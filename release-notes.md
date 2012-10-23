@@ -57,6 +57,10 @@ Changes:
 
 - Significant rework of tests to focus more on unit testing with better edge case coverage
 
+- Fixed mixin modules implementation. Properly links to mixin files. Mixin modules may now be
+  applied as mixins to other modules, have their own mixins, and be suppressed via false module
+  value.
+
 # 2.0.0 Beta 1 - Oct 9th 2012
 
 Changes:
