@@ -149,6 +149,31 @@ describe('mixins', function() {
         done();
       });
     });
+
+    it('should allow mixin module suppression', function(done) {
+      var mixinModules = {
+        'baz': {
+          'scripts': ['foo.js'],
+          'styles': ['foo.css'],
+          'static': ['foo.html'],
+        }
+      };
+      var modules = {
+        'baz': false,
+        'bar': {
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [{root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['bar']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql(['baz.js']);
+
+        done();
+      });
+    });
   });
 
   describe('modules', function() {
