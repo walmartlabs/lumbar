@@ -216,6 +216,10 @@ arise.on('output', function(status) {
   }
 });
 arise.on('error', function(err) {
+  if ((err.source || err).code === 'EMFILE') {
+    throw err.source || err;
+  }
+
   var message = err.stack || err.message;
   if (lastMessage !== message) {
     lastMessage = message;
@@ -235,4 +239,13 @@ worker.call(arise, packageName, moduleName, function(err, status) {
   if (err) {
     throw err;
   }
+});
+
+process.on('uncaughtException', function(err) {
+  if (err.code === 'EMFILE') {
+    console.error('\n\n\tEMFILE error: Too many files open at one time. Fix this by running\n\n\t\tulimit -n 9999\n\n');
+  } else {
+    console.error('Unhandled Exception:', err.stack || err);
+  }
+  process.exit(1);
 });
