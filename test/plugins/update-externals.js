@@ -106,5 +106,22 @@ describe('update-externals plugin', function() {
         testScript('for/bar/subdir/1.html', '../', done);
       });
     });
+
+    describe('embedded template support', function() {
+      function testTemplate(template, done) {
+        test(
+          {fileName: '1.html'},
+
+          '<script src="module:module"></script>' + template,
+
+          '<script type="text/javascript">var lumbarLoadPrefix = \'bar/\';</script>'
+            + '<script type="text/javascript" src="bar/module.js"></script>' + template,
+          done);
+      }
+
+      it('should support mustache style templates', function(done) {
+        testTemplate('<div>{{#name}}{{name}}{{/name}}</div>', done);
+      });
+    });
   });
 });
