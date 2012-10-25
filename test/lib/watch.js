@@ -11,11 +11,17 @@ exports.canWatch = function() {
   return !!fs.watch;
 };
 
+exports.appendSync = function(path, content) {
+  var fd = fs.openSync(path, 'a');
+  fs.writeSync(fd, content);
+  fs.closeSync(fd);
+};
+exports.appendSpaceSync = function(path) {
+  exports.appendSync(path, ' ');
+};
 exports.append = function(path, content) {
   setTimeout(function() {
-    var fd = fs.openSync(path, 'a');
-    fs.writeSync(fd, content);
-    fs.closeSync(fd);
+    exports.appendSync(path, content);
   }, 500);
 };
 exports.appendSpace = function(path) {
