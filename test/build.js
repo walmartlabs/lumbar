@@ -43,10 +43,12 @@ describe('build utils', function() {
       build.filterResource({}, {combined: false}).should.be.true;
 
       build.filterResource({combined: true}, {combined: true}).should.be.true;
-      build.filterResource({combined: false}, {combined: false}).should.be.true;
-
       build.filterResource({combined: true}, {combined: false}).should.be.false;
+      build.filterResource({combined: true}, {}).should.be.false;
+
       build.filterResource({combined: false}, {combined: true}).should.be.false;
+      build.filterResource({combined: false}, {combined: false}).should.be.true;
+      build.filterResource({combined: false}, {}).should.be.true;
     });
 
     it('should combine filters', function() {
