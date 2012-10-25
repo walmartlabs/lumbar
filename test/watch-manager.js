@@ -36,6 +36,39 @@ describe('watch-manager', function() {
       watch.queue.should.eql([{'fileName': 'foo'}]);
     });
 
+    describe('fileCache', function() {
+      beforeEach(function() {
+        sinon.stub(fu, 'resetCache');
+      });
+      afterEach(function() {
+        fu.resetCache.restore();
+      });
+
+      it('should reset fileCache on change', function() {
+        watch.pushChange({sourceChange: 'foo'});
+        fu.resetCache.callCount.should.equal(1);
+        fu.resetCache.calledWithExactly('foo').should.be.true;
+      });
+      it('should reset entire fileCache on config change', function() {
+        watch.pushChange({config: true});
+        fu.resetCache.callCount.should.equal(1);
+        fu.resetCache.calledWithExactly(undefined).should.be.true;
+      });
+      it('should reset parent fileCache on remove', function() {
+        watch.pushChange({sourceChange: 'foo/bar', type: 'remove'});
+        fu.resetCache.callCount.should.equal(2);
+        fu.resetCache.calledWithExactly('foo/bar').should.be.true;
+        fu.resetCache.calledWithExactly('foo').should.be.true;
+      });
+      it('should reset the file cache on ignored changes', function() {
+        watch.pushChange({'config': true});
+        watch.pushChange({sourceChange: 'bar'});
+        fu.resetCache.callCount.should.equal(2);
+        fu.resetCache.calledWithExactly(undefined).should.be.true;
+        fu.resetCache.calledWithExactly('bar').should.be.true;
+      });
+    });
+
     it('should reset on config changes', function() {
       sinon.stub(watch, 'reset');
       watch.pushChange({config: true});
