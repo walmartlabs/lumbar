@@ -1,9 +1,12 @@
-var fs = require('fs'),
+var _ = require('underscore'),
+    fs = require('fs'),
     fu = require('../../lib/fileUtil'),
     lib = require('./index'),
     lumbar = require('../../lib/lumbar'),
     should = require('should'),
+    sinon = require('sinon'),
     watcher = require('../../lib/watcher'),
+    WatchManager = require('../../lib/watch-manager'),
     wrench = require('wrench');
 
 exports.canWatch = function() {
@@ -43,6 +46,9 @@ exports.appendRapidSpace = function(path1, path2) {
 exports.mockWatch = function() {
   var original = watcher.watchFile;
 
+  sinon.stub(WatchManager.prototype, 'setupExec', function() {
+    return _.debounce(_.bind(this.flushQueue, this), 10);
+  });
   watcher.watchFile = function(filename, dependencies, callback) {
     function makeVirtual(filename) {
       if (!filename.virtual) {
@@ -60,6 +66,7 @@ exports.mockWatch = function() {
       watcher.trigger(type, filename);
     },
     cleanup: function() {
+      WatchManager.prototype.setupExec.restore();
       watcher.watchFile = original;
     }
   };
@@ -122,7 +129,7 @@ function checkOutput(operations, expectedFiles, arise, options, cleanup) {
 
     seenFiles = seenFiles.sort();
     expectedFiles = expectedFiles.sort();
-    seenFiles.should.eql(expectedFiles, 'watchFile: seen file list matches');
+    seenFiles.should.eql(expectedFiles, 'watchFile: seen file list matches ' + options.outdir);
 
     if (options.expectedDir) {
       lib.assertExpected(options.outdir, options.expectedDir, 'watchfile: ' + options.outdir);
