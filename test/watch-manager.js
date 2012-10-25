@@ -1,16 +1,17 @@
-var sinon = require('sinon'),
+var fu = require('../lib/fileUtil'),
+    sinon = require('sinon'),
     WatchManager = require('../lib/watch-manager'),
     watcher = require('../lib/watcher');
 
 describe('watch-manager', function() {
-  describe('change queue', function() {
-    var watch;
-    beforeEach(function() {
-      watch = new WatchManager();
-      sinon.stub(watch, '_exec');
-      watch.queue.should.be.empty;
-    });
+  var watch;
+  beforeEach(function() {
+    watch = new WatchManager();
+    sinon.stub(watch, '_exec');
+    watch.queue.should.be.empty;
+  });
 
+  describe('#pushChange', function() {
     it('should track changes', function() {
       watch.queue.should.be.empty;
       watch.pushChange({'foo': 'bar'});
@@ -35,10 +36,18 @@ describe('watch-manager', function() {
       watch.queue.should.eql([{'fileName': 'foo'}]);
     });
 
-    it('should begin exec on push', function() {
+    it('should reset on config changes', function() {
+      sinon.stub(watch, 'reset');
+      watch.pushChange({config: true});
+      watch.reset.callCount.should.equal(1);
+    });
+    it('should begin exec', function() {
       watch.pushChange({'config': true});
       watch._exec.callCount.should.equal(1);
     });
+  });
+
+  describe('#flushQueue', function() {
     it('should execute callbacks on flushQueue', function() {
       var stub = sinon.stub();
       watch.pushChange({callback: stub});
