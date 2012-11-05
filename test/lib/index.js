@@ -46,6 +46,25 @@ exports.assertExpected = function(outdir, expectedDir, configFile) {
   });
 };
 
+exports.mockStat = function(config) {
+  var stat = fu.stat;
+  before(function() {
+    fu.stat = function(file, callback) {
+      if (config.fileFilter && config.fileFilter.test(file)) {
+        callback(new Error());
+      } else {
+        callback(undefined, {});
+      }
+    };
+  });
+  after(function() {
+    fu.stat = stat;
+  });
+  beforeEach(function() {
+    config.fileFilter = config.defaultFilter;
+  });
+};
+
 exports.mockFileList = function(config) {
   var fileList = fu.fileList;
   before(function() {
