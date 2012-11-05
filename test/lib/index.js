@@ -128,7 +128,7 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
 
 exports.mixinExec = function(module, mixins, config, callback) {
   var plugin = require('../../lib/plugin').create({});
-  plugin.initialize({ attributes: {} });
+  plugin.initialize({ attributes: {plugins: config && config.plugins} });
 
   if (_.isFunction(config)) {
     callback = config;
@@ -180,7 +180,7 @@ exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
         context.moduleResources = resources;
         context.moduleCache = {};
 
-        plugin = context.plugins.get(plugin);
+        plugin = context.plugins.get(plugin) || plugin;
         if (!plugin.module) {
           return callback(context.moduleResources, context);
         }
