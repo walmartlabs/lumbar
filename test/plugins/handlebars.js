@@ -28,7 +28,7 @@ describe('handlebars plugin', function() {
       };
 
       lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[1].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', template: true});
+        resources[1].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', mixin: undefined, template: true});
 
         resources[1](context, function(err, data) {
           if (err) {

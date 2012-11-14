@@ -95,8 +95,8 @@ describe('template plugin', function() {
         build.loadResources(context, function(err, resources) {
           resources.should.eql([
             {src: 'js/views/test.js'},
-            {src: 'foo.handlebars', name: 'foo.handlebars', template: true},
-            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', template: true}
+            {src: 'foo.handlebars', name: 'foo.handlebars', mixin: undefined, template: true},
+            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', mixin: undefined, template: true}
           ]);
           done();
         });
