@@ -1,12 +1,18 @@
 var _ = require('underscore'),
     assert = require('assert'),
     build = require('../../lib/build'),
+    fs = require('fs'),
     lib = require('../lib'),
     should = require('should');
 
 describe('handlebars plugin', function() {
   // TODO : More explict test for normal output
   // TODO : Precompiled test with mocks
+  var readFile = fs.readFile;
+  after(function() {
+    fs.readFile = readFile;
+  });
+
 
   describe('directory include', function() {
     it('should drop trailing slashes in template names', function(done) {
@@ -42,6 +48,45 @@ describe('handlebars plugin', function() {
   });
 
   describe('mixin', function() {
+    it('should output without mixin path', function(done) {
+      //fu.lookupPath('');
+
+      fs.readFile = function(path, callback) {
+        callback(undefined, 'foo\n');
+      };
+
+
+      var mixins = [{
+        root: 'mixinRoot/',
+        mixins: {
+          'handlebars': {
+            'scripts': [
+              'foo.handlebars'
+            ]
+          }
+        }
+      }];
+
+      var config = {
+        'modules': {
+          'test': {
+            'mixins': ['handlebars']
+          }
+        }
+      };
+
+      lib.pluginExec('handlebars', 'scripts', config.modules.test, mixins, config, function(resources, context) {
+        context.loadResource(resources[0], function(err, data) {
+          if (err) {
+            throw err;
+          }
+
+          data.content.should.eql('/* handsfree : foo.handlebars*/\ntemplates[\'foo.handlebars\'] = Handlebars.compile(\'foo\\n\');\n');
+          done();
+        });
+      });
+    });
+
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
