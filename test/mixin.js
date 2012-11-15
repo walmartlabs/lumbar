@@ -3,7 +3,9 @@ var _ = require('underscore'),
     fu = require('../lib/fileUtil'),
     fs = require('fs'),
     lib = require('./lib'),
-    should = require('should');
+    should = require('should'),
+    sinon = require('sinon'),
+    watch = require('./lib/watch');
 
 describe('mixins', function() {
   function stripper(resources) {
@@ -432,6 +434,59 @@ describe('mixins', function() {
 
           done();
         });
+    });
+  });
+
+  describe('watch', function() {
+    var config = {};
+    lib.mockFileList(config);
+
+    var mock;
+    beforeEach(function() {
+      var readFile = fs.readFile;
+
+      mock = watch.mockWatch();
+
+      sinon.stub(fs, 'readFileSync', function(path) {
+        return JSON.stringify({
+          modules: {
+            module: {scripts: ['js/views/test.js']}
+          },
+          mixins: 'mixin'
+        });
+      });
+
+      sinon.stub(fs, 'readFile', function(path, callback) {
+        if (/test.(js|foo)$/.test(path)) {
+          return callback(undefined, 'foo');
+        } else {
+          return readFile.apply(this, arguments);
+        }
+      });
+    });
+    afterEach(function() {
+      fs.readFileSync.restore();
+      fs.readFile.restore();
+      mock.cleanup();
+    });
+
+
+    function runWatchTest(srcdir, config, operations, expectedFiles, done) {
+      watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, {}, done);
+    }
+
+    it('should rebuild on config change', function(done) {
+      var expectedFiles = ['/module.js', '/module.js'],
+          operations = {
+            1: function(testdir) {
+              mock.trigger('change', testdir + 'mixin/lumbar.json');
+            }
+          };
+
+      runWatchTest.call(this,
+        'test/artifacts', 'lumbar.json',
+        operations, expectedFiles,
+        done);
     });
   });
 
