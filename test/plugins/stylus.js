@@ -129,7 +129,7 @@ describe('stylus plugin', function() {
         if (path === 'mixinRoot/mixin-import.styl') {
           read.push(path);
           return '@import "foo"\n';
-        } else if (/\.styl|png$/.test(path) && !/node_modules[\\\/]stylus/.test(path)) {
+        } else if (/\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
           read.push(path);
           return '.test\n  background url("img.png")\n';
         } else {
@@ -137,7 +137,7 @@ describe('stylus plugin', function() {
         }
       };
       fs.statSync = function(path) {
-        if (!/\.styl|png$/.test(path) || /node_modules[\\\/]stylus/.test(path)) {
+        if (!/\.styl|png$/.test(path) || /functions(?:[\\\/]index)?.styl/.test(path)) {
           return statSync.apply(this, arguments);
         } else if (/mixinRoot/.test(path)) {
           if (/stylusRoot/.test(path)) {
