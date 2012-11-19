@@ -8,6 +8,11 @@ Changes:
   configs for a given mode. When false will ignore changes to the inputs
   when undefined will continue the default behavior of separate rebuilds.
 
+- Optimize stylus builds when using multiple pixel densities.
+
+  This saves about 50% of the developer build time for mobile.walmart.com.
+
+
 # 2.0.0 Beta 2 - Under development
 
 Changes:
