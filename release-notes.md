@@ -1,3 +1,13 @@
+# 2.0.0 Beta 5 - Under development
+
+Changes:
+
+- Allow file config independent rebuilds
+
+  Adds isPrimary flag to the file config. When true this will rebuild all
+  configs for a given mode. When false will ignore changes to the inputs
+  when undefined will continue the default behavior of separate rebuilds.
+
 # 2.0.0 Beta 2 - Under development
 
 Changes:
