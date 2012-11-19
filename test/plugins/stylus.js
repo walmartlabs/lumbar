@@ -193,16 +193,11 @@ describe('stylus plugin', function() {
             'mixinRoot/stylusRoot/img.png',
             'mixinRoot/img.png',
             'bar1.styl',
-            'mixinRoot/stylusRoot/img.png',
-            'mixinRoot/img.png',
             'mixinRoot/stylusRoot/file2.styl',
             'mixinRoot/file2.styl',
-            'mixinRoot/stylusRoot/img.png',
-            'mixinRoot/img.png',
             'file1.styl',
             'img.png',
-            'file2.styl',
-            'img.png'
+            'file2.styl'
           ]);
           done();
         });
