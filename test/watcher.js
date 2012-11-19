@@ -10,6 +10,8 @@ if (!fs.watch) {
 }
 
 describe('watcher', function() {
+  this.timeout(5000);
+
   var outdir;
 
   before(function() {
@@ -22,8 +24,6 @@ describe('watcher', function() {
   });
 
   it('should not notify on file read', function(done) {
-    this.timeout(1000);
-
     watcher.watchFile(outdir + '/index.html', [], function(type, fileName, sourceChange) {
       assert.fail('Watch event occurred.');
     });
@@ -122,7 +122,7 @@ describe('watcher', function() {
               fs.close(fd);
             });
           });
-        }, 100);
+        }, 1500);
       });
     }, 100);
   });
