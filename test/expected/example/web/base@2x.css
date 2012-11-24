@@ -3,6 +3,7 @@ button,
 [type='button'] {
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
   background: none;
 }
 th {

@@ -22,7 +22,7 @@
     "handlebars": "~1.0",
     "htmlparser": "~1.7",
     "jsdom-nocontextifiy": "~0.2",
-    "nib": "~0.8",
+    "nib": "~0.9",
     "optimist": "~0.3",
     "stylus": "~0.30",
     "stylus-images": "~1.0",
