@@ -18,6 +18,8 @@ var LONG_USAGE="lumbar help\n"+
 "--package:    represents the name of a corresponding package listed\n"+
 "              under 'packages' in lumbarFile.\n"+
 "\n"+
+"--module:     build only a specific module. May be defined multiple times to build multiple.\n"+
+"\n"+
 "--minimize:   to shrink the resultant file.\n"+
 "\n"+
 "--config:     is the name and path to the lumbar config file, if\n"+
@@ -37,7 +39,7 @@ var LONG_USAGE="lumbar help\n"+
 
 var configFile;
 var packageName;
-var moduleName;
+var modules = [];
 var minimize = false;
 var build = true; // build by default.
 var watch = false;
@@ -70,8 +72,9 @@ while (args.length) {
       if (!packageName) throw new Error('--package <name> required');
       break;
     case '--module':
-      moduleName = args.shift();
+      var moduleName = args.shift();
       if (!moduleName) throw new Error('--module <name> required');
+      modules.push(moduleName);
       break;
     case '-m':
     case '--minimize':
@@ -235,7 +238,7 @@ arise.on('error', function(err) {
 });
 
 // execute either watch() or build() and pass lumbar as the context.
-worker.call(arise, packageName, moduleName, function(err, status) {
+worker.call(arise, packageName, modules, function(err, status) {
   if (err) {
     throw err;
   }
