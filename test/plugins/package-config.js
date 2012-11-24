@@ -1,19 +1,26 @@
 var _ = require('underscore'),
+    fs = require('fs'),
     lib = require('../lib'),
-    should = require('should');
+    should = require('should'),
+    sinon = require('sinon'),
+    watch = require('../lib/watch');
 
 describe('package-config plugin', function() {
-  var module = {
-    scripts: [{'package-config': true}],
-    name: 'foo'
-  };
-  var config = {
-    packageConfig: "App.config",
-    scope: 'none'
-  };
+  var module, config;
+
+  beforeEach(function() {
+    module = {
+      scripts: [{'package-config': true}],
+      name: 'foo'
+    };
+    config = {
+      packageConfig: "App.config",
+      scope: 'none'
+    };
+  });
 
   it('should inlcude package-config resource', function(done) {
-    lib.pluginExec('package-config', 'scripts', module, [], config, function(resources, context) {
+    lib.pluginExec('package-config', 'scripts', module, [], config, function(resources) {
       _.pluck(resources, 'originalResource').should.eql([{'package-config': true}]);
       done();
     });
@@ -45,10 +52,62 @@ describe('package-config plugin', function() {
 
         data.should.eql({
           data: 'App.config = {\n  "port": 8080,\n  "securePort": 8081\n}\n;\n',
+          inputs: [context.options.packageConfigFile],
           noSeparator: true
         });
         done();
       });
+    });
+  });
+
+  describe('watch', function() {
+    var mock;
+    beforeEach(function() {
+      var readFile = fs.readFile;
+
+      mock = watch.mockWatch();
+
+      sinon.stub(fs, 'readFileSync', function() {
+        return JSON.stringify({
+          modules: {
+            module: {scripts: [{'package-config': true}]}
+          }
+        });
+      });
+
+      sinon.stub(fs, 'readFile', function(path, callback) {
+        if (/test.(js|foo)$/.test(path)) {
+          return callback(undefined, 'foo');
+        } else {
+          return readFile.apply(this, arguments);
+        }
+      });
+    });
+    afterEach(function() {
+      fs.readFileSync.restore();
+      fs.readFile.restore();
+      mock.cleanup();
+    });
+
+
+    function runWatchTest(srcdir, config, operations, expectedFiles, done) {
+      var options = {packageConfigFile: 'config/dev.json'};
+
+      watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
+    }
+
+    it('should rebuild modules on config change', function(done) {
+      var expectedFiles = ['/module.js', '/module.js'],
+          operations = {
+            1: function(testdir) {
+              mock.trigger('change', testdir + 'config/dev.json');
+            }
+          };
+
+      runWatchTest.call(this,
+        'test/artifacts', 'lumbar.json',
+        operations, expectedFiles,
+        done);
     });
   });
 });

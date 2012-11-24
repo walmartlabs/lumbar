@@ -2,6 +2,9 @@
 
 Changes:
 
+- Watch support for mixin config. Changes to mixin config files will now rebuild the project
+  when in watch mode.
+
 - Allow file config independent rebuilds
 
   Adds isPrimary flag to the file config. When true this will rebuild all
