@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "async": "0.1.16",
+    "esprima": "~1.0",
     "growl": "~1.4",
     "handlebars": "~1.0",
     "htmlparser": "~1.7",
