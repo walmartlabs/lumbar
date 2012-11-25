@@ -1,7 +1,9 @@
 var _ = require('underscore'),
     fs = require('fs'),
     fu = require('../../lib/fileUtil'),
-    lib = require('../lib');
+    lib = require('../lib'),
+    sinon = require('sinon'),
+    watch = require('../lib/watch');
 
 describe('stylus plugin', function() {
   var readFileSync = fs.readFileSync,
@@ -10,12 +12,12 @@ describe('stylus plugin', function() {
   beforeEach(function() {
     read = [];
   });
-  after(function() {
-    fs.readFileSync = readFileSync;
-    fs.statSync = statSync;
-  });
 
   describe('plugins', function() {
+    after(function() {
+      fs.readFileSync = readFileSync;
+      fs.statSync = statSync;
+    });
     it('should allow for custom plugins', function(done) {
       fu.lookupPath('');
 
@@ -79,7 +81,102 @@ describe('stylus plugin', function() {
     });
   });
 
+  describe('watch', function() {
+    var mock,
+        content = 'foo\n  display none\n';
+    beforeEach(function() {
+      mock = watch.mockWatch();
+
+      sinon.stub(fs, 'readFileSync', function(path) {
+        if (/test\.styl$/.test(path)) {
+          return content;
+        } else if (/lumbar\.json$/.test(path)) {
+          return JSON.stringify({
+            modules: {
+              module: {
+                mixins: ['module']
+              }
+            },
+            mixins: ['mixin/mixin.json']
+          });
+        } else if (/mixin\.json$/.test(path)) {
+          return JSON.stringify({
+            modules: {
+              module: {styles: ['style/test.styl']}
+            },
+            styles: {useNib: true}
+          });
+        } else {
+          return readFileSync.apply(this, arguments);
+        }
+      });
+      sinon.stub(fs, 'statSync', function(path) {
+        if (!/test\.styl$/.test(path)) {
+          return statSync.apply(this, arguments);
+        }
+      });
+    });
+    afterEach(function() {
+      fs.readFileSync.restore();
+      fs.statSync.restore();
+      mock.cleanup();
+    });
+
+
+    function runWatchTest(srcdir, config, operations, expectedFiles, done) {
+      var options = {packageConfigFile: 'config/dev.json'};
+
+      watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
+    }
+
+    it('should continue watching after a compile error', function(done) {
+      var expectedFiles = ['/module.css', 'error', '/module.css'],
+          operations = {
+            1: function(testdir) {
+              content = '  {yo couch}\n{really}';
+              fu.resetCache();
+              mock.trigger('change', testdir + 'style/test.styl');
+            },
+            2: function(testdir) {
+              content = 'foo\n  display none\n';
+              fu.resetCache();
+              mock.trigger('change', testdir + 'style/test.styl');
+            }
+          };
+
+      runWatchTest.call(this,
+        'test/artifacts', 'lumbar.json',
+        operations, expectedFiles,
+        done);
+    });
+
+    it('should continue watching after a compile error in mixin', function(done) {
+      var expectedFiles = ['/module.css', 'error', '/module.css'],
+          operations = {
+            1: function(testdir) {
+              content = '  {yo couch}\n{really}';
+              fu.resetCache();
+              mock.trigger('change', testdir + 'style/test.styl');
+            },
+            2: function(testdir) {
+              content = 'foo\n  display none\n';
+              fu.resetCache();
+              mock.trigger('change', testdir + 'style/test.styl');
+            }
+          };
+
+      runWatchTest.call(this,
+        'test/artifacts', 'lumbar.json',
+        operations, expectedFiles,
+        done);
+    });
+  });
+
   describe('mixin', function() {
+    afterEach(function() {
+      fs.readFileSync = readFileSync;
+      fs.statSync = statSync;
+    });
     it('should include special values from mixins', function(done) {
       var mixins = [
         {

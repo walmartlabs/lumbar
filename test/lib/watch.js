@@ -84,7 +84,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
 
   wrench.copyDirSyncRecursive(srcdir, testdir);
 
-  function complete(err) {
+  function complete() {
     process.removeListener('uncaughtException', complete);
     done();
   }
@@ -92,13 +92,16 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
 
   options.outdir = outdir;
   var arise = lumbar.init(testdir + '/' + config, options);
-  arise.on('output', checkOutput(operations, expectedFiles, arise, options, function() {
+
+  var handler = checkOutput(operations, expectedFiles, arise, options, function() {
     // Cleanup (Do cleanup here so the files remain for the failure case)
     wrench.rmdirSyncRecursive(testdir);
     wrench.rmdirSyncRecursive(outdir);
 
     complete();
-  }));
+  });
+  arise.on('error', handler);
+  arise.on('output', handler);
 
   arise.watch(undefined, function(err) {
     err = err || new Error('Callback called without fatal error');
@@ -110,10 +113,15 @@ function checkOutput(operations, expectedFiles, arise, options, cleanup) {
   var seenFiles = [];
 
   return function(status) {
-    var statusFile = status.fileName.substring(options.outdir.length);
+    var statusFile
+    if (status instanceof Error) {
+      statusFile = 'error';
+    } else {
+      statusFile = status.fileName.substring(options.outdir.length);
+    }
     if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
       arise.unwatch();
-      should.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
+      should.fail(undefined, statusFile,  'watchFile:' + statusFile + ': missing from expected list');
     } else {
       seenFiles.push(statusFile);
     }
