@@ -1,18 +1,82 @@
 var _ = require('underscore'),
-    assert = require('assert'),
-    build = require('../../lib/build'),
     fs = require('fs'),
     fu = require('../../lib/fileUtil'),
-    lib = require('../lib'),
-    should = require('should');
+    lib = require('../lib');
 
 describe('stylus plugin', function() {
   var readFileSync = fs.readFileSync,
       statSync = fs.statSync,
-      read = [];
+      read;
+  beforeEach(function() {
+    read = [];
+  });
   after(function() {
     fs.readFileSync = readFileSync;
     fs.statSync = statSync;
+  });
+
+  describe('plugins', function() {
+    it('should allow for custom plugins', function(done) {
+      fu.lookupPath('');
+
+      fs.readFileSync = function(path) {
+        if (/\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
+          read.push(path);
+          return '.test\n  display none\n';
+        } else {
+          return readFileSync.apply(this, arguments);
+        }
+      };
+      fs.statSync = function(path) {
+        if (!/\.styl|png$/.test(path) || /functions(?:[\\\/]index)?.styl/.test(path)) {
+          return statSync.apply(this, arguments);
+        }
+      };
+
+      var seen = [];
+      var config = {
+        'modules': {
+          'test': {
+            'styles': ['file1.styl']
+          }
+        },
+        plugins: [
+          'stylus',
+          {
+            mode: 'styles',
+            priority: 25,
+            module: function(context, next, complete) {
+              next(function(err) {
+                if (err) {
+                  throw err;
+                }
+
+                _.each(context.moduleResources, function(resource) {
+                  if (resource.stylus) {
+                    resource.plugins.push(function(compiler) {
+                      seen.push(compiler);
+                    });
+                  }
+                });
+                complete(err);
+              });
+            }
+          }
+        ]
+      };
+
+      lib.pluginExec(undefined, 'styles', config.modules.test, [], config, function(resources, context) {
+        context.loadResource(resources[0], function(err) {
+          if (err) {
+            throw err;
+          }
+
+          seen.length.should.eql(1);
+          seen[0].evaluator.should.exist;
+          done();
+        });
+      });
+    });
   });
 
   describe('mixin', function() {
@@ -180,7 +244,7 @@ describe('stylus plugin', function() {
       };
 
       lib.pluginExec('stylus', 'styles', config.modules.test, mixins, config, function(resources, context) {
-        context.loadResource(resources[0], function(err, data) {
+        context.loadResource(resources[0], function(err) {
           if (err) {
             throw err;
           }
