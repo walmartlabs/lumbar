@@ -18,11 +18,10 @@
   },
   "dependencies": {
     "async": "0.1.16",
+    "cheerio": "~0.10",
     "esprima": "~1.0",
     "growl": "~1.4",
     "handlebars": "~1.0",
-    "htmlparser": "~1.7",
-    "jsdom-nocontextifiy": "~0.2",
     "nib": "~0.9",
     "optimist": "~0.3",
     "stylus": "~0.30",
