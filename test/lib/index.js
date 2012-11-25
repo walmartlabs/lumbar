@@ -1,8 +1,8 @@
 var _ = require('underscore'),
-    assert = require('assert'),
     build = require('../../lib/build'),
     Config = require('../../lib/config'),
     Context = require('../../lib/context'),
+    EventEmitter = require('events').EventEmitter,
     fu = require('../../lib/fileUtil'),
     fs = require('fs'),
     glob = require('glob'),
@@ -146,8 +146,8 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
 };
 
 exports.mixinExec = function(module, mixins, config, callback) {
-  var plugin = require('../../lib/plugin').create({});
-  plugin.initialize({ attributes: {plugins: config && config.plugins} });
+  var plugin = require('../../lib/plugin').create({ignoreCorePlugins: !!(config && config.plugins)});
+  plugin.initialize({ attributes: { plugins: config && config.plugins} });
 
   if (_.isFunction(config)) {
     callback = config;
@@ -156,6 +156,7 @@ exports.mixinExec = function(module, mixins, config, callback) {
 
   config = Config.create(_.extend({modules: {module: module}}, config));
   var context = new Context({module: module}, config, plugin, new Mixins({mixins: mixins}));
+  context.event = new EventEmitter();
   context.options = {};
   context.configCache = {};
 
@@ -200,17 +201,22 @@ exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
         context.moduleResources = resources;
         context.moduleCache = {};
 
+        function _callback(err) {
+          if (err) {
+            throw err;
+          }
+          callback(context.moduleResources, context);
+        }
+
+        if (!plugin) {
+          return context.plugins.module(context, _callback);
+        }
+
         plugin = context.plugins.get(plugin) || plugin;
         if (!plugin.module) {
           return callback(context.moduleResources, context);
         }
-        plugin.module(context, function(complete) { complete(); }, function(err) {
-          if (err) {
-            throw err;
-          }
-
-          callback(context.moduleResources, context);
-        });
+        plugin.module(context, function(complete) { complete(); }, _callback);
       });
     });
   });
