@@ -1,7 +1,7 @@
+/*jshint multistr: true */
 var _ = require('underscore'),
     lib = require('../lib'),
-    updateExternals = require('../../lib/plugins/update-externals'),
-    should = require('should');
+    updateExternals = require('../../lib/plugins/update-externals');
 
 describe('update-externals plugin', function() {
   var module, config;
@@ -25,12 +25,11 @@ describe('update-externals plugin', function() {
         _.extend(context, contextArgs);
 
         updateExternals.updateHtmlReferences(context, content, function(err, src) {
-          if (err) {
-            throw err;
+          if (!err) {
+            src.should.equal(expected);
           }
 
-          src.should.equal(expected);
-          done();
+          done(err);
         });
       });
     }
@@ -61,16 +60,16 @@ describe('update-externals plugin', function() {
     });
 
     it('should error on unknown script module', function(done) {
-      (function() {
-        test({fileName: '1.hml'}, '<script src="module:go ... San Diego"></script>');
-      }).should.throw('Unknown module "go ... San Diego"');
-      done();
+      test({fileName: '1.hml'}, '<script src="module:go ... San Diego"></script>', undefined, function(err) {
+        err.message.should.eql('Unknown module "go ... San Diego"');
+        done();
+      });
     });
     it('should error on unknown style module', function(done) {
-      (function() {
-        test({fileName: '1.hml'}, '<link href="module:go ... San Diego">');
-      }).should.throw('Unknown module "go ... San Diego"');
-      done();
+      test({fileName: '1.hml'}, '<link href="module:go ... San Diego">', undefined, function(err) {
+        err.message.should.eql('Unknown module "go ... San Diego"');
+        done();
+      });
     });
 
     it('should output doctype', function(done) {
@@ -119,6 +118,9 @@ describe('update-externals plugin', function() {
           done);
       }
 
+      it.skip('should support ejs style templates', function(done) {
+        testTemplate('<div><%= name %></div>', done);
+      });
       it('should support mustache style templates', function(done) {
         testTemplate('<div>{{#name}}{{name}}{{/name}}</div>', done);
       });

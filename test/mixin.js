@@ -44,23 +44,27 @@ describe('mixins', function() {
       fs.statSync = statSync;
     });
 
-    it('should load direct mixin file references', function() {
+    it('should load direct mixin file references', function(done) {
       lib.mixinExec({}, ['mixin/file.json'], function(mixins, context) {
         read.should.eql(['mixin/file.json']);
 
         mixins.configs.length.should.eql(1);
         mixins.configs[0].root.should.equal('mixin/');
         context.config.attributes.foo.should.equal('bar');
+
+        done();
       });
     });
 
-    it('should load mixin directory references', function() {
+    it('should load mixin directory references', function(done) {
       lib.mixinExec({}, ['mixin'], function(mixins, context) {
         read.should.eql(['mixin/lumbar.json']);
 
         mixins.configs.length.should.eql(1);
         mixins.configs[0].root.should.equal('mixin/');
         context.config.attributes.foo.should.equal('bar');
+
+        done();
       });
     });
   });
