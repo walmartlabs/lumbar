@@ -8,6 +8,12 @@
       "platforms": [ "iphone" ],
       "modules": [ "base", "home" ],
       "combine": true
+    },
+    "named": {
+      "platforms": [ "iphone" ],
+      "modules": [ "base", "home" ],
+      "name": "native-named",
+      "combine": true
     }
   },
   "modules": {
