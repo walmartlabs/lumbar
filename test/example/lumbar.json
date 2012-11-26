@@ -75,6 +75,9 @@
       "web": [ 1, 2 ]
     },
     "useNib": true,
+    "config": [
+      "styles/config.json"
+    ],
     "includes": [
       "styles/include/global.styl"
     ]
