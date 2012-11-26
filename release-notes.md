@@ -1,4 +1,4 @@
-# 2.0.0 Beta 5 - Under development
+# 2.0.0 Beta 5 - Nov 25th 2012
 
 Changes:
 
@@ -15,8 +15,45 @@ Changes:
 
   This saves about 50% of the developer build time for mobile.walmart.com.
 
+- stylus-config plugin for sharing variables between stylus and javascript
 
-# 2.0.0 Beta 2 - Under development
+- Allow lumbar plugins to interact with the stylus compiler at runtime
+
+  Allows plugins to register callbacks on the stylus generator using the `plugins` field. This
+  mechanism allows additional plugins and source modifications on stylus compilation steps. The
+  stylus-config plugin provides an example of this API's usage.
+
+- Optimize plugin execution loop
+
+  The plugin executor now enforces async execution of async callbacks. This may break plugins that
+  incorrectly took advantage of non-contract synchronous behavior in the app.
+
+- Switch to cheerio for update-externals parsing
+
+- Improve various error messages
+
+- Watch package config files for changes
+
+- CLI: Allow multiple --module parameters
+
+
+# 2.0.0 Beta 4 - Nov 5th 2012
+
+Changes:
+
+- Allow specific modules to disable particular aliases.
+
+
+# 2.0.0 Beta 3 - Oct 25th 2012
+
+Changes:
+
+- Improves EMFILE error handling.
+
+- Watch unit test library updates
+
+
+# 2.0.0 Beta 2 - Oct 23rd 2012
 
 Changes:
 
