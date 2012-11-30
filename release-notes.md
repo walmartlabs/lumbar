@@ -1,3 +1,10 @@
+Change:
+
+- Removed precompiled template template.
+
+  Moving forward template templates should use `{{handlebarsCall}}` to differentiate between
+  precompiled and client compiled mode.
+
 # 2.0.0 Beta 5 - Nov 25th 2012
 
 Changes:

@@ -1,9 +1,8 @@
-var _ = require('underscore'),
-    assert = require('assert'),
-    build = require('../../lib/build'),
-    fs = require('fs'),
+var fs = require('fs'),
+    fu = require('../../lib/fileUtil'),
+    handlebars = require('handlebars'),
     lib = require('../lib'),
-    should = require('should');
+    sinon = require('sinon');
 
 describe('handlebars plugin', function() {
   // TODO : More explict test for normal output
@@ -12,7 +11,50 @@ describe('handlebars plugin', function() {
   after(function() {
     fs.readFile = readFile;
   });
+  beforeEach(function() {
+    fu.resetCache();
+  });
 
+  describe('output', function() {
+    function doIt(config, done) {
+      var module = {
+        scripts: [
+          'js/views/test.js'
+        ]
+      };
+
+      lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
+        resources[1](context, function(err, data) {
+          if (err) {
+            throw err;
+          }
+          done(data);
+        });
+      });
+    }
+      var config = {
+    it('should precompile', function(done) {
+      var config = {
+        templates: {
+          'js/views/test.js': [__dirname + '/../artifacts/templates/'],
+          precompile: true
+        }
+      };
+
+      sinon.stub(handlebars, 'precompile', function() { return 'wooo!'; });
+      doIt(config, function(data) {
+        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        data.should.eql({
+          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.template(wooo!);\n',
+          noSeparator: true
+        });
+
+        handlebars.precompile.restore();
+        done();
+      });
+    });
+  });
 
   describe('directory include', function() {
     it('should drop trailing slashes in template names', function(done) {
