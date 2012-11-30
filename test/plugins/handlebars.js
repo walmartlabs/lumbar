@@ -32,7 +32,24 @@ describe('handlebars plugin', function() {
         });
       });
     }
+    it('should strip root name', function(done) {
       var config = {
+        templates: {
+          root: __dirname + '/../artifacts/templates/',
+          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+        }
+      };
+
+      doIt(config, function(data) {
+        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        data.should.eql({
+          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
+          noSeparator: true
+        });
+        done();
+      });
+    });
     it('should precompile', function(done) {
       var config = {
         templates: {

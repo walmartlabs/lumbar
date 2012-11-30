@@ -1,5 +1,7 @@
 Change:
 
+- Add `template.root` property for template prefix stripping.
+
 - Removed precompiled template template.
 
   Moving forward template templates should use `{{handlebarsCall}}` to differentiate between
