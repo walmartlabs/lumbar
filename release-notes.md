@@ -1,3 +1,5 @@
+# 2.0.0 Beta 6 - Dec 4th 2012
+
 Change:
 
 - Add `template.root` property for template prefix stripping.
