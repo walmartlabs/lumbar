@@ -199,7 +199,39 @@ describe('mixins', function() {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
-        console.log(module.scripts);
+        stripper(module.scripts).should.eql([{src: 'bar/bar.js'}]);
+
+        done();
+      });
+    });
+    it('should update paths for nested mixin modules', function(done) {
+      var mixins = [
+        {
+          name: 'foo',
+          mixins: {
+            foo: {
+              scripts: [
+                {src: 'bar.js', mixin: 'bar'}
+              ]
+            }
+          },
+          root: 'foo'
+        },
+        {
+          name: 'bar',
+          root: 'bar'
+        }
+      ];
+      var modules = {
+        'foo': {
+          mixins: ['foo']
+        }
+      };
+
+      lib.mixinExec(undefined, mixins, {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['foo']);
+
+        var module = context.config.attributes.modules.foo;
         stripper(module.scripts).should.eql([{src: 'bar/bar.js'}]);
 
         done();
