@@ -162,12 +162,12 @@ exports.mixinExec = function(module, mixins, config, callback) {
 
   context.mixins.initialize(context, function(err) {
     if (err) {
-      throw err;
+      return callback({err: err});
     }
 
     plugin.loadConfig(context, function(err) {
       if (err) {
-        throw err;
+        return callback({err: err});
       }
 
       callback(context.mixins, context);

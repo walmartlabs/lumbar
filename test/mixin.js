@@ -181,6 +181,51 @@ describe('mixins', function() {
     });
   });
 
+  describe('mixin file references', function() {
+    it('should update paths for mixin modules', function(done) {
+      var mixin = {
+        name: 'foo',
+        root: 'bar'
+      };
+      var modules = {
+        'foo': {
+          scripts: [
+            {src: 'bar.js', mixin: 'foo'}
+          ]
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['foo']);
+
+        var module = context.config.attributes.modules.foo;
+        console.log(module.scripts);
+        stripper(module.scripts).should.eql([{src: 'bar/bar.js'}]);
+
+        done();
+      });
+    });
+    it('should throw an error if a mixin is not found', function(done) {
+      var mixin = {
+        name: 'foo',
+        root: 'bar'
+      };
+      var modules = {
+        'foo': {
+          scripts: [
+            {src: 'bar.js', mixin: 'bar'}
+          ]
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(mixins, context) {
+        (mixins.err + '').should.match(/mixin "bar" not found/i);
+
+        done();
+      });
+    });
+  });
+
   describe('modules', function() {
     it('should mixin module attributes', function(done) {
       var module = {
