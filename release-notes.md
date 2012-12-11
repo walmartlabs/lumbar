@@ -1,6 +1,20 @@
+# 2.0.0 Beta 7 - Dec 11th 2012
+
+Changes:
+
+- Add support for mixin file references via. mixin resource attribute.
+
+    {"src": "lumbar-loader-backbone.js", "mixin": "lumbar-loader"},
+
+  Mixins must define a name value in the mixin config file to utilize this feature.
+
+- Fix template auto-include in mixin contexts
+
+- Fix execution error in coffeescript plugin (needs unit tests)
+
 # 2.0.0 Beta 6 - Dec 4th 2012
 
-Change:
+Changes:
 
 - Add `template.root` property for template prefix stripping.
 
