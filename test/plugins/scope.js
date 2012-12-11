@@ -1,7 +1,5 @@
 var _ = require('underscore'),
-    build = require('../../lib/build'),
-    lib = require('../lib'),
-    should = require('should');
+    lib = require('../lib');
 
 describe('scope plugin', function() {
   describe('var scope', function() {
@@ -25,7 +23,7 @@ describe('scope plugin', function() {
         }
       };
 
-      lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+      lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
         resources = _.map(resources, function(resource) {
           return resource.stringValue || resource.src;
         });
@@ -102,7 +100,7 @@ describe('scope plugin', function() {
           }
         };
 
-        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
           resources = _.map(resources, function(resource) {
             return resource.stringValue || resource.src;
           });
@@ -142,7 +140,7 @@ describe('scope plugin', function() {
           }
         };
 
-        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
           resources = _.map(resources, function(resource) {
             return resource.stringValue || resource.src;
           });
@@ -176,7 +174,7 @@ describe('scope plugin', function() {
           }
         };
 
-        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
           resources = _.map(resources, function(resource) {
             return resource.stringValue || resource.src;
           });
@@ -204,7 +202,7 @@ describe('scope plugin', function() {
           }
         };
 
-        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
           resources = _.map(resources, function(resource) {
             return resource.stringValue || resource.src;
           });
@@ -241,7 +239,7 @@ describe('scope plugin', function() {
           }
         };
 
-        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
           resources = _.map(resources, function(resource) {
             return resource.stringValue || resource.src;
           });
@@ -279,7 +277,7 @@ describe('scope plugin', function() {
           }
         };
 
-        lib.pluginExec('scope', 'scripts', module, [], config, function(resources, context) {
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
           resources = _.map(resources, function(resource) {
             return resource.stringValue || resource.src;
           });

@@ -3,7 +3,6 @@ var _ = require('underscore'),
     fu = require('../lib/fileUtil'),
     fs = require('fs'),
     lib = require('./lib'),
-    should = require('should'),
     sinon = require('sinon'),
     watch = require('./lib/watch');
 
@@ -44,7 +43,7 @@ describe('mixins', function() {
       fs.statSync = statSync;
     });
 
-    it('should load direct mixin file references', function(done) {
+    it('should load direct mixin config file references', function(done) {
       lib.mixinExec({}, ['mixin/file.json'], function(mixins, context) {
         read.should.eql(['mixin/file.json']);
 
@@ -56,7 +55,7 @@ describe('mixins', function() {
       });
     });
 
-    it('should load mixin directory references', function(done) {
+    it('should load mixin config directory references', function(done) {
       lib.mixinExec({}, ['mixin'], function(mixins, context) {
         read.should.eql(['mixin/lumbar.json']);
 
@@ -408,7 +407,7 @@ describe('mixins', function() {
     });
 
     it('should conditionally include platform mixins', function(done) {
-      lib.mixinExec(module, [{mixins: mixins}], function(mixins, context) {
+      lib.mixinExec(module, [{mixins: mixins}], function() {
           module.foo.should.eql(1, 'foo should be written');
           module.bar.should.eql(2, 'bar should be written');
           module.bat.should.eql(3, 'bat should not be overwritten');
@@ -451,7 +450,7 @@ describe('mixins', function() {
 
       mock = watch.mockWatch();
 
-      sinon.stub(fs, 'readFileSync', function(path) {
+      sinon.stub(fs, 'readFileSync', function() {
         return JSON.stringify({
           modules: {
             module: {scripts: ['js/views/test.js']}
