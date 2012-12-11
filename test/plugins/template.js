@@ -2,10 +2,8 @@
 // TODO : Test multiple template references in the same file
 // TODO : Error handling for Missing template cache definitions
 var _ = require('underscore'),
-    assert = require('assert'),
     build = require('../../lib/build'),
     fs = require('fs'),
-    fu = require('../../lib/fileUtil'),
     lib = require('../lib'),
     should = require('should'),
     sinon = require('sinon'),
@@ -21,16 +19,39 @@ describe('template plugin', function() {
 
   describe('auto-include', function() {
     it('should remap files', function() {
+      var context = {
+        mixins: {
+          resolvePath: function(src) {
+            return src;
+          }
+        },
+        resource: {}
+      };
       template.remapFile({
           regex: /foo(.*)bar(.*)/,
           templates: ['$1$2$3', '', '$11', 'bat']
-        }, 'foo123bar')
-        .should.eql(['123$3', '', '1231', 'bat']);
+        }, 'foo123bar', context)
+        .should.eql([{src: '123$3', name: '123$3'}, {src: '', name: ''}, {src: '1231', name: '1231'}, {src: 'bat', name: 'bat'}]);
 
       should.not.exist(template.remapFile({
           regex: /foo(.*)bar(.*)/,
           templates: 'baz'
         }, 'bat'));
+    });
+    it('should remap files in mixins', function() {
+      var context = {
+        mixins: {
+          resolvePath: function(src) {
+            return 'baz/' + src;
+          }
+        },
+        resource: {}
+      };
+      template.remapFile({
+          regex: /foo(.*)bar(.*)/,
+          templates: ['$1$2$3', '', '$11', 'bat']
+        }, 'foo123bar', context)
+        .should.eql([{name: '123$3', src: 'baz/123$3'}, {name: '', src: 'baz/'}, {name: '1231', src: 'baz/1231'}, {name: 'bat', src: 'baz/bat'}]);
     });
 
     it('should pull in from auto-include pattern', function(done) {
@@ -110,7 +131,7 @@ describe('template plugin', function() {
 
         mock = watch.mockWatch();
 
-        sinon.stub(fs, 'readFileSync', function(path) {
+        sinon.stub(fs, 'readFileSync', function() {
           return JSON.stringify({
             modules: {
               module: {scripts: ['js/views/test.js']}

@@ -76,8 +76,8 @@ exports.mockFileList = function(config) {
       callback(
           undefined,
           _.map(list, function(file) {
-            if (config.fileFilter && config.fileFilter.test(file)) {
-              return {src: file, enoent: true};
+            if (config.fileFilter && config.fileFilter.test(file.src || file)) {
+              return {src: file.src || file, enoent: true};
             } else {
               return file;
             }
