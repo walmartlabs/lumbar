@@ -291,6 +291,43 @@ describe('scope plugin', function() {
           done();
         });
       });
+      it('should handle total alias overrides', function(done) {
+        var module = {
+          topLevelName: 'foo',
+          scripts: [
+            'js/init.js'
+          ],
+          aliases: {
+            'View': false,
+            'Application': false
+          }
+        };
+        var config = {
+          scope: {
+            scope: 'file',
+            aliases: {
+              'View': 'Application.View',
+              'foo': 'foo',
+              'Application': 'Application'
+            },
+            template: 'moduleStart({{{aliasVars}}}){{yield}}moduleEnd({{{callSpec}}})'
+          }
+        };
+
+        lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
+          resources = _.map(resources, function(resource) {
+            return resource.stringValue || resource.src;
+          });
+
+          resources.should.eql([
+            'var foo;\n',
+            'moduleStart()',
+            'js/init.js',
+            'moduleEnd(this)'
+          ]);
+          done();
+        });
+      });
     });
   });
 
