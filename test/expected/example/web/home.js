@@ -14,6 +14,7 @@ Example.Views.Home = Backbone.View.extend({
     $(this.el).append(Example.templates('templates/home/footer.handlebars'));
   }
 });
+
 ;;
 /* handsfree : templates/home/footer.handlebars*/
 Example.templates['templates/home/footer.handlebars'] = Handlebars.compile('<div>Footer</div>\n');
@@ -25,6 +26,7 @@ Example.Router.create(module, {
     home.render();
   }
 });
+
 ;;
 
 

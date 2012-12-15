@@ -14,6 +14,7 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 Example = (function() {
   var module = {exports: {}};
@@ -35,13 +36,16 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 var Bridge = exports.Bridge = {
   sendMessage: function() {}
 };
-  ;;
+  
+;;
 Bridge.nativeHost = 'iphone';
- ;;
+ 
+;;
 module.exports.config = {
   "port": 8080,
   "securePort": 8081
@@ -72,6 +76,7 @@ Example.Views.Home = Backbone.View.extend({
     $(this.el).append(Example.templates('templates/home/footer.handlebars'));
   }
 });
+
 ;;
 /* handsfree : templates/home/footer.handlebars*/
 Example.templates['templates/home/footer.handlebars'] = Handlebars.compile('<div>Footer</div>\n');
@@ -83,6 +88,7 @@ Example.Router.create(module, {
     home.render();
   }
 });
+
 ;;
 
 

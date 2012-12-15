@@ -52,7 +52,8 @@ describe('module-map plugin', function() {
 
           data.should.eql({
             data: '/* lumbar module map */\nmodule.exports.moduleMap({"module":true});\n',
-            noSeparator: true
+            noSeparator: true,
+            ignoreWarnings: true
           });
         });
         done();

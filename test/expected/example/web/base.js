@@ -14,12 +14,14 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 exports.Router = {
   create: function(module, protoProps, classProps) {
     return new (Backbone.Router.extend(_.extend({}, module, protoProps), classProps));
   }
 };
+
 ;;
 Example = (function() {
   var module = {exports: {}};
@@ -41,6 +43,7 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 exports.Views.Header = Backbone.View.extend({
   el: ".header",
@@ -49,6 +52,7 @@ exports.Views.Header = Backbone.View.extend({
     $(this.el).html(exports.templates('templates/header.handlebars'));
   }
 });
+
 ;;
 /* handsfree : templates/header.handlebars*/
 module.exports.templates['templates/header.handlebars'] = Handlebars.compile('Header\n');
