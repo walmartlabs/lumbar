@@ -1,4 +1,3 @@
-var Example;
 _.extend(exports, {
   Views: {},
   templates: function(name, context) {
@@ -16,6 +15,7 @@ $(document).ready(function() {
 });
 
 ;;
+var Example;
 Example = (function() {
   var module = {exports: {}};
   var exports = module.exports;
@@ -60,6 +60,7 @@ module.exports.moduleMap({"base":{"css":[{"href":"native-home.css","maxRatio":1.
   }
   return module.exports;
 }).call(this);
+
 Example['home'] = (function() {
   var module = {exports: {}};
   var exports = module.exports;

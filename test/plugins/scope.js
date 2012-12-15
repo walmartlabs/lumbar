@@ -35,7 +35,6 @@ describe('scope plugin', function() {
     it('should scope files', function(done) {
       testScope('file', function(resources) {
         resources.should.eql([
-          'var foo;\n',
           'moduleStart',
           'js/init.js',
           'js/views/test.js',
@@ -47,7 +46,6 @@ describe('scope plugin', function() {
     it('should scope resources', function(done) {
       testScope('resource', function(resources) {
         resources.should.eql([
-          'var foo;\n',
           'moduleStart',
           '(function() {\n',
           'js/init.js',
@@ -73,7 +71,6 @@ describe('scope plugin', function() {
     it('should scope globals', function(done) {
       testScope('file', [{src: 'js/init.js', global: true}, 'js/views/test.js'], function(resources) {
         resources.should.eql([
-          'var foo;\n',
           'js/init.js',
           'moduleStart',
           'js/views/test.js',
@@ -106,7 +103,6 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'var foo;\n',
             'moduleStart;var foo = exports;',
             'js/init.js',
             'moduleEnd'
@@ -180,7 +176,6 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'var foo;\n',
             'moduleStart(View, Application)',
             'js/init.js',
             'moduleEnd(this, Application.View, Application)'
@@ -208,7 +203,6 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'var foo;\n',
             'moduleStart()',
             'js/init.js',
             'moduleEnd(this)'
@@ -245,7 +239,6 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'var foo;\n',
             'moduleStart(View, Application)',
             'js/init.js',
             'moduleEnd(this, Application.View, Application)'
@@ -283,7 +276,6 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'var foo;\n',
             'moduleStart(View)',
             'js/init.js',
             'moduleEnd(this, bar)'
@@ -320,7 +312,6 @@ describe('scope plugin', function() {
           });
 
           resources.should.eql([
-            'var foo;\n',
             'moduleStart()',
             'js/init.js',
             'moduleEnd(this)'

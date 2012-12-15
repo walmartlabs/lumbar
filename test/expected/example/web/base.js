@@ -1,4 +1,3 @@
-var Example;
 _.extend(exports, {
   Views: {},
   templates: function(name, context) {
@@ -23,6 +22,7 @@ exports.Router = {
 };
 
 ;;
+var Example;
 Example = (function() {
   var module = {exports: {}};
   var exports = module.exports;
