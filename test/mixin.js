@@ -470,7 +470,7 @@ describe('mixins', function() {
       mixins = {
         mixin1: {
           foo: 1,
-          scripts: [ {src: 'foo1.1', global: true}, 'bar1.1'],
+          scripts: [ {src: 'foo1.1', global: true}, 'bar1.1', {'module-map': true}],
           styles: [ 'foo1' ],
           static: [ 'baz1.1' ]
         },
@@ -498,6 +498,7 @@ describe('mixins', function() {
             {src: 'foo2.1', global: true, package: 'native'},
             {src: 'foo0.1', global: true},
             {src: 'bar1.1', platform: 'web', env: 'dev'},
+            {'module-map': true, platform: 'web', env: 'dev'},
             {src: 'bar2.1', package: 'native'},
             'bar0.1'
           ]);
