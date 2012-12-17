@@ -58,5 +58,13 @@ describe('build utils', function() {
       build.filterResource({package: 'iphone', platform: 'foo'}, {package: 'web', platform: 'foo'}).should.be.false;
       build.filterResource({package: 'web', platform: 'bar'}, {package: 'web', platform: 'foo'}).should.be.false;
     });
+
+    it('should combine original resource', function() {
+      build.filterResource({originalResource: {}}, {package: 'web'}).should.be.true;
+      build.filterResource({package: 'web', originalResource: {}}, {package: 'web'}).should.be.true;
+      build.filterResource({originalResource: {package: 'web'}}, {package: 'web'}).should.be.true;
+
+      build.filterResource({package: 'web', originalResource: {package: 'iphone'}}, {package: 'web'}).should.be.false;
+    });
   });
 });
