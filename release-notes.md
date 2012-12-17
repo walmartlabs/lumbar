@@ -1,3 +1,16 @@
+# 2.0.0 Beta 8 - Dec 16th 2012
+
+Changes:
+
+- Implement source warning framework
+
+- Update to Uglify 2.2
+
+  NPM will refuse to install this under 0.8 and lower due to an upstream dependency so this is
+  now optional.
+
+- Fix filtering of generated resources
+
 # 2.0.0 Beta 7 - Dec 11th 2012
 
 Changes:
