@@ -208,20 +208,20 @@ arise.on('watch-change', function(status) {
 arise.on('output', function(status) {
   watchOutput = {};
   if (status.watch) {
-    console.log('\t\033[90mwatching\033[0m ' + status.fileName);
+    console.log('\033[90mwatching\033[0m ' + status.fileName);
   } else {
-    console.log('\t\033[90mcompiled\033[0m ' + status.fileName);
+    console.log('\033[90mcompiled\033[0m ' + status.fileName);
   }
   if (status.warnings && status.warnings.length) {
     if (watch) {
       safeGrowl(status.warnings.length + ' warnings in ' + status.fileName, { title: 'Lumbar warnings', sticky: true });
     }
-    console.log('\t\t\033[91m' + status.warnings.length + ' warnings\033[0m');
+    console.log('\t\033[91m' + status.warnings.length + ' warnings\033[0m');
     _.each(status.warnings, function(warning) {
-      console.log('\t\t\033[91mwarning\033[0m ' + warning.msg);
-      console.log('\t\t\tat ' + warning.file + ':' +  warning.line + (warning.column ? ',' + warning.column : ''));
+      console.log('\t\033[91mwarning\033[0m ' + warning.msg);
+      console.log('\t\tat ' + warning.file + ':' +  warning.line + (warning.column ? ',' + warning.column : ''));
       _.each(warning.context, function(line) {
-        console.log('\t\t' + line);
+        console.log('\t' + line);
       });
     });
   }
