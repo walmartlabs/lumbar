@@ -1,3 +1,11 @@
+Changes:
+
+- Filter duplicate files in the same module
+
+  This behavior may be disabled on the resource level via the `"duplicate": true`
+  attribute or at the application level with the `"filterDuplicates": false` top level
+  attribute.
+
 # 2.0.0 Beta 8 - Dec 16th 2012
 
 Changes:
