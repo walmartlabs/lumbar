@@ -145,29 +145,22 @@ describe('watcher', function() {
     }, 100);
   });
 
-  it('should unwatch a single file', function(done) {
+  it('should unwatch a single file', function() {
     var spy = sinon.spy();
-
-    function exec(callback) {
-      watcher.trigger('c', 'bar');
-      watcher.trigger('c', 'baz');
-      setTimeout(callback, 300);
-    }
     watcher.watchFile({virtual: 'foo'}, [{virtual: 'bar'}, {virtual: 'baz'}], spy);
 
-    exec(function() {
-      spy.callCount.should.equal(2);
+    watcher.trigger('c', 'bar');
+    watcher.trigger('c', 'baz');
+    spy.callCount.should.equal(2);
 
-      watcher.unwatch('foo', ['bar']);
-      exec(function() {
-        spy.callCount.should.equal(3);
+    watcher.unwatch('foo', ['bar']);
+    watcher.trigger('c', 'bar');
+    watcher.trigger('c', 'baz');
+    spy.callCount.should.equal(3);
 
-        watcher.unwatch('foo', ['baz']);
-        exec(function() {
-          spy.callCount.should.equal(3);
-          done();
-        });
-      });
-    });
+    watcher.unwatch('foo', ['baz']);
+    watcher.trigger('c', 'bar');
+    watcher.trigger('c', 'baz');
+    spy.callCount.should.equal(3);
   });
 });
