@@ -5,13 +5,13 @@ var assert = require('assert'),
     watcher = require('../lib/watcher'),
     wrench = require('wrench');
 
-if (!fs.watch) {
-  // Watch is unsupported on 0.4 and earlier, no tests for this case
-  return;
-}
-
 describe('watcher', function() {
   this.timeout(5000);
+
+  if (!fs.watch) {
+    // Watch is unsupported on 0.4 and earlier, no tests for this case
+    return;
+  }
 
   var outdir;
 
