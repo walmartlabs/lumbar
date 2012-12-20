@@ -6,6 +6,9 @@ Changes:
   attribute or at the application level with the `"filterDuplicates": false` top level
   attribute.
 
+- Files added through pattern mapping and auto-includes no longer require a config
+  change to watch for changes.
+
 # 2.0.0 Beta 8 - Dec 16th 2012
 
 Changes:

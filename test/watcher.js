@@ -1,6 +1,7 @@
 var assert = require('assert'),
     fs = require('fs'),
     lib = require('./lib'),
+    sinon = require('sinon'),
     watcher = require('../lib/watcher'),
     wrench = require('wrench');
 
@@ -24,13 +25,13 @@ describe('watcher', function() {
   });
 
   it('should not notify on file read', function(done) {
-    watcher.watchFile(outdir + '/index.html', [], function(type, fileName, sourceChange) {
+    watcher.watchFile(outdir + '/index.html', [], function() {
       assert.fail('Watch event occurred.');
     });
 
     fs.open(outdir + '/index.html', 'r+', function(err, fd) {
       var buffer = new Buffer(4);
-      fs.read(fd, buffer, 0, buffer.length, 0, function(err, bytesRead, buffer) {
+      fs.read(fd, buffer, 0, buffer.length, 0, function() {
         fs.close(fd, function() {
           setTimeout(done, 500);
         });
@@ -38,7 +39,7 @@ describe('watcher', function() {
     });
   });
 
-  it ('should notify on write', function(done) {
+  it('should notify on write', function(done) {
     var count = 0;
 
     var testFile = outdir + '/file-modules.json';
@@ -52,7 +53,7 @@ describe('watcher', function() {
 
     fs.open(testFile, 'w', function(err, fd) {
       var buffer = new Buffer([1, 2, 3, 4]);
-      fs.write(fd, buffer, 0, buffer.length, 0, function(err, written, buffer) {
+      fs.write(fd, buffer, 0, buffer.length, 0, function() {
         fs.close(fd);
       });
     });
@@ -118,7 +119,7 @@ describe('watcher', function() {
         setTimeout(function() {
           fs.open(testFile, 'w', function(err, fd) {
             var buffer = new Buffer([1, 2, 3, 4]);
-            fs.write(fd, buffer, 0, buffer.length, 0, function(err, written, buffer) {
+            fs.write(fd, buffer, 0, buffer.length, 0, function() {
               fs.close(fd);
             });
           });
@@ -142,5 +143,31 @@ describe('watcher', function() {
     setTimeout(function() {
       fs.writeFile(testFile, 'bar');
     }, 100);
+  });
+
+  it('should unwatch a single file', function(done) {
+    var spy = sinon.spy();
+
+    function exec(callback) {
+      watcher.trigger('c', 'bar');
+      watcher.trigger('c', 'baz');
+      setTimeout(callback, 200);
+    }
+    watcher.watchFile({virtual: 'foo'}, [{virtual: 'bar'}, {virtual: 'baz'}], spy);
+
+    exec(function() {
+      spy.callCount.should.equal(2);
+
+      watcher.unwatch('foo', ['bar']);
+      exec(function() {
+        spy.callCount.should.equal(3);
+
+        watcher.unwatch('foo', ['baz']);
+        exec(function() {
+          spy.callCount.should.equal(3);
+          done();
+        });
+      });
+    });
   });
 });
