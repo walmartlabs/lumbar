@@ -151,7 +151,7 @@ describe('watcher', function() {
     function exec(callback) {
       watcher.trigger('c', 'bar');
       watcher.trigger('c', 'baz');
-      setTimeout(callback, 200);
+      setTimeout(callback, 300);
     }
     watcher.watchFile({virtual: 'foo'}, [{virtual: 'bar'}, {virtual: 'baz'}], spy);
 
