@@ -1,3 +1,5 @@
+# 2.0.0 Beta 9 - Dec 21st 2012
+
 Changes:
 
 - Filter duplicate files in the same module
