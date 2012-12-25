@@ -203,11 +203,13 @@ describe('template plugin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           templates: {
             'auto-include': {'foo': 'bar'}
           }
         },
         {
+          name: 'mixin2',
           templates: {
             'auto-include': {'baz': 'bat'}
           }
@@ -240,6 +242,7 @@ describe('template plugin', function() {
 
       var mixins = [
         {
+          name: 'mixin',
           root: 'mixin1/',
           mixins: {
             mixin1: {
@@ -304,6 +307,7 @@ describe('template plugin', function() {
 
       var mixins = [
         {
+          name: 'mixin',
           root: 'mixin1/',
           mixins: {
             mixin1: {
@@ -318,6 +322,7 @@ describe('template plugin', function() {
           }
         },
         {
+          name: 'mixin2',
           root: 'mixin2/',
           mixins: {
             mixin2: {

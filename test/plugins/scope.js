@@ -359,6 +359,7 @@ describe('scope plugin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           root: 'mixin1/',
           scope: {
             scope: 'module',
@@ -370,6 +371,7 @@ describe('scope plugin', function() {
           }
         },
         {
+          name: 'mixin2',
           scope: 'none'
         }
       ];
@@ -402,6 +404,7 @@ describe('scope plugin', function() {
     it('should merge with shorthand', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           root: 'mixin1/',
           scope: {
             scope: 'module',
@@ -413,6 +416,7 @@ describe('scope plugin', function() {
           }
         },
         {
+          name: 'mixin2',
           scope: 'none'
         }
       ];
@@ -437,6 +441,7 @@ describe('scope plugin', function() {
     });
     it('should create scope config if necessary', function(done) {
       var mixin = {
+        name: 'mixin',
         scope: {
           scope: 'module',
           template: 'module.handlebars',
@@ -464,6 +469,7 @@ describe('scope plugin', function() {
     it('should mixin module aliases', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           root: 'mixin1/',
           mixins: {
             mixin1: {

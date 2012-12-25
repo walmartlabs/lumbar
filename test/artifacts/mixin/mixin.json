@@ -1,4 +1,5 @@
 {
+  "name": "attr",
   "mixins": {
     "base": {
       "scripts": [

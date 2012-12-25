@@ -25,7 +25,7 @@ describe('mixins', function() {
       fs.readFileSync = function(path) {
         if (/mixin.*\.json$/.test(path)) {
           read.push(path);
-          return '{"foo": "bar"}';
+          return '{"name": "loading", "foo": "bar"}';
         } else {
           return readFileSync.apply(this, arguments);
         }
@@ -75,7 +75,7 @@ describe('mixins', function() {
         'foo': 'bah'
       };
 
-      lib.mixinExec(undefined, [{modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'config', modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
         context.config.moduleList().should.eql(['foo', 'baz']);
         context.config.attributes.modules.foo.should.eql('bar');
         context.config.attributes.modules.baz.should.eql('bat');
@@ -92,7 +92,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{root: 'bar', modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'update', root: 'bar', modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
         context.config.moduleList().should.eql(['foo', 'baz']);
 
         var module = context.config.attributes.modules.baz;
@@ -117,7 +117,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{root: 'bar', modules: modules, mixins: mixins}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'apply', root: 'bar', modules: modules, mixins: mixins}], {modules: {'foo': 'bar'}}, function(mixins, context) {
         context.config.moduleList().should.eql(['foo', 'bar']);
 
         var module = context.config.attributes.modules.bar;
@@ -143,7 +143,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'apply', root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
         context.config.moduleList().should.eql(['bar', 'baz']);
 
         var module = context.config.attributes.modules.bar;
@@ -170,7 +170,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'supress', root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
         context.config.moduleList().should.eql(['bar']);
 
         var module = context.config.attributes.modules.bar;
@@ -270,7 +270,7 @@ describe('mixins', function() {
         mixin2: { bar: 2, baz: 2, bat: 2 }
       };
 
-      lib.mixinExec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{name: 'attr', mixins: mixins}], function() {
           assert.equal(module.foo, 1, 'foo should be written');
           assert.equal(module.bar, 2, 'bar should be written');
           assert.equal(module.baz, 2, 'baz should be overwritten');
@@ -294,7 +294,7 @@ describe('mixins', function() {
         mixin2: {routes: { bar: 2, baz: 2, bat: 2 }}
       };
 
-      lib.mixinExec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{name: 'routes', mixins: mixins}], function() {
           assert.equal(module.routes.foo, 1);//, 'foo should be written');
           assert.equal(module.routes.bar, 2, 'bar should be written');
           assert.equal(module.routes.baz, 2, 'baz should be overwritten');
@@ -317,7 +317,7 @@ describe('mixins', function() {
         mixin2: {routes: { bar: 2, baz: 2, bat: 2 }}
       };
 
-      lib.mixinExec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{name: 'routes', mixins: mixins}], function() {
           assert.equal(module.routes.foo, 1, 'foo should be written');
           assert.equal(module.routes.bar, 2, 'bar should be written');
           assert.equal(module.routes.baz, 2, 'baz should be overwritten');
@@ -339,6 +339,7 @@ describe('mixins', function() {
 
       var mixins = [
         {
+          name: '1',
           root: 'mixin1/',
           mixins: {
             mixin1: {
@@ -355,6 +356,7 @@ describe('mixins', function() {
           }
         },
         {
+          name: '2',
           root: 'mixin2/',
           mixins: {
             mixin2: {
@@ -415,6 +417,7 @@ describe('mixins', function() {
 
       var mixins = [
         {
+          name: '1',
           root: 'mixin1/',
           mixins: {
             mixin1: {
@@ -423,6 +426,7 @@ describe('mixins', function() {
           }
         },
         {
+          name: '2',
           root: 'mixin2/',
           mixins: {
             mixin2: {
@@ -469,12 +473,14 @@ describe('mixins', function() {
 
       mixins = {
         mixin1: {
+          name: '1',
           foo: 1,
           scripts: [ {src: 'foo1.1', global: true}, 'bar1.1', {'module-map': true}],
           styles: [ 'foo1' ],
           static: [ 'baz1.1' ]
         },
         mixin2: {
+          name: '2',
           bar: 2,
           scripts: [ {src: 'foo2.1', global: true}, 'bar2.1'],
           styles: [ 'foo2' ],
@@ -484,7 +490,7 @@ describe('mixins', function() {
     });
 
     it('should conditionally include platform mixins', function(done) {
-      lib.mixinExec(module, [{mixins: mixins}], function() {
+      lib.mixinExec(module, [{name: 'conditionally', mixins: mixins}], function() {
           module.foo.should.eql(1, 'foo should be written');
           module.bar.should.eql(2, 'bar should be written');
           module.bat.should.eql(3, 'bat should not be overwritten');
@@ -530,6 +536,7 @@ describe('mixins', function() {
 
       sinon.stub(fs, 'readFileSync', function() {
         return JSON.stringify({
+          name: 'attr',
           modules: {
             module: {scripts: ['js/views/test.js']}
           },

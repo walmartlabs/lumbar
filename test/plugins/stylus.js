@@ -101,6 +101,7 @@ describe('stylus plugin', function() {
           });
         } else if (/mixin\.json$/.test(path)) {
           return JSON.stringify({
+            name: 'mixin' + path,
             modules: {
               module: {styles: ['style/test.styl']}
             },
@@ -180,6 +181,7 @@ describe('stylus plugin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           styles: {
             "pixelDensity": {
               "iphone": [ 1, 2, 3 ],
@@ -195,6 +197,7 @@ describe('stylus plugin', function() {
           }
         },
         {
+          name: 'mixin2',
           styles: {
             "pixelDensity": {
               "android": [ 1, 2 ],
@@ -244,6 +247,7 @@ describe('stylus plugin', function() {
     });
     it('should create styles config if necessary', function(done) {
       var mixin = {
+        name: 'mixin',
         "styles": {
           "pixelDensity": {
             "iphone": [ 1, 2 ]
@@ -266,6 +270,7 @@ describe('stylus plugin', function() {
     });
     it('should update path references', function(done) {
       var mixin = {
+        name: 'mixin',
         "styles": {
           "includes": ['foo', 'bar'],
           "styleRoot": 'baz'
@@ -309,6 +314,7 @@ describe('stylus plugin', function() {
       };
 
       var mixins = [{
+        name: 'mixin',
         root: 'mixinRoot/',
         mixins: {
           'stylus': {

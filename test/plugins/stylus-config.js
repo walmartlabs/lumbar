@@ -148,12 +148,14 @@ describe('stylus-config plugin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           styles: {
             "config": "test.json",
             "configObject": "foo"
           }
         },
         {
+          name: 'mixin2',
           styles: {
             "config": ["test2.json"]
           }
@@ -180,6 +182,7 @@ describe('stylus-config plugin', function() {
     });
     it('should create styles config if necessary', function(done) {
       var mixin = {
+        name: 'mixin',
         "styles": {
           "config": "foo"
         }
@@ -196,6 +199,7 @@ describe('stylus-config plugin', function() {
     });
     it('should update path references', function(done) {
       var mixin = {
+        name: 'mixin',
         "styles": {
           "config": ['foo', 'bar']
         }

@@ -119,6 +119,7 @@ describe('handlebars plugin', function() {
 
 
       var mixins = [{
+        name: 'mixin',
         root: 'mixinRoot/',
         mixins: {
           'handlebars': {
@@ -152,6 +153,7 @@ describe('handlebars plugin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           templates: {
             'foo': 'bar',
             'template': 'template!',
@@ -160,6 +162,7 @@ describe('handlebars plugin', function() {
           }
         },
         {
+          name: 'mixin2',
           templates: {
             'bar': 'foo',
             'precompile': { 'template': 'another template!', 'bar': 'foo' }
@@ -197,6 +200,7 @@ describe('handlebars plugin', function() {
     it('should create templates config if necessary', function(done) {
       var mixins = [
         {
+          name: 'mixin',
           templates: {
             'foo': 'bar',
             'template': 'template!',

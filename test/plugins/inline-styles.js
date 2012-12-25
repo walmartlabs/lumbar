@@ -1,17 +1,11 @@
-var _ = require('underscore'),
-    assert = require('assert'),
-    build = require('../../lib/build'),
-    fs = require('fs'),
-    fu = require('../../lib/fileUtil'),
-    lib = require('../lib'),
-    should = require('should');
+var lib = require('../lib');
 
 describe('inline-styles plugin', function() {
   describe('mixin', function() {
     it('should include special values from mixins', function(done) {
       var mixins = [
-        {styles: { "inlineLoader": "foo" }},
-        {styles: { "inline": false }}
+        {name: 'mixin', styles: { "inlineLoader": "foo" }},
+        {name: 'mixin2', styles: { "inline": false }}
       ];
 
       var config = {styles: { "inline": true }};
@@ -26,8 +20,8 @@ describe('inline-styles plugin', function() {
     });
     it('should create styles config if necessary', function(done) {
       var mixins = [
-        {styles: { "inlineLoader": "foo" }},
-        {styles: { "inline": false }}
+        {name: 'mixin', styles: { "inlineLoader": "foo" }},
+        {name: 'mixin2', styles: { "inline": false }}
       ];
 
       lib.mixinExec({}, mixins, {}, function(mixins, context) {
@@ -40,8 +34,8 @@ describe('inline-styles plugin', function() {
     });
     it('should overwrite falsy values', function(done) {
       var mixins = [
-        {styles: { "inlineLoader": "foo", "inline": true }},
-        {styles: { "inline": false }}
+        {name: 'mixin', styles: { "inlineLoader": "foo", "inline": true }},
+        {name: 'mixin2', styles: { "inline": false }}
       ];
 
       lib.mixinExec({}, mixins, {}, function(mixins, context) {
