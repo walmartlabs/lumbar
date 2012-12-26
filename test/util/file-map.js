@@ -154,7 +154,7 @@ describe('file-map', function() {
         }
 
         fu.writeFile.args[0][0].should.equal('output/here!.map');
-        fu.writeFile.args[0][1].should.equal('"zee map!"');
+        fu.writeFile.args[0][1].should.equal('zee map!');
         done();
       });
     });
