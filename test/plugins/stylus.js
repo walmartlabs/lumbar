@@ -225,7 +225,7 @@ describe('stylus plugin', function() {
         }
       };
 
-      lib.mixinExec({}, mixins, config, function(mixins, context) {
+      lib.mixinExec({}, mixins, config, function(_mixins, context) {
         context.config.attributes.styles.should.eql({
           "pixelDensity": {
             "iphone": [ 1, 2 ],
@@ -234,9 +234,9 @@ describe('stylus plugin', function() {
           },
           "useNib": false,
           "includes": [
-            "styles/global.styl",
-            "styles/1.styl",
-            "styles/2.styl",
+            {src: "styles/global.styl", mixin: mixins[0]},
+            {src: "styles/1.styl", mixin: mixins[0]},
+            {src: "styles/2.styl", mixin: mixins[1]},
             "styles/config.styl"
           ],
           "urlSizeLimit": 104,
@@ -281,7 +281,10 @@ describe('stylus plugin', function() {
         mixin.root = 'a/';
         mixins.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
-            "includes": ['a/foo', 'a/bar']
+            "includes": [
+              {src: 'a/foo', mixin: mixin},
+              {src: 'a/bar', mixin: mixin}
+            ]
           });
           done();
         });
