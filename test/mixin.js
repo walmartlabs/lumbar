@@ -182,6 +182,66 @@ describe('mixins', function() {
   });
 
   describe('mixin namespace', function() {
+    it('should lookup default mixin', function(done) {
+      var mixinModules = {
+        'baz': {
+          'scripts': ['foo.js']
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': ['baz'],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [{name: 'bar', root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['bar', 'baz']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql([{src: 'bar/foo.js'}, 'baz.js']);
+
+        done();
+      });
+    });
+    it('should lookup mixin by container', function(done) {
+      var mixin1 = {
+        root: '1',
+        name: '1',
+        'modules': {
+          'baz': {
+            'scripts': ['foo1.js']
+          }
+        }
+      };
+      var mixin2 = {
+        root: '2',
+        name: '2',
+        'modules': {
+          'baz': {
+            'scripts': ['foo2.js']
+          }
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': [{name: 'baz', container: '2'}],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['bar', 'baz']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql([{src: '2/foo2.js'}, 'baz.js']);
+
+        module = context.config.attributes.modules.baz;
+        stripper(module.scripts).should.eql([{src: '1/foo1.js'}]);
+
+        done();
+      });
+    });
     it('should fail if a mixin container does not define a name', function(done) {
       var mixin1 = {
         root: '1',
@@ -196,6 +256,97 @@ describe('mixins', function() {
       lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
         mixins.err.should.be.an.instanceof(Error);
         mixins.err.message.should.match(/missing a name\./);
+
+        done();
+      });
+    });
+    it('should fail if multiple mixins are defined', function(done) {
+      var mixin1 = {
+        root: '1',
+        name: '1',
+        'modules': {
+          'baz': {
+            'scripts': ['foo1.js']
+          }
+        }
+      };
+      var mixin2 = {
+        root: '2',
+        name: '2',
+        'modules': {
+          'baz': {
+            'scripts': ['foo2.js']
+          }
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': [{name: 'baz'}],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins, context) {
+        mixins.err.should.be.an.instanceof(Error);
+        mixins.err.message.should.match(/Duplicate mixins found for "baz"/);
+
+        done();
+      });
+    });
+    it('should fail if no mixin from the given container is defined', function(done) {
+      var mixin1 = {
+        root: '1',
+        name: '1',
+        'modules': {
+          'baz': {
+            'scripts': ['foo1.js']
+          }
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': [{name: 'baz', container: 2}],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
+        mixins.err.should.be.an.instanceof(Error);
+        mixins.err.message.should.match(/Mixin named "baz" not found in container "2"/);
+
+        done();
+      });
+    });
+    it('should select mixin if a mixin has both mixins and module of the same name', function(done) {
+      var mixin1 = {
+        root: '1',
+        name: '1',
+        'modules': {
+          'baz': {
+            'scripts': ['foo1.js']
+          }
+        },
+        'mixins': {
+          'baz': {
+            'scripts': ['foo2.js']
+          }
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': [{name: 'baz'}],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
+        context.config.moduleList().should.eql(['bar', 'baz']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql([{src: '1/foo2.js'}, 'baz.js']);
+
+        module = context.config.attributes.modules.baz;
+        stripper(module.scripts).should.eql([{src: '1/foo1.js'}]);
 
         done();
       });
@@ -393,29 +544,29 @@ describe('mixins', function() {
           mixins = mixins.mixins;
 
           module.scripts.should.eql([
-            {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1},
-            {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2},
+            {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1[0]}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1[0]},
+            {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2[0]}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2[0]},
             {src: 'foo0', global: true }, {src: 'foo0.1', global: true},
-            {src: 'mixin1/bar1.1', mixin: mixins.mixin1}, {src: 'mixin1/bar1.2', mixin: mixins.mixin1},
-            {dir: 'mixin1/dir!', mixin: mixins.mixin1}, {notAFile: true, mixin: mixins.mixin1},
-            {src: 'mixin2/bar2.1', mixin: mixins.mixin2}, {src: 'mixin2/bar2.2', mixin: mixins.mixin2},
+            {src: 'mixin1/bar1.1', mixin: mixins.mixin1[0]}, {src: 'mixin1/bar1.2', mixin: mixins.mixin1[0]},
+            {dir: 'mixin1/dir!', mixin: mixins.mixin1[0]}, {notAFile: true, mixin: mixins.mixin1[0]},
+            {src: 'mixin2/bar2.1', mixin: mixins.mixin2[0]}, {src: 'mixin2/bar2.2', mixin: mixins.mixin2[0]},
             'bar0.1', 'bar0.2'
           ]);
           module.styles.should.eql([
-            {src: 'mixin2/foo2', mixin: mixins.mixin2}, {src: 'mixin2/bar2', mixin: mixins.mixin2},
+            {src: 'mixin2/foo2', mixin: mixins.mixin2[0]}, {src: 'mixin2/bar2', mixin: mixins.mixin2[0]},
             'foo0', 'bar0'
           ]);
           module.static.should.eql([
-            {src: 'mixin1/baz1.1', mixin: mixins.mixin1}, {src: 'mixin1/baz1.2', mixin: mixins.mixin1},
-            {src: 'mixin2/baz2.1', mixin: mixins.mixin2}, {src: 'mixin2/baz2.2', mixin: mixins.mixin2}
+            {src: 'mixin1/baz1.1', mixin: mixins.mixin1[0]}, {src: 'mixin1/baz1.2', mixin: mixins.mixin1[0]},
+            {src: 'mixin2/baz2.1', mixin: mixins.mixin2[0]}, {src: 'mixin2/baz2.2', mixin: mixins.mixin2[0]}
           ]);
 
-          mixins.mixin1.attributes.scripts.should.eql([{src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2', {dir: 'dir!'}, {notAFile: true}]);
-          mixins.mixin1.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin1[0].attributes.scripts.should.eql([{src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2', {dir: 'dir!'}, {notAFile: true}]);
+          mixins.mixin1[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
 
-          mixins.mixin2.attributes.scripts.should.eql([{src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2']);
-          mixins.mixin2.attributes.styles.should.eql([ 'foo2', 'bar2' ]);
-          mixins.mixin2.attributes.static.should.eql([ 'baz2.1', 'baz2.2' ]);
+          mixins.mixin2[0].attributes.scripts.should.eql([{src: 'foo2.1', global: true}, {src: 'foo2.2', global: true}, 'bar2.1', 'bar2.2']);
+          mixins.mixin2[0].attributes.styles.should.eql([ 'foo2', 'bar2' ]);
+          mixins.mixin2[0].attributes.static.should.eql([ 'baz2.1', 'baz2.2' ]);
           done();
         });
     });
@@ -460,18 +611,18 @@ describe('mixins', function() {
       lib.mixinExec(module, mixins, function(mixins) {
           mixins = mixins.mixins;
 
-          var mixin1 = _.extend({}, mixinDecl, mixins.mixin1);
+          var mixin1 = _.extend({}, mixinDecl, mixins.mixin1[0]);
 
           module.static.should.eql([
             {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixin1},
             {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixin1},
-            {src: 'mixin2/baz1.1', mixin: mixins.mixin2},
-            {src: 'mixin2/baz1.2', mixin: mixins.mixin2},
+            {src: 'mixin2/baz1.1', mixin: mixins.mixin2[0]},
+            {src: 'mixin2/baz1.2', mixin: mixins.mixin2[0]},
             'baz1.1'
           ]);
 
-          mixins.mixin1.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
-          mixins.mixin2.attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin1[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin2[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
           done();
         });
     });
