@@ -1,4 +1,8 @@
+# 2.0.0 Beta 10 - Dec 26th 2012
+
 Changes:
+
+- Added support for source maps
 
 - Update mixin handling for namespaces
 
