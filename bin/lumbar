@@ -22,6 +22,10 @@ var LONG_USAGE="lumbar help\n"+
 "\n"+
 "--minimize:   to shrink the resultant file.\n"+
 "\n"+
+"--sourceMap:  generate a source map for the output modules.\n"+
+"              WARN: This copies the source files into the module output unobfuscated.\n"
+"                 care should be exercised when used with production releases\n"
+"\n"+
 "--config:     is the name and path to the lumbar config file, if\n"+
 "              not given then lumbar.json is assumed.\n"+
 "\n"+
@@ -41,6 +45,7 @@ var configFile;
 var packageName;
 var modules = [];
 var minimize = false;
+var sourceMap = false;
 var build = true; // build by default.
 var watch = false;
 
@@ -79,6 +84,10 @@ while (args.length) {
     case '-m':
     case '--minimize':
       minimize = true;
+      break;
+    case '-s':
+    case '--sourceMap':
+      sourceMap = true;
       break;
     case '-b':
     case '--build':
@@ -170,6 +179,7 @@ plugins = plugins.map(function(plugin) {
 var options = {
   packageConfigFile: configFile,
   minimize: minimize,
+  sourceMap: sourceMap,
   outdir: outputDir,
   plugins: plugins
 };
