@@ -131,27 +131,58 @@ describe('file-map', function() {
           file: 'foo',
           line: 11,
           column: 1
+        });
+      });
+    }
+  });
+  describe('#writeSourceMap', function() {
+    var map;
+    beforeEach(function() {
+      sinon.stub(fu, 'writeFile', function(path, content, callback) { callback(); });
+      sinon.stub(fu, 'ensureDirs', function(path, callback) { callback(); });
+      map = new FileMap('output/here!');
+      sinon.stub(map, 'sourceMap', function() { return 'zee map!'; });
+    });
+    afterEach(function() {
+      fu.ensureDirs.restore();
+      fu.writeFile.restore();
+    });
+    it('should output map file', function(done) {
+      map.writeSourceMap(function(err) {
+        if (err) {
+          throw err;
+        }
+
+        fu.writeFile.args[0][0].should.equal('output/here!.map');
+        fu.writeFile.args[0][1].should.equal('"zee map!"');
+        done();
       });
     });
-    it('should output original lines for unnamed contexts', function() {
-      map.context(3, 5).should.eql({
-        file: '<generated>',
-        line: 3,
-        column: 5
+    it('should output source files', function(done) {
+      map.add('foo', 'foo1\nfoo2\n');
+      map.add('bar', 'bar1');
+      map.writeSourceMap(function(err) {
+        if (err) {
+          throw err;
+        }
+
+        fu.writeFile.args[1][0].should.equal('output/foo');
+        fu.writeFile.args[1][1].should.equal('foo1\nfoo2\n');
+
+        fu.writeFile.args[2][0].should.equal('output/bar');
+        fu.writeFile.args[2][1].should.equal('bar1');
+        done();
       });
     });
-    it('should clip context to the file', function() {
-      map.context(3, 7).should.eql({
-        file: 'bar',
-        line: 1,
-        column: 1,
-        context: '1:  bar1\n2   bar2\n3   bar3'
-      });
-      map.context(11, 1).should.eql({
-        file: 'bar',
-        line: 9,
-        column: 1,
-        context: ' 7   bar1\n 8   bar2\n 9:  bar3\n10   '
+    it('should add declaration commment', function(done) {
+      sinon.stub(map, 'add');
+      map.writeSourceMap(function(err) {
+        if (err) {
+          throw err;
+        }
+
+        map.add.args[0][1].should.match(/\/\/@ sourceMappingURL=here!.map\n/);
+        done();
       });
     });
   });
