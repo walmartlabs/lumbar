@@ -96,7 +96,11 @@ describe('file-map', function() {
           fileContext: 1,
           line: 1,
           column: 1,
-          context: '1:  foo1\n2   foo2\n3   foo3'
+          context: [
+            '1:  foo1',
+            '2   foo2',
+            '3   foo3'
+          ]
         });
       });
 
@@ -106,7 +110,13 @@ describe('file-map', function() {
           fileContext: undefined,
           line: 8,
           column: 1,
-          context: ' 6   bar3\n 7   bar1\n 8:  bar2\n 9   bar3\n10   '
+          context: [
+            ' 6   bar3',
+            ' 7   bar1',
+            ' 8:  bar2',
+            ' 9   bar3',
+            '10   '
+          ]
         });
       });
       it('should output original lines for unnamed contexts', function() {
@@ -122,14 +132,23 @@ describe('file-map', function() {
           fileContext: undefined,
           line: 1,
           column: 1,
-          context: '1:  bar1\n2   bar2\n3   bar3'
+          context: [
+            '1:  bar1',
+            '2   bar2',
+            '3   bar3'
+          ]
         });
         map.context(11, 1).should.eql({
           file: 'bar',
           fileContext: undefined,
           line: 9,
           column: 1,
-          context: ' 7   bar1\n 8   bar2\n 9:  bar3\n10   '
+          context: [
+            ' 7   bar1',
+            ' 8   bar2',
+            ' 9:  bar3',
+            '10   '
+          ]
         });
       });
     } else {
