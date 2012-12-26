@@ -43,12 +43,15 @@ describe('file-map', function() {
     });
     it('should cache named content', function() {
       var map = new FileMap('foo');
-      map.add('bar', ';;\n::\n');
-      map.contentCache.bar.should.eql([
-        ';;',
-        '::',
-        ''
-      ]);
+      map.add('bar', ';;\n::\n', 42);
+      map.contentCache.bar.should.eql({
+        lines: [
+          ';;',
+          '::',
+          ''
+        ],
+        context: 42
+      });
     });
     if (sourceMap) {
       // This test only applies if we have source map support
@@ -81,7 +84,7 @@ describe('file-map', function() {
     var map;
     beforeEach(function() {
       map = new FileMap('foo');
-      map.add('foo', 'foo1\nfoo2\nfoo3');   // 3, 4
+      map.add('foo', 'foo1\nfoo2\nfoo3', 1);   // 3, 4
       map.add(undefined, ';;');   // 3, 6
       map.add('bar', 'bar1\nbar2\nbar3\nbar1\nbar2\nbar3\nbar1\nbar2\nbar3\n');
     });
@@ -90,6 +93,7 @@ describe('file-map', function() {
       it('should output context', function() {
         map.context(1, 1).should.eql({
           file: 'foo',
+          fileContext: 1,
           line: 1,
           column: 1,
           context: '1:  foo1\n2   foo2\n3   foo3'
@@ -99,6 +103,7 @@ describe('file-map', function() {
       it('should output proper gutter width', function() {
         map.context(10, 1).should.eql({
           file: 'bar',
+          fileContext: undefined,
           line: 8,
           column: 1,
           context: ' 6   bar3\n 7   bar1\n 8:  bar2\n 9   bar3\n10   '
@@ -114,12 +119,14 @@ describe('file-map', function() {
       it('should clip context to the file', function() {
         map.context(3, 7).should.eql({
           file: 'bar',
+          fileContext: undefined,
           line: 1,
           column: 1,
           context: '1:  bar1\n2   bar2\n3   bar3'
         });
         map.context(11, 1).should.eql({
           file: 'bar',
+          fileContext: undefined,
           line: 9,
           column: 1,
           context: ' 7   bar1\n 8   bar2\n 9:  bar3\n10   '
@@ -129,6 +136,7 @@ describe('file-map', function() {
       it('should output without context', function() {
         map.context(11, 1).should.eql({
           file: 'foo',
+          fileContext: undefined,
           line: 11,
           column: 1
         });
