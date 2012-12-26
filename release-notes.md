@@ -1,3 +1,21 @@
+Changes:
+
+- Update mixin handling for namespaces
+
+  This allows different mixins to define mixins with the same name. Consumers can differentiate
+  between the mixins via the `container` attribute on the mixin reference. i.e.
+
+  ```
+  "mixins": [
+    {"name": "test", "container": "phoenix-build"}
+  ]
+  ```
+
+  All mixin projects must now define a name field so they may be referenced in this manner.
+
+- Fix incorrect configuration load when using watch mode.
+- Fix watch cleanup on file removal.
+
 # 2.0.0 Beta 9 - Dec 21st 2012
 
 Changes:
