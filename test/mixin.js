@@ -181,6 +181,27 @@ describe('mixins', function() {
     });
   });
 
+  describe('mixin namespace', function() {
+    it('should fail if a mixin container does not define a name', function(done) {
+      var mixin1 = {
+        root: '1',
+        'modules': {
+          'baz': {'scripts': ['foo1.js']}
+        }
+      };
+      var modules = {
+        'bar': {'scripts': ['baz.js']}
+      };
+
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
+        mixins.err.should.be.an.instanceof(Error);
+        mixins.err.message.should.match(/missing a name\./);
+
+        done();
+      });
+    });
+  });
+
   describe('mixin file references', function() {
     it('should update paths for mixin modules', function(done) {
       var mixin = {
