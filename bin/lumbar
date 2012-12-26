@@ -233,6 +233,7 @@ arise.on('output', function(status) {
       _.each(warning.context, function(line) {
         console.log('\t' + line);
       });
+      console.log();
     });
   }
 
