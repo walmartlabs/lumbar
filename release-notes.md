@@ -1,3 +1,9 @@
+# 2.0.0 Beta 10 - Jan 2nd 2013
+
+Changes:
+
+- Fix handling of styleRoot in mixins.
+
 # 2.0.0 Beta 10 - Dec 26th 2012
 
 Changes:
