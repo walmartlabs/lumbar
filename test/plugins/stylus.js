@@ -328,7 +328,7 @@ describe('stylus plugin', function() {
           }
         },
         'styles': {
-          'stylusRoot': 'stylusRoot/',
+          'styleRoot': 'stylusRoot/',
           'includes': [
             'mixin-import.styl'
           ]
