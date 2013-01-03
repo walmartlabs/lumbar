@@ -1,0 +1,12 @@
+{
+  "name": "attr",
+  "mixins": {
+    "base": {
+      "scripts": [
+        "global.js",
+        "base.js"
+      ]
+    }
+  },
+  "scope": "none"
+}

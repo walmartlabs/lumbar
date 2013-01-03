@@ -10,14 +10,15 @@
     }
   },
 
+  "loadPrefix": "/foo/",
   "styles": {
     "pixelDensity": {
       "iphone": [ 1, 2 ]
     },
     "urlSizeLimit": 103,
     "copyFiles": true,
+    "useNib": true,
     "includes": [
-      "nib",
       "styles/global.styl"
     ]
   }

@@ -1,215 +1,192 @@
-var assert = require('assert'),
-    fs = require('fs'),
-    glob = require('glob'),
+var fs = require('fs'),
     lib = require('./lib'),
-    lumbar = require('../lib/lumbar'),
+    watch = require('./lib/watch'),
     wrench = require('wrench');
 
-function appendSpace(path) {
-  setTimeout(function() {
-    console.error('append:', path);
-    var fd = fs.openSync(path, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-  }, 1000);
+if (!watch.canWatch()) {
+  // Watch is unsupported on 0.4 and earlier, no tests for this case
+  return;
 }
-function appendRapidSpace(path1, path2) {
-  setTimeout(function() {
-    console.error('append rapid:', path1, path2);
-    var fd = fs.openSync(path1, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
 
-    var fd = fs.openSync(path2, 'a');
-    fs.writeSync(fd, ' ');
-    fs.closeSync(fd);
-  }, 1000);
-}
 function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, done) {
-  var testdir = lib.testDir(this.title, 'example'),
-      outdir = lib.testDir(this.title, 'test'),
-      seenFiles = [];
-  this.title += ' ' + outdir;
+  var options = {packageConfigFile: 'config/dev.json', expectedDir: expectedDir};
 
-  wrench.copyDirSyncRecursive(srcdir, testdir);
-
-  var arise = lumbar.init(testdir + '/' + config, {packageConfigFile: 'config/dev.json', outdir: outdir});
-  arise.on('output', function(status) {
-    var statusFile = status.fileName.substring(outdir.length);
-    if (!expectedFiles.some(function(fileName) { return statusFile === fileName; })) {
-      arise.unwatch();
-      assert.fail(undefined, status.fileName,  'watchFile:' + statusFile + ': missing from expected list');
-    } else {
-      seenFiles.push(statusFile);
-    }
-    var seen = seenFiles.length;
-    setTimeout(function() {
-      operations[seen] && operations[seen](testdir);
-    }, 0);
-    if (seenFiles.length < expectedFiles.length) {
-      return;
-    }
-
-    arise.unwatch();
-
-    seenFiles = seenFiles.sort();
-    expectedFiles = expectedFiles.sort();
-    assert.deepEqual(seenFiles, expectedFiles, 'watchFile: seen file list matches');
-
-    lib.assertExpected(outdir, expectedDir, 'watchfile');
-
-    // Cleanup (Do cleanup here so the files remain for the failure case)
-    wrench.rmdirSyncRecursive(testdir);
-    wrench.rmdirSyncRecursive(outdir);
-
-    done();
-  });
-
-  var retCount = 0;
-  arise.watch(undefined, function(err) {
-    err = err || new Error('Callback called without fatal error');
-    throw err;
-  });
+  watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
 }
 
-exports['watch-script'] = function(done) {
-  var expectedFiles = [
-          '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
-              '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
-              '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
-              '/web/index.html', '/web/web-file.txt',
-              '/iphone/index.html', '/iphone/iphone-file.txt',
-              '/android/index.html', '/android/android-file.txt',
-          '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
-              '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
-              '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
-              '/web/index.html', '/web/web-file.txt',
-              '/iphone/index.html', '/iphone/iphone-file.txt',
-              '/android/index.html', '/android/android-file.txt',
-          '/android/native-home.js', '/iphone/native-home.js',
-              '/web/web-file.txt', '/iphone/iphone-file.txt', '/android/android-file.txt',
-          '/android/native-home.js', '/iphone/native-home.js',
-              '/web/web-file.txt', '/iphone/iphone-file.txt', '/android/android-file.txt',
-          '/android/native-home.js', '/iphone/native-home.js', '/web/home.js'
-        ],
-      operations = {
-        18: function(testdir) {
-          // Modify the config file
-          appendSpace(testdir + '/lumbar.json');
-        },
-        36: function(testdir) {
-          // Modify the bridge file
-          appendSpace(testdir + '/js/bridge.js');
-        },
-        41: function(testdir) {
-          appendRapidSpace(testdir + '/js/bridge.js', testdir + '/js/bridge-iphone.js');
-        },
-        46: function(testdir) {
-          // Modify the home template
-          appendSpace(testdir + '/templates/home/home.handlebars');
-        }
-      };
+describe('watch integration', function() {
+  var mock;
+  before(function() {
+    mock = watch.mockWatch();
+  });
+  after(function() {
+    mock.cleanup();
+  });
 
-  runWatchTest.call(this,
-    'test/example', 'lumbar.json',
-    operations, expectedFiles, 'test/expected/example',
-    done);
-};
+  it('should watch script files', function(done) {
+    this.timeout(15000);
 
-exports['watch-style'] = function(done) {
-  var expectedFiles = [
-          '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
-          '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
-          '/iphone/native.css', '/iphone/base.css', '/web/base.css',
-          '/iphone/native.css', '/iphone/base.css', '/web/base.css'
-        ],
-      operations = {
-        5: function(testdir) {
-          appendSpace(testdir + '/styles.json');
-        },
-        10: function(testdir) {
-          appendSpace(testdir + '/styles/base.css');
-        },
-        13: function(testdir) {
-          appendRapidSpace(testdir + '/styles/base.css', testdir + '/styles/iphone.css');
-        }
-      };
+    var expectedFiles = [
+            '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
+                '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
+                '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
+                '/web/index.html', '/web/web-file.txt',
+                '/iphone/index.html', '/iphone/iphone-file.txt',
+                '/android/index.html', '/android/android-file.txt',
+            '/android/native-home.js', '/android/native-home.css', '/android/native-home@1.5x.css',
+                '/iphone/native-home.js', '/iphone/native-home.css', '/iphone/native-home@2x.css',
+                '/web/base.js', '/web/base.css', '/web/base@2x.css', '/web/home.js', '/web/home.css', '/web/home@2x.css',
+                '/web/index.html', '/web/web-file.txt',
+                '/iphone/index.html', '/iphone/iphone-file.txt',
+                '/android/index.html', '/android/android-file.txt',
+            '/android/native-home.js', '/iphone/native-home.js',
+                '/web/web-file.txt', '/iphone/iphone-file.txt', '/android/android-file.txt',
+            '/android/native-home.js', '/iphone/native-home.js',
+                '/web/web-file.txt', '/iphone/iphone-file.txt', '/android/android-file.txt',
+            '/android/native-home.js', '/iphone/native-home.js', '/web/home.js'
+          ],
+        operations = {
+          18: function(testdir) {
+            // Modify the config file
+            watch.appendSpaceSync(testdir + 'lumbar.json');
+            mock.trigger('change', testdir + 'lumbar.json');
+          },
+          36: function(testdir) {
+            // Modify the bridge file
+            watch.appendSpaceSync(testdir + 'js/bridge.js');
+            mock.trigger('change', testdir + 'js/bridge.js');
+          },
+          41: function(testdir) {
+            watch.appendSpaceSync(testdir + 'js/bridge.js');
+            watch.appendSpaceSync(testdir + 'js/bridge-iphone.js');
+            mock.trigger('change', testdir + 'js/bridge-iphone.js');
+            mock.trigger('change', testdir + 'js/bridge.js');
+          },
+          46: function(testdir) {
+            // Modify the home template
+            watch.appendSpaceSync(testdir + 'templates/home/home.handlebars');
+            mock.trigger('change', testdir + 'templates/home/home.handlebars');
+          }
+        };
 
-  runWatchTest.call(this,
-    'test/artifacts', 'styles.json',
-    operations, expectedFiles, 'test/expected/styles-watch',
-    done);
-};
+    runWatchTest.call(this,
+      'test/example', 'lumbar.json',
+      operations, expectedFiles, 'test/expected/example',
+      done);
+  });
 
-exports['watch-stylus'] = function(done) {
-  var expectedFiles = [
-          '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
-          '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
-          '/iphone/base.css', '/iphone/base@2x.css',
-          '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css'
-        ],
-      operations = {
-        3: function(testdir) {
-          appendSpace(testdir + '/stylus.json');
-        },
-        6: function(testdir) {
-          appendSpace(testdir + '/styles/iphone.styl');
-        },
-        8: function(testdir) {
-          appendRapidSpace(testdir + '/styles/base.styl', testdir + '/styles/iphone.styl');
-        }
-      };
+  it('should watch style files', function(done) {
+    var expectedFiles = [
+            '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
+            '/iphone/native.css', '/iphone/base.css', '/iphone/home.css', '/web/base.css', '/web/home.css',
+            '/iphone/native.css', '/iphone/base.css', '/web/base.css',
+            '/iphone/native.css', '/iphone/base.css', '/web/base.css'
+          ],
+        operations = {
+          5: function(testdir) {
+            watch.appendSpaceSync(testdir + 'styles.json');
+            mock.trigger('change', testdir + 'styles.json');
+          },
+          10: function(testdir) {
+            watch.appendSpaceSync(testdir + 'styles/base.css');
+            mock.trigger('change', testdir + 'styles/base.css');
+          },
+          13: function(testdir) {
+            watch.appendSpaceSync(testdir + 'styles/base.css');
+            watch.appendSpaceSync(testdir + 'styles/iphone.css');
+            mock.trigger('change', testdir + 'styles/base.css');
+            mock.trigger('change', testdir + 'styles/iphone.css');
+          }
+        };
 
-  runWatchTest.call(this,
-    'test/artifacts', 'stylus.json',
-    operations, expectedFiles, 'test/expected/stylus',
-    done);
-};
+    runWatchTest.call(this,
+      'test/artifacts', 'styles.json',
+      operations, expectedFiles, 'test/expected/styles-watch',
+      done);
+  });
 
-exports['watch-dir'] = function(done) {
-  var expectedFiles = [
-          '/base.js', '/base.js'
-        ],
-      operations = {
-        1: function(testdir) {
-          appendSpace(testdir + '/js/iphone.js');
-        }
-      };
+  it('should watch stylus files', function(done) {
+    this.timeout(15000);
 
-  runWatchTest.call(this,
-    'test/artifacts', 'single-directory.json',
-    operations, expectedFiles, 'test/expected/watch-dir',
-    done);
-};
+    var expectedFiles = [
+            '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
+            '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css',
+            '/iphone/base.css', '/iphone/base@2x.css',
+            '/iphone/base.css', '/iphone/base@2x.css', '/web/base.css'
+          ],
+        operations = {
+          3: function(testdir) {
+            watch.appendSpaceSync(testdir + 'stylus.json');
+            mock.trigger('change', testdir + 'stylus.json');
+          },
+          6: function(testdir) {
+            watch.appendSync(testdir + 'styles/iphone.styl', '\nfoo\n  bar 1');
+            mock.trigger('change', testdir + 'styles/iphone.styl');
+          },
+          8: function(testdir) {
+            watch.appendSpaceSync(testdir + 'styles/base.styl');
+            watch.appendSpaceSync(testdir + 'styles/iphone.styl');
+            mock.trigger('change', testdir + 'styles/base.styl');
+            mock.trigger('change', testdir + 'styles/iphone.styl');
+          }
+        };
 
-exports['watch-add'] = function(done) {
-  var expectedFiles = [
-          '/base.js', '/base.js'
-        ],
-      operations = {
-        1: function(testdir) {
-          fs.writeFileSync(testdir + '/js/home/home2.js', ' ');
-        }
-      };
+    runWatchTest.call(this,
+      'test/artifacts', 'stylus.json',
+      operations, expectedFiles, 'test/expected/stylus-watch',
+      done);
+  });
 
-  runWatchTest.call(this,
-    'test/artifacts', 'single-directory.json',
-    operations, expectedFiles, 'test/expected/watch-add',
-    done);
-};
+  it('should watch directories', function(done) {
+    var expectedFiles = [
+            '/base.js', '/base.js'
+          ],
+        operations = {
+          1: function(testdir) {
+            watch.appendSpaceSync(testdir + 'js/iphone.js');
+            mock.trigger('change', testdir + 'js/iphone.js');
+          }
+        };
 
-exports['watch-remove'] = function(done) {
-  var expectedFiles = [
-          '/base.js', '/base.js'
-        ],
-      operations = {
-        1: function(testdir) {
-          fs.unlinkSync(testdir + '/js/home/home.js');
-        }
-      };
+    runWatchTest.call(this,
+      'test/artifacts', 'single-directory.json',
+      operations, expectedFiles, 'test/expected/watch-dir',
+      done);
+  });
 
-  runWatchTest.call(this,
-    'test/artifacts', 'single-directory.json',
-    operations, expectedFiles, 'test/expected/watch-remove',
-    done);
-};
+  it('should watch added files', function(done) {
+    var expectedFiles = [
+            '/base.js', '/base.js'
+          ],
+        operations = {
+          1: function(testdir) {
+            fs.writeFileSync(testdir + 'js/home/home2.js', ' ');
+            mock.trigger('change', testdir + 'js/home');
+          }
+        };
+
+    runWatchTest.call(this,
+      'test/artifacts', 'single-directory.json',
+      operations, expectedFiles, 'test/expected/watch-add',
+      done);
+  });
+
+  it('should watch removed files', function(done) {
+    this.timeout(15000);
+
+    var expectedFiles = [
+            '/base.js', '/base.js'
+          ],
+        operations = {
+          1: function(testdir) {
+            fs.unlinkSync(testdir + 'js/home/home.js');
+            mock.trigger('remove', testdir + 'js/home/home.js');
+          }
+        };
+
+    runWatchTest.call(this,
+      'test/artifacts', 'single-directory.json',
+      operations, expectedFiles, 'test/expected/watch-remove',
+      done);
+  });
+});

@@ -59,8 +59,8 @@ stylus build. As a consequence the stylus variable state will be common across t
         "urlSizeLimit": 103,
         "copyFiles": true,
         "styleRoot": "static",
+        "useNib": true,
         "includes": [
-          "nib",
           "styles/global.styl"
         ]
       }

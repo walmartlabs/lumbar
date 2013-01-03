@@ -17,9 +17,14 @@ once in the output.
 
   * `precompile` : Options to pass to handlebars precompile method if precompilation is desired. Leave
         falsy or undefined to load the templates through client-side compilation.
-  * `templateCache` : Object that templates will be assigned to. This field is defined on the root config
+  & `precompile.template` : An optional string for the code to be generated when a compiled template
+        is inserted into the module source. The template will recieve three variables: `data`, 
+        `templateCache` and `name`. It may be a string handlbars template or a path to a file ending in `.handlebars`
+  * `templateCache` : Object that templates will be assigned to. This field is defined on the root 
         and defaults to `{AppModule}.templates` where {AppModule} is the name of the application module.
         This instance can be any object and should be manually defined by the client code.
+  * `templates.template` : An optional string for the code to be generated when a template is inserted into
+        the module source. The template will recieve three variables: `data`, `templateCache` and `name`. It may be a string handlbars template or a path to a file ending in `.handlebars`
 
 ## Example ##
 
@@ -44,6 +49,8 @@ once in the output.
         }
       },
 
-      "templateCache": "TemplateCache"
+      "templateCache": "TemplateCache",
+      "templateTemplate": "{{{templateCache}}}['{{{name}}}'] = Handlebars.compile('{{{data}}}');",
+      "precompiledTemplate": "{{{templateCache}}}['{{{name}}}'] = Handlebars.template({{{data}}});"
     }
 

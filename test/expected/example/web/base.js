@@ -1,4 +1,3 @@
-var Example;
 _.extend(exports, {
   Views: {},
   templates: function(name, context) {
@@ -14,17 +13,22 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 exports.Router = {
   create: function(module, protoProps, classProps) {
     return new (Backbone.Router.extend(_.extend({}, module, protoProps), classProps));
   }
 };
+
 ;;
+var Example;
 Example = (function() {
-var module = {exports: {}};
-var exports = module.exports;
-_.extend(exports, {
+  var module = {exports: {}};
+  var exports = module.exports;
+  var Example = exports;
+
+  _.extend(exports, {
   Views: {},
   templates: function(name, context) {
     return exports.templates[name](context);
@@ -39,6 +43,7 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 exports.Views.Header = Backbone.View.extend({
   el: ".header",
@@ -47,6 +52,7 @@ exports.Views.Header = Backbone.View.extend({
     $(this.el).html(exports.templates('templates/header.handlebars'));
   }
 });
+
 ;;
 /* handsfree : templates/header.handlebars*/
 module.exports.templates['templates/header.handlebars'] = Handlebars.compile('Header\n');
@@ -56,6 +62,11 @@ module.exports.config = {
 }
 ;
 /* lumbar module map */
-module.exports.moduleMap({"modules":{"home":{"js":"home.js","css":[{"href":"home.css","maxRatio":1.5},{"href":"home@2x.css","minRatio":1.5}]}},"routes":{"":"home","home":"home"},"base":{"js":"base.js","css":[{"href":"base.css","maxRatio":1.5},{"href":"base@2x.css","minRatio":1.5}]}});
-return module.exports;
+module.exports.moduleMap({"base":{"css":[{"href":"base.css","maxRatio":1.5},{"href":"base@2x.css","minRatio":1.5}],"js":"base.js"},"modules":{"home":{"css":[{"href":"home.css","maxRatio":1.5},{"href":"home@2x.css","minRatio":1.5}],"js":"home.js"}},"routes":{"":"home","home":"home"}});
+
+
+  if (Example !== module.exports) {
+    console.warn("Example internally differs from global");
+  }
+  return module.exports;
 }).call(this);

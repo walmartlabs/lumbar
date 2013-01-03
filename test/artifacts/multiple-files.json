@@ -6,5 +6,6 @@
       "js/iphone.js",
       "js/web.js"
     ]
-  }
+  },
+  "scope": "none"
 }

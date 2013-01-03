@@ -21,9 +21,10 @@
       "iphone": [ 1, 2 ]
     },
     "urlSizeLimit": 1,
+    "useNib": true,
     "includes": [
-      "nib",
       "styles/global.styl"
     ]
-  }
+  },
+  "scope": "none"
 }

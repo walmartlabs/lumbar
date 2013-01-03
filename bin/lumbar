@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var fs = require('fs'),
+var _ = require('underscore'),
+    fs = require('fs'),
     lumbar = require('../lib/lumbar'),
     dirname = require('path').dirname,
     growl = require('growl');
@@ -9,15 +10,21 @@ var args = process.argv.slice(2);
 
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
-"lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir\n"+
+"lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile [outputDir]\n"+
 "        Build out the package(s).\n"+
-"lumbar watch [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir\n"+
+"lumbar watch [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile [outputDir]\n"+
 "        Start watching the files for changes and rebuild as necessary.\n"+
 "\n"+
 "--package:    represents the name of a corresponding package listed\n"+
 "              under 'packages' in lumbarFile.\n"+
 "\n"+
+"--module:     build only a specific module. May be defined multiple times to build multiple.\n"+
+"\n"+
 "--minimize:   to shrink the resultant file.\n"+
+"\n"+
+"--sourceMap:  generate a source map for the output modules.\n"+
+"              WARN: This copies the source files into the module output unobfuscated.\n"
+"                 care should be exercised when used with production releases\n"
 "\n"+
 "--config:     is the name and path to the lumbar config file, if\n"+
 "              not given then lumbar.json is assumed.\n"+
@@ -36,12 +43,13 @@ var LONG_USAGE="lumbar help\n"+
 
 var configFile;
 var packageName;
-var moduleName;
+var modules = [];
 var minimize = false;
+var sourceMap = false;
 var build = true; // build by default.
 var watch = false;
 
-var lumbarFile;
+var lumbarFile = 'lumbar.json';
 var outputDir;
 /**
  * Import paths.
@@ -69,12 +77,17 @@ while (args.length) {
       if (!packageName) throw new Error('--package <name> required');
       break;
     case '--module':
-      moduleName = args.shift();
+      var moduleName = args.shift();
       if (!moduleName) throw new Error('--module <name> required');
+      modules.push(moduleName);
       break;
     case '-m':
     case '--minimize':
       minimize = true;
+      break;
+    case '-s':
+    case '--sourceMap':
+      sourceMap = true;
       break;
     case '-b':
     case '--build':
@@ -115,19 +128,28 @@ while (args.length) {
 }
 
 if (build || watch) {
-  switch (files.length) {
-    case 2:
-      lumbarFile = files[0];
-      outputDir = files[1];
-      break;
-    case 1:
-      outputDir = files[0];
-      lumbarFile = "lumbar.json";
-      break;
-    case 0:
-      console.error(LONG_USAGE);
-      process.exit(1);
-      return true;
+  var file = files.shift();
+  try {
+    var stat = fs.statSync(file);
+
+    if (stat.isFile()) {
+      lumbarFile = file;
+
+      file = files.shift();
+      if (file) {
+        outputDir = file;
+      }
+    } else {
+      outputDir = file;
+    }
+  } catch (err) {
+    outputDir = file;
+  }
+
+  if (files.length) {
+    console.error(LONG_USAGE);
+    process.exit(1);
+    return true;
   }
 } else {
   console.error(LONG_USAGE);
@@ -157,6 +179,7 @@ plugins = plugins.map(function(plugin) {
 var options = {
   packageConfigFile: configFile,
   minimize: minimize,
+  sourceMap: sourceMap,
   outdir: outputDir,
   plugins: plugins
 };
@@ -166,7 +189,25 @@ var arise = lumbar.init(lumbarFile, options),
     // is worker going to point to watch or build func?
     worker = watch ? arise.watch : arise.build,
     lastMessage,
-    watchOutput = {};
+    watchOutput = {},
+    growlList = [];
+
+function safeGrowl(msg, options) {
+  try {
+    growl(msg, options);
+  } catch (err) {
+    if (err.errno === 'EMFILE') {
+      _.defer(safeGrowl, msg, options);
+    } else {
+      throw err;
+    }
+  }
+}
+
+var pingGrowl = _.debounce(function() {
+  safeGrowl('compiled: ' + growlList.map(function(file) { return file.substring(options.outdir.length); }).join('\n\t'), {title: 'Lumbar'});
+  growlList = [];
+}, 1000);
 
 arise.on('watch-change', function(status) {
   if (!watchOutput[status.fileName]) {
@@ -177,35 +218,61 @@ arise.on('watch-change', function(status) {
 arise.on('output', function(status) {
   watchOutput = {};
   if (status.watch) {
-    console.log('\t\033[90mwatching\033[0m ' + status.fileName);
+    console.log('\033[90mwatching\033[0m ' + status.fileName);
   } else {
-    console.log('\t\033[90mcompiled\033[0m ' + status.fileName);
+    console.log('\033[90mcompiled\033[0m ' + status.fileName);
+  }
+  if (status.warnings && status.warnings.length) {
+    if (watch) {
+      safeGrowl(status.warnings.length + ' warnings in ' + status.fileName, { title: 'Lumbar warnings', sticky: true });
+    }
+    console.log('\t\033[91m' + status.warnings.length + ' warnings\033[0m');
+    _.each(status.warnings, function(warning) {
+      console.log('\t\033[91mwarning\033[0m ' + warning.msg);
+      console.log('\t\tat ' + warning.file + ':' +  warning.line + (warning.column ? ',' + warning.column : ''));
+      _.each(warning.context, function(line) {
+        console.log('\t' + line);
+      });
+      console.log();
+    });
+  }
+
+  if (watch) {
+    growlList.push(status.fileName);
+    pingGrowl();
   }
 });
 arise.on('error', function(err) {
+  if ((err.source || err).code === 'EMFILE') {
+    throw err.source || err;
+  }
+
   var message = err.stack || err.message;
   if (lastMessage !== message) {
     lastMessage = message;
 
     console.error(message);
-    growl(err.message, { title: 'Lumbar error' });
+    try {
+      safeGrowl(err.message, { title: 'Lumbar error', sticky: true });
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 });
 
-// First figure out what our output looks like
-fs.stat(options.outdir, function(err, stat) {
+// execute either watch() or build() and pass lumbar as the context.
+worker.call(arise, packageName, modules, function(err, status) {
   if (err) {
     throw err;
   }
+});
 
-  if (!stat.isDirectory()) {
-    throw new Error("Output must be a directory");
+process.on('uncaughtException', function(err) {
+  if (err.code === 'EMFILE') {
+    console.error('\n\n\tEMFILE error: Too many files open at one time. Fix this by running\n\n\t\tulimit -n 9999\n\n');
+  } else {
+    console.error('Unhandled Exception:', err.stack || err);
   }
-
-  // execute either watch() or build() and pass lumbar as the context.
-  worker.call(arise, packageName, moduleName, function(err, status) {
-    if (err) {
-      throw err;
-    }
-  });
+  process.exit(1);
 });

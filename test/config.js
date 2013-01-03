@@ -1,0 +1,34 @@
+var Config = require('../lib/config');
+
+describe('config', function() {
+  it('should fail if no modules are defined', function() {
+    (function() {
+      Config.create({});
+    }).should.throw('No modules object defined');
+  });
+
+  describe('application module', function() {
+    var config = Config.create({
+      application: {
+        module: 'foo',
+        name: 'Name!'
+      },
+      modules: {}
+    });
+
+    it('should identify the app module', function() {
+      config.isAppModule('foo').should.be.true;
+      config.isAppModule({name: 'foo'}).should.be.true;
+
+      config.isAppModule('bar').should.be.false;
+      config.isAppModule({name: 'bar'}).should.be.false;
+    });
+    it('should provide the scoped module name', function() {
+      config.scopedAppModuleName('foo').should.equal('module.exports');
+      config.scopedAppModuleName({name: 'foo'}).should.equal('module.exports');
+
+      config.scopedAppModuleName('bar').should.equal('Name!');
+      config.scopedAppModuleName({name: 'bar'}).should.equal('Name!');
+    });
+  });
+});

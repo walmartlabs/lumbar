@@ -8,16 +8,23 @@
       "platforms": [ "iphone" ],
       "modules": [ "base", "home" ],
       "combine": true
+    },
+    "named": {
+      "platforms": [ "iphone" ],
+      "modules": [ "base", "home" ],
+      "name": "native-named",
+      "combine": true
     }
   },
   "modules": {
     "base": [
       "js/base.js",
-      {"src": "js/iphone.js", "platform": "iphone"},
+      {"src": "js/iphone.js", "package": "native"},
       {"src": "js/web.js", "platforms": ["web"]}
     ],
     "home": [
       "js/home/home.js"
     ]
-  }
+  },
+  "scope": "none"
 }

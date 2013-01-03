@@ -1,4 +1,3 @@
-var Example;
 _.extend(exports, {
   Views: {},
   templates: function(name, context) {
@@ -14,11 +13,15 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
+var Example;
 Example = (function() {
-var module = {exports: {}};
-var exports = module.exports;
-_.extend(exports, {
+  var module = {exports: {}};
+  var exports = module.exports;
+  var Example = exports;
+
+  _.extend(exports, {
   Views: {},
   templates: function(name, context) {
     return exports.templates[name](context);
@@ -33,26 +36,37 @@ $(document).ready(function() {
 
   Backbone.history.start();
 });
+
 ;;
 var Bridge = exports.Bridge = {
   sendMessage: function() {}
 };
-  ;;
+  
+;;
 Bridge.nativeHost = 'iphone';
- ;;
+ 
+;;
 module.exports.config = {
   "port": 8080,
   "securePort": 8081
 }
 ;
 /* lumbar module map */
-module.exports.moduleMap({"base":{"js":".js","css":[{"href":".css","maxRatio":1.5},{"href":"@2x.css","minRatio":1.5}]}});
-return module.exports;
+module.exports.moduleMap({"base":{"css":[{"href":"native-home.css","maxRatio":1.5},{"href":"native-home@2x.css","minRatio":1.5}],"js":"native-home.js"}});
+
+
+  if (Example !== module.exports) {
+    console.warn("Example internally differs from global");
+  }
+  return module.exports;
 }).call(this);
+
 Example['home'] = (function() {
-var module = {exports: {}};
-var exports = module.exports;
-/* router : home */
+  var module = {exports: {}};
+  var exports = module.exports;
+  Example['home'] = exports;
+
+  /* router : home */
 module.name = "home";
 module.routes = {"":"home","home":"home"};
 Example.Views.Home = Backbone.View.extend({
@@ -63,6 +77,7 @@ Example.Views.Home = Backbone.View.extend({
     $(this.el).append(Example.templates('templates/home/footer.handlebars'));
   }
 });
+
 ;;
 /* handsfree : templates/home/footer.handlebars*/
 Example.templates['templates/home/footer.handlebars'] = Handlebars.compile('<div>Footer</div>\n');
@@ -74,6 +89,12 @@ Example.Router.create(module, {
     home.render();
   }
 });
+
 ;;
-return module.exports;
+
+
+  if (Example['home'] !== module.exports) {
+    console.warn("Example['home'] internally differs from global");
+  }
+  return module.exports;
 }).call(this);

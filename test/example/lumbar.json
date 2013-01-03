@@ -74,8 +74,11 @@
       "iphone": [ 1, 2 ],
       "web": [ 1, 2 ]
     },
+    "useNib": true,
+    "config": [
+      "styles/config.json"
+    ],
     "includes": [
-      "nib",
       "styles/include/global.styl"
     ]
   }

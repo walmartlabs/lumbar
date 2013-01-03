@@ -3,5 +3,6 @@
     "base": [
       "js"
     ]
-  }
+  },
+  "scope": "none"
 }
