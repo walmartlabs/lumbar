@@ -45,6 +45,7 @@ describe('handlebars plugin', function() {
         data.should.eql({
           inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
           data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
+          generated: true,
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -65,6 +66,7 @@ describe('handlebars plugin', function() {
         data.should.eql({
           inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
           data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.template(wooo!);\n',
+          generated: true,
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -100,6 +102,7 @@ describe('handlebars plugin', function() {
           data.should.eql({
             inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
             data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.compile(\'home\\n\');\n',
+            generated: true,
             noSeparator: true,
             ignoreWarnings: true
           });

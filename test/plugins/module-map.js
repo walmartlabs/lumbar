@@ -1,7 +1,6 @@
 var _ = require('underscore'),
     lib = require('../lib'),
-    moduleMap = require('../../lib/plugins/module-map'),
-    should = require('should');
+    moduleMap = require('../../lib/plugins/module-map');
 
 describe('module-map plugin', function() {
   var modules, config;
@@ -33,7 +32,7 @@ describe('module-map plugin', function() {
     });
 
     it('should include module-map resource', function(done) {
-      lib.pluginExec('module-map', 'scripts', config.modules.module1, [], config, function(resources, context) {
+      lib.pluginExec('module-map', 'scripts', config.modules.module1, [], config, function(resources) {
         _.pluck(resources, 'originalResource').should.eql([{routes: {'foo': 'bar', 'baz': 'bat'}}, {'module-map': true}]);
         done();
       });
@@ -52,6 +51,7 @@ describe('module-map plugin', function() {
 
           data.should.eql({
             data: '/* lumbar module map */\nmodule.exports.moduleMap({"module":true});\n',
+            generated: true,
             noSeparator: true,
             ignoreWarnings: true
           });
@@ -107,9 +107,9 @@ describe('module-map plugin', function() {
             modules: {
               module1: {js: 'module1.js', css: undefined},
               module2: {js: 'module2.js', css: [
-                  {href:'module2.css', maxRatio: 1.5},
-                  {href:'module2@2x.css', minRatio: 1.5, maxRatio: 2.5},
-                  {href:'module2@3x.css', minRatio: 2.5}
+                  {href: 'module2.css', maxRatio: 1.5},
+                  {href: 'module2@2x.css', minRatio: 1.5, maxRatio: 2.5},
+                  {href: 'module2@3x.css', minRatio: 2.5}
                 ]}
             },
             routes: {

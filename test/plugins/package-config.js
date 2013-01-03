@@ -53,6 +53,7 @@ describe('package-config plugin', function() {
         data.should.eql({
           data: 'App.config = {\n  "port": 8080,\n  "securePort": 8081\n}\n;\n',
           inputs: [context.options.packageConfigFile],
+          generated: true,
           noSeparator: true
         });
         done();

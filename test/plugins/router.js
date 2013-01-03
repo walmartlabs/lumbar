@@ -27,6 +27,7 @@ describe('router plugin', function() {
 
         data.should.eql({
           data: '/* router : foo */\nmodule.name = "foo";\nmodule.routes = {"foo":"bar","baz":"bat"};\n',
+          generated: true,
           noSeparator: true
         });
       });
