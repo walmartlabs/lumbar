@@ -28,8 +28,6 @@
   "trailing": false,
   "globalstrict": true,
   "nonstandard": true,
-  "white": false,
-  "indent": 2,
 
   "onevar": false
 }
