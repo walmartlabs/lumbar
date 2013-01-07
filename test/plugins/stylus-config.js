@@ -150,32 +150,32 @@ describe('stylus-config plugin', function() {
         {
           name: 'mixin',
           styles: {
-            "config": "test.json",
-            "configObject": "foo"
+            'config': 'test.json',
+            'configObject': 'foo'
           }
         },
         {
           name: 'mixin2',
           styles: {
-            "config": ["test2.json"]
+            'config': ['test2.json']
           }
         }
       ];
 
       var config = {
         styles: {
-          "config": "config.json"
+          'config': 'config.json'
         }
       };
 
       lib.mixinExec({}, mixins, config, function(_mixins, context) {
         context.config.attributes.styles.should.eql({
-          "config": [
-            {src: "test.json", mixin: mixins[0]},
-            {src: "test2.json", mixin: mixins[1]},
-            "config.json"
+          'config': [
+            {src: 'test.json', mixin: mixins[0]},
+            {src: 'test2.json', mixin: mixins[1]},
+            'config.json'
           ],
-          "configObject": "foo"
+          'configObject': 'foo'
         });
         done();
       });
@@ -183,15 +183,15 @@ describe('stylus-config plugin', function() {
     it('should create styles config if necessary', function(done) {
       var mixin = {
         name: 'mixin',
-        "styles": {
-          "config": "foo"
+        'styles': {
+          'config': 'foo'
         }
       };
 
       lib.mixinExec({}, [], {}, function(mixins, context) {
         mixins.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
-            "config": [{src: "foo", mixin: mixin}]
+            'config': [{src: 'foo', mixin: mixin}]
           });
           done();
         });
@@ -200,8 +200,8 @@ describe('stylus-config plugin', function() {
     it('should update path references', function(done) {
       var mixin = {
         name: 'mixin',
-        "styles": {
-          "config": ['foo', 'bar']
+        'styles': {
+          'config': ['foo', 'bar']
         }
       };
 
@@ -209,7 +209,7 @@ describe('stylus-config plugin', function() {
         mixin.root = 'a/';
         mixins.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
-            "config": [
+            'config': [
               {src: 'a/foo', mixin: mixin},
               {src: 'a/bar', mixin: mixin}
             ]

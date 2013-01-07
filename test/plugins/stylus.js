@@ -183,31 +183,31 @@ describe('stylus plugin', function() {
         {
           name: 'mixin',
           styles: {
-            "pixelDensity": {
-              "iphone": [ 1, 2, 3 ],
-              "web": [ 1, 2 ]
+            'pixelDensity': {
+              'iphone': [ 1, 2, 3 ],
+              'web': [ 1, 2 ]
             },
-            "urlSizeLimit": 103,
-            "copyFiles": true,
-            "useNib": true,
-            "includes": [
-              "styles/global.styl",
-              "styles/1.styl"
+            'urlSizeLimit': 103,
+            'copyFiles': true,
+            'useNib': true,
+            'includes': [
+              'styles/global.styl',
+              'styles/1.styl'
             ]
           }
         },
         {
           name: 'mixin2',
           styles: {
-            "pixelDensity": {
-              "android": [ 1, 2 ],
-              "web": [ 1, 2, 3 ]
+            'pixelDensity': {
+              'android': [ 1, 2 ],
+              'web': [ 1, 2, 3 ]
             },
-            "urlSizeLimit": 104,
-            "copyFiles": false,
-            "styleRoot": "foo/",
-            "includes": [
-              "styles/2.styl"
+            'urlSizeLimit': 104,
+            'copyFiles': false,
+            'styleRoot': 'foo/',
+            'includes': [
+              'styles/2.styl'
             ]
           }
         }
@@ -215,32 +215,32 @@ describe('stylus plugin', function() {
 
       var config = {
         styles: {
-          "pixelDensity": {
-            "iphone": [ 1, 2 ]
+          'pixelDensity': {
+            'iphone': [ 1, 2 ]
           },
-          "useNib": false,
-          "includes": [
-            "styles/config.styl"
+          'useNib': false,
+          'includes': [
+            'styles/config.styl'
           ]
         }
       };
 
       lib.mixinExec({}, mixins, config, function(_mixins, context) {
         context.config.attributes.styles.should.eql({
-          "pixelDensity": {
-            "iphone": [ 1, 2 ],
-            "web": [ 1, 2, 3 ],
-            "android": [ 1, 2 ]
+          'pixelDensity': {
+            'iphone': [ 1, 2 ],
+            'web': [ 1, 2, 3 ],
+            'android': [ 1, 2 ]
           },
-          "useNib": false,
-          "includes": [
-            {src: "styles/global.styl", mixin: mixins[0]},
-            {src: "styles/1.styl", mixin: mixins[0]},
-            {src: "styles/2.styl", mixin: mixins[1]},
-            "styles/config.styl"
+          'useNib': false,
+          'includes': [
+            {src: 'styles/global.styl', mixin: mixins[0]},
+            {src: 'styles/1.styl', mixin: mixins[0]},
+            {src: 'styles/2.styl', mixin: mixins[1]},
+            'styles/config.styl'
           ],
-          "urlSizeLimit": 104,
-          "copyFiles": false
+          'urlSizeLimit': 104,
+          'copyFiles': false
         });
         done();
       });
@@ -248,21 +248,21 @@ describe('stylus plugin', function() {
     it('should create styles config if necessary', function(done) {
       var mixin = {
         name: 'mixin',
-        "styles": {
-          "pixelDensity": {
-            "iphone": [ 1, 2 ]
+        'styles': {
+          'pixelDensity': {
+            'iphone': [ 1, 2 ]
           },
-          "useNib": true
+          'useNib': true
         }
       };
 
       lib.mixinExec({}, [], {}, function(mixins, context) {
         mixins.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
-            "pixelDensity": {
-              "iphone": [ 1, 2 ]
+            'pixelDensity': {
+              'iphone': [ 1, 2 ]
             },
-            "useNib": true
+            'useNib': true
           });
           done();
         });
@@ -271,9 +271,9 @@ describe('stylus plugin', function() {
     it('should update path references', function(done) {
       var mixin = {
         name: 'mixin',
-        "styles": {
-          "includes": ['foo', 'bar'],
-          "styleRoot": 'baz'
+        'styles': {
+          'includes': ['foo', 'bar'],
+          'styleRoot': 'baz'
         }
       };
 
@@ -281,7 +281,7 @@ describe('stylus plugin', function() {
         mixin.root = 'a/';
         mixins.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
-            "includes": [
+            'includes': [
               {src: 'a/foo', mixin: mixin},
               {src: 'a/bar', mixin: mixin}
             ]
