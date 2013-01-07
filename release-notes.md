@@ -1,3 +1,13 @@
+# 2.0.0 Beta 11 - Jan 7th 2013
+
+Changes:
+
+- Add `depends` field to module map for lumbar loader module dependencies
+- Fix source map comment output
+- Source map parsing performance improvements
+- Run uglify in parallel worker process(es)
+    Dramatically decreased processing time for large projects on multi-core machines.
+
 # 2.0.0 Beta 10 - Jan 2nd 2013
 
 Changes:
