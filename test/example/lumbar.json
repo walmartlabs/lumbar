@@ -46,6 +46,7 @@
       ]
     },
     "home": {
+      "depends": ["dummy"],
       "routes": {
         "": "home",
         "home": "home"

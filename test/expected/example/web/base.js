@@ -62,7 +62,7 @@ module.exports.config = {
 }
 ;
 /* lumbar module map */
-module.exports.moduleMap({"base":{"css":[{"href":"base.css","maxRatio":1.5},{"href":"base@2x.css","minRatio":1.5}],"js":"base.js"},"modules":{"home":{"css":[{"href":"home.css","maxRatio":1.5},{"href":"home@2x.css","minRatio":1.5}],"js":"home.js"}},"routes":{"":"home","home":"home"}});
+module.exports.moduleMap({"base":{"css":[{"href":"base.css","maxRatio":1.5},{"href":"base@2x.css","minRatio":1.5}],"js":"base.js"},"modules":{"home":{"css":[{"href":"home.css","maxRatio":1.5},{"href":"home@2x.css","minRatio":1.5}],"depends":["dummy"],"js":"home.js"}},"routes":{"":"home","home":"home"}});
 
 
   if (Example !== module.exports) {
