@@ -323,7 +323,8 @@ describe('stylus plugin', function() {
           'stylus': {
             'styles': [
               'file1.styl',
-              'file2.styl'
+              'file2.styl',
+              'file3.styl'
             ]
           }
         },
@@ -339,7 +340,7 @@ describe('stylus plugin', function() {
         'modules': {
           'test': {
             'mixins': [
-              {name: 'stylus', overrides: {'file1.styl': 'bar1.styl'}}
+              {name: 'stylus', overrides: {'file1.styl': 'bar1.styl', 'file3.styl': true}}
             ],
             'styles': [
               'file1.styl',
@@ -365,6 +366,7 @@ describe('stylus plugin', function() {
             'bar1.styl',
             'mixinRoot/stylusRoot/file2.styl',
             'mixinRoot/file2.styl',
+            'file3.styl',
             'file1.styl',
             'img.png',
             'file2.styl'
