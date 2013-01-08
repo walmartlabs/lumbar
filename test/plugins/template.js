@@ -300,7 +300,8 @@ describe('template plugin', function() {
         templates: {
           'baz1.1': [
             'foo1.1',
-            'foo1.2'
+            'foo1.2',
+            {src: 'foo1.3', mixin: 'mixin'}
           ]
         }
       };
@@ -357,7 +358,8 @@ describe('template plugin', function() {
             {src: 'mixin2/baz1.2'},
             {src: 'baz1.1'},
             {template: true, src: 'foo1.1', name: 'foo1.1'},
-            {template: true, src: 'foo1.2', name: 'foo1.2'}
+            {template: true, src: 'foo1.2', name: 'foo1.2'},
+            {template: true, src: 'mixin1/foo1.3', name: 'foo1.3'},
           ]);
           done();
         });
