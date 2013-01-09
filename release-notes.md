@@ -1,4 +1,13 @@
-# 2.0.0 Beta 11 - Jan 7th 2013
+# 2.0.0 Beta 13 - Jan 8th 2013
+
+Changes:
+
+- Cleanup override handling in stylus templates
+- Allow template hash references to pull from specific mixins
+- Fix stylus mixin compilation under combined compile
+- Allow for nested mixin definition
+
+# 2.0.0 Beta 12 - Jan 7th 2013
 
 Changes:
 
