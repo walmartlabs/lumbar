@@ -5,8 +5,6 @@ var fs = require('fs'),
     sinon = require('sinon');
 
 describe('handlebars plugin', function() {
-  // TODO : More explict test for normal output
-  // TODO : Precompiled test with mocks
   var readFile = fs.readFile;
   after(function() {
     fs.readFile = readFile;
