@@ -75,6 +75,56 @@ describe('handlebars plugin', function() {
         done();
       });
     });
+    it('should output only once', function(done) {
+      var config = {
+        templates: {
+          root: __dirname + '/../artifacts/templates/',
+          'js/views/test.js': [
+            __dirname + '/../artifacts/templates/'
+          ],
+          'js/views/test2.js': [
+            __dirname + '/../artifacts/templates/home.handlebars'
+          ]
+        }
+      };
+
+      var module = {
+        scripts: [
+          'js/views/test.js',
+          'js/views/test2.js'
+        ]
+      };
+
+      lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
+        resources[1](context, function(err, data1) {
+          if (err) {
+            throw err;
+          }
+          resources[3](context, function(err, data3) {
+            if (err) {
+              throw err;
+            }
+
+            var name = __dirname + '/../artifacts/templates/home.handlebars';
+            data1.should.eql({
+              inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+              data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
+              generated: true,
+              noSeparator: true,
+              ignoreWarnings: true
+            });
+            data3.should.eql({
+              inputs: [ name ],
+              data: '',
+              generated: true,
+              noSeparator: true,
+              ignoreWarnings: true
+            });
+            done();
+          });
+        });
+      });
+    });
   });
 
   describe('directory include', function() {
