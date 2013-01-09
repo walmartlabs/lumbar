@@ -231,6 +231,10 @@ describe('mixins', function() {
       };
 
       lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins, context) {
+        if (mixins.err) {
+          throw mixins.err;
+        }
+
         context.config.moduleList().should.eql(['bar', 'baz']);
 
         var module = context.config.attributes.modules.bar;
@@ -253,7 +257,7 @@ describe('mixins', function() {
         'bar': {'scripts': ['baz.js']}
       };
 
-      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins) {
         mixins.err.should.be.an.instanceof(Error);
         mixins.err.message.should.match(/missing a name\./);
 
@@ -286,7 +290,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins) {
         mixins.err.should.be.an.instanceof(Error);
         mixins.err.message.should.match(/Duplicate mixins found for "baz"/);
 
@@ -310,7 +314,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins) {
         mixins.err.should.be.an.instanceof(Error);
         mixins.err.message.should.match(/Mixin named "baz" not found in container "2"/);
 
@@ -422,7 +426,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(mixins) {
         (mixins.err + '').should.match(/mixin "bar" not found/i);
 
         done();
@@ -690,6 +694,30 @@ describe('mixins', function() {
             {src: 'baz2.1', package: 'native'},
             'baz0.1'
           ]);
+
+          done();
+        });
+    });
+
+    it('should allow for nested mixins', function(done) {
+      var module = {
+        mixins: ['mixin1']
+      };
+
+      var mixins = {
+        mixin1: {
+          mixins: ['mixin2'],
+          routes: { foo: 1, baz: 1, bat: 1 }
+        },
+        mixin2: {mixins: [{name: 'mixin3'}]},
+        mixin3: {routes: { bar: 2, baz: 2, bat: 2 }}
+      };
+
+      lib.mixinExec(module, [{name: 'routes', mixins: mixins}], function() {
+          module.routes.foo.should.equal(1);
+          module.routes.bar.should.equal(2);
+          module.routes.baz.should.equal(1);
+          module.routes.bat.should.equal(1);
 
           done();
         });
