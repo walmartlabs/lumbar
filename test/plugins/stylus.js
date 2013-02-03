@@ -35,7 +35,6 @@ describe('stylus plugin', function() {
         }
       };
 
-      var seen = [];
       var config = {
         'modules': {
           'test': {
@@ -55,8 +54,8 @@ describe('stylus plugin', function() {
 
                 _.each(context.moduleResources, function(resource) {
                   if (resource.stylus) {
-                    resource.plugins.push(function(compiler) {
-                      seen.push(compiler);
+                    resource.plugins.push({
+                      plugin: __dirname + '/stylus-plugin-worker'
                     });
                   }
                 });
@@ -68,13 +67,12 @@ describe('stylus plugin', function() {
       };
 
       lib.pluginExec(undefined, 'styles', config.modules.test, [], config, function(resources, context) {
-        context.loadResource(resources[0], function(err) {
+        context.loadResource(resources[0], function(err, data) {
           if (err) {
             throw err;
           }
 
-          seen.length.should.eql(1);
-          seen[0].evaluator.should.exist;
+          data.content.should.match(/bar: baz;/);
           done();
         });
       });
