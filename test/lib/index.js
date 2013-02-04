@@ -182,6 +182,10 @@ exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
   }
 
   exports.mixinExec(module, mixins, config, function(mixins, context) {
+    if (mixins.err) {
+      throw mixins.err;
+    }
+
     context.mode = mode;
     context.modeCache = {};
     context.fileConfig = {};
