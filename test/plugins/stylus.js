@@ -5,35 +5,13 @@ var _ = require('underscore'),
     sinon = require('sinon'),
     watch = require('../lib/watch');
 
-describe('stylus plugin', function() {
-  var readFileSync = fs.readFileSync,
-      statSync = fs.statSync,
-      read;
-  beforeEach(function() {
-    read = [];
-  });
+var readFileSync = fs.readFileSync,
+    statSync = fs.statSync;
 
+describe('stylus plugin', function() {
   describe('plugins', function() {
-    after(function() {
-      fs.readFileSync = readFileSync;
-      fs.statSync = statSync;
-    });
     it('should allow for custom plugins', function(done) {
       fu.lookupPath('');
-
-      fs.readFileSync = function(path) {
-        if (/\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
-          read.push(path);
-          return '.test\n  display none\n';
-        } else {
-          return readFileSync.apply(this, arguments);
-        }
-      };
-      fs.statSync = function(path) {
-        if (!/\.styl|png$/.test(path) || /functions(?:[\\\/]index)?.styl/.test(path)) {
-          return statSync.apply(this, arguments);
-        }
-      };
 
       var config = {
         'modules': {
@@ -54,6 +32,9 @@ describe('stylus plugin', function() {
 
                 _.each(context.moduleResources, function(resource) {
                   if (resource.stylus) {
+                    resource.plugins.push({
+                      plugin: __dirname + '/stylus-mock-worker'
+                    });
                     resource.plugins.push({
                       plugin: __dirname + '/stylus-plugin-worker'
                     });
@@ -86,9 +67,7 @@ describe('stylus plugin', function() {
       mock = watch.mockWatch();
 
       sinon.stub(fs, 'readFileSync', function(path) {
-        if (/test\.styl$/.test(path)) {
-          return content;
-        } else if (/lumbar\.json$/.test(path)) {
+        if (/lumbar\.json$/.test(path)) {
           return JSON.stringify({
             modules: {
               module: {
@@ -109,21 +88,42 @@ describe('stylus plugin', function() {
           return readFileSync.apply(this, arguments);
         }
       });
-      sinon.stub(fs, 'statSync', function(path) {
-        if (!/test\.styl$/.test(path)) {
-          return statSync.apply(this, arguments);
-        }
-      });
     });
     afterEach(function() {
-      fs.readFileSync.restore();
-      fs.statSync.restore();
       mock.cleanup();
+      fs.readFileSync.restore();
     });
 
 
     function runWatchTest(srcdir, config, operations, expectedFiles, done) {
-      var options = {packageConfigFile: 'config/dev.json'};
+      var options = {
+        plugins: [
+          {
+            mode: 'styles',
+            priority: 25,
+            module: function(context, next, complete) {
+              next(function(err) {
+                if (err) {
+                  throw err;
+                }
+
+                _.each(context.moduleResources, function(resource) {
+                  if (resource.stylus) {
+                    resource.plugins.push({
+                      plugin: __dirname + '/stylus-watch-mock-worker',
+                      data: {
+                        content: content
+                      }
+                    });
+                  }
+                });
+                complete(err);
+              });
+            }
+          }
+        ],
+        packageConfigFile: 'config/dev.json'
+      };
 
       watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
     }
@@ -172,10 +172,6 @@ describe('stylus plugin', function() {
   });
 
   describe('mixin', function() {
-    afterEach(function() {
-      fs.readFileSync = readFileSync;
-      fs.statSync = statSync;
-    });
     it('should include special values from mixins', function(done) {
       var mixins = [
         {
@@ -292,28 +288,6 @@ describe('stylus plugin', function() {
     it('should lookup files from mixins', function(done) {
       fu.lookupPath('');
 
-      fs.readFileSync = function(path) {
-        if (path === 'mixinRoot/mixin-import.styl') {
-          read.push(path);
-          return '@import "foo"\n';
-        } else if (/\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
-          read.push(path);
-          return '.test\n  background url("img.png")\n';
-        } else {
-          return readFileSync.apply(this, arguments);
-        }
-      };
-      fs.statSync = function(path) {
-        if (!/\.styl|png$/.test(path) || /functions(?:[\\\/]index)?.styl/.test(path)) {
-          return statSync.apply(this, arguments);
-        } else if (/mixinRoot/.test(path)) {
-          if (/stylusRoot/.test(path)) {
-            read.push(path);
-            throw new Error();
-          }
-        }
-      };
-
       var mixins = [{
         name: 'mixin',
         root: 'mixinRoot/',
@@ -360,12 +334,19 @@ describe('stylus plugin', function() {
       };
 
       lib.pluginExec('stylus', 'styles', config.modules.test, mixins, config, function(resources, context) {
-        context.loadResource(resources[0], function(err) {
+
+        resources[0].plugins.push({
+          plugin: __dirname + '/stylus-mock-worker',
+          data: {
+            rewrite: true
+          }
+        });
+        context.loadResource(resources[0], function(err, data) {
           if (err) {
             throw err;
           }
 
-          read.should.eql([
+          JSON.parse(data.content).should.eql([
             'mixinRoot/stylusRoot/mixin-import.styl',
             'mixinRoot/mixin-import.styl',
             'mixinRoot/stylusRoot/foo.styl',

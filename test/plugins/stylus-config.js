@@ -6,26 +6,18 @@ var fs = require('fs'),
 describe('stylus-config plugin', function() {
   var readFileSync = fs.readFileSync,
       readFile = fs.readFile,
-      statSync = fs.statSync,
-      read;
-  beforeEach(function() {
-    read = [];
-  });
+      statSync = fs.statSync;
   before(function() {
     fu.lookupPath('');
 
     fs.readFileSync = function(path) {
       if (/file1\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
-        read.push(path);
         return '.test\n  display $display\n';
       } else if (/lumbar\.json$/.test(path)) {
-        read.push(path);
         return JSON.stringify(config);
       } else if (/two\.json$/.test(path)) {
-        read.push(path);
         return '{"$display": "red","value!":10}';
       } else if (/\.json$/.test(path)) {
-        read.push(path);
         return '{"$display": "black"}';
       } else {
         return readFileSync.apply(this, arguments);
@@ -79,10 +71,6 @@ describe('stylus-config plugin', function() {
             throw err;
           }
 
-          read.should.eql([
-            'two.json',
-            'foo.json'
-          ]);
           data.content.should.eql('foo = {"$display":"black","value!":10};\n');
 
           done();
@@ -91,16 +79,14 @@ describe('stylus-config plugin', function() {
     });
     it('should include the content in styles', function(done) {
       lib.pluginExec(undefined, 'styles', config.modules.test, [], config, function(resources, context) {
+        resources[0].plugins.push({
+          plugin: __dirname + '/stylus-config-worker'
+        });
         context.loadResource(resources[0], function(err, data) {
           if (err) {
             throw err;
           }
 
-          read.should.eql([
-            'two.json',
-            'foo.json',
-            'file1.styl'
-          ]);
           data.content.should.eql('.test {\n  display: black;\n}\n');
 
           done();
@@ -120,7 +106,30 @@ describe('stylus-config plugin', function() {
     });
 
     function runWatchTest(srcdir, config, operations, expectedFiles, done) {
-      var options = {};
+      var options = {
+        plugins: [
+          {
+            mode: 'styles',
+            priority: 25,
+            module: function(context, next, complete) {
+              next(function(err) {
+                if (err) {
+                  throw err;
+                }
+
+                context.moduleResources.forEach(function(resource) {
+                  if (resource.stylus) {
+                    resource.plugins.push({
+                      plugin: __dirname + '/stylus-config-worker'
+                    });
+                  }
+                });
+                complete(err);
+              });
+            }
+          }
+        ]
+      };
 
       watch.runWatchTest.call(this, srcdir, config, operations, expectedFiles, options, done);
     }
