@@ -1,3 +1,27 @@
+# 2.0.0 Beta 15 - Feb 5th 2013
+
+Changes:
+
+- Break stylus execution into worker processes
+    This change dropped build times across the board, with a large build that was taking 20 seconds
+    dropping to 7 seconds. This breaks existing stylus plugins who must now be defined in worker
+    files which may then be required into the worker process. Ex:
+
+```
+            resource.plugins.push({
+              plugin: __dirname + '/stylus-config-worker',
+              data: config
+            });
+```
+
+- Support source map output to alternate locations
+
+# 2.0.0 Beta 14 - Jan 9th 2013
+
+Changes:
+
+- Fix bug while watching template files.
+
 # 2.0.0 Beta 13 - Jan 8th 2013
 
 Changes:
