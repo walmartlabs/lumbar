@@ -60,6 +60,11 @@ var files = [];
 var arg;
 while (args.length) {
   arg = args.shift();
+
+  var value = arg.split('=');
+  arg = value[0];
+  value = value[1];
+
   switch (arg) {
     case '-h':
     case '--help':
@@ -87,7 +92,7 @@ while (args.length) {
       break;
     case '-s':
     case '--sourceMap':
-      sourceMap = true;
+      sourceMap = value || true;
       break;
     case '-b':
     case '--build':
