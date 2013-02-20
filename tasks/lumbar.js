@@ -42,9 +42,16 @@ module.exports = function(grunt) {
     var done = this.async();
 
     var config = this.data,
-        mode = this.target,
-        lumbarFile = config.lumbarFile || './lumbar.json',
-        outputDir = config.outputDir || './public';
+        lumbarFile = config.watch || config.build || './lumbar.json',
+        outputDir = config.output || './public',
+        mode;
+
+    if (config.build) {
+      mode = 'build'
+    }
+    if (config.watch) {
+      mode = 'watch';
+    }
 
     if (mode !== 'watch' && mode !== 'build') {
       throw new Error('Arguments to lumbar task must be watch: {}, or build: {}');
