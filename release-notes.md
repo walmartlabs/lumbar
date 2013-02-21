@@ -1,3 +1,7 @@
+# 2.0.0 Beta 17 - Feb 21st 2013
+
+- Added `lumbar` grunt task
+
 # 2.0.0 Beta 15 - Feb 5th 2013
 
 Changes:
