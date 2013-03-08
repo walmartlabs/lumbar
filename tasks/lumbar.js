@@ -67,6 +67,7 @@ module.exports = function(grunt) {
 
     // build up command string
     var command = [
+      'node',
       path.join(process.cwd(), 'node_modules/lumbar/bin/lumbar'),
       mode
     ];
