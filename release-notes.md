@@ -1,3 +1,5 @@
+- Fix stylus execution outside of the lumbar directory
+
 # 2.0.0 Beta 17 - Feb 21st 2013
 
 - Added `lumbar` grunt task
