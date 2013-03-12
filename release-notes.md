@@ -1,4 +1,5 @@
 - Fix stylus execution outside of the lumbar directory
+- Add overrides false flag to prevent output of particular resources from mixins
 
 # 2.0.0 Beta 17 - Feb 21st 2013
 
