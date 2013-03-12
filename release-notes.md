@@ -1,3 +1,5 @@
+# 2.0.0 Beta 19 - Mar 12th 2013
+
 - Fix stylus execution outside of the lumbar directory
 - Add overrides false flag to prevent output of particular resources from mixins
 
