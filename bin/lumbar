@@ -195,9 +195,13 @@ var arise = lumbar.init(lumbarFile, options),
     worker = watch ? arise.watch : arise.build,
     lastMessage,
     watchOutput = {},
-    growlList = [];
+    growlList = [],
+    osType = require('os').type();
 
 function safeGrowl(msg, options) {
+  if (require('os').type().toLowerCase().match(/^windows/)) {
+    return;
+  }
   try {
     growl(msg, options);
   } catch (err) {

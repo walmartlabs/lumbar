@@ -580,7 +580,8 @@ describe('mixins', function() {
         name: 'mixin1',
         overrides: {
           'baz1.1': 'foo',
-          'baz1.2': true
+          'baz1.2': true,
+          'baz1.3': false
         }
       };
       var module = {
@@ -597,7 +598,7 @@ describe('mixins', function() {
           root: 'mixin1/',
           mixins: {
             mixin1: {
-              static: [ 'baz1.1', 'baz1.2' ]
+              static: [ 'baz1.1', 'baz1.2', 'baz1.3' ]
             }
           }
         },
@@ -625,7 +626,7 @@ describe('mixins', function() {
             'baz1.1'
           ]);
 
-          mixins.mixin1[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
+          mixins.mixin1[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2', 'baz1.3' ]);
           mixins.mixin2[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
           done();
         });
