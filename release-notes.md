@@ -1,3 +1,7 @@
+# 2.0.0 Beta 20 - Mar 22nd 2013
+
+- Implement server-scripts plugin
+
 # 2.0.0 Beta 19 - Mar 12th 2013
 
 - Fix stylus execution outside of the lumbar directory
