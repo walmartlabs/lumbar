@@ -1,3 +1,7 @@
+# 2.0.0 Beta 21 - Apr 3rd 2013
+
+- Allow uglify config via `uglify` project config option.
+
 # 2.0.0 Beta 20 - Mar 22nd 2013
 
 - Implement server-scripts plugin
