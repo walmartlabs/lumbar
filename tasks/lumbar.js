@@ -80,6 +80,17 @@ module.exports = function(grunt) {
     if (config.minimize) {
       command.push('--minimize');
     }
+	
+	if (config.use) {
+      command.push('--use');
+      command.push(config.use);
+    }
+   
+    if (config.withJson) {
+      command.push('--with');
+      command.push(config.withJson);
+    }
+		
     command.push(lumbarFile);
     command.push(outputDir);
 
