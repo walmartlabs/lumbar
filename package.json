@@ -17,13 +17,13 @@
     "node": ">=0.4.7"
   },
   "dependencies": {
-    "async": "0.1.16",
-    "cheerio": "~0.10",
+    "async": "~0.2",
+    "cheerio": "~0.11",
     "esprima": "~1.0",
     "growl": "~1.4",
     "handlebars": "~1.0",
     "nib": "~0.9",
-    "optimist": "~0.3",
+    "optimist": "~0.4",
     "stylus": "~0.30",
     "stylus-images": "~1.0",
     "underscore": "~1.4",
