@@ -13,11 +13,11 @@ See [thorax-example](https://github.com/walmartlabs/thorax-example) for an examp
 ## Grunt Plugin
 
     var port = 8000,
-      publicDir = './public',
-      lumbarFile = './lumbar.json';
-    
+        publicDir = './public',
+        lumbarFile = './lumbar.json';
+
     grunt.loadNpmTasks('lumbar');
-  
+
     grunt.initConfig({
       server: {
         base: publicDir,
@@ -41,7 +41,7 @@ See [thorax-example](https://github.com/walmartlabs/thorax-example) for an examp
         }
       }
     });
-    
+
     grunt.registerTask('default', 'lumbar:build server lumbar:watch');
 
 
