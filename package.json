@@ -39,9 +39,7 @@
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-mocha-cov": "0.0.5",
-    "grunt-github-pages": "0.0.3",
-
-    "static": "0.4.7"
+    "grunt-github-pages": "0.0.3"
   },
   "bin": {
     "lumbar": "bin/lumbar"
