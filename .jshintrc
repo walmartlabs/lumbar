@@ -1,4 +1,3 @@
-/*dotfiles node, mocha*/
 {
   "node": true,
   "es5": true,
@@ -20,7 +19,7 @@
   "unused": false,
   "strict": false,
   "trailing": true,
-  "maxparams": 4,
+  "maxparams": 6,
   "asi": false,
   "boss": false,
   "expr": true,
