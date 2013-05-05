@@ -5,7 +5,7 @@
     }
   },
 
-  "mixins": [
+  "libraries": [
     "library/library.json"
   ]
 }
