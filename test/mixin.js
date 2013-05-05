@@ -44,11 +44,11 @@ describe('mixins', function() {
     });
 
     it('should load direct mixin config file references', function(done) {
-      lib.mixinExec({}, ['library/file.json'], function(mixins, context) {
+      lib.mixinExec({}, ['library/file.json'], function(libraries, context) {
         read.should.eql(['library/file.json']);
 
-        mixins.configs.length.should.eql(1);
-        mixins.configs[0].root.should.equal('library/');
+        libraries.configs.length.should.eql(1);
+        libraries.configs[0].root.should.equal('library/');
         context.config.attributes.foo.should.equal('bar');
 
         done();
@@ -56,11 +56,11 @@ describe('mixins', function() {
     });
 
     it('should load mixin config directory references', function(done) {
-      lib.mixinExec({}, ['library'], function(mixins, context) {
+      lib.mixinExec({}, ['library'], function(libraries, context) {
         read.should.eql(['library/lumbar.json']);
 
-        mixins.configs.length.should.eql(1);
-        mixins.configs[0].root.should.equal('library/');
+        libraries.configs.length.should.eql(1);
+        libraries.configs[0].root.should.equal('library/');
         context.config.attributes.foo.should.equal('bar');
 
         done();
@@ -75,7 +75,7 @@ describe('mixins', function() {
         'foo': 'bah'
       };
 
-      lib.mixinExec(undefined, [{name: 'config', modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'config', modules: modules}], {modules: {'foo': 'bar'}}, function(libraries, context) {
         context.config.moduleList().should.eql(['foo', 'baz']);
         context.config.attributes.modules.foo.should.eql('bar');
         context.config.attributes.modules.baz.should.eql('bat');
@@ -92,7 +92,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{name: 'update', root: 'bar', modules: modules}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'update', root: 'bar', modules: modules}], {modules: {'foo': 'bar'}}, function(libraries, context) {
         context.config.moduleList().should.eql(['foo', 'baz']);
 
         var module = context.config.attributes.modules.baz;
@@ -117,7 +117,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{name: 'apply', root: 'bar', modules: modules, mixins: mixins}], {modules: {'foo': 'bar'}}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'apply', root: 'bar', modules: modules, mixins: mixins}], {modules: {'foo': 'bar'}}, function(libraries, context) {
         context.config.moduleList().should.eql(['foo', 'bar']);
 
         var module = context.config.attributes.modules.bar;
@@ -143,7 +143,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{name: 'apply', root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'apply', root: 'bar', modules: mixinModules}], {modules: modules}, function(libraries, context) {
         context.config.moduleList().should.eql(['bar', 'baz']);
 
         var module = context.config.attributes.modules.bar;
@@ -170,7 +170,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{name: 'supress', root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'supress', root: 'bar', modules: mixinModules}], {modules: modules}, function(libraries, context) {
         context.config.moduleList().should.eql(['bar']);
 
         var module = context.config.attributes.modules.bar;
@@ -195,7 +195,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [{name: 'bar', root: 'bar', modules: mixinModules}], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [{name: 'bar', root: 'bar', modules: mixinModules}], {modules: modules}, function(libraries, context) {
         context.config.moduleList().should.eql(['bar', 'baz']);
 
         var module = context.config.attributes.modules.bar;
@@ -230,9 +230,9 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins, context) {
-        if (mixins.err) {
-          throw mixins.err;
+      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(libraries, context) {
+        if (libraries.err) {
+          throw libraries.err;
         }
 
         context.config.moduleList().should.eql(['bar', 'baz']);
@@ -257,9 +257,9 @@ describe('mixins', function() {
         'bar': {'scripts': ['baz.js']}
       };
 
-      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins) {
-        mixins.err.should.be.an.instanceof(Error);
-        mixins.err.message.should.match(/missing a name\./);
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(libraries) {
+        libraries.err.should.be.an.instanceof(Error);
+        libraries.err.message.should.match(/missing a name\./);
 
         done();
       });
@@ -290,9 +290,9 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(mixins) {
-        mixins.err.should.be.an.instanceof(Error);
-        mixins.err.message.should.match(/Duplicate mixins found for "baz"/);
+      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(libraries) {
+        libraries.err.should.be.an.instanceof(Error);
+        libraries.err.message.should.match(/Duplicate mixins found for "baz"/);
 
         done();
       });
@@ -314,9 +314,9 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins) {
-        mixins.err.should.be.an.instanceof(Error);
-        mixins.err.message.should.match(/Mixin named "baz" not found in container "2"/);
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(libraries) {
+        libraries.err.should.be.an.instanceof(Error);
+        libraries.err.message.should.match(/Mixin named "baz" not found in container "2"/);
 
         done();
       });
@@ -343,7 +343,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [mixin1], {modules: modules}, function(libraries, context) {
         context.config.moduleList().should.eql(['bar', 'baz']);
 
         var module = context.config.attributes.modules.bar;
@@ -371,7 +371,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin], {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries, context) {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
@@ -404,7 +404,7 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, mixins, {modules: modules}, function(mixins, context) {
+      lib.mixinExec(undefined, mixins, {modules: modules}, function(libraries, context) {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
@@ -426,8 +426,8 @@ describe('mixins', function() {
         }
       };
 
-      lib.mixinExec(undefined, [mixin], {modules: modules}, function(mixins) {
-        (mixins.err + '').should.match(/mixin "bar" not found/i);
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries) {
+        (libraries.err + '').should.match(/mixin "bar" not found/i);
 
         done();
       });
@@ -544,8 +544,8 @@ describe('mixins', function() {
         }
       ];
 
-      lib.mixinExec(module, mixins, function(mixins) {
-          mixins = mixins.mixins;
+      lib.mixinExec(module, mixins, function(libraries) {
+          mixins = libraries.mixins;
 
           module.scripts.should.eql([
             {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1[0]}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1[0]},
@@ -613,8 +613,8 @@ describe('mixins', function() {
         }
       ];
 
-      lib.mixinExec(module, mixins, function(mixins) {
-          mixins = mixins.mixins;
+      lib.mixinExec(module, mixins, function(libraries) {
+          mixins = libraries.mixins;
 
           var mixin1 = _.extend({}, mixinDecl, mixins.mixin1[0]);
 

@@ -10,7 +10,7 @@ describe('inline-styles plugin', function() {
 
       var config = {styles: { "inline": true }};
 
-      lib.mixinExec({}, mixins, config, function(mixins, context) {
+      lib.mixinExec({}, mixins, config, function(libraries, context) {
         context.config.attributes.styles.should.eql({
           "inline": true,
           "inlineLoader": "foo"
@@ -24,7 +24,7 @@ describe('inline-styles plugin', function() {
         {name: 'mixin2', styles: { "inline": false }}
       ];
 
-      lib.mixinExec({}, mixins, {}, function(mixins, context) {
+      lib.mixinExec({}, mixins, {}, function(libraries, context) {
         context.config.attributes.styles.should.eql({
           "inline": false,
           "inlineLoader": "foo"
@@ -38,7 +38,7 @@ describe('inline-styles plugin', function() {
         {name: 'mixin2', styles: { "inline": false }}
       ];
 
-      lib.mixinExec({}, mixins, {}, function(mixins, context) {
+      lib.mixinExec({}, mixins, {}, function(libraries, context) {
         context.config.attributes.styles.should.eql({
           "inline": false,
           "inlineLoader": "foo"

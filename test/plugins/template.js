@@ -20,7 +20,7 @@ describe('template plugin', function() {
   describe('auto-include', function() {
     it('should remap files', function() {
       var context = {
-        mixins: {
+        libraries: {
           resolvePath: function(src) {
             return src;
           }
@@ -40,7 +40,7 @@ describe('template plugin', function() {
     });
     it('should remap files in mixins', function() {
       var context = {
-        mixins: {
+        libraries: {
           resolvePath: function(src) {
             return 'baz/' + src;
           }
@@ -73,7 +73,7 @@ describe('template plugin', function() {
         }
       };
 
-      lib.mixinExec(module, [], config, function(mixins, context) {
+      lib.mixinExec(module, [], config, function(libraries, context) {
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           // Drop the mixin reference to make testing easier
@@ -111,7 +111,7 @@ describe('template plugin', function() {
         }
       };
 
-      lib.mixinExec(module, [], config, function(mixins, context) {
+      lib.mixinExec(module, [], config, function(libraries, context) {
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           resources.should.eql([
@@ -222,7 +222,7 @@ describe('template plugin', function() {
         }
       };
 
-      lib.mixinExec({}, mixins, config, function(mixins, context) {
+      lib.mixinExec({}, mixins, config, function(libraries, context) {
         context.config.attributes.templates.should.eql({
           'auto-include': {'foo': 'bar', 'bar': 'bar', 'baz': 'bar'}
         });
@@ -247,7 +247,7 @@ describe('template plugin', function() {
           mixins: {
             mixin1: {
               scripts: [ 'baz1.1' ]
-            },
+            }
           },
           templates: {
             'auto-include': {
@@ -260,7 +260,7 @@ describe('template plugin', function() {
         }
       ];
 
-      lib.mixinExec(module, mixins, function(mixins, context) {
+      lib.mixinExec(module, mixins, function(libraries, context) {
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           // Drop the mixin reference to make testing easier
@@ -272,7 +272,7 @@ describe('template plugin', function() {
             {src: 'foo', name: 'baz1.1.handlebars', template: true},
             {src: 'baz1.1'},
             {src: 'templates/baz1.1.handlebars', name: 'templates/baz1.1.handlebars', template: true},
-            {src: 'baz1.1.handlebars', name: 'baz1.1.handlebars', template: true},
+            {src: 'baz1.1.handlebars', name: 'baz1.1.handlebars', template: true}
           ]);
           done();
         });
@@ -313,7 +313,7 @@ describe('template plugin', function() {
           mixins: {
             mixin1: {
               scripts: [ 'baz1.1', 'baz1.2' ]
-            },
+            }
           },
           templates: {
             'baz1.1': [
@@ -328,7 +328,7 @@ describe('template plugin', function() {
           mixins: {
             mixin2: {
               scripts: [ 'baz1.1', 'baz1.2' ]
-            },
+            }
           },
           templates: {
             'baz1.1': [
@@ -339,7 +339,7 @@ describe('template plugin', function() {
         }
       ];
 
-      lib.mixinExec(module, mixins, config, function(mixins, context) {
+      lib.mixinExec(module, mixins, config, function(libraries, context) {
         mixins = mixins.mixins;
 
         context.mode = 'scripts';

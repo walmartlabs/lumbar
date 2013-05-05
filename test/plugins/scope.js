@@ -62,7 +62,7 @@ describe('scope plugin', function() {
       testScope('none', function(resources) {
         resources.should.eql([
           'js/init.js',
-          'js/views/test.js',
+          'js/views/test.js'
         ]);
         done();
       });
@@ -386,8 +386,8 @@ describe('scope plugin', function() {
         }
       };
 
-      lib.mixinExec({}, mixins, config, function(mixins, context) {
-        mixins.load(context, mixins, function() {
+      lib.mixinExec({}, mixins, config, function(libraries, context) {
+        libraries.load(context, mixins, function() {
           context.config.attributes.scope.should.eql({
             scope: 'resource',
             template: 'mixin1/module.handlebars',
@@ -425,8 +425,8 @@ describe('scope plugin', function() {
         scope: 'resource'
       };
 
-      lib.mixinExec({}, mixins, config, function(mixins, context) {
-        mixins.load(context, mixins, function() {
+      lib.mixinExec({}, mixins, config, function(libraries, context) {
+        libraries.load(context, mixins, function() {
           context.config.attributes.scope.should.eql({
             scope: 'resource',
             template: 'mixin1/module.handlebars',
@@ -452,8 +452,8 @@ describe('scope plugin', function() {
         }
       };
 
-      lib.mixinExec({}, [], {}, function(mixins, context) {
-        mixins.load(context, mixin, function() {
+      lib.mixinExec({}, [], {}, function(libraries, context) {
+        libraries.load(context, mixin, function() {
           context.config.attributes.scope.should.eql({
             scope: 'module',
             template: 'module.handlebars',
@@ -482,8 +482,8 @@ describe('scope plugin', function() {
         }
       ];
 
-      lib.mixinExec({mixins: ['mixin1'], aliases: {'foo': 'bat'}}, mixins, {}, function(mixins, context) {
-        mixins.load(context, mixins, function() {
+      lib.mixinExec({mixins: ['mixin1'], aliases: {'foo': 'bat'}}, mixins, {}, function(libraries, context) {
+        libraries.load(context, mixins, function() {
           context.module.aliases.should.eql({
             'foo': 'bat',
             'baz': 'bar'

@@ -145,7 +145,7 @@ exports.runTest = function(configFile, expectedDir, options, expectGlob) {
   };
 };
 
-exports.mixinExec = function(module, mixins, config, callback) {
+exports.mixinExec = function(module, libraries, config, callback) {
   var plugin = require('../../lib/plugin').create({ignoreCorePlugins: !!(config && config.plugins)});
   plugin.initialize({ attributes: { plugins: config && config.plugins} });
 
@@ -155,12 +155,12 @@ exports.mixinExec = function(module, mixins, config, callback) {
   }
 
   config = Config.create(_.extend({modules: {module: module}}, config));
-  var context = new Context({module: module}, config, plugin, new Mixins({libraries: mixins}));
+  var context = new Context({module: module}, config, plugin, new Mixins({libraries: libraries}));
   context.event = new EventEmitter();
   context.options = {};
   context.configCache = {};
 
-  context.mixins.initialize(context, function(err) {
+  context.libraries.initialize(context, function(err) {
     if (err) {
       return callback({err: err});
     }
@@ -170,20 +170,20 @@ exports.mixinExec = function(module, mixins, config, callback) {
         return callback({err: err});
       }
 
-      callback(context.mixins, context);
+      callback(context.libraries, context);
     });
   });
 };
 
-exports.pluginExec = function(plugin, mode, module, mixins, config, callback) {
+exports.pluginExec = function(plugin, mode, module, libraries, config, callback) {
   if (_.isFunction(config)) {
     callback = config;
     config = undefined;
   }
 
-  exports.mixinExec(module, mixins, config, function(mixins, context) {
-    if (mixins.err) {
-      throw mixins.err;
+  exports.mixinExec(module, libraries, config, function(libraries, context) {
+    if (libraries.err) {
+      throw libraries.err;
     }
 
     context.mode = mode;

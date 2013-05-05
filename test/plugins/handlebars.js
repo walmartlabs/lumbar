@@ -233,7 +233,7 @@ describe('handlebars plugin', function() {
         }
       };
 
-      lib.mixinExec({}, mixins, config, function(mixins, context) {
+      lib.mixinExec({}, mixins, config, function(libraries, context) {
         context.config.attributes.templates.should.eql({
           'foo': 'baz',
           'template': 'not in my house',
@@ -261,7 +261,7 @@ describe('handlebars plugin', function() {
         }
       ];
 
-      lib.mixinExec({}, mixins, {}, function(mixins, context) {
+      lib.mixinExec({}, mixins, {}, function(libraries, context) {
         context.config.attributes.templates.should.eql({
           'template': 'template!',
           'precompile': true,
