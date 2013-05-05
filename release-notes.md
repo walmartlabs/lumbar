@@ -1,3 +1,6 @@
+- Rename root mixins to libraries.
+    Library import declarations have been changed from `mixins` to `libraries` and are otherwise identical. Likewise, resource library references have been changed from `mixin` to `library`.
+
 # 2.0.0 Beta 21 - Apr 3rd 2013
 
 - Allow uglify config via `uglify` project config option.
