@@ -34,13 +34,25 @@
     "glob": "~3.2",
     "should": "*",
     "sinon": "*",
-    "wrench": "~1.4"
+    "wrench": "~1.4",
+
+    "grunt": "~0.4.1",
+    "grunt-mocha-cov": "0.0.5",
+    "grunt-github-pages": "0.0.3",
+
+    "static": "0.4.7"
   },
   "bin": {
     "lumbar": "bin/lumbar"
   },
   "main": "lib/lumbar",
   "scripts": {
+    "blanket": {
+      "pattern": "//^((?!/node_modules/)(?!/test/).)*$/",
+      "data-cover-flags": {
+        "branchTracking": true
+      }
+    },
     "test": "node_modules/.bin/mocha test/*.js test/plugins/*.js"
   },
   "optionalDependencies": {
