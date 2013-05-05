@@ -231,6 +231,11 @@ arise.on('watch-change', function(status) {
     watchOutput[status.fileName] = true;
   }
 });
+arise.on('log', function(log) {
+  if (verbose) {
+    console.log(log);
+  }
+});
 arise.on('output', function(status) {
   watchOutput = {};
   if (status.watch) {
