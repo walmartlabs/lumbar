@@ -30,6 +30,7 @@ The main configuration file for lumbar is by default named *lumbar.json*. It is 
 
 Each section of lumbar.json is discussed in more detail below. There is an example lumbar.json included in the [thorax-example](https://github.com/walmartlabs/thorax-example) project.
 
+The configuration in this file may also be split into multiple files via [libraries and mixins](#libraries).
 
 ### Platforms ###
 
@@ -208,6 +209,30 @@ Finally the `styles` section controls how CSS is generated and included within t
   * Pixel density targeted stylesheets
 
 For more information see the [stylus plugin](plugins/stylus.md).
+
+### Libraries ###
+
+Lumbar allows for a projects configuration to be split into multiple lumbar config files via libraries. This allows multiple projects to reuse behaviors without having to duplicate their
+configuration. For example the lumbar-loader files can be referenced via a library like so:
+
+
+    "modules": {
+      "loader": {
+        "mixins": [
+          {"name": "lumbar-loader", "env": "dev"},
+          {"name": "lumbar-localstorage-loader", "env": "production"}
+        ]
+      }
+    },
+    "libraries": [
+      "components/lumbar-loader"
+    ]
+
+Libraries have two methods of operation, global config and module mixins. The former allows libraries to define common configuration such as common `stylus` include files and the later allows for the addition of specific behaviors to specific modules.
+
+Global config changes are simply defined in the root of the library `lumbar.json` file. When the library is loaded any settings defined here will be imported into the project. Note that each plugin implements it's own inheritance scheme here. Some plugins might treat specific definitions as additive and others might treat them as overrides.
+
+They are discussed in detail [here](libraries.md).
 
 ## Plugins ##
 
