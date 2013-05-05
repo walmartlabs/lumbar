@@ -145,6 +145,9 @@ describe('watcher', function() {
     }, 100);
   });
 
+  it('should ignore unknown unwatch commands', function() {
+    watcher.unwatch('foo', ['baz']);
+  });
   it('should unwatch a single file', function() {
     var spy = sinon.spy();
     watcher.watchFile({virtual: 'foo'}, [{virtual: 'bar'}, {virtual: 'baz'}], spy);
