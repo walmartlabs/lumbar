@@ -74,9 +74,9 @@ describe('stylus plugin', function() {
                 mixins: ['module']
               }
             },
-            mixins: ['mixin/mixin.json']
+            libraries: ['library/library.json']
           });
-        } else if (/mixin\.json$/.test(path)) {
+        } else if (/library\.json$/.test(path)) {
           return JSON.stringify({
             name: 'mixin' + path,
             modules: {

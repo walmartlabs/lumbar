@@ -6,6 +6,6 @@
   },
 
   "mixins": [
-    "mixin/mixin.json"
+    "library/library.json"
   ]
 }

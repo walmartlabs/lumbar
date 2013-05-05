@@ -23,7 +23,7 @@ describe('mixins', function() {
     });
     before(function() {
       fs.readFileSync = function(path) {
-        if (/mixin.*\.json$/.test(path)) {
+        if (/library.*\.json$/.test(path)) {
           read.push(path);
           return '{"name": "loading", "foo": "bar"}';
         } else {
@@ -31,7 +31,7 @@ describe('mixins', function() {
         }
       };
       fs.statSync = function(path) {
-        if (/mixin/.test(path)) {
+        if (/library/.test(path)) {
           return {isDirectory: function() { return !/\.json$/.test(path); }};
         } else {
           return statSync.apply(this, arguments);
@@ -44,11 +44,11 @@ describe('mixins', function() {
     });
 
     it('should load direct mixin config file references', function(done) {
-      lib.mixinExec({}, ['mixin/file.json'], function(mixins, context) {
-        read.should.eql(['mixin/file.json']);
+      lib.mixinExec({}, ['library/file.json'], function(mixins, context) {
+        read.should.eql(['library/file.json']);
 
         mixins.configs.length.should.eql(1);
-        mixins.configs[0].root.should.equal('mixin/');
+        mixins.configs[0].root.should.equal('library/');
         context.config.attributes.foo.should.equal('bar');
 
         done();
@@ -56,11 +56,11 @@ describe('mixins', function() {
     });
 
     it('should load mixin config directory references', function(done) {
-      lib.mixinExec({}, ['mixin'], function(mixins, context) {
-        read.should.eql(['mixin/lumbar.json']);
+      lib.mixinExec({}, ['library'], function(mixins, context) {
+        read.should.eql(['library/lumbar.json']);
 
         mixins.configs.length.should.eql(1);
-        mixins.configs[0].root.should.equal('mixin/');
+        mixins.configs[0].root.should.equal('library/');
         context.config.attributes.foo.should.equal('bar');
 
         done();
@@ -741,7 +741,7 @@ describe('mixins', function() {
           modules: {
             module: {scripts: ['js/views/test.js']}
           },
-          mixins: 'mixin'
+          libraries: 'library'
         });
       });
 
@@ -768,7 +768,7 @@ describe('mixins', function() {
       var expectedFiles = ['/module.js', '/module.js'],
           operations = {
             1: function(testdir) {
-              mock.trigger('change', testdir + 'mixin/lumbar.json');
+              mock.trigger('change', testdir + 'library/lumbar.json');
             }
           };
 
