@@ -7,6 +7,43 @@ describe('config', function() {
     }).should.throw('No modules object defined');
   });
 
+  it('should serialize config', function() {
+    var config = Config.create({
+      application: {
+        module: 'foo',
+        name: 'Name!'
+      },
+      modules: {
+        foo: {
+          scripts: [
+            "foo",
+            {template: "bar"}
+          ]
+        }
+      }
+    });
+
+    config.serialize().should.eql({
+        application: {
+          module: 'foo',
+          name: 'Name!'
+        },
+        modules: {
+          foo: {
+            scripts: [
+              "foo",
+              {template: "bar"}
+            ]
+          }
+        },
+        packages: {
+          web: {
+            name: ''
+          }
+        }
+      });
+  });
+
   describe('application module', function() {
     var config = Config.create({
       application: {

@@ -41,21 +41,22 @@ var LONG_USAGE="lumbar help\n"+
 "outputDir:    Required. Designates where the files will be placed.\n"+
 "\n";
 
-var configFile;
-var packageName;
-var modules = [];
-var minimize = false;
-var sourceMap = false;
-var build = true; // build by default.
-var watch = false;
+var configFile,
+    packageName,
+    modules = [],
+    minimize = false,
+    sourceMap = false,
+    build = true, // build by default.
+    watch = false,
+    verbose = false;
 
 var lumbarFile = 'lumbar.json';
 var outputDir;
 /**
  * Import paths.
  */
-var plugins = [];
-var files = [];
+var plugins = [],
+    files = [];
 
 var arg;
 while (args.length) {
@@ -105,6 +106,10 @@ while (args.length) {
     case 'watch':
       watch = true;
       build = false;
+      break;
+    case '-v':
+    case '--verbose':
+      verbose = true;
       break;
     case '-u':
     case '--use':
@@ -182,6 +187,8 @@ plugins = plugins.map(function(plugin) {
 });
 
 var options = {
+  verbose: verbose,
+
   packageConfigFile: configFile,
   minimize: minimize,
   sourceMap: sourceMap,
