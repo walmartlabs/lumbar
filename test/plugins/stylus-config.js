@@ -180,8 +180,8 @@ describe('stylus-config plugin', function() {
       lib.mixinExec({}, mixins, config, function(_libraries, context) {
         context.config.attributes.styles.should.eql({
           'config': [
-            {src: 'test.json', mixin: mixins[0]},
-            {src: 'test2.json', mixin: mixins[1]},
+            {src: 'test.json', library: mixins[0]},
+            {src: 'test2.json', library: mixins[1]},
             'config.json'
           ],
           'configObject': 'foo'
@@ -200,7 +200,7 @@ describe('stylus-config plugin', function() {
       lib.mixinExec({}, [], {}, function(libraries, context) {
         libraries.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
-            'config': [{src: 'foo', mixin: mixin}]
+            'config': [{src: 'foo', library: mixin}]
           });
           done();
         });
@@ -219,8 +219,8 @@ describe('stylus-config plugin', function() {
         libraries.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
             'config': [
-              {src: 'a/foo', mixin: mixin},
-              {src: 'a/bar', mixin: mixin}
+              {src: 'a/foo', library: mixin},
+              {src: 'a/bar', library: mixin}
             ]
           });
           done();

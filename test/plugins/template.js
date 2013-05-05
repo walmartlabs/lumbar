@@ -77,7 +77,7 @@ describe('template plugin', function() {
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           // Drop the mixin reference to make testing easier
-          _.each(resources, function(resource) { delete resource.mixin; });
+          _.each(resources, function(resource) { delete resource.library; });
 
           resources.should.eql([
             {src: 'js/init.js'},
@@ -116,8 +116,8 @@ describe('template plugin', function() {
         build.loadResources(context, function(err, resources) {
           resources.should.eql([
             {src: 'js/views/test.js'},
-            {src: 'foo.handlebars', name: 'foo.handlebars', mixin: undefined, template: true},
-            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', mixin: undefined, template: true}
+            {src: 'foo.handlebars', name: 'foo.handlebars', library: undefined, template: true},
+            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', library: undefined, template: true}
           ]);
           done();
         });
@@ -264,7 +264,7 @@ describe('template plugin', function() {
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           // Drop the mixin reference to make testing easier
-          _.each(resources, function(resource) { delete resource.mixin; });
+          _.each(resources, function(resource) { delete resource.library; });
 
           resources.should.eql([
             {src: 'mixin1/baz1.1'},
@@ -301,7 +301,7 @@ describe('template plugin', function() {
           'baz1.1': [
             'foo1.1',
             'foo1.2',
-            {src: 'foo1.3', mixin: 'mixin'}
+            {src: 'foo1.3', library: 'mixin'}
           ]
         }
       };
@@ -340,12 +340,12 @@ describe('template plugin', function() {
       ];
 
       lib.mixinExec(module, mixins, config, function(libraries, context) {
-        mixins = mixins.mixins;
+        mixins = libraries.mixins;
 
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           // Drop the mixin reference to make testing easier
-          _.each(resources, function(resource) { delete resource.mixin; });
+          _.each(resources, function(resource) { delete resource.library; });
 
           resources.should.eql([
             {src: 'foo', originalSrc: 'mixin1/baz1.1'},

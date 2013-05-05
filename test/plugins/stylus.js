@@ -228,9 +228,9 @@ describe('stylus plugin', function() {
           },
           'useNib': false,
           'includes': [
-            {src: 'styles/global.styl', mixin: mixins[0]},
-            {src: 'styles/1.styl', mixin: mixins[0]},
-            {src: 'styles/2.styl', mixin: mixins[1]},
+            {src: 'styles/global.styl', library: mixins[0]},
+            {src: 'styles/1.styl', library: mixins[0]},
+            {src: 'styles/2.styl', library: mixins[1]},
             'styles/config.styl'
           ],
           'urlSizeLimit': 104,
@@ -276,8 +276,8 @@ describe('stylus plugin', function() {
         libraries.load(context, mixin, function() {
           context.config.attributes.styles.should.eql({
             'includes': [
-              {src: 'a/foo', mixin: mixin},
-              {src: 'a/bar', mixin: mixin}
+              {src: 'a/foo', library: mixin},
+              {src: 'a/bar', library: mixin}
             ]
           });
           done();

@@ -9,7 +9,7 @@ var _ = require('underscore'),
 describe('mixins', function() {
   function stripper(resources) {
     // Drop the mixin reference to make testing easier
-    _.each(resources, function(resource) { delete resource.mixin; });
+    _.each(resources, function(resource) { delete resource.mixin; delete resource.library; });
     return resources;
   }
 
@@ -366,7 +366,7 @@ describe('mixins', function() {
       var modules = {
         'foo': {
           scripts: [
-            {src: 'bar.js', mixin: 'foo'}
+            {src: 'bar.js', library: 'foo'}
           ]
         }
       };
@@ -387,7 +387,7 @@ describe('mixins', function() {
           mixins: {
             foo: {
               scripts: [
-                {src: 'bar.js', mixin: 'bar'}
+                {src: 'bar.js', library: 'bar'}
               ]
             }
           },
@@ -421,7 +421,7 @@ describe('mixins', function() {
       var modules = {
         'foo': {
           scripts: [
-            {src: 'bar.js', mixin: 'bar'}
+            {src: 'bar.js', library: 'bar'}
           ]
         }
       };
@@ -548,21 +548,21 @@ describe('mixins', function() {
           mixins = libraries.mixins;
 
           module.scripts.should.eql([
-            {src: 'mixin1/foo1.1', global: true, mixin: mixins.mixin1[0]}, {src: 'mixin1/foo1.2', global: true, mixin: mixins.mixin1[0]},
-            {src: 'mixin2/foo2.1', global: true, mixin: mixins.mixin2[0]}, {src: 'mixin2/foo2.2', global: true, mixin: mixins.mixin2[0]},
+            {src: 'mixin1/foo1.1', global: true, library: mixins.mixin1[0]}, {src: 'mixin1/foo1.2', global: true, library: mixins.mixin1[0]},
+            {src: 'mixin2/foo2.1', global: true, library: mixins.mixin2[0]}, {src: 'mixin2/foo2.2', global: true, library: mixins.mixin2[0]},
             {src: 'foo0', global: true }, {src: 'foo0.1', global: true},
-            {src: 'mixin1/bar1.1', mixin: mixins.mixin1[0]}, {src: 'mixin1/bar1.2', mixin: mixins.mixin1[0]},
-            {dir: 'mixin1/dir!', mixin: mixins.mixin1[0]}, {notAFile: true, mixin: mixins.mixin1[0]},
-            {src: 'mixin2/bar2.1', mixin: mixins.mixin2[0]}, {src: 'mixin2/bar2.2', mixin: mixins.mixin2[0]},
+            {src: 'mixin1/bar1.1', library: mixins.mixin1[0]}, {src: 'mixin1/bar1.2', library: mixins.mixin1[0]},
+            {dir: 'mixin1/dir!', library: mixins.mixin1[0]}, {notAFile: true, library: mixins.mixin1[0]},
+            {src: 'mixin2/bar2.1', library: mixins.mixin2[0]}, {src: 'mixin2/bar2.2', library: mixins.mixin2[0]},
             'bar0.1', 'bar0.2'
           ]);
           module.styles.should.eql([
-            {src: 'mixin2/foo2', mixin: mixins.mixin2[0]}, {src: 'mixin2/bar2', mixin: mixins.mixin2[0]},
+            {src: 'mixin2/foo2', library: mixins.mixin2[0]}, {src: 'mixin2/bar2', library: mixins.mixin2[0]},
             'foo0', 'bar0'
           ]);
           module.static.should.eql([
-            {src: 'mixin1/baz1.1', mixin: mixins.mixin1[0]}, {src: 'mixin1/baz1.2', mixin: mixins.mixin1[0]},
-            {src: 'mixin2/baz2.1', mixin: mixins.mixin2[0]}, {src: 'mixin2/baz2.2', mixin: mixins.mixin2[0]}
+            {src: 'mixin1/baz1.1', library: mixins.mixin1[0]}, {src: 'mixin1/baz1.2', library: mixins.mixin1[0]},
+            {src: 'mixin2/baz2.1', library: mixins.mixin2[0]}, {src: 'mixin2/baz2.2', library: mixins.mixin2[0]}
           ]);
 
           mixins.mixin1[0].attributes.scripts.should.eql([{src: 'foo1.1', global: true}, {src: 'foo1.2', global: true}, 'bar1.1', 'bar1.2', {dir: 'dir!'}, {notAFile: true}]);
@@ -619,10 +619,10 @@ describe('mixins', function() {
           var mixin1 = _.extend({}, mixinDecl, mixins.mixin1[0]);
 
           module.static.should.eql([
-            {src: 'foo', originalSrc: 'mixin1/baz1.1', mixin: mixin1},
-            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', mixin: mixin1},
-            {src: 'mixin2/baz1.1', mixin: mixins.mixin2[0]},
-            {src: 'mixin2/baz1.2', mixin: mixins.mixin2[0]},
+            {src: 'foo', originalSrc: 'mixin1/baz1.1', library: mixin1},
+            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', library: mixin1},
+            {src: 'mixin2/baz1.1', library: mixins.mixin2[0]},
+            {src: 'mixin2/baz1.2', library: mixins.mixin2[0]},
             'baz1.1'
           ]);
 

@@ -7,7 +7,7 @@ var _ = require('underscore'),
     fs = require('fs'),
     glob = require('glob'),
     lumbar = require('../../lib/lumbar'),
-    Mixins = require('../../lib/mixins'),
+    Libraries = require('../../lib/libraries'),
     path = require('path'),
     should = require('should'),
     wrench = require('wrench');
@@ -155,7 +155,7 @@ exports.mixinExec = function(module, libraries, config, callback) {
   }
 
   config = Config.create(_.extend({modules: {module: module}}, config));
-  var context = new Context({module: module}, config, plugin, new Mixins({libraries: libraries}));
+  var context = new Context({module: module}, config, plugin, new Libraries({libraries: libraries}));
   context.event = new EventEmitter();
   context.options = {};
   context.configCache = {};
