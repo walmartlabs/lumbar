@@ -44,13 +44,9 @@
 
 <pre><code>"platforms": [ "android", "iphone", "ipad", "web" ],</code></pre>
 
-<p>Platforms define the target environments that a particular lumbar build may target. This could range
-from separate builds targeted to different browsing environments (I.e. embedded webview vs. full
-browser) all the way up to builds targeted for specific business units.</p>
+<p>Platforms define the target environments that a particular lumbar build may target. This could range from separate builds targeted to different browsing environments (I.e. embedded webview vs. full browser) all the way up to builds targeted for specific business units.</p>
 
-<p>Platforms are defined through the <code>platforms</code> field in the lumbar.json file. This is an array of names,
-each of which produce a subdirectory in the build that contains all of the resources needed by that
-platform.</p>
+<p>Platforms are defined through the <code>platforms</code> field in the lumbar.json file. This is an array of names, each of which produce a subdirectory in the build that contains all of the resources needed by that platform.</p>
 
 <h3 id="packages">Packages</h3>
 
@@ -66,21 +62,13 @@ platform.</p>
   }
 },</code></pre>
 
-<p>Where platforms specify what you are going to build for, packages define what will be in each platform,
-at a macro level. This allows for creating applications for specific environments that are optimized
-subsets of the larger codebase. For example a native+web application may have a package for all modules
-that is utilized for web users and a package containing only a subset of modules that are combined
-into a single HTTP request for users that are coming from the native implementation.</p>
+<p>Where platforms specify what you are going to build for, packages define what will be in each platform, at a macro level. This allows for creating applications for specific environments that are optimized subsets of the larger codebase. For example a native+web application may have a package for all modules that is utilized for web users and a package containing only a subset of modules that are combined into a single HTTP request for users that are coming from the native implementation.</p>
 
-<p>Packages are defined as objects on the <code>packages</code> object. Each package may define <code>platforms</code> and
-<code>modules</code> keys which will limit the platforms and modules that are associated with that package to
-a given set. If these fields are omitted then all platforms and modules are involved with the package.</p>
+<p>Packages are defined as objects on the <code>packages</code> object. Each package may define <code>platforms</code> and <code>modules</code> keys which will limit the platforms and modules that are associated with that package to a given set. If these fields are omitted then all platforms and modules are involved with the package.</p>
 
-<p>The platforms list can be viewed as the platforms that the package will deliver on and the modules
-list can be viewed as what resources will be included in the package.</p>
+<p>The platforms list can be viewed as the platforms that the package will deliver on and the modules list can be viewed as what resources will be included in the package.</p>
 
-<p>The resources in a package may also be optionally combined into a single file via the <code>combine</code>
-attribute. When combined the generated file will have the same name as the package name.</p>
+<p>The resources in a package may also be optionally combined into a single file via the <code>combine</code> attribute. When combined the generated file will have the same name as the package name.</p>
 
 <h3 id="modules">Modules</h3>
 
@@ -129,53 +117,53 @@ attribute. When combined the generated file will have the same name as the packa
   }
 },</code></pre>
 
-<p>Next, lets discuss the <code>modules</code> section of the <em>lumbar.json</em> file. This section lets you define logical
-groupings of code, static files, stylesheets, and templates (mustache / handlebars).</p>
+<p>Next, lets discuss the <code>modules</code> section of the <em>lumbar.json</em> file. This section lets you define logical groupings of code, static files, stylesheets, and templates (mustache / handlebars).</p>
 
-<p>A modules content is primarily defined by the <code>scripts</code>, <code>styles</code> and <code>static</code> fields which define arrays
-of resources that will be included within the module. For the <code>scripts</code> and <code>styles</code> entries all resources
-will be combined into a single script and single style file at build time. <code>static</code> resources will be copied
-to the build target on build. Each of these fields are optional and omitting a given field will prevent
-final output of that given file.</p>
+<p>A modules content is primarily defined by the <code>scripts</code>, <code>styles</code> and <code>static</code> fields which define arrays of resources that will be included within the module. For the <code>scripts</code> and <code>styles</code> entries all resources will be combined into a single script and single style file at build time. <code>static</code> resources will be copied to the build target on build. Each of these fields are optional and omitting a given field will prevent final output of that given file.</p>
 
 <h4 id="resources">Resources</h4>
 
-<p>While left somewhat vague as plugins can provide their own definition of what a resource is, at the core
-level it is content that will be output in the resulting module. In general a resource is a file on the
-file system that may be transformed by plugins, but in some cases plugins define their own resources. The <a href="plugins/module-map.html">module-map</a> plugin for example defines it's own resource type that outputs the 
-collective routes and associated modules for the entire package.</p>
+<p>While left somewhat vague as plugins can provide their own definition of what a resource is, at the core level it is content that will be output in the resulting module. In general a resource is a file on the file system that may be transformed by plugins, but in some cases plugins define their own resources. The <a href="plugins/module-map.html">module-map</a> plugin for example defines it's own resource type that outputs the collective routes and associated modules for the entire package.</p>
 
-<p>File resources can be a simple string with relative path and or an object that offers more granularity for
-the file. If it's a simple filename then an entry like, <strong>init.js</strong> would be appropriate. If additional
-requirements are needed such as limiting to specific platforms or scope then an object with the <code>src</code> field
+<p>File resources can be a simple string with relative path and or an object that offers more granularity for the file. If it's a simple filename then an entry like, <strong>init.js</strong> would be appropriate. If additional requirements are needed such as limiting to specific platforms or scope then an object with the <code>src</code> field
 set to the relative path should be used, along with any plugin specific filter values. The
-<a href="plugins/conditional.html">conditional plugin</a> for example can define conditional inclusion via contstructs
-like this following:</p>
+<a href="plugins/conditional.html">conditional plugin</a> for example can define conditional inclusion via contstructs like this following:</p>
 
-<pre><code>{"src":"lumber-loader-localstorage.js", "env":"production"},
-{"src":"lumber-loader-storage.js", "env":"dev"}</code></pre>
+<pre><code>{"src": "lumber-loader-localstorage.js", "env" :"production"},
+{"src": "lumber-loader-storage.js", "env": "dev"}</code></pre>
 
-<p>The core implementation provides platform-specific filtering by specifying the <code>platform</code> or <code>platforms</code>
-fields on the resource object; the singular form being a string reference to a platform and the plural
-being an array of platform names. list the platforms we wanted init.js to be included with.
-If we were targeting the ipad and iphone platforms our entry would look like this:</p>
+<p>The core implementation provides platform-specific filtering by specifying the <code>platform</code> or <code>platforms</code> fields on the resource object; the singular form being a string reference to a platform and the plural being an array of platform names. list the platforms we wanted init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this:</p>
 
 <pre><code>{ "src": "init.js", "platforms": ["ipad", "iphone"] }</code></pre>
 
 <h4 id="scoping">Scoping</h4>
 
-<p>By default, Lumbar creates a private scope for all generated modules using the javascript module pattern.
-This behavior is controlled by the <a href="plugins/scope.html">scope plugin</a> and may be adjusted as necessary.</p>
+<p>By default, Lumbar creates a private scope for all generated modules using the javascript module pattern. This behavior is controlled by the <a href="plugins/scope.html">scope plugin</a> and may be adjusted as necessary.</p>
 
-<p>The scopes are somewhat akin to CommonJS modules, generating a <code>module</code> instance variable which acts as a
-general input from plugins and the <code>exports</code> or <code>module.exports</code> variable allowing for the module to
-expose functionality to the outside world.</p>
+<p>The scopes are somewhat akin to CommonJS modules, generating a <code>module</code> instance variable which acts as a general input from plugins and the <code>exports</code> or <code>module.exports</code> variable allowing for the module to expose functionality to the outside world.</p>
+
+<p>The output of a module can be customized with a template which will receive <code>scope</code> (the current module scope) and <code>name</code> (the current application name) as variables.</p>
+
+<p>To specify this in your lumbar file set:</p>
+
+<pre><code>{
+  "scope": {
+    "template": "templates/module.template"
+  }
+}</code></pre>
+
+<p>The template can be a handlebars template string or a path to a file that ends in <code>.handlebars</code>. This template <strong>must</strong> contain <code>{{yield}}</code>. The built in module template looks more or less like:</p>
+
+<pre><code>{{{scope}}} = (function() {
+  var module = {exports: {}};
+  var exports = module.  exports;
+  {{yield}}
+  return module.exports;
+}).call(this);</code></pre>
 
 <h4 id="routes">Routes</h4>
 
-<p>Modules may optionally define backbone routes that it manages via the <code>routes</code> field. When paired with
-<a href="https://github.com/walmartlabs/lumbar-loader">lumbar-loader</a> the given module will be loaded on demand
-when the user navigates to a route serviced by that module.</p>
+<p>Modules may optionally define backbone routes that it manages via the <code>routes</code> field. When paired with <a href="https://github.com/walmartlabs/lumbar-loader">lumbar-loader</a> the given module will be loaded on demand when the user navigates to a route serviced by that module.</p>
 
 <p>Any routes defined for the module are available to javascript code via the <code>module.routes</code> field.</p>
 
@@ -186,21 +174,13 @@ when the user navigates to a route serviced by that module.</p>
   "module": "base"
 },</code></pre>
 
-<p>The <code>application</code> section defines the module that serves as the root namespace for all other modules.
-This is generally the module that provides the core framework for the application while other modules
-implement specific subsections of the application functionality.</p>
+<p>The <code>application</code> section defines the module that serves as the root namespace for all other modules. This is generally the module that provides the core framework for the application while other modules implement specific subsections of the application functionality.</p>
 
-<p>On this object, the <code>name</code> key defines the javascript name that other modules may access the module's
-exports from. (Note that code running within this module must address itself using the <code>exports</code> object
-directly until it has been fully initialized).</p>
+<p>On this object, the <code>name</code> key defines the javascript name that other modules may access the module's exports from. (Note that code running within this module must address itself using the <code>exports</code> object directly until it has been fully initialized).</p>
 
-<p>All other modules will namespace themselves based on this name. With the example above a module named
-home would name itself <code>Example.home</code>.</p>
+<p>All other modules will namespace themselves based on this name. With the example above a module named home would name itself <code>Example.home</code>.</p>
 
-<p>There’s also a <code>module</code> key used to identify the module that will be loaded into the root namespace.
-Without explicit loading this is the only one that can be relied on when running code in any other
-modules. This is a special module that kicks off everything and presumably contains the core library
-code for your application.</p>
+<p>There’s also a <code>module</code> key used to identify the module that will be loaded into the root namespace. Without explicit loading this is the only one that can be relied on when running code in any other modules. This is a special module that kicks off everything and presumably contains the core library code for your application.</p>
 
 <p>For example, if we listed two modules for our package, say "base" and "home" we would get two files called <em>home.js</em> and <em>base.js</em>.&nbsp;If we chose "base" as the value for module then our <em>base.js</em> file would declare <code>Example</code> and <em>home.js</em> would use it. If we chose "home" as the value for module then our <em>base.js</em> file would use <code>Example</code> while <em>home.js</em> would declare it.</p>
 
@@ -212,12 +192,9 @@ code for your application.</p>
   ]
 },</code></pre>
 
-<p>Lumbar also support inclusion of templates via the <code>templates</code> field. Each entry in this object will be
-matched against the files that are included in a particular module. When a match occurs all templates will
-be included in the associated module (not more than once).</p>
+<p>Lumbar also support inclusion of templates via the <code>templates</code> field. Each entry in this object will be matched against the files that are included in a particular module. When a match occurs all templates will be included in the associated module (not more than once).</p>
 
-<p>These templates may also be precompiled and have other optimizations applied to them. See the
-<a href="plugins/template.html">template plugin</a> documentation for additional information.</p>
+<p>These templates may also be precompiled and have other optimizations applied to them. See the <a href="plugins/template.html">template plugin</a> documentation for additional information.</p>
 
 <h3 id="styles">Styles</h3>
 
@@ -227,14 +204,13 @@ be included in the associated module (not more than once).</p>
     "iphone": [ 1, 2 ],
     "web": [ 1, 2 ]
   },
+  "useNib": true,
   "includes": [
-    "nib",
     "styles/include/global.styl"
   ]
 }</code></pre>
 
-<p>Finally the <code>styles</code> section controls how CSS is generated and included within the generated content. When
-combined with <a href="http://learnboost.github.com/stylus/">stylus</a>, lumbar can allow for things like:</p>
+<p>Finally the <code>styles</code> section controls how CSS is generated and included within the generated content. When combined with <a href="http://learnboost.github.com/stylus/">stylus</a>, lumbar can allow for things like:</p>
 
 <ul><li>Platform conditional styles via stylus conditionals and <code>$platform</code> variables</li><li>Data URI inlined images</li><li>Pixel density targeted stylesheets</li></ul>
 
@@ -246,34 +222,18 @@ combined with <a href="http://learnboost.github.com/stylus/">stylus</a>, lumbar 
 
 <h3 id="core">Core Plugins</h3>
 
-<p>The bulk of Lumbar's core functionality is implemented through core plugins, such as the <a href="plugins/stylus.html">stylus</a>,
-<a href="plugins/template.html">template</a>, and <a href="plugins/scope.html">scope</a> plugins. Documentation on all of the core plugins is
-available <a href="plugins/">here</a>.</p>
+<p>The bulk of Lumbar's core functionality is implemented through core plugins, such as the <a href="plugins/stylus.html">stylus</a>, <a href="plugins/template.html">template</a>, and <a href="plugins/scope.html">scope</a> plugins. Documentation on all of the core plugins is available <a href="plugins/">here</a>.</p>
 
-<p>By default each of these plugins are utilized for all builds. If this is not desired then the <code>ignoreCorePlugins</code>
-field may be specified on the build options. When doing this select core plugins may still be used by referencing
-them name. See <a href="#plugins-using">Using 3rd Party Plugins</a> below for details.</p>
+<p>By default each of these plugins are utilized for all builds. If this is not desired then the <code>ignoreCorePlugins</code> field may be specified on the build options. When doing this select core plugins may still be used by referencing them name. See <a href="#plugins-using">Using 3rd Party Plugins</a> below for details.</p>
 
 <h3 id="using">Using 3rd Party Plugins</h3>
 
 <p>3rd party (and core plugins in <code>ignoreCorePlugins</code> mode) may be defined through</p>
 
 <ul><li><p>The command line
-Plugins may be defined on the command line with the <code>--use</code> parameter. This should be the
-plugin module name (global or relative to the current working directory) or an explicit
-path the the module defining the plugin. For plugins that support option passing, the
-<code>--with</code> argument may be used immediately after the associated plugin to pass arbitrary
-JSON objects to the plugin.</p></li><li><p>The project configuration
-Plugins may also be defined in the plugin configuration via the <code>plugins</code> field. This
-field should be an array of either name values or <code>{path: pluginPath}</code> objects. Path
-objects will load global node.js modules, explicit paths, or modules in the <em>node_modules</em>
-directory in the same directory as the configuration file.</p></li><li><p>The Lumbar API
-Clients that are interfacing directly with the lumbar API may explicitly define plugins
-via the <code>Lumbar.use</code> API. This API registers a particular plugin with a given name that
-can be referenced with through the <code>options</code> parameter or the project configuration.</p><p>API clients may also pass plugins through the <code>plugins</code> field on the <code>options</code> object.
-This field should be an array containing either the name, <code>{path: pluginPath}</code> object
-or the plugin instance. Path objects are loaded in the same manner as plugins defined
-in the configuration file.</p></li></ul>
+Plugins may be defined on the command line with the <code>--use</code> parameter. This should be the plugin module name (global or relative to the current working directory) or an explicit path the the module defining the plugin. For plugins that support option passing, the <code>--with</code> argument may be used immediately after the associated plugin to pass arbitrary JSON objects to the plugin.</p></li><li><p>The project configuration
+Plugins may also be defined in the plugin configuration via the <code>plugins</code> field. This field should be an array of either name values or <code>{path: pluginPath}</code> objects. Path objects will load global node.js modules, explicit paths, or modules in the <em>node_modules</em> directory in the same directory as the configuration file.</p></li><li><p>The Lumbar API
+Clients that are interfacing directly with the lumbar API may explicitly define plugins via the <code>Lumbar.use</code> API. This API registers a particular plugin with a given name that can be referenced with through the <code>options</code> parameter or the project configuration.</p><p>API clients may also pass plugins through the <code>plugins</code> field on the <code>options</code> object. This field should be an array containing either the name, <code>{path: pluginPath}</code> object or the plugin instance. Path objects are loaded in the same manner as plugins defined in the configuration file.</p></li></ul>
 
 <h3 id="implementing">Implementing Custom Plugins</h3>
 
@@ -305,11 +265,7 @@ outputDir:    Required. Designates where the files will be placed.</code></pre>
 
 <h2 id="faq">FAQ</h2>
 
-<ol><li><p>Does lumbar.json have to be in the root our our application?</p><p>No, not necessarily. The root is the current working directory that you are running <em>lumbar</em> from.</p><p>However, the files mentioned in lumbar.json would have to be relative to its location. So if you dropped lumbar into a sub directory, you would have to ../ all files from the root. You would also have to run lumbar from the sub directory.</p><p>So to keep it simple, keep lumbar.json in the root.</p></li><li><p>Is there a bootstrap for Lumbar?</p><p>The <a href="https://github.com/walmartlabs/throax-example">thorax-example</a> project contains all of the content necessary
-to setup a Lumbar (and Thorax) project. This may be freely copied and used as a basis for new projects.</p></li><li><p>What do I do about <strong>EMFILE</strong> errors?</p><p>For larger projects watch mode may run into issues relating to too many open files depending
-on the size of the project and environment settings. If <strong>EMFILE</strong> errors are encountered while
-running in watch mode there are two options:</p><ol><li><p>Increate the maximum number of open files. On most systems this can be achieved via the <code>ulimit -n &lt;value&gt;</code> command.</p></li><li><p>Use an outside recompile method such as an IDE or general execution.</p></li></ol></li><li><p>Does Lumbar provide any options for long expires resources?</p><p>The <a href="https://github.com/walmartlabs/lumbar-long-expires">lumbar long expires</a> plugin allows for
-naming objects with arbitrary cache buster tokens, such as git SHA values. For example:</p></li></ol>
+<ol><li><p>Does lumbar.json have to be in the root our our application?</p><p>No, not necessarily. The root is the current working directory that you are running <em>lumbar</em> from.</p><p>However, the files mentioned in lumbar.json would have to be relative to its location. So if you dropped lumbar into a sub directory, you would have to ../ all files from the root. You would also have to run lumbar from the sub directory.</p><p>So to keep it simple, keep lumbar.json in the root.</p></li><li><p>Is there a bootstrap for Lumbar?</p><p>The <a href="https://github.com/walmartlabs/throax-example">thorax-example</a> project contains all of the content necessary to setup a Lumbar (and Thorax) project. This may be freely copied and used as a basis for new projects.</p></li><li><p>What do I do about <strong>EMFILE</strong> errors?</p><p>For larger projects watch mode may run into issues relating to too many open files depending on the size of the project and environment settings. If <strong>EMFILE</strong> errors are encountered while running in watch mode there are two options:</p><ol><li><p>Increate the maximum number of open files. On most systems this can be achieved via the <code>ulimit -n &lt;value&gt;</code> command.</p></li><li><p>Use an outside recompile method such as an IDE or general execution.</p></li></ol></li><li><p>Does Lumbar provide any options for long expires resources?</p><p>The <a href="https://github.com/walmartlabs/lumbar-long-expires">lumbar long expires</a> plugin allows for naming objects with arbitrary cache buster tokens, such as git SHA values. For example:</p></li></ol>
 
 <blockquote><p>./android/7c18fda/index.html
 ./android/7c18fda/native-hello-world.css
@@ -331,7 +287,7 @@ naming objects with arbitrary cache buster tokens, such as git SHA values. For e
 ./web/7c18fda/index.html</p></blockquote>
   </div></div>
   <a href="http://github.com/walmartlabs/lumbar">
-    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub">
   </a>
 </body>
 </html>
