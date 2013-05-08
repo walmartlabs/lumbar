@@ -1,3 +1,8 @@
+- Fix template linking for library modules
+- Output templates prior to their referencing file
+- Use `library` rather than `container` for fully qualified mixin lookup
+- Allow plugins in Grunt task (@stehag)
+- Add verbose logging options
 - Rename root mixins to libraries.
     Library import declarations have been changed from `mixins` to `libraries` and are otherwise identical. Likewise, resource library references have been changed from `mixin` to `library`.
 
