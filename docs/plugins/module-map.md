@@ -11,6 +11,10 @@ resource reference in the `files` data.  This reference should be in the base
 module after the `lumbar-loader.js` reference but before an loader implementation
 references.  See [lumbar-loader](https://github.com/walmartlabs/lumbar-loader) for more details.
 
+## Preload and Depends ##
+
+As of 2.0 the module-map plugin supports `preload` and `depends` flags defined on individual modules. When defined these will either background or blocking load, respectively.
+
 ## Example ##
 
 This example is from the [sample todos app](https://github.com/walmartlabs/thorax-todos)
@@ -30,4 +34,3 @@ This example is from the [sample todos app](https://github.com/walmartlabs/thora
 The code produced from the module map with the [sample todos app lumbar file](https://github.com/walmartlabs/thorax-todos/blob/master/lumbar.json)
 
     module.exports.moduleMap({"modules":{"todo":{"js":"todo.js"}},"routes":{"":"todo","todo":"todo"},"base":{"js":"base.js"}}, './');
-
