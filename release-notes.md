@@ -76,11 +76,11 @@ Changes:
 - Update mixin handling for namespaces
 
   This allows different mixins to define mixins with the same name. Consumers can differentiate
-  between the mixins via the `container` attribute on the mixin reference. i.e.
+  between the mixins via the `library` attribute on the mixin reference. i.e.
 
   ```
   "mixins": [
-    {"name": "test", "container": "phoenix-build"}
+    {"name": "test", "library": "phoenix-build"}
   ]
   ```
 

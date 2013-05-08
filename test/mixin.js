@@ -246,7 +246,49 @@ describe('mixins', function() {
         done();
       });
     });
-    it('should fail if a mixin container does not define a name', function(done) {
+    it('should lookup mixin by library', function(done) {
+      var mixin1 = {
+        root: '1',
+        name: '1',
+        'modules': {
+          'baz': {
+            'scripts': ['foo1.js']
+          }
+        }
+      };
+      var mixin2 = {
+        root: '2',
+        name: '2',
+        'modules': {
+          'baz': {
+            'scripts': ['foo2.js']
+          }
+        }
+      };
+      var modules = {
+        'bar': {
+          'mixins': [{name: 'baz', library: '2'}],
+          'scripts': ['baz.js']
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin1, mixin2], {modules: modules}, function(libraries, context) {
+        if (libraries.err) {
+          throw libraries.err;
+        }
+
+        context.config.moduleList().should.eql(['bar', 'baz']);
+
+        var module = context.config.attributes.modules.bar;
+        stripper(module.scripts).should.eql([{src: '2/foo2.js'}, 'baz.js']);
+
+        module = context.config.attributes.modules.baz;
+        stripper(module.scripts).should.eql([{src: '1/foo1.js'}]);
+
+        done();
+      });
+    });
+    it('should fail if a mixin library does not define a name', function(done) {
       var mixin1 = {
         root: '1',
         'modules': {
@@ -297,7 +339,7 @@ describe('mixins', function() {
         done();
       });
     });
-    it('should fail if no mixin from the given container is defined', function(done) {
+    it('should fail if no mixin from the given library is defined', function(done) {
       var mixin1 = {
         root: '1',
         name: '1',
@@ -309,14 +351,14 @@ describe('mixins', function() {
       };
       var modules = {
         'bar': {
-          'mixins': [{name: 'baz', container: 2}],
+          'mixins': [{name: 'baz', library: 2}],
           'scripts': ['baz.js']
         }
       };
 
       lib.mixinExec(undefined, [mixin1], {modules: modules}, function(libraries) {
         libraries.err.should.be.an.instanceof(Error);
-        libraries.err.message.should.match(/Mixin named "baz" not found in container "2"/);
+        libraries.err.message.should.match(/Mixin named "baz" not found in library "2"/);
 
         done();
       });
