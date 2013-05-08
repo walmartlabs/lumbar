@@ -94,7 +94,11 @@ module.exports = function(static) {
     file.$(function(window) {
       //assign ids
       window.$('h2, h3, h4').each(function() {
-        this.id = this.innerHTML.split(/\s/).shift().replace(/\./g,'-').toLowerCase();
+        this.id = this.innerHTML.replace(/[\s\.]+/g,'-').toLowerCase();
+        var len = window.$('[id^="' + this.id + '"]').length;
+        if (len > 1) {
+          this.id += '-' + len;
+        }
       });
 
       //build toc
