@@ -365,5 +365,48 @@ describe('template plugin', function() {
         });
       });
     });
+    it('should pull in templates from library modules', function(done) {
+      var config = {
+        modules: {},
+        templates: {
+          // Leave intact to ensure that we aren't being seeded from the mixin
+        }
+      };
+
+      var mixins = [
+        {
+          name: 'mixin2',
+          root: 'mixin2/',
+          modules: {
+            module: {
+              scripts: [ 'bat1.1' ]
+            }
+          },
+          templates: {
+            'bat1.1': [
+              'fot1.1'
+            ]
+          }
+        }
+      ];
+
+      lib.mixinExec(module, mixins, config, function(libraries, context) {
+        mixins = libraries.mixins;
+
+        var modules = context.config.attributes.modules;
+        context.mode = 'scripts';
+        context.module = modules[_.keys(modules)[0]];
+        build.loadResources(context, function(err, resources) {
+          // Drop the mixin reference to make testing easier
+          _.each(resources, function(resource) { delete resource.library; });
+
+          resources.should.eql([
+            {template: true, src: 'mixin2/fot1.1', name: 'fot1.1'},
+            {src: 'mixin2/bat1.1'}
+          ]);
+          done();
+        });
+      });
+    });
   });
 });
