@@ -210,7 +210,7 @@ Finally the `styles` section controls how CSS is generated and included within t
 
 For more information see the [stylus plugin](plugins/stylus.md).
 
-### Libraries ###
+## Libraries ###
 
 Lumbar allows for a projects configuration to be split into multiple lumbar config files via libraries. This allows multiple projects to reuse behaviors without having to duplicate their
 configuration. For example the lumbar-loader files can be referenced via a library like so:
