@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libraries</title>
+  
+  <script type="text/javascript" src="scripts/highlight.js"></script>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="#creating-libraries">Creating Libraries</a><ul class="sub"><li><a href="#mixins">Mixins</a></li><li><a href="#modules">Modules</a></li><li><a href="#global-settings">Global settings</a></li><li><a href="#examples">Examples</a></li></ul></li><li class="header"><a href="#using-libraries">Using Libraries</a><ul class="sub"><li><a href="#mixins-2">Mixins</a></li></ul></li><li class="header"><a href="#additional-information">Additional information</a><ul class="sub"><li><a href="#handling-conflicts">Handling Conflicts</a></li><li><a href="#overriding-modules">Overriding Modules</a></li><li><a href="#file-management">File Management</a></li></ul></li></ul></div>
+  <div class="container"><div class="page">
+    <h1>Libraries</h1>
+
+<p>Libraries provide abstractions that allow lumbar components to be bundled into sharable, reusable components. The are able to extend almost any aspect of the lumbar configuration, from setting global config values up to defining entire reusable modules.</p>
+
+<h2 id="creating-libraries">Creating Libraries</h2>
+
+<p>Libraries consist of a <em>lumbar.json</em> configuration file with at minimum a <code>name</code> field which uniquely identifies the library within the current project. This is the human readable method of referencing this library in case of conflicts. (See <a href="#handling-conflicts">Handling Conficts</a> below for more information on conflicts.</p>
+
+<pre><code>{
+  "name": "my-library"
+}</code></pre>
+
+<p>With the base in we now want to add functionality to this. Generally this is going to be a combination of global settings for the project and mixins that can be loaded at specific points in the project.</p>
+
+<h3 id="mixins">Mixins</h3>
+
+<p>A library's mixins are generally implement their primary functionality. They allow for the addition of arbitrary behaviors to a specific module. At the most basic level a mixin can apply any attribute value to a module including additional file references.</p>
+
+<p>For example a mixin that may be used to bootstrap a project:</p>
+
+<pre><code>"mixins": {
+  "core-lib": {
+    "scripts": [
+      {"src": "js/lib/backbone.queryparams.js", "global": true},
+      {"src": "js/lib/backbone.historytracker.js", "global": true},
+      {"src": "js/lib/fastclick.js", "global": true},
+
+      {"src": "lumbar-loader-backbone.js", "library": "lumbar-loader", "platform": "web"},
+
+      {"package-config": true},
+      {"stylus-config": true},
+
+      {"src": "js/init.js"}
+    ],
+    "styles": [
+      "styles/reset.styl",
+      "styles/normalize.styl",
+      "styles/tap-highlight.styl"
+    ]
+  }
+}</code></pre>
+
+<p>In general you would define the contents of a mixin in the same manner as the contents of a normal module, with a few alterations to the behaviors.</p>
+
+<p>All mixin source files are output first in the resulting module. Exception for script files which are marked as global. In that case the files will be output as follows:</p>
+
+<blockquote><p>[mixin globals, module globals, mixin locals, module locals]</p></blockquote>
+
+<p>All file references in the mixin are relative to the library unless explicitly listed in the reference. In the example above, <em>js/init.js</em> refers to <em>libraryDir/js/init.js</em> at build time. Effectively mixins have their own form of a sandboxed file system. Clients may override portions of this behavior, which is discussed <a href="#overriding-files">below</a>.</p>
+
+<h3 id="modules">Modules</h3>
+
+<p>Libraries may also define entire modules, useful for utility modules such as the generic loader behavior:</p>
+
+<pre><code>"modules": {
+  "loader": {
+    "topLevelName": "Loader",
+    "mixins": [
+      {"name": "lumbar-loader", "env": "dev"},
+      {"name": "lumbar-localstorage-loader", "env": "production"}
+    ],
+    "scripts": [
+      "js/load.js"
+    ]
+  }
+}</code></pre>
+
+<p>Note that any modules defined in a library are automatically accessible as mixins. As a consequence of this, mixins and modules may not have the same name in a given library.</p>
+
+<h3 id="global-settings">Global settings</h3>
+
+<p>Libraries are able to provide default values for settings that otherwise would be duplicated across projects. For example the Thorax library <a href="https://github.com/walmartlabs/thorax/blob/master/lumbar.json#L73">defines</a> the template handler that it expects for all projects that import the library.</p>
+
+<pre><code>"templates": {
+  "template": "Handlebars.templates['{{{without-extension name}}}'] = {{handlebarsCall}}({{{data}}});"
+}</code></pre>
+
+<p>The default behavior for global settings is to extend the current project exactly as if the <code>_.extend</code> operation occurred. Individual plugins will modify this behavior based on what makes sense. The majority of these cases will be to augment rather than replace behavior, as is the case with the root <code>template</code> setting in the example above. Please consult the documentation for each plugin to see the expected behavior for global setting changes.</p>
+
+<h3 id="examples">Examples</h3>
+
+<ul><li><a href="https://github.com/walmartlabs/lumbar-loader/blob/master/lumbar.json">Lumbar Loader</a></li><li><a href="https://github.com/walmartlabs/thorax/blob/master/lumbar.json">Thorax</a></li><li><a href="https://github.com/walmartlabs/phoenix-build/blob/master/mixin/lumbar.json">Phoenix Build</a></li></ul>
+
+<h2 id="using-libraries">Using Libraries</h2>
+
+<p>Once <a href="#creating-libraries">defined</a> using a library is as simple as referencing it's path to load it.</p>
+
+<pre><code>"libraries": [
+  "components/lumbar-loader"
+]</code></pre>
+
+<p>This will load the global settings defined in the config and make any mixins defined in the library available for use. Note that the default library file name is <em>lumbar.json</em>. Libraries that use another file name will need to reference that file explicitly rather than the containing directory.</p>
+
+<h3 id="mixins-2">Mixins</h3>
+
+<p>Once the library is loaded, it's mixins may be used with in specific modules. This is done by creating a <code>mixins</code> array within the module and referencing the name of the library's mixin or module.</p>
+
+<pre><code>"modules": {
+  "loader": {
+    "mixins": [
+      {"name": "lumbar-loader", "env": "dev"},
+      "core-lib"
+    ]
+  }
+}</code></pre>
+
+<p>This may be done via simple strings or for overrides and conditional behavior, via a JSON object whose name value is set to the mixin name.</p>
+
+<p>When a mixin is included with additional properties such as the <code>lumbar-loader</code> include above, these properties will be applied to all resources defined in the mixin. For this allows for the project to override or define their own conditional behavior as necessary.</p>
+
+<h4 id="overriding-files">Overriding Files</h4>
+
+<p>If a mixin includes a file that is not desired, it's possible to replace the file by specifying the overrides key when including the mixin.</p>
+
+<pre><code>"mixins": [
+  {
+    "name": "banner-carousel",
+    "overrides": {
+      "static/images/page-dot.png": "images/page-dot.png"
+    }
+  }
+}</code></pre>
+
+<p>This will replace any file references to <em>static/images/page-dot.png</em> in the mixin with <em>image/page-dot.png</em> in the project's file structure. It's also possible to use the value <code>true</code> to specify the exact same file name, just in the local file space and <code>false</code> to prevent the file from being output.</p>
+
+<h2 id="additional-information">Additional information</h2>
+
+<h3 id="handling-conflicts">Handling Conflicts</h3>
+
+<p>If two libraries define a mixin or module of the same name, lumbar will not be able to resolve them by name alone. Under situations such as this mixin's must be included using the fully qualified form:</p>
+
+<pre><code>"mixins": [
+  { "name": "banner-carousel", "library": "shared" }
+}</code></pre>
+
+<p>Outside of the additional parameter, this does not impact the include operation.</p>
+
+<h3 id="overriding-modules">Overriding Modules</h3>
+
+<p>It's possible to override modules that are defined in a library by creating a module in the root project lumbar config file and then importing the library module as a mixin.</p>
+
+<pre><code>"modules": {
+  "base": {
+    "mixins": [ {"name": "base", "library": "shared"} ]
+    "scripts": [ "additiona-file.js" ]
+  }
+}</code></pre>
+
+<p>Alternatively modules can be removed from output by assigning <code>false</code> to that particular module's name in the root config.</p>
+
+<h3 id="file-management">File Management</h3>
+
+<p>Lumbar purposefully avoids tackling the hows of getting the shared library files into a location accessible to the project. There are too many different needs for this and many existing ways for doing package management.</p>
+
+<p>There are many ways that this can be done, each with their own pros and cons. Some investigated by the WalmartLabs team included:</p>
+
+<ol><li>Git Submodules</li><li>Git Subtrees</li><li>npm</li><li>bower</li></ol>
+  </div></div>
+  <a href="http://github.com/walmartlabs/lumbar">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub">
+  </a>
+</body>
+</html>

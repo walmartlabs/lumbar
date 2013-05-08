@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <div id="sidebar" class="interface"><ul><li class="header"><a href="#introduction">Introduction</a><li class="header"><a href="#high">High Level Overview</a><li class="header"><a href="#lumbar-json">lumbar.json</a><ul class="sub"><li><a href="#platforms">Platforms</a></li><li><a href="#packages">Packages</a></li><li><a href="#modules">Modules</a></li><li><a href="#application">Application</a></li><li><a href="#templates">Templates</a></li><li><a href="#styles">Styles</a></li></ul></li><li class="header"><a href="#plugins">Plugins</a><ul class="sub"><li><a href="#core">Core Plugins</a></li><li><a href="#using">Using 3rd Party Plugins</a></li><li><a href="#implementing">Implementing Custom Plugins</a></li></ul></li><li class="header"><a href="#command">Command Line</a><li class="header"><a href="#faq">FAQ</a></li></li></li></li></ul></div>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="#introduction">Introduction</a><li class="header"><a href="#high-level-overview">High Level Overview</a><li class="header"><a href="#lumbar-json">lumbar.json</a><ul class="sub"><li><a href="#platforms">Platforms</a></li><li><a href="#packages">Packages</a></li><li><a href="#modules">Modules</a></li><li><a href="#application">Application</a></li><li><a href="#templates">Templates</a></li><li><a href="#styles">Styles</a></li></ul></li><li class="header"><a href="#libraries">Libraries</a><li class="header"><a href="#plugins">Plugins</a><ul class="sub"><li><a href="#core-plugins">Core Plugins</a></li><li><a href="#using-3rd-party-plugins">Using 3rd Party Plugins</a></li><li><a href="#implementing-custom-plugins">Implementing Custom Plugins</a></li></ul></li><li class="header"><a href="#command-line">Command Line</a><li class="header"><a href="#faq">FAQ</a></li></li></li></li></li></ul></div>
   <div class="container"><div class="page">
     <h1>Lumbar</h1>
 
@@ -26,7 +26,7 @@
 
 <p>Best of all, if what’s included out of the box doesn’t satisfy your needs, then you should be able to build a plugin relatively easily to support it. Lumbar was built around a <a href="#plugins">plugin architecture</a> which makes it very extensible.</p>
 
-<h2 id="high">High Level Overview</h2>
+<h2 id="high-level-overview">High Level Overview</h2>
 
 <p>Lumbar is modeled and built around <a href="#platforms">platforms</a>. Platforms are defined by you, to fit your representations. When a platform flag is present on a resource, such as a javascript file, then that resource will be included for that platform’s output only.</p>
 
@@ -39,6 +39,8 @@
 <p>The main configuration file for lumbar is by default named <em>lumbar.json</em>. It is a JSON formatted document that has six main sections. They are <a href="#application">application</a>, <a href="#platforms">platforms</a>, <a href="#packages">packages</a>, <a href="#modules">modules</a>, <a href="#templates">templates</a>, and <a href="#styles">styles</a>.</p>
 
 <p>Each section of lumbar.json is discussed in more detail below. There is an example lumbar.json included in the <a href="https://github.com/walmartlabs/thorax-example">thorax-example</a> project.</p>
+
+<p>The configuration in this file may also be split into multiple files via <a href="#libraries">libraries and mixins</a>.</p>
 
 <h3 id="platforms">Platforms</h3>
 
@@ -216,17 +218,40 @@ set to the relative path should be used, along with any plugin specific filter v
 
 <p>For more information see the <a href="plugins/stylus.html">stylus plugin</a>.</p>
 
+<h2 id="libraries">Libraries</h2>
+
+<p>Lumbar allows for a projects configuration to be split into multiple lumbar config files via libraries. This allows multiple projects to reuse behaviors without having to duplicate their
+configuration. For example the lumbar-loader files can be referenced via a library like so:</p>
+
+<pre><code>"modules": {
+  "loader": {
+    "mixins": [
+      {"name": "lumbar-loader", "env": "dev"},
+      {"name": "lumbar-localstorage-loader", "env": "production"}
+    ]
+  }
+},
+"libraries": [
+  "components/lumbar-loader"
+]</code></pre>
+
+<p>Libraries have two methods of operation, global config and module mixins. The former allows libraries to define common configuration such as common <code>stylus</code> include files and the later allows for the addition of specific behaviors to specific modules.</p>
+
+<p>Global config changes are simply defined in the root of the library <code>lumbar.json</code> file. When the library is loaded any settings defined here will be imported into the project. Note that each plugin implements it's own inheritance scheme here. Some plugins might treat specific definitions as additive and others might treat them as overrides.</p>
+
+<p>They are discussed in detail <a href="libraries.html">here</a>.</p>
+
 <h2 id="plugins">Plugins</h2>
 
 <p>Lumbar offers many options for customization and extensibly through its Plugin Architecture.</p>
 
-<h3 id="core">Core Plugins</h3>
+<h3 id="core-plugins">Core Plugins</h3>
 
 <p>The bulk of Lumbar's core functionality is implemented through core plugins, such as the <a href="plugins/stylus.html">stylus</a>, <a href="plugins/template.html">template</a>, and <a href="plugins/scope.html">scope</a> plugins. Documentation on all of the core plugins is available <a href="plugins/">here</a>.</p>
 
 <p>By default each of these plugins are utilized for all builds. If this is not desired then the <code>ignoreCorePlugins</code> field may be specified on the build options. When doing this select core plugins may still be used by referencing them name. See <a href="#plugins-using">Using 3rd Party Plugins</a> below for details.</p>
 
-<h3 id="using">Using 3rd Party Plugins</h3>
+<h3 id="using-3rd-party-plugins">Using 3rd Party Plugins</h3>
 
 <p>3rd party (and core plugins in <code>ignoreCorePlugins</code> mode) may be defined through</p>
 
@@ -235,11 +260,11 @@ Plugins may be defined on the command line with the <code>--use</code> parameter
 Plugins may also be defined in the plugin configuration via the <code>plugins</code> field. This field should be an array of either name values or <code>{path: pluginPath}</code> objects. Path objects will load global node.js modules, explicit paths, or modules in the <em>node_modules</em> directory in the same directory as the configuration file.</p></li><li><p>The Lumbar API
 Clients that are interfacing directly with the lumbar API may explicitly define plugins via the <code>Lumbar.use</code> API. This API registers a particular plugin with a given name that can be referenced with through the <code>options</code> parameter or the project configuration.</p><p>API clients may also pass plugins through the <code>plugins</code> field on the <code>options</code> object. This field should be an array containing either the name, <code>{path: pluginPath}</code> object or the plugin instance. Path objects are loaded in the same manner as plugins defined in the configuration file.</p></li></ul>
 
-<h3 id="implementing">Implementing Custom Plugins</h3>
+<h3 id="implementing-custom-plugins">Implementing Custom Plugins</h3>
 
 <p>Read more about our architecture <a href="plugins.html">here</a>.</p>
 
-<h2 id="command">Command Line</h2>
+<h2 id="command-line">Command Line</h2>
 
 <pre><code>lumbar build [--package name] [--config file] [--minimize] [--use path [--with options]] lumbarFile outputDir
         Build out the package(s).

@@ -25,6 +25,10 @@ resource reference in the <code>files</code> data.  This reference should be in 
 module after the <code>lumbar-loader.js</code> reference but before an loader implementation
 references.  See <a href="https://github.com/walmartlabs/lumbar-loader">lumbar-loader</a> for more details.</p>
 
+<h2 id="preload-and-depends">Preload and Depends</h2>
+
+<p>As of 2.0 the module-map plugin supports <code>preload</code> and <code>depends</code> flags defined on individual modules. When defined these will either background or blocking load, respectively.</p>
+
 <h2 id="example">Example</h2>
 
 <p>This example is from the <a href="https://github.com/walmartlabs/thorax-todos">sample todos app</a></p>

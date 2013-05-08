@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Release Notes</title>
+  
+  <script type="text/javascript" src="scripts/highlight.js"></script>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div id="sidebar" class="interface"><ul><li class="header"><a href="#2-0-0-beta-21---apr-3rd-2013">2.0.0 Beta 21 - Apr 3rd 2013</a><li class="header"><a href="#2-0-0-beta-20---mar-22nd-2013">2.0.0 Beta 20 - Mar 22nd 2013</a><li class="header"><a href="#2-0-0-beta-19---mar-12th-2013">2.0.0 Beta 19 - Mar 12th 2013</a><li class="header"><a href="#2-0-0-beta-17---feb-21st-2013">2.0.0 Beta 17 - Feb 21st 2013</a><li class="header"><a href="#2-0-0-beta-15---feb-5th-2013">2.0.0 Beta 15 - Feb 5th 2013</a><li class="header"><a href="#2-0-0-beta-14---jan-9th-2013">2.0.0 Beta 14 - Jan 9th 2013</a><li class="header"><a href="#2-0-0-beta-13---jan-8th-2013">2.0.0 Beta 13 - Jan 8th 2013</a><li class="header"><a href="#2-0-0-beta-12---jan-7th-2013">2.0.0 Beta 12 - Jan 7th 2013</a><li class="header"><a href="#2-0-0-beta-10---jan-2nd-2013">2.0.0 Beta 10 - Jan 2nd 2013</a><li class="header"><a href="#2-0-0-beta-10---dec-26th-2012">2.0.0 Beta 10 - Dec 26th 2012</a><li class="header"><a href="#2-0-0-beta-9---dec-21st-2012">2.0.0 Beta 9 - Dec 21st 2012</a><li class="header"><a href="#2-0-0-beta-8---dec-16th-2012">2.0.0 Beta 8 - Dec 16th 2012</a><li class="header"><a href="#2-0-0-beta-7---dec-11th-2012">2.0.0 Beta 7 - Dec 11th 2012</a><li class="header"><a href="#2-0-0-beta-6---dec-4th-2012">2.0.0 Beta 6 - Dec 4th 2012</a><li class="header"><a href="#2-0-0-beta-5---nov-25th-2012">2.0.0 Beta 5 - Nov 25th 2012</a><li class="header"><a href="#2-0-0-beta-4---nov-5th-2012">2.0.0 Beta 4 - Nov 5th 2012</a><li class="header"><a href="#2-0-0-beta-3---oct-25th-2012">2.0.0 Beta 3 - Oct 25th 2012</a><li class="header"><a href="#2-0-0-beta-2---oct-23rd-2012">2.0.0 Beta 2 - Oct 23rd 2012</a><li class="header"><a href="#2-0-0-beta-1---oct-9th-2012">2.0.0 Beta 1 - Oct 9th 2012</a></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></ul></div>
+  <div class="container"><div class="page">
+    <h1>Release Notes</h1>
+
+<ul><li>Fix template linking for library modules</li><li>Output templates prior to their referencing file</li><li>Use <code>library</code> rather than <code>container</code> for fully qualified mixin lookup</li><li>Allow plugins in Grunt task (@stehag)</li><li>Add verbose logging options</li><li>Rename root mixins to libraries.
+Library import declarations have been changed from <code>mixins</code> to <code>libraries</code> and are otherwise identical. Likewise, resource library references have been changed from <code>mixin</code> to <code>library</code>.</li></ul>
+
+<h2 id="2-0-0-beta-21---apr-3rd-2013">2.0.0 Beta 21 - Apr 3rd 2013</h2>
+
+<ul><li>Allow uglify config via <code>uglify</code> project config option.</li></ul>
+
+<h2 id="2-0-0-beta-20---mar-22nd-2013">2.0.0 Beta 20 - Mar 22nd 2013</h2>
+
+<ul><li>Implement server-scripts plugin</li></ul>
+
+<h2 id="2-0-0-beta-19---mar-12th-2013">2.0.0 Beta 19 - Mar 12th 2013</h2>
+
+<ul><li>Fix stylus execution outside of the lumbar directory</li><li>Add overrides false flag to prevent output of particular resources from mixins</li></ul>
+
+<h2 id="2-0-0-beta-17---feb-21st-2013">2.0.0 Beta 17 - Feb 21st 2013</h2>
+
+<ul><li>Added <code>lumbar</code> grunt task</li></ul>
+
+<h2 id="2-0-0-beta-15---feb-5th-2013">2.0.0 Beta 15 - Feb 5th 2013</h2>
+
+<p>Changes:</p>
+
+<ul><li>Break stylus execution into worker processes
+This change dropped build times across the board, with a large build that was taking 20 seconds
+dropping to 7 seconds. This breaks existing stylus plugins who must now be defined in worker
+files which may then be required into the worker process. Ex:</li></ul>
+
+<p><code>
+            resource.plugins.push({
+              plugin: __dirname + '/stylus-config-worker',
+              data: config
+            });
+</code></p>
+
+<ul><li>Support source map output to alternate locations</li></ul>
+
+<h2 id="2-0-0-beta-14---jan-9th-2013">2.0.0 Beta 14 - Jan 9th 2013</h2>
+
+<p>Changes:</p>
+
+<ul><li>Fix bug while watching template files.</li></ul>
+
+<h2 id="2-0-0-beta-13---jan-8th-2013">2.0.0 Beta 13 - Jan 8th 2013</h2>
+
+<p>Changes:</p>
+
+<ul><li>Cleanup override handling in stylus templates</li><li>Allow template hash references to pull from specific mixins</li><li>Fix stylus mixin compilation under combined compile</li><li>Allow for nested mixin definition</li></ul>
+
+<h2 id="2-0-0-beta-12---jan-7th-2013">2.0.0 Beta 12 - Jan 7th 2013</h2>
+
+<p>Changes:</p>
+
+<ul><li>Add <code>depends</code> field to module map for lumbar loader module dependencies</li><li>Fix source map comment output</li><li>Source map parsing performance improvements</li><li>Run uglify in parallel worker process(es)
+Dramatically decreased processing time for large projects on multi-core machines.</li></ul>
+
+<h2 id="2-0-0-beta-10---jan-2nd-2013">2.0.0 Beta 10 - Jan 2nd 2013</h2>
+
+<p>Changes:</p>
+
+<ul><li>Fix handling of styleRoot in mixins.</li></ul>
+
+<h2 id="2-0-0-beta-10---dec-26th-2012">2.0.0 Beta 10 - Dec 26th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Added support for source maps</p></li><li><p>Update mixin handling for namespaces</p><p>This allows different mixins to define mixins with the same name. Consumers can differentiate
+between the mixins via the <code>library</code> attribute on the mixin reference. i.e.</p><p><code>
+"mixins": [
+{"name": "test", "library": "phoenix-build"}
+]
+</code></p><p>All mixin projects must now define a name field so they may be referenced in this manner.</p></li><li><p>Fix incorrect configuration load when using watch mode.</p></li><li>Fix watch cleanup on file removal.</li></ul>
+
+<h2 id="2-0-0-beta-9---dec-21st-2012">2.0.0 Beta 9 - Dec 21st 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Filter duplicate files in the same module</p><p>This behavior may be disabled on the resource level via the <code>"duplicate": true</code>
+attribute or at the application level with the <code>"filterDuplicates": false</code> top level
+attribute.</p></li><li><p>Files added through pattern mapping and auto-includes no longer require a config
+change to watch for changes.</p></li><li><p>Allow for disabling of all alliases with <code>"aliases": false</code></p></li><li><p>Fix CoffeeScript plugin (@jasonwebster)</p></li></ul>
+
+<h2 id="2-0-0-beta-8---dec-16th-2012">2.0.0 Beta 8 - Dec 16th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Implement source warning framework</p></li><li><p>Update to Uglify 2.2</p><p>NPM will refuse to install this under 0.8 and lower due to an upstream dependency so this is
+now optional.</p></li><li><p>Fix filtering of generated resources</p></li></ul>
+
+<h2 id="2-0-0-beta-7---dec-11th-2012">2.0.0 Beta 7 - Dec 11th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Add support for mixin file references via. mixin resource attribute.</p><p>{"src": "lumbar-loader-backbone.js", "mixin": "lumbar-loader"},</p><p>Mixins must define a name value in the mixin config file to utilize this feature.</p></li><li><p>Fix template auto-include in mixin contexts</p></li><li><p>Fix execution error in coffeescript plugin (needs unit tests)</p></li></ul>
+
+<h2 id="2-0-0-beta-6---dec-4th-2012">2.0.0 Beta 6 - Dec 4th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Add <code>template.root</code> property for template prefix stripping.</p></li><li><p>Removed precompiled template template.</p><p>Moving forward template templates should use <code>{{handlebarsCall}}</code> to differentiate between
+precompiled and client compiled mode.</p></li></ul>
+
+<h2 id="2-0-0-beta-5---nov-25th-2012">2.0.0 Beta 5 - Nov 25th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Watch support for mixin config. Changes to mixin config files will now rebuild the project
+when in watch mode.</p></li><li><p>Allow file config independent rebuilds</p><p>Adds isPrimary flag to the file config. When true this will rebuild all
+configs for a given mode. When false will ignore changes to the inputs
+when undefined will continue the default behavior of separate rebuilds.</p></li><li><p>Optimize stylus builds when using multiple pixel densities.</p><p>This saves about 50% of the developer build time for mobile.walmart.com.</p></li><li><p>stylus-config plugin for sharing variables between stylus and javascript</p></li><li><p>Allow lumbar plugins to interact with the stylus compiler at runtime</p><p>Allows plugins to register callbacks on the stylus generator using the <code>plugins</code> field. This
+mechanism allows additional plugins and source modifications on stylus compilation steps. The
+stylus-config plugin provides an example of this API's usage.</p></li><li><p>Optimize plugin execution loop</p><p>The plugin executor now enforces async execution of async callbacks. This may break plugins that
+incorrectly took advantage of non-contract synchronous behavior in the app.</p></li><li><p>Switch to cheerio for update-externals parsing</p></li><li><p>Improve various error messages</p></li><li><p>Watch package config files for changes</p></li><li><p>CLI: Allow multiple --module parameters</p></li></ul>
+
+<h2 id="2-0-0-beta-4---nov-5th-2012">2.0.0 Beta 4 - Nov 5th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li>Allow specific modules to disable particular aliases.</li></ul>
+
+<h2 id="2-0-0-beta-3---oct-25th-2012">2.0.0 Beta 3 - Oct 25th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Improves EMFILE error handling.</p></li><li><p>Watch unit test library updates</p></li></ul>
+
+<h2 id="2-0-0-beta-2---oct-23rd-2012">2.0.0 Beta 2 - Oct 23rd 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Separated handlebars processing from template includes</p><p>Handlebar templates may now be included in script array or the template lookup field. Templates
+in the lookup field are no longer required to be handlebars templates.</p></li><li><p>Template plugin now supports pattern matching includes.</p><p>Example mapping for thorax template structure:
+<code>javascript
+"templates": {
+  "auto-include": {
+    "js/views/(.*)\\.(?:js|coffee)": [
+      "templates/$1.handlebars",
+      "templates/$1-item.handlebars",
+      "templates/$1-empty.handlebars"
+    ]
+  }
+}
+</code></p></li><li><p>Local module reference support</p><p>Module variables are now aliased internally meaning that a module with a top level name
+<code>Application</code> can access it's exported members by accessing the <code>Application</code> object at any point
+in time. Previously initialization logic was only able to access this through the <code>exports</code> or
+<code>module.exports</code> references.</p><p>Note that for top level objects this is an alias so assigning to this variable will not update the
+external reference. The default template is configured to warn in the event that it detects this
+situation.</p></li><li><p>Scope aliases</p><p>It's now possible to define aliases globally via the scope.alias config object and locally by
+defining the alias object on specific modules. These alias will create local variable references
+to any javascript statement, allowing for minimization of frequently used references.</p><p>Example global aliases:
+<code>javascript
+"scope": {
+  "aliases": {
+    "View": "Application.View",
+    "Application": "Application"
+  }
+}
+</code></p></li><li><p>Allow filtering of resources via not structures, i.e. <code>"platform": {"not": "web"}</code> and
+<code>"packages": {"not": ["foo", "bar"]}</code>.</p></li><li><p>Allow filtering of resources based on combined module or not via the <code>combined</code> attribute.
+Undefined for all modes, true for combined mode only, false for non-combined only.</p></li><li><p>Significant rework of tests to focus more on unit testing with better edge case coverage</p></li><li><p>Fixed mixin modules implementation. Properly links to mixin files. Mixin modules may now be
+applied as mixins to other modules, have their own mixins, and be suppressed via false module
+value.</p></li></ul>
+
+<h2 id="2-0-0-beta-1---oct-9th-2012">2.0.0 Beta 1 - Oct 9th 2012</h2>
+
+<p>Changes:</p>
+
+<ul><li><p>Mixin support</p></li><li><p>Stylus useNib flag</p><p>UPDATE: As of beta 2 this is no longer a breaking change. Includes referencing nib directly will
+have this flag applied.</p><p>Updates nib include in stylus to utilize a named attribute. This was necessary to support mixins
+of the nib plugin. Update path for nib users is to remove the <code>nib</code> entry from the styles includes
+list and to add a <code>useNib</code> attribute to the styles object set to true.</p><p>Old:
+<code>javascript
+"styles": { "includes": ["nib"] }
+</code></p><p>New:
+<code>javascript
+"styles: { "useNib": true }
+</code></p></li><li><p>Scope</p><ul><li><p>Possible to define both a scope and template value.</p></li></ul></li><li><p>API Changes</p><ul><li><p>config.readConfig utility method</p><p>Helper method that strips out comments and other comments that causes the JSON parse to blow up.
+It's recommended that all interaction with lumbar config files use this helper method.</p></li><li><p>config.create factor method</p><p>Method used for creating a config object from a javascript key-value object rather than directly
+from a file.</p></li><li><p>Moved config.fileList and config.filterResource to static lumbar.build object</p></li><li><p>Created new loadMixin and loadConfig plugin points. Plugins that need to perform mixin-specific
+behavior should implement these methods.</p></li></ul></li></ul>
+  </div></div>
+  <a href="http://github.com/walmartlabs/lumbar">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub">
+  </a>
+</body>
+</html>
