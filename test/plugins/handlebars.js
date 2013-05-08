@@ -21,7 +21,7 @@ describe('handlebars plugin', function() {
     };
 
     lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-      resources[1](context, function(err, data) {
+      resources[0](context, function(err, data) {
         done(err || data);
       });
     });
@@ -92,11 +92,11 @@ describe('handlebars plugin', function() {
       };
 
       lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[1](context, function(err, data1) {
+        resources[0](context, function(err, data1) {
           if (err) {
             throw err;
           }
-          resources[3](context, function(err, data3) {
+          resources[2](context, function(err, data3) {
             if (err) {
               throw err;
             }
@@ -178,9 +178,9 @@ describe('handlebars plugin', function() {
       };
 
       lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[1].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', library: undefined, template: true});
+        resources[0].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', library: undefined, template: true});
 
-        resources[1](context, function(err, data) {
+        resources[0](context, function(err, data) {
           if (err) {
             throw err;
           }

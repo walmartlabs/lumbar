@@ -81,12 +81,12 @@ describe('template plugin', function() {
 
           resources.should.eql([
             {src: 'js/init.js'},
-            {src: 'js/views/test.js'},
-            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', template: true},
             {src: 'templates/test-item.handlebars', name: 'templates/test-item.handlebars', template: true},
-            {src: 'js/views/foo/bar.js'},
+            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', template: true},
+            {src: 'js/views/test.js'},
+            {watch: 'templates/foo'},
             {src: 'templates/foo/bar-item.handlebars', name: 'templates/foo/bar-item.handlebars', template: true},
-            {watch: 'templates/foo'}
+            {src: 'js/views/foo/bar.js'}
           ]);
           done();
         });
@@ -115,9 +115,9 @@ describe('template plugin', function() {
         context.mode = 'scripts';
         build.loadResources(context, function(err, resources) {
           resources.should.eql([
-            {src: 'js/views/test.js'},
+            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', library: undefined, template: true},
             {src: 'foo.handlebars', name: 'foo.handlebars', library: undefined, template: true},
-            {src: 'templates/test.handlebars', name: 'templates/test.handlebars', library: undefined, template: true}
+            {src: 'js/views/test.js'}
           ]);
           done();
         });
@@ -267,12 +267,12 @@ describe('template plugin', function() {
           _.each(resources, function(resource) { delete resource.library; });
 
           resources.should.eql([
-            {src: 'mixin1/baz1.1'},
-            {src: 'mixin1/templates/baz1.1.handlebars', name: 'templates/baz1.1.handlebars', template: true},
             {src: 'foo', name: 'baz1.1.handlebars', template: true},
-            {src: 'baz1.1'},
+            {src: 'mixin1/templates/baz1.1.handlebars', name: 'templates/baz1.1.handlebars', template: true},
+            {src: 'mixin1/baz1.1'},
+            {src: 'baz1.1.handlebars', name: 'baz1.1.handlebars', template: true},
             {src: 'templates/baz1.1.handlebars', name: 'templates/baz1.1.handlebars', template: true},
-            {src: 'baz1.1.handlebars', name: 'baz1.1.handlebars', template: true}
+            {src: 'baz1.1'}
           ]);
           done();
         });
@@ -348,18 +348,18 @@ describe('template plugin', function() {
           _.each(resources, function(resource) { delete resource.library; });
 
           resources.should.eql([
-            {src: 'foo', originalSrc: 'mixin1/baz1.1'},
-            {template: true, src: 'foo1.1', name: 'foo1.1'},
             {template: true, src: 'mixin1/foo1.2', name: 'foo1.2'},
-            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2'},
-            {src: 'mixin2/baz1.1'},
-            {template: true, src: 'mixin2/foo1.1', name: 'foo1.1'},
-            {template: true, src: 'mixin2/foo1.2', name: 'foo1.2'},
-            {src: 'mixin2/baz1.2'},
-            {src: 'baz1.1'},
             {template: true, src: 'foo1.1', name: 'foo1.1'},
-            {template: true, src: 'foo1.2', name: 'foo1.2'},
+            {src: 'foo', originalSrc: 'mixin1/baz1.1'},
+            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2'},
+            {template: true, src: 'mixin2/foo1.2', name: 'foo1.2'},
+            {template: true, src: 'mixin2/foo1.1', name: 'foo1.1'},
+            {src: 'mixin2/baz1.1'},
+            {src: 'mixin2/baz1.2'},
             {template: true, src: 'mixin1/foo1.3', name: 'foo1.3'},
+            {template: true, src: 'foo1.2', name: 'foo1.2'},
+            {template: true, src: 'foo1.1', name: 'foo1.1'},
+            {src: 'baz1.1'},
           ]);
           done();
         });

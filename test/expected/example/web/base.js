@@ -45,6 +45,8 @@ $(document).ready(function() {
 });
 
 ;;
+/* handsfree : templates/header.handlebars*/
+module.exports.templates['templates/header.handlebars'] = Handlebars.compile('Header\n');
 exports.Views.Header = Backbone.View.extend({
   el: ".header",
 
@@ -54,8 +56,6 @@ exports.Views.Header = Backbone.View.extend({
 });
 
 ;;
-/* handsfree : templates/header.handlebars*/
-module.exports.templates['templates/header.handlebars'] = Handlebars.compile('Header\n');
 module.exports.config = {
   "port": 8080,
   "securePort": 8081
