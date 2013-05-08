@@ -13,23 +13,21 @@ describe('handlebars plugin', function() {
     fu.resetCache();
   });
 
-  describe('output', function() {
-    function doIt(config, done) {
-      var module = {
-        scripts: [
-          'js/views/test.js'
-        ]
-      };
+  function doIt(config, done) {
+    var module = {
+      scripts: [
+        'js/views/test.js'
+      ]
+    };
 
-      lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[1](context, function(err, data) {
-          if (err) {
-            throw err;
-          }
-          done(data);
-        });
+    lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
+      resources[0](context, function(err, data) {
+        done(err || data);
       });
-    }
+    });
+  }
+
+  describe('output', function() {
     it('should strip root name', function(done) {
       var config = {
         templates: {
@@ -94,11 +92,11 @@ describe('handlebars plugin', function() {
       };
 
       lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[1](context, function(err, data1) {
+        resources[0](context, function(err, data1) {
           if (err) {
             throw err;
           }
-          resources[3](context, function(err, data3) {
+          resources[2](context, function(err, data3) {
             if (err) {
               throw err;
             }
@@ -125,6 +123,47 @@ describe('handlebars plugin', function() {
     });
   });
 
+  describe('template templates', function() {
+    it('should handle file errors', function(done) {
+      var config = {
+        templates: {
+          template: 'foo.handlebars',
+          root: __dirname + '/../artifacts/templates/',
+          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+        }
+      };
+
+      doIt(config, function(data) {
+        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        data.should.be.instanceOf(Error);
+        data.code.should.equal('ENOENT');
+        done();
+      });
+    });
+
+    it('should strip extension name', function(done) {
+      var config = {
+        templates: {
+          template: '{{without-extension name}}',
+          root: __dirname + '/../artifacts/templates/',
+          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+        }
+      };
+
+      doIt(config, function(data) {
+        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        data.should.eql({
+          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          data: 'home',
+          generated: true,
+          noSeparator: true,
+          ignoreWarnings: true
+        });
+        done();
+      });
+    });
+  });
+
   describe('directory include', function() {
     it('should drop trailing slashes in template names', function(done) {
       var module = {
@@ -139,9 +178,9 @@ describe('handlebars plugin', function() {
       };
 
       lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[1].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', library: undefined, template: true});
+        resources[0].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', library: undefined, template: true});
 
-        resources[1](context, function(err, data) {
+        resources[0](context, function(err, data) {
           if (err) {
             throw err;
           }

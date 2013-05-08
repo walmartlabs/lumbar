@@ -7,6 +7,10 @@ Example['home'] = (function() {
   /* router : home */
 module.name = "home";
 module.routes = {"":"home","home":"home"};
+/* handsfree : templates/home/footer.handlebars*/
+Example.templates['templates/home/footer.handlebars'] = Handlebars.compile('<div>Footer</div>\n');
+/* handsfree : templates/home/home.handlebars*/
+Example.templates['templates/home/home.handlebars'] = Handlebars.compile('Home\n ');
 Example.Views.Home = Backbone.View.extend({
   el: ".layout",
 
@@ -17,10 +21,6 @@ Example.Views.Home = Backbone.View.extend({
 });
 
 ;;
-/* handsfree : templates/home/footer.handlebars*/
-Example.templates['templates/home/footer.handlebars'] = Handlebars.compile('<div>Footer</div>\n');
-/* handsfree : templates/home/home.handlebars*/
-Example.templates['templates/home/home.handlebars'] = Handlebars.compile('Home\n ');
 Example.Router.create(module, {
   home: function() {
     var home = new Example.Views.Home();
