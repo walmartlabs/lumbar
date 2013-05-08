@@ -126,3 +126,26 @@ If a mixin includes a file that is not desired, it's possible to replace the fil
 
 This will replace any file references to *static/images/page-dot.png* in the mixin with *image/page-dot.png* in the project's file structure. It's also possible to use the value `true` to specify the exact same file name, just in the local file space and `false` to prevent the file from being output.
 
+## Additional information
+
+### Handling Conflicts
+
+If two libraries define a mixin or module of the same name, lumbar will not be able to resolve them by name alone. Under situations such as this mixin's must be included using the fully qualified form:
+
+    "mixins": [
+      { "name": "banner-carousel", "library": "shared" }
+    }
+
+Outside of the additional parameter, this does not impact the include operation.
+
+### File Management
+
+Lumbar purposefully avoids tackling the hows of getting the shared library files into a location accessible to the project. There are too many different needs for this and many existing ways for doing package management.
+
+There are many ways that this can be done, each with their own pros and cons. Some investigated by the WalmartLabs team included:
+
+1. Git Submodules
+1. Git Subtrees
+1. npm
+1. bower
+
