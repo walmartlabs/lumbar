@@ -83,3 +83,46 @@ The default behavior for global settings is to extend the current project exactl
  - [Lumbar Loader](https://github.com/walmartlabs/lumbar-loader/blob/master/lumbar.json)
  - [Thorax](https://github.com/walmartlabs/thorax/blob/master/lumbar.json)
  - [Phoenix Build](https://github.com/walmartlabs/phoenix-build/blob/master/mixin/lumbar.json)
+
+## Using Libraries
+
+Once [defined](#creating-libraries) using a library is as simple as referencing it's path to load it.
+
+    "libraries": [
+      "components/lumbar-loader"
+    ]
+
+This will load the global settings defined in the config and make any mixins defined in the library available for use. Note that the default library file name is *lumbar.json*. Libraries that use another file name will need to reference that file explicitly rather than the containing directory.
+
+### Mixins
+
+Once the library is loaded, it's mixins may be used with in specific modules. This is done by creating a `mixins` array within the module and referencing the name of the library's mixin or module.
+
+    "modules": {
+      "loader": {
+        "mixins": [
+          {"name": "lumbar-loader", "env": "dev"},
+          "core-lib"
+        ]
+      }
+    }
+
+This may be done via simple strings or for overrides and conditional behavior, via a JSON object whose name value is set to the mixin name.
+
+When a mixin is included with additional properties such as the `lumbar-loader` include above, these properties will be applied to all resources defined in the mixin. For this allows for the project to override or define their own conditional behavior as necessary.
+
+#### Overriding Files
+
+If a mixin includes a file that is not desired, it's possible to replace the file by specifying the overrides key when including the mixin.
+
+    "mixins": [
+      {
+        "name": "banner-carousel",
+        "overrides": {
+          "static/images/page-dot.png": "images/page-dot.png"
+        }
+      }
+    }
+
+This will replace any file references to *static/images/page-dot.png* in the mixin with *image/page-dot.png* in the project's file structure. It's also possible to use the value `true` to specify the exact same file name, just in the local file space and `false` to prevent the file from being output.
+
