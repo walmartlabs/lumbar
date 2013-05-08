@@ -138,6 +138,19 @@ If two libraries define a mixin or module of the same name, lumbar will not be a
 
 Outside of the additional parameter, this does not impact the include operation.
 
+### Overriding Modules
+
+It's possible to override modules that are defined in a library by creating a module in the root project lumbar config file and then importing the library module as a mixin.
+
+    "modules": {
+      "base": {
+        "mixins": [ {"name": "base", "library": "shared"} ]
+        "scripts": [ "additiona-file.js" ]
+      }
+    }
+
+Alternatively modules can be removed from output by assigning `false` to that particular module's name in the root config.
+
 ### File Management
 
 Lumbar purposefully avoids tackling the hows of getting the shared library files into a location accessible to the project. There are too many different needs for this and many existing ways for doing package management.
