@@ -1,6 +1,6 @@
 # Release Notes
 
-# 2.0.0 - May 8th 2013
+## 2.0.0 - May 8th 2013
 
 - Fix template linking for library modules
 - Output templates prior to their referencing file
