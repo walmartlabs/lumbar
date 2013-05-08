@@ -1,3 +1,5 @@
+# Release Notes
+
 - Fix template linking for library modules
 - Output templates prior to their referencing file
 - Use `library` rather than `container` for fully qualified mixin lookup
@@ -6,24 +8,24 @@
 - Rename root mixins to libraries.
     Library import declarations have been changed from `mixins` to `libraries` and are otherwise identical. Likewise, resource library references have been changed from `mixin` to `library`.
 
-# 2.0.0 Beta 21 - Apr 3rd 2013
+## 2.0.0 Beta 21 - Apr 3rd 2013
 
 - Allow uglify config via `uglify` project config option.
 
-# 2.0.0 Beta 20 - Mar 22nd 2013
+## 2.0.0 Beta 20 - Mar 22nd 2013
 
 - Implement server-scripts plugin
 
-# 2.0.0 Beta 19 - Mar 12th 2013
+## 2.0.0 Beta 19 - Mar 12th 2013
 
 - Fix stylus execution outside of the lumbar directory
 - Add overrides false flag to prevent output of particular resources from mixins
 
-# 2.0.0 Beta 17 - Feb 21st 2013
+## 2.0.0 Beta 17 - Feb 21st 2013
 
 - Added `lumbar` grunt task
 
-# 2.0.0 Beta 15 - Feb 5th 2013
+## 2.0.0 Beta 15 - Feb 5th 2013
 
 Changes:
 
@@ -41,13 +43,13 @@ Changes:
 
 - Support source map output to alternate locations
 
-# 2.0.0 Beta 14 - Jan 9th 2013
+## 2.0.0 Beta 14 - Jan 9th 2013
 
 Changes:
 
 - Fix bug while watching template files.
 
-# 2.0.0 Beta 13 - Jan 8th 2013
+## 2.0.0 Beta 13 - Jan 8th 2013
 
 Changes:
 
@@ -56,7 +58,7 @@ Changes:
 - Fix stylus mixin compilation under combined compile
 - Allow for nested mixin definition
 
-# 2.0.0 Beta 12 - Jan 7th 2013
+## 2.0.0 Beta 12 - Jan 7th 2013
 
 Changes:
 
@@ -66,13 +68,13 @@ Changes:
 - Run uglify in parallel worker process(es)
     Dramatically decreased processing time for large projects on multi-core machines.
 
-# 2.0.0 Beta 10 - Jan 2nd 2013
+## 2.0.0 Beta 10 - Jan 2nd 2013
 
 Changes:
 
 - Fix handling of styleRoot in mixins.
 
-# 2.0.0 Beta 10 - Dec 26th 2012
+## 2.0.0 Beta 10 - Dec 26th 2012
 
 Changes:
 
@@ -94,7 +96,7 @@ Changes:
 - Fix incorrect configuration load when using watch mode.
 - Fix watch cleanup on file removal.
 
-# 2.0.0 Beta 9 - Dec 21st 2012
+## 2.0.0 Beta 9 - Dec 21st 2012
 
 Changes:
 
@@ -111,7 +113,7 @@ Changes:
 
 - Fix CoffeeScript plugin (@jasonwebster)
 
-# 2.0.0 Beta 8 - Dec 16th 2012
+## 2.0.0 Beta 8 - Dec 16th 2012
 
 Changes:
 
@@ -124,7 +126,7 @@ Changes:
 
 - Fix filtering of generated resources
 
-# 2.0.0 Beta 7 - Dec 11th 2012
+## 2.0.0 Beta 7 - Dec 11th 2012
 
 Changes:
 
@@ -138,7 +140,7 @@ Changes:
 
 - Fix execution error in coffeescript plugin (needs unit tests)
 
-# 2.0.0 Beta 6 - Dec 4th 2012
+## 2.0.0 Beta 6 - Dec 4th 2012
 
 Changes:
 
@@ -149,7 +151,7 @@ Changes:
   Moving forward template templates should use `{{handlebarsCall}}` to differentiate between
   precompiled and client compiled mode.
 
-# 2.0.0 Beta 5 - Nov 25th 2012
+## 2.0.0 Beta 5 - Nov 25th 2012
 
 Changes:
 
@@ -188,14 +190,14 @@ Changes:
 - CLI: Allow multiple --module parameters
 
 
-# 2.0.0 Beta 4 - Nov 5th 2012
+## 2.0.0 Beta 4 - Nov 5th 2012
 
 Changes:
 
 - Allow specific modules to disable particular aliases.
 
 
-# 2.0.0 Beta 3 - Oct 25th 2012
+## 2.0.0 Beta 3 - Oct 25th 2012
 
 Changes:
 
@@ -204,7 +206,7 @@ Changes:
 - Watch unit test library updates
 
 
-# 2.0.0 Beta 2 - Oct 23rd 2012
+## 2.0.0 Beta 2 - Oct 23rd 2012
 
 Changes:
 
@@ -267,7 +269,7 @@ Changes:
   applied as mixins to other modules, have their own mixins, and be suppressed via false module
   value.
 
-# 2.0.0 Beta 1 - Oct 9th 2012
+## 2.0.0 Beta 1 - Oct 9th 2012
 
 Changes:
 
