@@ -247,6 +247,7 @@ describe('handlebars plugin', function() {
           templates: {
             'foo': 'bar',
             'template': 'template!',
+            'knownHelpers': ['foo', 'bar'],
             'precompile': true,
             'cache': 'cache!'
           }
@@ -263,6 +264,7 @@ describe('handlebars plugin', function() {
       var config = {
         templates: {
           'foo': 'baz',
+          'knownHelpers': ['baz'],
           'template': 'not in my house',
 
           'baz1.1': [
@@ -276,6 +278,7 @@ describe('handlebars plugin', function() {
         context.config.attributes.templates.should.eql({
           'foo': 'baz',
           'template': 'not in my house',
+          'knownHelpers': ['baz', 'foo', 'bar'],
           'precompile': { 'template': 'another template!', 'bar': 'foo' },
           'cache': 'cache!',
 

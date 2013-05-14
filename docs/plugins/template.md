@@ -40,11 +40,11 @@ once in the output.
           "templates/footer.handlebars"
         ],
 
-        "precompile": {
-          "knownHelpers": [
-            "template",
-            "view"
-          ],
+        "knownHelpers": [
+          "template",
+          "view"
+        ],
+        "precompile": {,
           "knownHelpersOnly": true
         }
       },

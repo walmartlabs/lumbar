@@ -1,5 +1,9 @@
 # Release Notes
 
+- Allow mixins to specify handlebars known helpers.
+
+  This moves the known helpers declaration from `templates.precompile.knownHelpers` to `template.knownHelpers`. The older path is still available but does not support mixins.
+
 ## 2.0.0 - May 8th 2013
 
 - Fix template linking for library modules
@@ -8,6 +12,7 @@
 - Allow plugins in Grunt task (@stehag)
 - Add verbose logging options
 - Rename root mixins to libraries.
+
     Library import declarations have been changed from `mixins` to `libraries` and are otherwise identical. Likewise, resource library references have been changed from `mixin` to `library`.
 
 ## 2.0.0 Beta 21 - Apr 3rd 2013
@@ -32,6 +37,7 @@
 Changes:
 
 - Break stylus execution into worker processes
+
     This change dropped build times across the board, with a large build that was taking 20 seconds
     dropping to 7 seconds. This breaks existing stylus plugins who must now be defined in worker
     files which may then be required into the worker process. Ex:
@@ -68,6 +74,7 @@ Changes:
 - Fix source map comment output
 - Source map parsing performance improvements
 - Run uglify in parallel worker process(es)
+
     Dramatically decreased processing time for large projects on multi-core machines.
 
 ## 2.0.0 Beta 10 - Jan 2nd 2013
