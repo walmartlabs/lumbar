@@ -1,5 +1,7 @@
 # Release Notes
 
+- #88 - Implement global workers limit
+
 - Allow mixins to specify handlebars known helpers.
 
   This moves the known helpers declaration from `templates.precompile.knownHelpers` to `template.knownHelpers`. The older path is still available but does not support mixins.
