@@ -42,6 +42,7 @@ describe('handlebars plugin', function() {
           inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
           data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
           generated: true,
+          name: __dirname + '/../artifacts/templates/',
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -63,6 +64,7 @@ describe('handlebars plugin', function() {
           inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
           data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.template(wooo!);\n',
           generated: true,
+          name: __dirname + '/../artifacts/templates/',
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -106,6 +108,7 @@ describe('handlebars plugin', function() {
               inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
               data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
               generated: true,
+              name: __dirname + '/../artifacts/templates/',
               noSeparator: true,
               ignoreWarnings: true
             });
@@ -113,6 +116,7 @@ describe('handlebars plugin', function() {
               inputs: [ name ],
               data: '',
               generated: true,
+              name: name,
               noSeparator: true,
               ignoreWarnings: true
             });
@@ -156,6 +160,7 @@ describe('handlebars plugin', function() {
           inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
           data: 'home',
           generated: true,
+          name: __dirname + '/../artifacts/templates/',
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -190,6 +195,7 @@ describe('handlebars plugin', function() {
             inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
             data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.compile(\'home\\n\');\n',
             generated: true,
+            name: __dirname + '/../artifacts/templates/',
             noSeparator: true,
             ignoreWarnings: true
           });
