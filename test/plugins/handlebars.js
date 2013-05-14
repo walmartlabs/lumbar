@@ -13,7 +13,7 @@ describe('handlebars plugin', function() {
     fu.resetCache();
   });
 
-  function doIt(config, done) {
+  function doIt(config, done, server) {
     var module = {
       scripts: [
         'js/views/test.js'
@@ -21,6 +21,8 @@ describe('handlebars plugin', function() {
     };
 
     lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
+      context.fileConfig.server = server;
+
       resources[0](context, function(err, data) {
         done(err || data);
       });
@@ -72,6 +74,45 @@ describe('handlebars plugin', function() {
         handlebars.precompile.restore();
         done();
       });
+    });
+    it('should handle server args', function(done) {
+      var config = {
+        templates: {
+          'js/views/test.js': [__dirname + '/../artifacts/templates/'],
+
+          server: {
+            bar: 3,
+            bat: 4
+          },
+          precompile: {
+            foo: 1,
+            bar: 2
+          }
+        }
+      };
+
+      sinon.stub(handlebars, 'precompile', function(content, options) {
+        options.should.eql({
+          foo: 1,
+          bar: 3,
+          bat: 4
+        });
+        return 'wooo!';
+      });
+      doIt(config, function(data) {
+        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        data.should.eql({
+          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.template(wooo!);\n',
+          generated: true,
+          name: __dirname + '/../artifacts/templates/',
+          noSeparator: true,
+          ignoreWarnings: true
+        });
+
+        handlebars.precompile.restore();
+        done();
+      }, true);
     });
     it('should output only once', function(done) {
       var config = {

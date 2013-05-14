@@ -1,5 +1,7 @@
 # Release Notes
 
+- Allow server mode handlebars options
+
 - #88 - Implement global workers limit
 
 - Allow mixins to specify handlebars known helpers.
