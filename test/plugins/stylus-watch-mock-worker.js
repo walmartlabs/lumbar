@@ -8,14 +8,14 @@ module.exports = exports = function(compiler, config) {
   var $render = compiler.render;
 
   sinon.stub(fs, 'readFileSync', function(path) {
-    if (/test\.styl$/.test(path)) {
+    if (/lumbar-test/.test(path) && /style\/test\.styl$/.test(path)) {
       return config.content;
     } else {
       return readFileSync.apply(this, arguments);
     }
   });
   sinon.stub(fs, 'statSync', function(path) {
-    if (!/test\.styl$/.test(path)) {
+    if (!/lumbar-test/.test(path) || !/style\/test\.styl$/.test(path)) {
       return statSync.apply(this, arguments);
     }
   });
