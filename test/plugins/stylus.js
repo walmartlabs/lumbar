@@ -62,17 +62,27 @@ describe('stylus plugin', function() {
 
   describe('watch', function() {
     var mock,
+        useMixin,
         content = 'foo\n  display none\n';
     beforeEach(function() {
+      useMixin = true;
       mock = watch.mockWatch();
 
       sinon.stub(fs, 'readFileSync', function(path) {
         if (/lumbar\.json$/.test(path)) {
+          var module;
+          if (useMixin) {
+            module = {
+              mixins: ['module']
+            };
+          } else {
+            module = {
+              styles: ['style/test.styl']
+            };
+          }
           return JSON.stringify({
             modules: {
-              module: {
-                mixins: ['module']
-              }
+              module: module
             },
             libraries: ['library/library.json']
           });
@@ -129,6 +139,7 @@ describe('stylus plugin', function() {
     }
 
     it('should continue watching after a compile error', function(done) {
+      useMixin = false;
       var expectedFiles = ['/module.css', 'error', '/module.css'],
           operations = {
             1: function(testdir) {
@@ -155,12 +166,12 @@ describe('stylus plugin', function() {
             1: function(testdir) {
               content = '  {yo couch}\n{really}';
               fu.resetCache();
-              mock.trigger('change', testdir + 'style/test.styl');
+              mock.trigger('change', testdir + 'library/style/test.styl');
             },
             2: function(testdir) {
               content = 'foo\n  display none\n';
               fu.resetCache();
-              mock.trigger('change', testdir + 'style/test.styl');
+              mock.trigger('change', testdir + 'library/style/test.styl');
             }
           };
 
