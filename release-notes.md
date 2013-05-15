@@ -1,5 +1,7 @@
 # Release Notes
 
+## 2.1.0 - May 14th 2013
+
 - Lock down code generating library versions
 
 - #77 - Fix watch tracking if initial build fails
