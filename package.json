@@ -20,7 +20,7 @@
     "async": "~0.2",
     "cheerio": "~0.11",
     "esprima": "~1.0",
-    "growl": "~1.4",
+    "growl": "~1.7",
     "handlebars": "1.0.11",
     "nib": "~0.9",
     "optimist": "~0.4",
@@ -34,11 +34,11 @@
     "glob": "~3.2",
     "should": "*",
     "sinon": "*",
-    "wrench": "~1.4",
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.4.3",
-    "grunt-mocha-cov": "0.0.5",
-    "grunt-github-pages": "0.0.3"
+    "wrench": "~1.5",
+    "grunt": "~0.4",
+    "grunt-contrib-jshint": "~0.4",
+    "grunt-mocha-cov": "~0.0",
+    "grunt-github-pages": "~0.0"
   },
   "bin": {
     "lumbar": "bin/lumbar"
