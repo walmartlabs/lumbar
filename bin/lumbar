@@ -237,6 +237,10 @@ arise.on('log', function(log) {
   }
 });
 arise.on('output', function(status) {
+  if (status.error) {
+    return;
+  }
+
   watchOutput = {};
   if (status.watch) {
     console.log('\033[90mwatching\033[0m ' + status.fileName);
