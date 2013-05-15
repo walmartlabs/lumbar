@@ -100,7 +100,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
 
     complete();
   });
-  arise.on('error', handler);
+  arise.on('error', function() { /* NOP : Blows up if not defined */ });
   arise.on('output', handler);
 
   arise.watch(undefined, function(err) {
@@ -114,7 +114,7 @@ function checkOutput(operations, expectedFiles, arise, options, cleanup) {
 
   return function(status) {
     var statusFile
-    if (status instanceof Error) {
+    if (status.error || status instanceof Error) {
       statusFile = 'error';
     } else {
       statusFile = status.fileName.substring(options.outdir.length);
@@ -129,9 +129,9 @@ function checkOutput(operations, expectedFiles, arise, options, cleanup) {
       seenFiles.push(statusFile);
     }
     var seen = seenFiles.length;
-    setTimeout(function() {
+    process.nextTick(function() {
       operations[seen] && operations[seen](fu.lookupPath());
-    }, 0);
+    });
     if (seenFiles.length < expectedFiles.length) {
       return;
     }

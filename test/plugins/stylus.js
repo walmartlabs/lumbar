@@ -160,6 +160,24 @@ describe('stylus plugin', function() {
         done);
     });
 
+    it('should continue watching after initial compile error', function(done) {
+      useMixin = false;
+      content = '  {yo couch}\n{really}';
+      var expectedFiles = ['error', '/module.css'],
+          operations = {
+            1: function(testdir) {
+              content = 'foo\n  display none\n';
+              fu.resetCache();
+              mock.trigger('change', testdir + 'style/test.styl');
+            }
+          };
+
+      runWatchTest.call(this,
+        'test/artifacts', 'lumbar.json',
+        operations, expectedFiles,
+        done);
+    });
+
     it('should continue watching after a compile error in mixin', function(done) {
       var expectedFiles = ['/module.css', 'error', '/module.css'],
           operations = {

@@ -1,5 +1,7 @@
 # Release Notes
 
+- #77 - Fix watch tracking if initial build fails
+
 - Allow server mode handlebars options
 
 - #88 - Implement global workers limit
