@@ -1,5 +1,7 @@
 # Release Notes
 
+- Lock down code generating library versions
+
 - #77 - Fix watch tracking if initial build fails
 
 - Allow server mode handlebars options
