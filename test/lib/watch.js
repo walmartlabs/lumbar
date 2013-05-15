@@ -82,7 +82,7 @@ exports.runWatchTest = function(srcdir, config, operations, expectedFiles, optio
     this.title += ' ' + outdir;
   }
 
-  wrench.copyDirSyncRecursive(srcdir, testdir);
+  wrench.copyDirSyncRecursive(srcdir, testdir, {forceDelete: true});
 
   function complete() {
     process.removeListener('uncaughtException', complete);

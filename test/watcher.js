@@ -18,7 +18,7 @@ describe('watcher', function() {
   before(function() {
     outdir = lib.testDir('watcher', 'touch');
 
-    wrench.copyDirSyncRecursive('test/artifacts', outdir);
+    wrench.copyDirSyncRecursive('test/artifacts', outdir, {forceDelete: true});
   });
   afterEach(function() {
     watcher.unwatchAll();
