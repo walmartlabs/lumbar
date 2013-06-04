@@ -25,7 +25,7 @@
     "nib": "~0.9",
     "optimist": "~0.4",
     "stylus": "0.32.1",
-    "stylus-images": "1.0.2",
+    "stylus-images": "1.0.3",
     "underscore": "~1.4",
     "coffee-script": "~1.6"
   },
