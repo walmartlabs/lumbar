@@ -1,5 +1,13 @@
 # Release Notes
 
+- Add bower namespace support through the `bower` resource attribute.
+
+  Resources can no reference specific bower packages by name without needing to know where the bower path is.
+
+## 2.1.1 - June 4th 2013
+
+- Update stylus-images dependency
+
 ## 2.1.0 - May 14th 2013
 
 - Lock down code generating library versions

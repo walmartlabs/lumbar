@@ -1,5 +1,7 @@
 var _ = require('underscore'),
     assert = require('assert'),
+    bower = require('bower'),
+    EventEmitter = require('events').EventEmitter,
     fu = require('../lib/fileUtil'),
     fs = require('fs'),
     lib = require('./lib'),
@@ -470,6 +472,133 @@ describe('mixins', function() {
 
       lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries) {
         (libraries.err + '').should.match(/mixin "bar" not found/i);
+
+        done();
+      });
+    });
+  });
+
+  describe('bower file references', function() {
+    var statSync = fs.statSync;
+    beforeEach(function() {
+      bower.test = true;
+      sinon.stub(fs, 'statSync', function(name) {
+        if (/bower.json$/.test(name)) {
+          return {};
+        } else {
+          return statSync.call(fs, name);
+        }
+      });
+      sinon.stub(bower.commands, 'list', function() {
+        var event = new EventEmitter();
+        process.nextTick(function() {
+          event.emit('data', {foo: 'bar'});
+        });
+        return event;
+      });
+    });
+    afterEach(function() {
+      fs.statSync.restore();
+      bower.commands.list.restore();
+    });
+    it('should not run without a bower file', function(done) {
+      fs.statSync.restore();
+      sinon.stub(fs, 'statSync', function(name) {
+        if (/bower.json$/.test(name)) {
+          throw new Error();
+        } else {
+          return statSync.call(fs, name);
+        }
+      });
+
+      var mixin = {
+        name: 'foo',
+        root: 'bar'
+      };
+      var modules = {
+        'foo': {
+          scripts: [
+            {src: 'bar.js'}
+          ]
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries, context) {
+        bower.commands.list.callCount.should.equal(0);
+
+        done();
+      });
+    });
+    it('should update paths for bower packages', function(done) {
+      var mixin = {
+        name: 'foo',
+        root: 'bar'
+      };
+      var modules = {
+        'foo': {
+          scripts: [
+            {src: 'bar.js', bower: 'foo'}
+          ]
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries, context) {
+        context.config.moduleList().should.eql(['foo']);
+
+        var module = context.config.attributes.modules.foo;
+        stripper(module.scripts).should.eql([{src: 'bar/bar.js', bower: 'foo'}]);
+
+        done();
+      });
+    });
+    it('should give priority to bower path over module path', function(done) {
+      var mixins = [
+        {
+          name: 'foo',
+          mixins: {
+            foo: {
+              scripts: [
+                {src: 'bar.js', bower: 'foo'}
+              ]
+            }
+          },
+          root: 'foo'
+        },
+        {
+          name: 'bar',
+          root: 'bar'
+        }
+      ];
+      var modules = {
+        'foo': {
+          mixins: ['foo']
+        }
+      };
+
+      lib.mixinExec(undefined, mixins, {modules: modules}, function(libraries, context) {
+        context.config.moduleList().should.eql(['foo']);
+
+        var module = context.config.attributes.modules.foo;
+        stripper(module.scripts).should.eql([{src: 'bar/bar.js', bower: 'foo'}]);
+
+        done();
+      });
+    });
+    it('should throw an error if bower package is not found', function(done) {
+      var mixin = {
+        name: 'foo',
+        root: 'bar'
+      };
+      var modules = {
+        'foo': {
+          scripts: [
+            {src: 'bar.js', bower: 'bar'}
+          ]
+        }
+      };
+
+      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries) {
+        (libraries.err + '').should.match(/Missing bower package "bar"/i);
 
         done();
       });
