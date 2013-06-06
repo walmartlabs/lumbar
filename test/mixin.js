@@ -479,6 +479,10 @@ describe('mixins', function() {
   });
 
   describe('bower file references', function() {
+    beforeEach(function() {
+      require('bower').config.directory = 'bower_components';
+    });
+
     it('should update paths for bower packages', function(done) {
       var mixin = {
         name: 'foo',
