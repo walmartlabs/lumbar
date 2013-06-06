@@ -479,56 +479,6 @@ describe('mixins', function() {
   });
 
   describe('bower file references', function() {
-    var statSync = fs.statSync;
-    beforeEach(function() {
-      bower.test = true;
-      sinon.stub(fs, 'statSync', function(name) {
-        if (/bower.json$/.test(name)) {
-          return {};
-        } else {
-          return statSync.call(fs, name);
-        }
-      });
-      sinon.stub(bower.commands, 'list', function() {
-        var event = new EventEmitter();
-        process.nextTick(function() {
-          event.emit('data', {foo: 'bar'});
-        });
-        return event;
-      });
-    });
-    afterEach(function() {
-      fs.statSync.restore();
-      bower.commands.list.restore();
-    });
-    it('should not run without a bower file', function(done) {
-      fs.statSync.restore();
-      sinon.stub(fs, 'statSync', function(name) {
-        if (/bower.json$/.test(name)) {
-          throw new Error();
-        } else {
-          return statSync.call(fs, name);
-        }
-      });
-
-      var mixin = {
-        name: 'foo',
-        root: 'bar'
-      };
-      var modules = {
-        'foo': {
-          scripts: [
-            {src: 'bar.js'}
-          ]
-        }
-      };
-
-      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries, context) {
-        bower.commands.list.callCount.should.equal(0);
-
-        done();
-      });
-    });
     it('should update paths for bower packages', function(done) {
       var mixin = {
         name: 'foo',
@@ -546,7 +496,7 @@ describe('mixins', function() {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
-        stripper(module.scripts).should.eql([{src: 'bar/bar.js', bower: 'foo'}]);
+        stripper(module.scripts).should.eql([{src: 'bower_components/foo/bar.js', bower: 'foo'}]);
 
         done();
       });
@@ -579,26 +529,7 @@ describe('mixins', function() {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
-        stripper(module.scripts).should.eql([{src: 'bar/bar.js', bower: 'foo'}]);
-
-        done();
-      });
-    });
-    it('should throw an error if bower package is not found', function(done) {
-      var mixin = {
-        name: 'foo',
-        root: 'bar'
-      };
-      var modules = {
-        'foo': {
-          scripts: [
-            {src: 'bar.js', bower: 'bar'}
-          ]
-        }
-      };
-
-      lib.mixinExec(undefined, [mixin], {modules: modules}, function(libraries) {
-        (libraries.err + '').should.match(/Missing bower package "bar"/i);
+        stripper(module.scripts).should.eql([{src: 'bower_components/foo/bar.js', bower: 'foo'}]);
 
         done();
       });
