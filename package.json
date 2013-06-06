@@ -14,7 +14,7 @@
     "url": "git://github.com/walmartlabs/lumbar.git"
   },
   "engines": {
-    "node": ">=0.4.7"
+    "node": ">=0.8"
   },
   "dependencies": {
     "async": "~0.2",
