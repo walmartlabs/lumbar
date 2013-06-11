@@ -4,6 +4,8 @@
 
   Resources can no reference specific bower packages by name without needing to know where the bower path is.
 
+- Automatically load lumbar libraries that are in the bower components directory.
+
 - Use global config for template auto include
 
 - Update minimum node version to 0.8
