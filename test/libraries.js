@@ -4,6 +4,10 @@ var fs = require('fs'),
 
 describe('Libraries', function() {
   describe('#bowerLibraries', function() {
+    beforeEach(function() {
+      require('bower').config.directory = 'bower_components';
+    });
+
     var readdirSync = fs.readdirSync,
         statSync = fs.statSync,
 
