@@ -4,6 +4,8 @@
 
   Resources can no reference specific bower packages by name without needing to know where the bower path is.
 
+- Use global config for template auto include
+
 - Update minimum node version to 0.8
 
 ## 2.1.1 - June 4th 2013
