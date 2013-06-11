@@ -8,6 +8,8 @@
 
 - Use global config for template auto include
 
+- Update to Handlebars 1.0.12 / 1.0.0
+
 - Update minimum node version to 0.8
 
 ## 2.1.1 - June 4th 2013

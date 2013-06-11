@@ -22,7 +22,7 @@
     "cheerio": "~0.11",
     "esprima": "~1.0",
     "growl": "~1.7",
-    "handlebars": "1.0.11",
+    "handlebars": "1.0.12",
     "nib": "~0.9",
     "optimist": "~0.4",
     "stylus": "0.32.1",
