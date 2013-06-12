@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 
+
+// Remove any command line information before bower/rc/optimist are loaded and attempt to hijack
+// our CLI args. This is a total hack but works around the issue described here:
+//    https://github.com/bower/bower/issues/543
+//
+// This can be removed once bower is updated to 1.9.3 (which updates rc to 0.3.0)
+//
+var args = process.argv.slice(2);
+process.argv = [process.argv[0], process.argv[1]];
+
 var _ = require('underscore'),
     fs = require('fs'),
     lumbar = require('../lib/lumbar'),
     dirname = require('path').dirname,
     growl = require('growl');
-
-var args = process.argv.slice(2);
 
 var LONG_USAGE="lumbar help\n"+
 "        Print this long help message.\n"+
