@@ -1,5 +1,11 @@
 # Release Notes
 
+## 2.2.1 - June 11th 2013
+
+- Hack around bower config issue when passing config files on CLI
+
+## 2.2.0 - June 11th 2013
+
 - Add bower namespace support through the `bower` resource attribute.
 
   Resources can no reference specific bower packages by name without needing to know where the bower path is.
