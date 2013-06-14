@@ -52,6 +52,7 @@ var LONG_USAGE="lumbar help\n"+
 var configFile,
     packageName,
     modules = [],
+    libraries = [],
     minimize = false,
     sourceMap = false,
     build = true, // build by default.
@@ -94,6 +95,10 @@ while (args.length) {
       var moduleName = args.shift();
       if (!moduleName) throw new Error('--module <name> required');
       modules.push(moduleName);
+      break;
+    case '--library':
+      if (!value) throw new Error('--library=<name> required');
+      libraries.push(value);
       break;
     case '-m':
     case '--minimize':
@@ -197,6 +202,7 @@ plugins = plugins.map(function(plugin) {
 var options = {
   verbose: verbose,
 
+  libraries: libraries,
   packageConfigFile: configFile,
   minimize: minimize,
   sourceMap: sourceMap,
