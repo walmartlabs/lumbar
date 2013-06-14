@@ -1,5 +1,9 @@
 # Release Notes
 
+## 2.2.3 - June 14th 2013
+
+- Remove duplicate library declarations
+
 ## 2.2.2 - June 13th 2013
 
 - Allow library loading on CLI via `--library=name`
