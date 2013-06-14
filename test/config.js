@@ -4,7 +4,7 @@ describe('config', function() {
   it('should fail if no modules are defined', function() {
     (function() {
       Config.create({});
-    }).should.throw('No modules object defined');
+    }).should.throw(/No modules object defined/);
   });
 
   it('should serialize config', function() {
