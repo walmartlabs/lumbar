@@ -68,7 +68,8 @@ var configFile,
     sourceMap = false,
     build = true, // build by default.
     watch = false,
-    verbose = false;
+    verbose = false,
+    modeSeen;
 
 var lumbarFile = 'lumbar.json';
 var outputDir;
@@ -122,14 +123,24 @@ while (args.length) {
     case '-b':
     case '--build':
     case 'build':
-      build = true;
-      watch = false;
+      if (modeSeen) {
+        files.push(arg);
+      } else {
+        modeSeen = true;
+        build = true;
+        watch = false;
+      }
       break;
     case '-w':
     case '--watch':
     case 'watch':
-      watch = true;
-      build = false;
+      if (modeSeen) {
+        files.push(arg);
+      } else {
+        modeSeen = true;
+        watch = true;
+        build = false;
+      }
       break;
     case '-v':
     case '--verbose':
