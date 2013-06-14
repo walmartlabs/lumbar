@@ -1,5 +1,9 @@
 # Release Notes
 
+## 2.2.4 - June 14th 2013
+
+- Fix error with ./ mixin in stylus
+
 ## 2.2.3 - June 14th 2013
 
 - Remove duplicate library declarations
