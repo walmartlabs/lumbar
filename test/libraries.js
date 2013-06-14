@@ -3,6 +3,22 @@ var fs = require('fs'),
     should = require('should');
 
 describe('Libraries', function() {
+  describe('#initialize', function() {
+    it('should remove duplicates', function() {
+      var library = new Libraries({libraries: ['bower_components/foo', 'baz']}),
+          paths = [];
+      library.load = function(context, path, callback) {
+        paths.push(path);
+        callback();
+      };
+      library.bowerLibraries = function() {
+        return ['bower_components/foo', 'bower_components/baz'];
+      };
+
+      library.initialize({config: {attributes: {libraries: ['bower_components/foo', 'bar', 'foo/../baz']}}});
+      paths.should.eql(['bower_components/foo', 'baz', 'bar', 'bower_components/baz']);
+    });
+  });
   describe('#bowerLibraries', function() {
     beforeEach(function() {
       require('bower').config.directory = 'bower_components';
