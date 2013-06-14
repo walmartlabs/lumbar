@@ -10,6 +10,17 @@
 var args = process.argv.slice(2);
 process.argv = [process.argv[0], process.argv[1]];
 
+process.on('uncaughtException', function(err) {
+  verbose = false;
+
+  if (err.code === 'EMFILE') {
+    console.error('\n\n\tEMFILE error: Too many files open at one time. Fix this by running\n\n\t\tulimit -n 9999\n\n');
+  } else {
+    console.error('Unhandled Exception:', err.stack || err);
+  }
+  process.exit(128);
+});
+
 var _ = require('underscore'),
     fs = require('fs'),
     lumbar = require('../lib/lumbar'),
@@ -79,7 +90,7 @@ while (args.length) {
     case '-h':
     case '--help':
       console.error(LONG_USAGE);
-      process.exit(1);
+      process.exit(0);
       break;
     case '-c':
     case '--config':
@@ -171,12 +182,12 @@ if (build || watch) {
 
   if (files.length) {
     console.error(LONG_USAGE);
-    process.exit(1);
+    process.exit(3);
     return true;
   }
 } else {
   console.error(LONG_USAGE);
-  process.exit(1);
+  process.exit(2);
 }
 
 plugins = plugins.map(function(plugin) {
@@ -305,13 +316,4 @@ worker.call(arise, packageName, modules, function(err, status) {
   if (err) {
     throw err;
   }
-});
-
-process.on('uncaughtException', function(err) {
-  if (err.code === 'EMFILE') {
-    console.error('\n\n\tEMFILE error: Too many files open at one time. Fix this by running\n\n\t\tulimit -n 9999\n\n');
-  } else {
-    console.error('Unhandled Exception:', err.stack || err);
-  }
-  process.exit(1);
 });
