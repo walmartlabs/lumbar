@@ -408,5 +408,44 @@ describe('template plugin', function() {
         });
       });
     });
+
+    it('should allow library specifier on template', function(done) {
+      var config = {
+        modules: {
+          module: {
+            scripts: [ 'bat1.1' ]
+          }
+        },
+        templates: {
+          'bat1.1': [
+            {src: 'fot1.1', library: 'mixin2'}
+          ]
+        }
+      };
+
+      var mixins = [
+        {
+          name: 'mixin2',
+          root: 'mixin2/',
+          modules: {
+          }
+        }
+      ];
+
+      lib.mixinExec(module, mixins, config, function(libraries, context) {
+        mixins = libraries.mixins;
+
+        var modules = context.config.attributes.modules;
+        context.mode = 'scripts';
+        context.module = modules[_.keys(modules)[0]];
+        build.loadResources(context, function(err, resources) {
+          resources.should.eql([
+            {template: true, src: 'mixin2/fot1.1', name: 'fot1.1', library: context.libraries.getConfig('mixin2')},
+            {src: 'bat1.1'}
+          ]);
+          done();
+        });
+      });
+    });
   });
 });
