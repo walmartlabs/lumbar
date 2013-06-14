@@ -1,6 +1,14 @@
 # Release Notes
 
+## 2.2.2 - June 13th 2013
+
+- Allow library loading on CLI via `--library=name`
+- Allow CLI output named build or watch without requiring path components
 - Allow library specification in template lookup
+
+Compatibility Notes:
+
+- If multiple watch or build commands are specified on the CLI the action will no longer be the last action specified. This could lead to unexpected behavior for improperly formed CLI commands.
 
 ## 2.2.1 - June 11th 2013
 
