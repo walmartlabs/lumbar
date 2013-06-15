@@ -66,7 +66,7 @@ defineRouter('web-checkout', {
   });
 });
 
-defineView('rich-relevance', ['hbs!additional/template', 'view!carsouel', 'helper!magack'], function() {
+defineView('cart', ['hbs!additional/template', 'view!threshold-shipping', 'helper!magack', 'stylus!cart'], function() {
 });
 
 defineHelper('magack', function() {
