@@ -19,6 +19,24 @@ Nice to haves:
 - Allow for runtime use of this feature
 - Move all/most lumbar config to `require.config`
 
+## Possible Issues
+
+- Substantial change to build dependency graph
+  - Styles become dependent on source modules
+    - Will have to generate javascript files and then generate styles.
+    - Will also need to perform some level of diffing on javascript changes to determine when to rebuild.
+  - Source modules are now interrelated
+    - Changing the module-map parameters in one module may require rebuilding others
+    - defineHelpers declarations in the application module impact the remainder of the modules.
+    - This is cyclical under the current proposal.
+- Additional overhead
+  - Now have to parse each javascript file (twice for minimized builds) rather than doing generic forwarding.
+  - Change in dependency graph requires more serial behavior
+
+We will likely have to create another phase for parsing config that must be done for all modules prior to any output. Once that has been done then all modules can proceed with their builds as normal.
+
+For the watch case we will want to be smart about diffing the config so that we do not have a a large performance impact from cascading blanket rebuilds.
+
 ## Libraries
 
 - Esprima - Parsing javascript source
