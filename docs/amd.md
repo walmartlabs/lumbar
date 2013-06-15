@@ -46,17 +46,21 @@ For the watch case we will want to be smart about diffing the config so that we 
 
 WARN: This is currently TBD pending the ability to provide custom plugins for defines in addition to requires.
 
-```
+```javascript
 defineRouter('web-checkout', {
-      'preload': ['checkout'],
+      // Replaces the module routes directive
       'routes': {
         'cart': 'cart',
         'cart/:shippingOptionFailed': 'cart',
         'signin': 'signin'
       }
     },
-    ['models/cart', 'view!signin/signin', 'view!cart'],
+    // module!taxonomy replaces depends module directive
+    ['models/cart', 'views/signin/signin', 'views/cart', 'module!taxonomy'],
     function(Cart, SigninView, CartView) {
+
+  // Replaces preload module directive
+  Phoenix.preload('checkout');
 
   Phoenix.Router.create(module, {
     cart: function(shippingOptionsFailed) {
@@ -66,11 +70,6 @@ defineRouter('web-checkout', {
         Backbone.history.navigate('cart', {trigger: false, replace: true});
       }
 
-      view.bind('complete', function() {
-        Phoenix.Track.checkout(cart);
-        Phoenix.trackEvent('checkout');
-        Backbone.history.navigate('checkout', true);
-      });
       view.setModel(Cart.get());
       Phoenix.setView(view);
     },
@@ -84,7 +83,7 @@ defineRouter('web-checkout', {
   });
 });
 
-defineView('cart', ['hbs!additional/template', 'view!threshold-shipping', 'helper!magack', 'stylus!cart'], function() {
+defineView('cart', ['hbs!additional/template', 'views/threshold-shipping', 'helpers/magack', 'stylus!cart'], function() {
 });
 
 defineHelper('magack', function() {
