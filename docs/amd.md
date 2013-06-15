@@ -23,12 +23,12 @@ Nice to haves:
 
 - Substantial change to build dependency graph
   - Styles become dependent on source modules
-    - Will have to generate javascript files and then generate styles.
-    - Will also need to perform some level of diffing on javascript changes to determine when to rebuild.
+      - Will have to generate javascript files and then generate styles.
+      - Will also need to perform some level of diffing on javascript changes to determine when to rebuild.
   - Source modules are now interrelated
-    - Changing the module-map parameters in one module may require rebuilding others
-    - defineHelpers declarations in the application module impact the remainder of the modules.
-    - This is cyclical under the current proposal.
+      - Changing the module-map parameters in one module may require rebuilding others
+      - defineHelpers declarations in the application module impact the remainder of the modules.
+      - This is cyclical under the current proposal.
 - Additional overhead
   - Now have to parse each javascript file (twice for minimized builds) rather than doing generic forwarding.
   - Change in dependency graph requires more serial behavior
