@@ -1,5 +1,9 @@
 # Release Notes
 
+- `config` method has been removed
+
+  This has been replaced with the `config(config)` event which is emitted on the lumbar event instance after any changes to the config.
+
 ## 2.2.4 - June 14th 2013
 
 - Fix error with ./ mixin in stylus
