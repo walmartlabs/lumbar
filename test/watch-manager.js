@@ -1,7 +1,7 @@
 var fu = require('../lib/fileUtil'),
     sinon = require('sinon'),
     WatchManager = require('../lib/watch-manager'),
-    watcher = require('../lib/watcher');
+    watcher = require('../lib/util/watcher');
 
 describe('watch-manager', function() {
   var watch;

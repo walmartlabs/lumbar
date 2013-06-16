@@ -1,8 +1,8 @@
 var assert = require('assert'),
     fs = require('fs'),
-    lib = require('./lib'),
+    lib = require('../lib'),
     sinon = require('sinon'),
-    watcher = require('../lib/watcher'),
+    watcher = require('../../lib/util/watcher'),
     wrench = require('wrench');
 
 describe('watcher', function() {
