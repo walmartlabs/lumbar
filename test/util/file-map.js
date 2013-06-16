@@ -1,7 +1,5 @@
 var FileMap = require('../../lib/util/file-map'),
     fu = require('../../lib/fileUtil'),
-    should = require('should'),
-    sinon = require('sinon'),
     sourceMap;
 
 try {
@@ -58,7 +56,7 @@ describe('file-map', function() {
       // This test only applies if we have source map support
       it('should add source mapping', function() {
         var map = new FileMap('foo');
-        sinon.stub(map.generator, 'addMapping');
+        this.stub(map.generator, 'addMapping');
 
         map.add('bar', ';;\n::');
         map.add('baz', ';;\n');
@@ -162,14 +160,10 @@ describe('file-map', function() {
   describe('#writeSourceMap', function() {
     var map;
     beforeEach(function() {
-      sinon.stub(fu, 'writeFile', function(path, content, callback) { callback(); });
-      sinon.stub(fu, 'ensureDirs', function(path, callback) { callback(); });
+      this.stub(fu, 'writeFile', function(path, content, callback) { callback(); });
+      this.stub(fu, 'ensureDirs', function(path, callback) { callback(); });
       map = new FileMap('output/here!');
-      sinon.stub(map, 'sourceMap', function() { return 'zee map!'; });
-    });
-    afterEach(function() {
-      fu.ensureDirs.restore();
-      fu.writeFile.restore();
+      this.stub(map, 'sourceMap', function() { return 'zee map!'; });
     });
     it('should output map file', function(done) {
       map.writeSourceMap({
@@ -204,7 +198,7 @@ describe('file-map', function() {
       });
     });
     it('should add declaration commment', function(done) {
-      sinon.stub(map, 'add');
+      this.stub(map, 'add');
       map.writeSourceMap({
         callback: function(err) {
           if (err) {

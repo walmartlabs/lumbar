@@ -1,8 +1,7 @@
 var assert = require('assert'),
     fs = require('fs'),
-    lib = require('./lib'),
-    sinon = require('sinon'),
-    watcher = require('../lib/watcher'),
+    lib = require('../lib'),
+    watcher = require('../../lib/util/watcher'),
     wrench = require('wrench');
 
 describe('watcher', function() {
@@ -149,7 +148,7 @@ describe('watcher', function() {
     watcher.unwatch('foo', ['baz']);
   });
   it('should unwatch a single file', function() {
-    var spy = sinon.spy();
+    var spy = this.spy();
     watcher.watchFile({virtual: 'foo'}, [{virtual: 'bar'}, {virtual: 'baz'}], spy);
 
     watcher.trigger('c', 'bar');

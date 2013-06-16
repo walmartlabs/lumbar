@@ -31,9 +31,10 @@
     "estraverse": "~1.1.2"
   },
   "devDependencies": {
-    "mocha": "~1.9",
+    "mocha": "~1.11",
     "glob": "~3.2",
-    "should": "*",
+    "sinon-chai": "~2.4.0",
+    "chai": "~1.6.1",
     "sinon": "*",
     "wrench": "~1.5",
     "grunt": "~0.4",

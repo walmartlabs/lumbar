@@ -1,6 +1,5 @@
 var _ = require('underscore'),
-    lib = require('../lib'),
-    should = require('should');
+    lib = require('../lib');
 
 describe('router plugin', function() {
   var module = {

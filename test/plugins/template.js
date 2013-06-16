@@ -5,8 +5,6 @@ var _ = require('underscore'),
     build = require('../../lib/build'),
     fs = require('fs'),
     lib = require('../lib'),
-    should = require('should'),
-    sinon = require('sinon'),
     template = require('../../lib/plugins/template'),
     watch = require('../lib/watch');
 
@@ -131,7 +129,7 @@ describe('template plugin', function() {
 
         mock = watch.mockWatch();
 
-        sinon.stub(fs, 'readFileSync', function() {
+        this.stub(fs, 'readFileSync', function() {
           return JSON.stringify({
             modules: {
               module: {scripts: ['js/views/test.js']}
@@ -144,7 +142,7 @@ describe('template plugin', function() {
           });
         });
 
-        sinon.stub(fs, 'readFile', function(path, callback) {
+        this.stub(fs, 'readFile', function(path, callback) {
           if (/test.(js|foo)$/.test(path)) {
             return callback(undefined, 'foo');
           } else {
@@ -153,8 +151,6 @@ describe('template plugin', function() {
         });
       });
       afterEach(function() {
-        fs.readFileSync.restore();
-        fs.readFile.restore();
         mock.cleanup();
       });
 

@@ -5,7 +5,6 @@ var _ = require('underscore'),
     fu = require('../lib/fileUtil'),
     fs = require('fs'),
     lib = require('./lib'),
-    sinon = require('sinon'),
     watch = require('./lib/watch');
 
 describe('mixins', function() {
@@ -23,26 +22,22 @@ describe('mixins', function() {
       read = [];
       fu.lookupPath('');
     });
-    before(function() {
-      fs.readFileSync = function(path) {
+    beforeEach(function() {
+      this.stub(fs, 'readFileSync', function(path) {
         if (/library.*\.json$/.test(path)) {
           read.push(path);
           return '{"name": "loading", "foo": "bar"}';
         } else {
           return readFileSync.apply(this, arguments);
         }
-      };
-      fs.statSync = function(path) {
+      });
+      this.stub(fs, 'statSync', function(path) {
         if (/library/.test(path)) {
           return {isDirectory: function() { return !/\.json$/.test(path); }};
         } else {
           return statSync.apply(this, arguments);
         }
-      };
-    });
-    after(function() {
-      fs.readFileSync = readFileSync;
-      fs.statSync = statSync;
+      });
     });
 
     it('should load direct mixin config file references', function(done) {
@@ -841,7 +836,7 @@ describe('mixins', function() {
 
       mock = watch.mockWatch();
 
-      sinon.stub(fs, 'readFileSync', function() {
+      this.stub(fs, 'readFileSync', function() {
         return JSON.stringify({
           name: 'attr',
           modules: {
@@ -851,7 +846,7 @@ describe('mixins', function() {
         });
       });
 
-      sinon.stub(fs, 'readFile', function(path, callback) {
+      this.stub(fs, 'readFile', function(path, callback) {
         if (/test.(js|foo)$/.test(path)) {
           return callback(undefined, 'foo');
         } else {
@@ -860,8 +855,6 @@ describe('mixins', function() {
       });
     });
     afterEach(function() {
-      fs.readFileSync.restore();
-      fs.readFile.restore();
       mock.cleanup();
     });
 

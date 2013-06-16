@@ -1,8 +1,6 @@
 var _ = require('underscore'),
     fs = require('fs'),
     lib = require('../lib'),
-    should = require('should'),
-    sinon = require('sinon'),
     watch = require('../lib/watch');
 
 describe('package-config plugin', function() {
@@ -35,7 +33,7 @@ describe('package-config plugin', function() {
           }
           should.fail();
         });
-      }).should.throwError('package_config.json specified without file being set');
+      }).should.throw('package_config.json specified without file being set');
       done();
     });
   });
@@ -68,7 +66,7 @@ describe('package-config plugin', function() {
 
       mock = watch.mockWatch();
 
-      sinon.stub(fs, 'readFileSync', function() {
+      this.stub(fs, 'readFileSync', function() {
         return JSON.stringify({
           modules: {
             module: {scripts: [{'package-config': true}]}
@@ -76,7 +74,7 @@ describe('package-config plugin', function() {
         });
       });
 
-      sinon.stub(fs, 'readFile', function(path, callback) {
+      this.stub(fs, 'readFile', function(path, callback) {
         if (/test.(js|foo)$/.test(path)) {
           return callback(undefined, 'foo');
         } else {
@@ -85,8 +83,6 @@ describe('package-config plugin', function() {
       });
     });
     afterEach(function() {
-      fs.readFileSync.restore();
-      fs.readFile.restore();
       mock.cleanup();
     });
 

@@ -3,9 +3,8 @@ var _ = require('underscore'),
     fu = require('../../lib/fileUtil'),
     lib = require('./index'),
     lumbar = require('../../lib/lumbar'),
-    should = require('should'),
     sinon = require('sinon'),
-    watcher = require('../../lib/watcher'),
+    watcher = require('../../lib/util/watcher'),
     WatchManager = require('../../lib/watch-manager'),
     wrench = require('wrench');
 
