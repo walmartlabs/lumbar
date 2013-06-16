@@ -1,5 +1,6 @@
 var FileMap = require('../../lib/util/file-map'),
     fu = require('../../lib/fileUtil'),
+    should = require('should'),
     sinon = require('sinon'),
     sourceMap;
 
@@ -119,12 +120,8 @@ describe('file-map', function() {
           ]
         });
       });
-      it('should output original lines for unnamed contexts', function() {
-        map.context(3, 5).should.eql({
-          file: '<generated>',
-          line: 3,
-          column: 5
-        });
+      it('should not output for unnamed contexts', function() {
+        should.not.exist(map.context(3, 5));
       });
       it('should clip context to the file', function() {
         map.context(3, 7).should.eql({
@@ -175,41 +172,48 @@ describe('file-map', function() {
       fu.writeFile.restore();
     });
     it('should output map file', function(done) {
-      map.writeSourceMap(function(err) {
-        if (err) {
-          throw err;
-        }
+      map.writeSourceMap({
+        callback: function(err) {
+          if (err) {
+            throw err;
+          }
 
-        fu.writeFile.args[0][0].should.equal('output/here!.map');
-        fu.writeFile.args[0][1].should.equal('zee map!');
-        done();
+          fu.writeFile.args[0][0].should.equal('output/here!.map');
+          fu.writeFile.args[0][1].should.equal('zee map!');
+          done();
+        }
       });
     });
     it('should output source files', function(done) {
       map.add('foo', 'foo1\nfoo2\n');
       map.add('bar', 'bar1');
-      map.writeSourceMap(function(err) {
-        if (err) {
-          throw err;
+      map.writeSourceMap({
+        outputSource: true,
+        callback: function(err) {
+          if (err) {
+            throw err;
+          }
+
+          fu.writeFile.args[1][0].should.equal('output/foo');
+          fu.writeFile.args[1][1].should.equal('foo1\nfoo2\n');
+
+          fu.writeFile.args[2][0].should.equal('output/bar');
+          fu.writeFile.args[2][1].should.equal('bar1');
+          done();
         }
-
-        fu.writeFile.args[1][0].should.equal('output/foo');
-        fu.writeFile.args[1][1].should.equal('foo1\nfoo2\n');
-
-        fu.writeFile.args[2][0].should.equal('output/bar');
-        fu.writeFile.args[2][1].should.equal('bar1');
-        done();
       });
     });
     it('should add declaration commment', function(done) {
       sinon.stub(map, 'add');
-      map.writeSourceMap(function(err) {
-        if (err) {
-          throw err;
-        }
+      map.writeSourceMap({
+        callback: function(err) {
+          if (err) {
+            throw err;
+          }
 
-        map.add.args[0][1].should.match(/\/\/@ sourceMappingURL=here!.map\n/);
-        done();
+          map.add.args[0][1].should.match(/\/\/@ sourceMappingURL=here!.map\n/);
+          done();
+        }
       });
     });
   });
