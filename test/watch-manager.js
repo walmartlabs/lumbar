@@ -1,5 +1,4 @@
 var fu = require('../lib/fileUtil'),
-    sinon = require('sinon'),
     WatchManager = require('../lib/watch-manager'),
     watcher = require('../lib/util/watcher');
 
@@ -7,7 +6,7 @@ describe('watch-manager', function() {
   var watch;
   beforeEach(function() {
     watch = new WatchManager();
-    sinon.stub(watch, '_exec');
+    this.stub(watch, '_exec');
     watch.queue.should.be.empty;
   });
 
@@ -38,10 +37,7 @@ describe('watch-manager', function() {
 
     describe('fileCache', function() {
       beforeEach(function() {
-        sinon.stub(fu, 'resetCache');
-      });
-      afterEach(function() {
-        fu.resetCache.restore();
+        this.stub(fu, 'resetCache');
       });
 
       it('should reset fileCache on change', function() {
@@ -70,7 +66,7 @@ describe('watch-manager', function() {
     });
 
     it('should reset on config changes', function() {
-      sinon.stub(watch, 'reset');
+      this.stub(watch, 'reset');
       watch.pushChange({config: true});
       watch.reset.callCount.should.equal(1);
     });
@@ -82,7 +78,7 @@ describe('watch-manager', function() {
 
   describe('#flushQueue', function() {
     it('should execute callbacks on flushQueue', function() {
-      var stub = sinon.stub();
+      var stub = this.stub();
       watch.pushChange({callback: stub});
       watch.pushChange({callback: stub});
       watch.flushQueue();

@@ -6,8 +6,6 @@ describe('many-to-one-ouput plugin', function() {
   lib.mockFileList(config);
   lib.mockStat(config);
 
-  require('../lib/sandbox')();
-
   beforeEach(function() {
     this.stub(lumbar, 'combine', function(context, files, output, minimize, noSeparator, callback) { callback(undefined, 'foo'); });
   });

@@ -7,10 +7,10 @@ describe('stylus-config plugin', function() {
   var readFileSync = fs.readFileSync,
       readFile = fs.readFile,
       statSync = fs.statSync;
-  before(function() {
+  beforeEach(function() {
     fu.lookupPath('');
 
-    fs.readFileSync = function(path) {
+    this.stub(fs, 'readFileSync', function(path) {
       if (/file1\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
         return '.test\n  display $display\n';
       } else if (/lumbar\.json$/.test(path)) {
@@ -22,8 +22,8 @@ describe('stylus-config plugin', function() {
       } else {
         return readFileSync.apply(this, arguments);
       }
-    };
-    fs.readFile = function(path, callback) {
+    });
+    this.stub(fs, 'readFile', function(path, callback) {
       process.nextTick(function() {
         try {
           callback(undefined, fs.readFileSync(path));
@@ -31,17 +31,12 @@ describe('stylus-config plugin', function() {
           callback(err);
         }
       });
-    };
-    fs.statSync = function(path) {
+    });
+    this.stub(fs, 'statSync', function(path) {
       if (!/(foo|two|lumbar|file1)\.(styl|png|json)$/.test(path) || /functions(?:[\\\/]index)?.styl/.test(path)) {
         return statSync.apply(this, arguments);
       }
-    };
-  });
-  after(function() {
-    fs.readFileSync = readFileSync;
-    fs.readFile = readFile;
-    fs.statSync = statSync;
+    });
   });
 
   var config = {
@@ -150,10 +145,6 @@ describe('stylus-config plugin', function() {
   });
 
   describe('mixin', function() {
-    afterEach(function() {
-      fs.readFileSync = readFileSync;
-      fs.statSync = statSync;
-    });
     it('should include special values from mixins', function(done) {
       var mixins = [
         {

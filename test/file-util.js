@@ -1,5 +1,4 @@
-var fu = require('../lib/fileUtil'),
-    should = require('should');
+var fu = require('../lib/fileUtil');
 
 describe('file-util', function() {
   afterEach(function() {
@@ -193,24 +192,17 @@ describe('file-util', function() {
 
   describe('file caches', function() {
     var fs = require('fs'),
-        originalReadFile = fs.readFile,
-        originalReaddir = fs.readdir,
         count = 0;
-    before(function() {
-      fs.readFile = function(path, callback) {
-        count++;
-        callback(undefined, 'data');
-      };
-      fs.readdir = function(path, callback) {
-        count++;
-        callback(undefined, 'data');
-      };
-    });
-    after(function() {
-      fs.readFile = originalReadFile;
-    });
     beforeEach(function() {
       count = 0;
+      this.stub(fs, 'readFile', function(path, callback) {
+        count++;
+        callback(undefined, 'data');
+      });
+      this.stub(fs, 'readdir', function(path, callback) {
+        count++;
+        callback(undefined, 'data');
+      });
     });
 
     describe('#readdir', function() {
@@ -250,8 +242,6 @@ describe('file-util', function() {
           data.should.equal('data');
         });
         count.should.equal(2);
-
-        fs.readdir = originalReaddir;
       });
     });
 

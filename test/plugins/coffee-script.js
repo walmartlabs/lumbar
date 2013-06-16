@@ -1,14 +1,9 @@
 var fs = require('fs'),
     fu = require('../../lib/fileUtil'),
     CoffeeScript = require('coffee-script'),
-    lib = require('../lib'),
-    sinon = require('sinon');
+    lib = require('../lib');
 
 describe('coffee-script plugin', function() {
-  var readFile = fs.readFile;
-  after(function() {
-    fs.readFile = readFile;
-  });
   beforeEach(function() {
     fu.resetCache();
   });
@@ -26,14 +21,12 @@ describe('coffee-script plugin', function() {
       });
     }
     it('should compile', function(done) {
-      fs.readFile = function(path, callback) {
+      this.stub(fs, 'readFile', function(path, callback) {
         callback(undefined, 'foo\n');
-      };
+      });
 
-      sinon.stub(CoffeeScript, 'compile', function() { return 'wooo!'; });
+      this.stub(CoffeeScript, 'compile', function() { return 'wooo!'; });
       doIt(function(err, data) {
-        CoffeeScript.compile.restore();
-
         data.should.eql({
           inputs: undefined,
           data: 'wooo!'
@@ -43,9 +36,9 @@ describe('coffee-script plugin', function() {
       });
     });
     it('should handle errors', function(done) {
-      fs.readFile = function(path, callback) {
+      this.stub(fs, 'readFile', function(path, callback) {
         callback(new Error('You failed'));
-      };
+      });
 
       doIt(function(err, data) {
         err.should.be.instanceOf(Error);

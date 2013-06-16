@@ -1,14 +1,9 @@
 var fs = require('fs'),
     fu = require('../../lib/fileUtil'),
     handlebars = require('handlebars'),
-    lib = require('../lib'),
-    sinon = require('sinon');
+    lib = require('../lib');
 
 describe('handlebars plugin', function() {
-  var readFile = fs.readFile;
-  after(function() {
-    fs.readFile = readFile;
-  });
   beforeEach(function() {
     fu.resetCache();
   });
@@ -59,7 +54,7 @@ describe('handlebars plugin', function() {
         }
       };
 
-      sinon.stub(handlebars, 'precompile', function() { return 'wooo!'; });
+      this.stub(handlebars, 'precompile', function() { return 'wooo!'; });
       doIt(config, function(data) {
         var name = __dirname + '/../artifacts/templates/home.handlebars';
         data.should.eql({
@@ -71,7 +66,6 @@ describe('handlebars plugin', function() {
           ignoreWarnings: true
         });
 
-        handlebars.precompile.restore();
         done();
       });
     });
@@ -91,7 +85,7 @@ describe('handlebars plugin', function() {
         }
       };
 
-      sinon.stub(handlebars, 'precompile', function(content, options) {
+      this.stub(handlebars, 'precompile', function(content, options) {
         options.should.eql({
           foo: 1,
           bar: 3,
@@ -110,7 +104,6 @@ describe('handlebars plugin', function() {
           ignoreWarnings: true
         });
 
-        handlebars.precompile.restore();
         done();
       }, true);
     });
@@ -250,10 +243,9 @@ describe('handlebars plugin', function() {
     it('should output without mixin path', function(done) {
       //fu.lookupPath('');
 
-      fs.readFile = function(path, callback) {
+      this.stub(fs, 'readFile', function(path, callback) {
         callback(undefined, 'foo\n');
-      };
-
+      });
 
       var mixins = [{
         name: 'mixin',

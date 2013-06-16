@@ -1,2 +1,2 @@
---require should
+--require ./test/lib/mocha-sinon
 --reporter spec

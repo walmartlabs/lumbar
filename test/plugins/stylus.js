@@ -2,7 +2,6 @@ var _ = require('underscore'),
     fs = require('fs'),
     fu = require('../../lib/fileUtil'),
     lib = require('../lib'),
-    sinon = require('sinon'),
     watch = require('../lib/watch');
 
 var readFileSync = fs.readFileSync,
@@ -68,7 +67,7 @@ describe('stylus plugin', function() {
       useMixin = true;
       mock = watch.mockWatch();
 
-      sinon.stub(fs, 'readFileSync', function(path) {
+      this.stub(fs, 'readFileSync', function(path) {
         if (/lumbar\.json$/.test(path)) {
           var module;
           if (useMixin) {
@@ -101,7 +100,6 @@ describe('stylus plugin', function() {
     });
     afterEach(function() {
       mock.cleanup();
-      fs.readFileSync.restore();
     });
 
 

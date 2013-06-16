@@ -16,10 +16,10 @@ function runWatchTest(srcdir, config, operations, expectedFiles, expectedDir, do
 
 describe('watch integration', function() {
   var mock;
-  before(function() {
+  beforeEach(function() {
     mock = watch.mockWatch();
   });
-  after(function() {
+  afterEach(function() {
     mock.cleanup();
   });
 

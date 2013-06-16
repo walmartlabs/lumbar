@@ -9,7 +9,6 @@ var _ = require('underscore'),
     lumbar = require('../../lib/lumbar'),
     Libraries = require('../../lib/libraries'),
     path = require('path'),
-    should = require('should'),
     wrench = require('wrench');
 
 var counter = 0;
@@ -48,27 +47,24 @@ exports.assertExpected = function(outdir, expectedDir, configFile) {
 
 exports.mockStat = function(config) {
   var stat = fu.stat;
-  before(function() {
-    fu.stat = function(file, callback) {
+  beforeEach(function() {
+    config.fileFilter = config.defaultFilter;
+
+    this.stub(fu, 'stat', function(file, callback) {
       if (config.fileFilter && config.fileFilter.test(file)) {
         callback(new Error());
       } else {
         callback(undefined, {});
       }
-    };
-  });
-  after(function() {
-    fu.stat = stat;
-  });
-  beforeEach(function() {
-    config.fileFilter = config.defaultFilter;
+    });
   });
 };
 
 exports.mockFileList = function(config) {
   var fileList = fu.fileList;
-  before(function() {
-    fu.fileList = function(list, extension, callback) {
+  beforeEach(function() {
+    config.fileFilter = config.defaultFilter;
+    this.stub(fu, 'fileList', function(list, extension, callback) {
       callback = _.isFunction(extension) ? extension : callback;
       if (!_.isArray(list)) {
         list = [list];
@@ -82,13 +78,7 @@ exports.mockFileList = function(config) {
               return file;
             }
           }));
-    };
-  });
-  after(function() {
-    fu.fileList = fileList;
-  });
-  beforeEach(function() {
-    config.fileFilter = config.defaultFilter;
+    });
   });
 };
 

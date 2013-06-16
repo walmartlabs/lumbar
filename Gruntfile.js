@@ -1,5 +1,3 @@
-var Static = require('static');
-
 /*global grunt */
 module.exports = function(grunt) {
   grunt.initConfig({
@@ -29,7 +27,7 @@ module.exports = function(grunt) {
         src: ['test/*.js', 'test/plugins/*.js', 'test/util/*.js']
       },
       options: {
-        require: ['should']
+        require: ['./test/lib/mocha-sinon']
       }
     },
 
@@ -55,7 +53,9 @@ module.exports = function(grunt) {
   grunt.registerTask('docs', function() {
     this.async();
 
-    var static = new Static('docs');
+
+    var Static = require('static'),
+        static = new Static('docs');
     static.publish('_site');
   });
   grunt.registerTask('docs-deploy', ['githubPages:target']);

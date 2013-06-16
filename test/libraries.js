@@ -1,6 +1,5 @@
 var fs = require('fs'),
-    Libraries = require('../lib/libraries'),
-    should = require('should');
+    Libraries = require('../lib/libraries');
 
 describe('Libraries', function() {
   describe('#initialize', function() {
@@ -30,30 +29,28 @@ describe('Libraries', function() {
         context = {
           event: {emit: function() {}}
         };
-    before(function() {
-      fs.statSync = function(path) {
+    beforeEach(function() {
+      this.stub(fs, 'statSync', function(path) {
         if (/bar\//.test(path)) {
           throw new Error();
+        } else if (!/bower(.json|_components)/.test(path)) {
+          return statSync.call(this, path);
         }
-      };
-    });
-    after(function() {
-      fs.readdirSync = readdirSync;
-      fs.statSync = statSync;
+      });
     });
 
     it('should return all modules in bower directory', function() {
-      fs.readdirSync = function(path) {
+      this.stub(fs, 'readdirSync', function(path) {
         return ['foo', 'bar', 'baz'];
-      };
+      });
 
       var library = new Libraries();
       library.bowerLibraries(context).should.eql(['bower_components/foo', 'bower_components/baz']);
     });
     it('should not error on fs error', function() {
-      fs.readdirSync = function(path) {
+      this.stub(fs, 'readdirSync', function(path) {
         throw new Error();
-      };
+      });
 
       var library = new Libraries();
       should.not.exist(library.bowerLibraries(context));

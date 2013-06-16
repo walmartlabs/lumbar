@@ -35,6 +35,6 @@
     "after",
     "beforeEach",
     "afterEach",
-    "sinon"
+    "should"
   ]
 }
