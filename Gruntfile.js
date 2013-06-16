@@ -20,13 +20,13 @@ module.exports = function(grunt) {
         options: {
           reporter: 'spec'
         },
-        src: ['test/*.js', 'test/plugins/*.js']
+        src: ['test/*.js', 'test/plugins/*.js', 'test/util/*.js']
       },
       cov: {
         options: {
           reporter: 'html-cov'
         },
-        src: ['test/*.js', 'test/plugins/*.js']
+        src: ['test/*.js', 'test/plugins/*.js', 'test/util/*.js']
       },
       options: {
         require: ['should']

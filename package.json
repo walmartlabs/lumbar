@@ -27,7 +27,8 @@
     "stylus": "0.32.1",
     "stylus-images": "1.0.3",
     "underscore": "~1.4",
-    "coffee-script": "~1.6"
+    "coffee-script": "~1.6",
+    "estraverse": "~1.1.2"
   },
   "devDependencies": {
     "mocha": "~1.9",
@@ -51,7 +52,7 @@
         "branchTracking": true
       }
     },
-    "test": "node_modules/.bin/mocha test/*.js test/plugins/*.js"
+    "test": "node_modules/.bin/mocha test/*.js test/plugins/*.js test/util/*.js"
   },
   "optionalDependencies": {
     "source-map": "~0.1",
