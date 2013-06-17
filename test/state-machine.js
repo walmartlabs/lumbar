@@ -45,6 +45,10 @@ describe('state machine', function() {
           "modules": {
             "home": {},
             "base": {}
+          },
+          application: {
+            name: 'foo',
+            module: 'base'
           }
         });
     context = new Context({}, config, plugin, {}, event);
@@ -309,6 +313,29 @@ describe('state machine', function() {
       stateMachine.buildMode('foo', context, function() {});
       plugin.modeComplete.should.have.been.calledOnce;
     });
+
+    describe('AMD mode', function() {
+      beforeEach(function() {
+        context.config.attributes.amd = true;
+      });
+      it('should build top level modules before others', function(done) {
+        var seen = [];
+        stateMachine.buildModule.restore();
+        this.stub(stateMachine, 'buildModule', function(context, callback) {
+          seen.push(context.fileConfig + ':' + context.module);
+          _.defer(function() {
+            seen.push('end_' + context.fileConfig + ':' + context.module);
+            callback();
+          });
+        });
+
+        stateMachine.buildMode('script', context, function() {
+          built().should.eql(['fu:base', 'gazi:base', 'fu:home', 'gazi:home']);
+          seen.should.eql(['fu:base', 'gazi:base', 'end_fu:base', 'fu:home', 'end_gazi:base', 'gazi:home', 'end_fu:home', 'end_gazi:home']);
+          done();
+        });
+      });
+    });
   });
 
   describe('#buildModule', function() {
@@ -356,6 +383,35 @@ describe('state machine', function() {
       });
 
       stateMachine.processResources.should.not.have.been.called;
+    });
+
+    describe('AMD mode', function() {
+      beforeEach(function() {
+        context.config.attributes.amd = true;
+        context.platformCache = {};
+        this.stub(build, 'loadResources');
+      });
+
+      it('should build top level if there is not a top-level AMD config', function() {
+        context.module = 'base';
+        stateMachine.buildModule(context, function() {});
+        build.loadResources.should.have.been.calledOnce;
+      });
+      it('should error if there is not a top-level AMD config', function() {
+        context.module = 'home';
+        stateMachine.buildModule(context, function(err) {
+          err.should.match(/Attempting to build module "home" without AMD config/);
+        });
+      });
+      it('should build if there is a top-level AMD config', function() {
+        context.platformCache = {
+          amdConfig: {
+          }
+        };
+        context.module = 'home';
+        stateMachine.buildModule(context, function() {});
+        build.loadResources.should.have.been.calledOnce;
+      });
     });
   });
   describe('#processResources', function() {
