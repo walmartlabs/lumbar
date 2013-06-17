@@ -1,4 +1,5 @@
-var build = require('../lib/build'),
+var _ = require('underscore'),
+    build = require('../lib/build'),
     configLoader = require('../lib/config'),
     Context = require('../lib/context'),
     EventEmitter = require('events').EventEmitter,
@@ -192,6 +193,67 @@ describe('state machine', function() {
       stateMachine.buildPlatform(context, function() {});
 
       built().should.eql(['scripts']);
+    });
+
+    describe('AMD mode', function() {
+      beforeEach(function() {
+        context.config.attributes.amd = true;
+        plugin.modes = function() { return ['foo', 'scripts', 'bar']; };
+      });
+      it('should complete scripts mode before others', function(done) {
+        var seen = [];
+        stateMachine.buildMode.restore();
+        this.stub(stateMachine, 'buildMode', function(mode, context, callback) {
+          seen.push(mode);
+          _.defer(function() {
+            seen.push('end_' + mode);
+            callback();
+          });
+        });
+
+        stateMachine.buildPlatform(context, function() {
+          built().should.eql(['scripts', 'foo', 'bar']);
+          seen.should.eql(['scripts', 'end_scripts', 'foo', 'bar', 'end_foo', 'end_bar']);
+          done();
+        });
+      });
+      it('should handle error in script build', function() {
+        stateMachine.buildMode.restore();
+        this.stub(stateMachine, 'buildMode', function(mode, context, callback) {
+          callback(new Error('FAILED'));
+        });
+
+        stateMachine.buildPlatform(context, function(err) {
+          err.should.match(/FAILED/);
+        });
+      });
+
+      it('should build individual modes if AMD config is avilable', function() {
+        stateMachine.buildMode.restore();
+        context.platformCache = {
+          amdConfig: {
+          }
+        };
+        context.mode = 'foo';
+        this.stub(stateMachine, 'buildMode', function(mode, context, callback) {
+          callback();
+        });
+
+        stateMachine.buildPlatform(context, function(err) {
+          built().should.eql(['foo']);
+        });
+      });
+      it('should fail if scripts are not built before other modules', function() {
+        stateMachine.buildMode.restore();
+        context.mode = 'foo';
+        this.stub(stateMachine, 'buildMode', function(mode, context, callback) {
+          callback();
+        });
+
+        stateMachine.buildPlatform(context, function(err) {
+          err.should.match(/Attempting to build mode "foo" without AMD config/);
+        });
+      });
     });
   });
 
