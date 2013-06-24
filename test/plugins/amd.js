@@ -1,7 +1,8 @@
 var _ = require('underscore'),
     amd = require('../../lib/plugins/amd'),
     build = require('../../lib/build'),
-    fu = require('../../lib/fileUtil');
+    fu = require('../../lib/fileUtil'),
+    fs = require('fs');
 
 describe('amd plugin', function() {
   var appModule,
@@ -9,6 +10,8 @@ describe('amd plugin', function() {
       expectedCache,
       next;
   beforeEach(function() {
+    fu.resetCache();
+
     appModule = false;
     next = this.spy(function(callback) { callback(undefined, [context.resource]); });
     context = {
@@ -65,7 +68,8 @@ describe('amd plugin', function() {
       }
     };
 
-    this.stub(fu, 'readFile', function(path, callback) {
+    this.stub(fu, 'setFileArtifact');
+    this.stub(fs, 'readFile', function(path, callback) {
       if (path === 'js/foo/foo.js') {
         callback(undefined, 'defineView(["bar"], function() {})');
       } else {
@@ -92,7 +96,8 @@ describe('amd plugin', function() {
         context, next,
         function() {
           next.should.have.been.calledOnce;
-          context.platformCache.amd.should.eql(expectedCache);
+          fu.setFileArtifact.should.have.been.calledWith('js/foo/bar.js', 'amd', expectedCache['foo/bar']);
+          fu.setFileArtifact.should.have.been.calledWith('js/baz.js', 'amd', expectedCache['baz']);
           done();
         });
     });
@@ -102,7 +107,8 @@ describe('amd plugin', function() {
         context, next,
         function() {
           next.should.have.been.calledOnce;
-          context.platformCache.amd.should.eql(expectedCache);
+          fu.setFileArtifact.should.have.been.calledWith('js/foo/bar.js', 'amd', expectedCache['foo/bar']);
+          fu.setFileArtifact.should.have.been.calledWith('js/baz.js', 'amd', expectedCache['baz']);
           done();
         });
     });
@@ -112,7 +118,7 @@ describe('amd plugin', function() {
         context, next,
         function() {
           next.should.have.been.calledOnce;
-          context.platformCache.amd.should.eql({});
+          fu.setFileArtifact.should.not.have.been.called;
           done();
         });
     });
@@ -144,7 +150,9 @@ describe('amd plugin', function() {
         context, next,
         function() {
           next.should.have.been.calledOnce;
-          context.platformCache.amd.should.eql(expectedCache);
+          fu.setFileArtifact.should.have.been.calledWith('js/foo/foo.js', 'amd', expectedCache['foo/foo']);
+          fu.setFileArtifact.should.have.been.calledWith('js/bar.js', 'amd', expectedCache['bar']);
+          fu.setFileArtifact.should.have.been.calledWith('js/baz.js', 'amd', expectedCache['baz']);
           done();
         });
     });
@@ -174,18 +182,21 @@ describe('amd plugin', function() {
         });
     });
     it('should insert recursive cached dependencies', function(done) {
-      context.platformCache.amd = expectedCache;
-      expectedCache.bar = expectedCache['foo/bar'];
-      expectedCache.bar.defined[0].name = 'bar';
-      delete expectedCache['foo/bar'];
-
-      context.resource = {'src': 'js/foo/foo.js'};
+      context.resource = {'src': 'js/bar.js'};
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql(['js/baz.js', 'js/bar.js', {src: 'js/foo/foo.js'}]);
-          fu.readFile.should.have.been.calledOnce;
-          done();
+          fs.readFile.reset();
+          context.fileCache = {};
+
+          context.resource = {'src': 'js/foo/foo.js'};
+          amd.resourceList(
+            context, next,
+            function(err, resources) {
+              resources.should.eql(['js/baz.js', 'js/bar.js', {src: 'js/foo/foo.js'}]);
+              fs.readFile.should.have.been.calledOnce;
+              done();
+            });
         });
     });
     it('should not insert dependencies included in application module', function(done) {
