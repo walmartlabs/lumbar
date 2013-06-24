@@ -1,4 +1,5 @@
-var build = require('../lib/build');
+var build = require('../lib/build'),
+    fu = require('../lib/fileUtil');
 
 describe('build utils', function() {
   describe('#filterResource', function() {
@@ -65,6 +66,64 @@ describe('build utils', function() {
       build.filterResource({originalResource: {package: 'web'}}, {package: 'web'}).should.be.true;
 
       build.filterResource({package: 'web', originalResource: {package: 'iphone'}}, {package: 'web'}).should.be.false;
+    });
+  });
+
+  describe('#loadResources', function() {
+    it('should handle moduleResources error', function() {
+      var context = {
+        plugins: {
+          moduleResources: function(context, callback) {
+            callback(new Error('FAILED'));
+          }
+        }
+      };
+
+      var spy = this.spy(function(err) {
+        err.should.be.instanceOf(Error);
+      });
+      build.loadResources(context, spy);
+      spy.should.have.been.calledOnce;
+    });
+    it('should handle fileList error', function() {
+      var context = {
+        plugins: {
+          moduleResources: function(context, callback) {
+            callback();
+          },
+          fileFilter: function() {}
+        }
+      };
+      this.stub(fu, 'fileList', function(files, filter, callback) {
+        callback(new Error('FAILED'));
+      });
+
+      var spy = this.spy(function(err) {
+        err.should.be.instanceOf(Error);
+      });
+      build.loadResources(context, spy);
+      spy.should.have.been.calledOnce;
+    });
+  });
+
+  describe('#processResources', function() {
+    it('should handle resource errors', function() {
+      var context = {
+        clone: function() {
+          return this;
+        },
+        plugins: {
+          resource: function(context, callback) {
+            callback(new Error('FAILED'));
+          }
+        }
+      };
+
+      var spy = this.spy(function(err) {
+        err.should.be.instanceOf(Error);
+      });
+      build.processResources([1], context, spy);
+      spy.should.have.been.calledOnce;
     });
   });
 });
