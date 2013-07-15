@@ -1,8 +1,14 @@
 # Release Notes
 
+## 2.2.5 - July 15th 2013
+
 - `config` method has been removed
 
   This has been replaced with the `config(config)` event which is emitted on the lumbar event instance after any changes to the config.
+
+- Fixed error seen when mixins with child mixins where incorrectly included multiple times.
+
+- Refactor state machine and utils
 
 ## 2.2.4 - June 14th 2013
 
