@@ -58,6 +58,6 @@
   },
   "optionalDependencies": {
     "source-map": "~0.1",
-    "uglify-js": "~2.2"
+    "uglify-js": "~2.3"
   }
 }
