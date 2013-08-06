@@ -824,6 +824,36 @@ describe('mixins', function() {
           done();
         });
     });
+
+    it('should propagate conditional attributes for nested mixins', function(done) {
+      var module = {
+        mixins: ['mixin1']
+      };
+
+      var mixins = {
+        mixin1: {
+          mixins: [{name: 'mixin2', platform: 'foo'}],
+          scripts: [
+            '1.js'
+          ]
+        },
+        mixin2: {mixins: [{name: 'mixin3'}]},
+        mixin3: {scripts: [
+            '3.js'
+          ]
+        }
+      };
+
+      lib.mixinExec(module, [{name: 'routes', mixins: mixins}], function() {
+          stripper(module.scripts);
+          module.scripts.should.eql([
+            {'src': '3.js', platform: 'foo'},
+            {'src': '1.js'}
+          ]);
+
+          done();
+        });
+    });
   });
 
   describe('watch', function() {

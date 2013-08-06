@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2.2.7 - Aug 5th 2013
+
+- Fix mixin attribute propagation
+
+## 2.2.6 - July 26th 2013
+
+- Ensure that all mixins are iterated over when adding to module
+- Update uglify to 2.3
+
 ## 2.2.5 - July 15th 2013
 
 - `config` method has been removed
