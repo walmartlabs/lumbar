@@ -70,7 +70,7 @@ describe('amd plugin', function() {
 
     this.stub(fu, 'setFileArtifact');
     this.stub(fs, 'readFile', function(path, callback) {
-      if (path === 'js/foo/foo.js') {
+      if (/js\/foo\/foo.js$/.test(path)) {
         callback(undefined, 'defineView(["bar"], function() {})');
       } else {
         callback(undefined, 'defineView(["view!baz"], function() {})');
