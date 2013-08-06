@@ -29,8 +29,9 @@ describe('router plugin', function() {
           generated: true,
           noSeparator: true
         });
+
+        done();
       });
-      done();
     });
   });
 });
