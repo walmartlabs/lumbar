@@ -19,8 +19,8 @@ describe('template plugin', function() {
     it('should remap files', function() {
       var context = {
         libraries: {
-          resolvePath: function(src) {
-            return src;
+          mapFile: function(src) {
+            return {src: src};
           }
         },
         resource: {}
@@ -39,8 +39,8 @@ describe('template plugin', function() {
     it('should remap files in mixins', function() {
       var context = {
         libraries: {
-          resolvePath: function(src) {
-            return 'baz/' + src;
+          mapFile: function(src) {
+            return {src: 'baz/' + src};
           }
         },
         resource: {}
