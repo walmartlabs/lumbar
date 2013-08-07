@@ -8,7 +8,7 @@ module.exports = exports = function(compiler, config) {
       read = [];
 
   fs.readFileSync = function(path) {
-    if (path === 'mixinRoot/mixin-import.styl') {
+    if (/mixinRoot\/mixin-import.styl$/.test(path)) {
       read.push(path);
       return '@import "foo"\n';
     } else if (/\.styl|png$/.test(path) && !/functions(?:[\\\/]index)?.styl/.test(path)) {
