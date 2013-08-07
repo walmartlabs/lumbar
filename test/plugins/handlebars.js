@@ -415,4 +415,64 @@ describe('handlebars plugin', function() {
       });
     });
   });
+
+  describe('template plugin integration', function() {
+    var config = {
+      defaultFilter: /.*bar.handlebars$/
+    };
+    lib.mockFileList(config);
+
+    it('should handle nested auto-include mixin names (regression)', function(done) {
+      this.stub(fs, 'readFile', function(path, callback) {
+        callback(undefined, 'foo\n');
+      });
+
+      var module = {
+        mixins: [{
+          name: 'depthNotBreadth'
+        }],
+        scripts: [ 'baz1.1' ]
+      };
+
+      var mixins = [
+        {
+          name: 'depthNotBreadth',
+          root: 'depthNotBreadth/',
+          mixins: {
+            depthNotBreadth: {
+              mixins: [ 'mixin1' ]
+            }
+          }
+        },
+        {
+          name: 'mixin',
+          root: 'mixin1/',
+          mixins: {
+            mixin1: {
+              scripts: [ 'baz1.1' ]
+            }
+          },
+          templates: {
+            'auto-include': {
+              '.*': [
+                'templates/$0.handlebars',
+                '$0.handlebars'
+              ]
+            }
+          }
+        }
+      ];
+
+      lib.pluginExec('handlebars', 'scripts', module, mixins, {}, function(resources, context) {
+        context.loadResource(resources[1], function(err, data) {
+          if (err) {
+            throw err;
+          }
+
+          data.content.should.eql('/* handsfree : templates/baz1.1.handlebars*/\ntemplates[\'templates/baz1.1.handlebars\'] = Handlebars.compile(\'foo\\n\');\n');
+          done();
+        });
+      });
+    });
+  });
 });
