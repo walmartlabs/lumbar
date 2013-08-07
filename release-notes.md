@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2.3.0 - Aug 7th 2013
+
+- Update stylus to 0.36.1
+- Fixed root handling when overriding files in nested mixins
+- Fixed naming of overriden handlebars templates
+- Removed `Library.resolvePath`.
+
+  `Library.mapFile` should be used instead
+
 ## 2.2.7 - Aug 5th 2013
 
 - Fix mixin attribute propagation
