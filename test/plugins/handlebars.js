@@ -278,6 +278,69 @@ describe('handlebars plugin', function() {
         });
       });
     });
+    it('should output without nested mixin path', function(done) {
+      this.stub(fs, 'readFile', function(path, callback) {
+        callback(undefined, 'foo\n');
+      });
+
+      var config = {
+        modules: {
+          module: {
+            mixins: [
+              "mixin!"
+            ]
+          }
+        },
+        templates: {
+          // Leave intact to ensure that we aren't being seeded from the mixin
+        }
+      };
+
+      var mixins = [
+        {
+          name: 'mixin1',
+          root: 'mixin1/',
+          mixins: {
+            'mixin!': {
+              mixins: [
+                {
+                  name: 'mixin2',
+                  overrides: {
+                    'thisRoot/fot1.1.handlebars': 'otherRoot/bar.handlebars'
+                  }
+                }
+              ]
+            }
+          },
+          templates: {
+            root: 'otherRoot/'
+          }
+        },
+        {
+          name: 'mixin2',
+          root: 'mixin2/',
+          mixins: {
+            mixin2: {
+              scripts: [ 'thisRoot/fot1.1.handlebars' ]
+            }
+          },
+          templates: {
+            root: 'thisRoot/',
+          }
+        }
+      ];
+
+      lib.pluginExec('handlebars', 'scripts', config.modules.module, mixins, config, function(resources, context) {
+        context.loadResource(resources[0], function(err, data) {
+          if (err) {
+            throw err;
+          }
+
+          data.content.should.eql('/* handsfree : fot1.1.handlebars*/\ntemplates[\'fot1.1.handlebars\'] = Handlebars.compile(\'foo\\n\');\n');
+          done();
+        });
+      });
+    });
 
     it('should include special values from mixins', function(done) {
       var mixins = [
