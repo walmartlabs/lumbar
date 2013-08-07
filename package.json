@@ -27,9 +27,9 @@
     "nib": "~0.9",
     "stylus": "0.32.1",
     "stylus-images": "1.0.3",
-    "underscore": "~1.4",
     "coffee-script": "~1.6",
-    "estraverse": "~1.1.2"
+    "estraverse": "~1.1.2",
+    "underscore": "~1.5.1"
   },
   "devDependencies": {
     "chai": "~1.7.2",
