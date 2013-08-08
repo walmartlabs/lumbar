@@ -19,8 +19,8 @@ describe('template plugin', function() {
     it('should remap files', function() {
       var context = {
         libraries: {
-          resolvePath: function(src) {
-            return src;
+          mapFile: function(src) {
+            return {src: src};
           }
         },
         resource: {}
@@ -39,8 +39,8 @@ describe('template plugin', function() {
     it('should remap files in mixins', function() {
       var context = {
         libraries: {
-          resolvePath: function(src) {
-            return 'baz/' + src;
+          mapFile: function(src) {
+            return {src: 'baz/' + src};
           }
         },
         resource: {}
@@ -398,6 +398,75 @@ describe('template plugin', function() {
 
           resources.should.eql([
             {template: true, src: 'mixin2/fot1.1', name: 'fot1.1'},
+            {src: 'mixin2/bat1.1'}
+          ]);
+          done();
+        });
+      });
+    });
+    it('should override mixins relative to declaring library', function(done) {
+      var config = {
+        modules: {
+          module: {
+            mixins: [
+              "mixin1"
+            ]
+          }
+        },
+        templates: {
+          // Leave intact to ensure that we aren't being seeded from the mixin
+        }
+      };
+
+      var mixins = [
+        {
+          name: 'mixin1',
+          root: 'mixin1/',
+          mixins: {
+            mixin1: {
+              mixins: [
+                {
+                  name: 'mixin2',
+                  overrides: {
+                    'thisRoot/fot1.1': 'otherRoot/bar'
+                  }
+                }
+              ]
+            }
+          },
+          templates: {
+            root: 'otherRoot/'
+          }
+        },
+        {
+          name: 'mixin2',
+          root: 'mixin2/',
+          mixins: {
+            mixin2: {
+              scripts: [ 'bat1.1' ]
+            }
+          },
+          templates: {
+            root: 'thisRoot/',
+            'bat1.1': [
+              'thisRoot/fot1.1'
+            ]
+          }
+        }
+      ];
+
+      lib.mixinExec(module, mixins, config, function(libraries, context) {
+        mixins = libraries.mixins;
+
+        var modules = context.config.attributes.modules;
+        context.mode = 'scripts';
+        context.module = modules[_.keys(modules)[0]];
+        build.loadResources(context, function(err, resources) {
+          // Drop the mixin reference to make testing easier
+          _.each(resources, function(resource) { delete resource.library; });
+
+          resources.should.eql([
+            {template: true, src: 'mixin1/otherRoot/bar', name: 'thisRoot/fot1.1'},
             {src: 'mixin2/bat1.1'}
           ]);
           done();

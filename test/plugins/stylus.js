@@ -373,7 +373,15 @@ describe('stylus plugin', function() {
             throw err;
           }
 
-          JSON.parse(data.content).should.eql([
+          var cwd = process.cwd();
+          var content = _.map(JSON.parse(data.content), function(path) {
+            if (path.indexOf(cwd) === 0) {
+              return path.substring(cwd.length+1);
+            } else {
+              return path;
+            }
+          });
+          content.should.eql([
             'mixinRoot/stylusRoot/mixin-import.styl',
             'mixinRoot/mixin-import.styl',
             'mixinRoot/stylusRoot/foo.styl',
