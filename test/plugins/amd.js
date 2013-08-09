@@ -276,12 +276,77 @@ describe('amd plugin', function() {
     });
   });
 
+  describe('loading', function() {
+    beforeEach(function() {
+      amd.loaders.custom = {
+        resource: this.spy(function(name) {
+          return {src: 'resource_' + name};
+        }),
+        definition: function(name, content, isGlobal) {
+        },
+        loader: function(name, isGlobal) {
+        }
+      };
+
+      expectedCache = {
+        'foo/bar': {
+          defined: [{
+            name: 'foo/bar',
+            loc: {
+              start: {
+                line: 1,
+                column: 27
+              },
+              end: {
+                line: 1,
+                column: 40
+              }
+            },
+            view: true,
+            source: 'function() {}'
+          }],
+          dependencies: ['custom!baz']
+        }
+      };
+
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        if (/js\/foo\/foo.js$/.test(path)) {
+          callback(undefined, 'defineView(["bar"], function() {})');
+        } else {
+          callback(undefined, 'defineView(["custom!baz"], function() {})');
+        }
+      });
+    });
+    afterEach(function() {
+      delete amd.loaders.custom;
+    });
+
+    it('should allow for custom resource lookup', function(done) {
+      context.resource = 'js/foo/bar.js';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          amd.loaders.custom.resource.should.have.been.calledWith('baz');
+
+          next.should.have.been.calledOnce;
+          fu.setFileArtifact.should.have.been.calledWith('js/foo/bar.js', 'amd', expectedCache['foo/bar']);
+
+          resources.should.eql([
+            {src: 'resource_baz'},
+            'js/foo/bar.js'
+          ]);
+          done();
+        });
+    });
+    it('should allow for custom declaration mechanisms');
+
+    it('should allow for custom loading mechanisms from module');
+    it('should allow for custom loading mechanisms from global');
+  });
+
   describe('config change', function() {
     it('should detect when style config changed');
     it('should detect when applicaiton module impacts modules');
-  });
-
-  describe('rewriting', function() {
-    it('should output loader for define calls');
   });
 });
