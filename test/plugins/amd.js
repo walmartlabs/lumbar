@@ -360,6 +360,8 @@ describe('amd plugin', function() {
           done();
         });
     });
+    it('should lookup global define dependencies');
+    it('should lookup local define dependencies');
   });
 
   describe('custom loading', function() {

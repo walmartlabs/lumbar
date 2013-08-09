@@ -189,4 +189,7 @@ describe('watch integration', function() {
       operations, expectedFiles, 'test/expected/watch-remove',
       done);
   });
+
+  it('should maintain AMD config across rebuilds');
+  it('should diff AMD config across rebuilds');
 });
