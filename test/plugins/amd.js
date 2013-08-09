@@ -43,6 +43,7 @@ describe('amd plugin', function() {
               column: 38
             }
           },
+          define: true,
           view: true,
           source: 'function() {}'
         }],
@@ -61,6 +62,7 @@ describe('amd plugin', function() {
               column: 38
             }
           },
+          define: true,
           view: true,
           source: 'function() {}'
         }],
@@ -175,6 +177,7 @@ describe('amd plugin', function() {
               column: 33
             }
           },
+          define: true,
           view: true,
           source: 'function() {}'
         }],
@@ -302,6 +305,7 @@ describe('amd plugin', function() {
                 column: 40
               }
             },
+            define: true,
             view: true,
             source: 'function() {}'
           }],
