@@ -86,6 +86,12 @@ describe('define-parser', function() {
     });
   });
 
+  it('should support non-amd files', function() {
+    parser("\nfoo\n\nfoo\nfoo").should.eql([
+      {source: "\nfoo\n\nfoo\nfoo", loc: loc(1, 0, 5, 3)},
+    ]);
+  });
+
   it('should support multiple declarations', function() {
     parser(
         "\ndefineView('name', function() {});"
