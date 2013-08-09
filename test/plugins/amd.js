@@ -15,6 +15,9 @@ describe('amd plugin', function() {
     appModule = false;
     next = this.spy(function(callback) { callback(undefined, [context.resource]); });
     context = {
+      event: {
+        emit: this.spy()
+      },
       platformCache: {
         amdAppModules: {}
       },
@@ -43,7 +46,7 @@ describe('amd plugin', function() {
               column: 38
             }
           },
-          define: true,
+          amd: true,
           view: true,
           source: 'function() {}'
         }],
@@ -62,7 +65,7 @@ describe('amd plugin', function() {
               column: 38
             }
           },
-          define: true,
+          amd: true,
           view: true,
           source: 'function() {}'
         }],
@@ -74,6 +77,10 @@ describe('amd plugin', function() {
     this.stub(fs, 'readFile', function(path, callback) {
       if (/js\/foo\/foo.js$/.test(path)) {
         callback(undefined, 'defineView(["bar"], function() {})');
+      } else if (/js\/invalid.js$/.test(path)) {
+        callback(undefined, 'This is not amd. Hell, its not even javascript');
+      } else if (/js\/nonamd.js$/.test(path)) {
+        callback(undefined, 'notAMD;');
       } else {
         callback(undefined, 'defineView(["view!baz"], function() {})');
       }
@@ -122,6 +129,26 @@ describe('amd plugin', function() {
           next.should.have.been.calledOnce;
           fu.setFileArtifact.should.have.been.calledWith('js/foo/bar.js', 'amd', expectedCache['foo/bar']);
           fu.setFileArtifact.should.have.been.calledWith('js/views/baz.js', 'amd', expectedCache['views/baz']);
+          done();
+        });
+    });
+    it('should handle non-amd js files', function(done) {
+      context.resource = 'js/nonamd.js';
+      amd.resourceList(
+        context, next,
+        function() {
+          next.should.have.been.calledOnce;
+          fu.setFileArtifact.should.have.been.calledWith('js/nonamd.js', 'amd', false);
+          done();
+        });
+    });
+    it('should handle improperly formated js files', function(done) {
+      context.resource = 'js/invalid.js';
+      amd.resourceList(
+        context, next,
+        function() {
+          next.should.have.been.calledOnce;
+          fu.setFileArtifact.should.have.been.calledWith('js/invalid.js', 'amd', false);
           done();
         });
     });
@@ -177,7 +204,7 @@ describe('amd plugin', function() {
               column: 33
             }
           },
-          define: true,
+          amd: true,
           view: true,
           source: 'function() {}'
         }],
@@ -196,7 +223,26 @@ describe('amd plugin', function() {
     });
   });
 
-  describe('dependencies', function() {
+  describe('resources', function() {
+    it('should ignore non-amd js files', function(done) {
+      context.resource = 'js/nonamd.js';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          resources.should.eql(['js/nonamd.js']);
+          done();
+        });
+    });
+    it('should ignore improperly formated js files', function(done) {
+      context.resource = 'js/invalid.js';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          resources.should.eql(['js/invalid.js']);
+          done();
+        });
+    });
+
     it('should insert dependencies', function(done) {
       context.resource = {'src': 'js/foo/foo.js'};
       amd.resourceList(
@@ -305,7 +351,7 @@ describe('amd plugin', function() {
                 column: 40
               }
             },
-            define: true,
+            amd: true,
             view: true,
             source: 'function() {}'
           }],
