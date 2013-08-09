@@ -73,6 +73,10 @@ describe('amd plugin', function() {
       }
     };
 
+    this.stub(amd.defaultLoader, 'output', function(defined) {
+      return {amd: defined.name};
+    });
+
     this.stub(fu, 'setFileArtifact');
     this.stub(fs, 'readFile', function(path, callback) {
       if (/js\/foo\/foo.js$/.test(path)) {
@@ -325,7 +329,40 @@ describe('amd plugin', function() {
     });
   });
 
-  describe('loading', function() {
+  describe('defaultLoader', function() {
+    var defineSource;
+
+    beforeEach(function() {
+      amd.defaultLoader.output.restore();
+
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        if (/js\/define.js/) {
+          callback(undefined, defineSource);
+        } else {
+          callback(undefined, 'defineView(["custom!baz"], function() {})');
+        }
+      });
+    });
+
+    it('should include define boilerplate', function(done) {
+      context.resource = 'js/define.js';
+      defineSource = 'define(function() {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["define"] = (',
+            'function() {}',
+            ')();\n'
+          ]);
+          done();
+        });
+    });
+  });
+
+  describe('custom loading', function() {
     beforeEach(function() {
       amd.loaders.custom = {
         resource: this.spy(function(name) {
@@ -379,8 +416,6 @@ describe('amd plugin', function() {
         function(err, resources) {
           amd.loaders.custom.resource.should.have.been.calledWith('baz');
 
-          next.should.have.been.calledOnce;
-          fu.setFileArtifact.should.have.been.calledWith('js/foo/bar.js', 'amd', expectedCache['foo/bar']);
 
           resources.should.eql([
             {src: 'resource_baz'},
@@ -400,3 +435,7 @@ describe('amd plugin', function() {
     it('should detect when applicaiton module impacts modules');
   });
 });
+
+function mapResources(resources) {
+  return _.map(resources, function(resource) { return resource.stringValue || resource; });
+}
