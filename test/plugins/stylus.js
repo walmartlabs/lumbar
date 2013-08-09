@@ -373,15 +373,7 @@ describe('stylus plugin', function() {
             throw err;
           }
 
-          var cwd = process.cwd();
-          var content = _.map(JSON.parse(data.content), function(path) {
-            if (path.indexOf(cwd) === 0) {
-              return path.substring(cwd.length+1);
-            } else {
-              return path;
-            }
-          });
-          content.should.eql([
+          checkData(data, [
             'mixinRoot/stylusRoot/mixin-import.styl',
             'mixinRoot/mixin-import.styl',
             'mixinRoot/stylusRoot/foo.styl',
@@ -401,5 +393,112 @@ describe('stylus plugin', function() {
         });
       });
     });
+    it('should override mixins relative to declaring library', function(done) {
+      fu.lookupPath('');
+
+      var mixins = [{
+        name: 'mixin1',
+        root: 'mixin1/',
+        mixins: {
+          mixin1: {
+            mixins: [
+              {
+                name: 'mixin2',
+                overrides: {
+                  'file1.styl': 'bar1.styl',
+                  'file3.styl': true,
+                  'stylusRoot/file4.styl': true
+                }
+              }
+            ]
+          }
+        },
+        'styles': {
+          'styleRoot': 'otherRoot/'
+        }
+      },
+      {
+        name: 'mixin',
+        root: 'mixin2/',
+        mixins: {
+          'mixin2': {
+            'styles': [
+              'file1.styl',
+              'file2.styl',
+              'file3.styl',
+              'file4.styl'
+            ]
+          }
+        },
+        'styles': {
+          'styleRoot': 'stylusRoot/',
+          'includes': [
+            'mixin-import.styl'
+          ]
+        }
+      }];
+
+      var config = {
+        modules: {
+          module: {
+            mixins: [
+              "mixin1"
+            ],
+            'styles': [
+              'file1.styl',
+              'file2.styl'
+            ]
+          }
+        },
+        'styles': {
+          'styleRoot': 'stillAnotherRoot/'
+        }
+      };
+
+
+      lib.pluginExec('stylus', 'styles', config.modules.module, mixins, config, function(resources, context) {
+        resources[0].plugins.push({
+          plugin: __dirname + '/stylus-mock-worker',
+          data: {
+            rewrite: true
+          }
+        });
+        context.loadResource(resources[0], function(err, data) {
+          if (err) {
+            throw err;
+          }
+
+          checkData(data, [
+            'mixin2/stylusRoot/mixin-import.styl',
+            'mixin2/mixin-import.styl',
+            'mixin2/stylusRoot/foo.styl',
+            'mixin2/foo.styl',
+            'mixin2/stylusRoot/img.png',
+            'mixin2/img.png',
+            'mixin1/otherRoot/bar1.styl',
+            'mixin2/stylusRoot/file2.styl',
+            'mixin2/file2.styl',
+            'mixin1/otherRoot/file3.styl',
+            'mixin1/otherRoot/file4.styl',
+            'stillAnotherRoot/file1.styl',
+            'stillAnotherRoot/img.png',
+            'stillAnotherRoot/file2.styl'
+          ]);
+          done();
+        });
+      });
+    });
   });
 });
+
+function checkData(data, expected) {
+  var cwd = process.cwd();
+  var content = _.map(JSON.parse(data.content), function(path) {
+    if (path.indexOf(cwd) === 0) {
+      return path.substring(cwd.length+1);
+    } else {
+      return path;
+    }
+  });
+  content.should.eql(expected);
+}
