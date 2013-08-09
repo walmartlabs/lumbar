@@ -1,5 +1,9 @@
 # Release Notes
 
+## 2.3.2 - Aug 8th 2013
+
+- Fixed map error under node 0.10
+
 ## 2.3.1 - Aug 8th 2013
 
 - Fixed stylus includes when overriding files in nested mixins
