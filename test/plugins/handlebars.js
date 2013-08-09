@@ -3,6 +3,8 @@ var fs = require('fs'),
     handlebars = require('handlebars'),
     lib = require('../lib');
 
+const TEST_DIR = require('path').normalize(__dirname + '/../artifacts/templates/');
+
 describe('handlebars plugin', function() {
   beforeEach(function() {
     fu.resetCache();
@@ -28,18 +30,18 @@ describe('handlebars plugin', function() {
     it('should strip root name', function(done) {
       var config = {
         templates: {
-          root: __dirname + '/../artifacts/templates/',
-          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+          root: TEST_DIR,
+          'js/views/test.js': [TEST_DIR]
         }
       };
 
       doIt(config, function(data) {
-        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        var name = TEST_DIR + 'home.handlebars';
         data.should.eql({
-          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          inputs: [ {dir: TEST_DIR}, name ],
           data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
           generated: true,
-          name: __dirname + '/../artifacts/templates/',
+          name: TEST_DIR,
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -49,19 +51,19 @@ describe('handlebars plugin', function() {
     it('should precompile', function(done) {
       var config = {
         templates: {
-          'js/views/test.js': [__dirname + '/../artifacts/templates/'],
+          'js/views/test.js': [TEST_DIR],
           precompile: true
         }
       };
 
       this.stub(handlebars, 'precompile', function() { return 'wooo!'; });
       doIt(config, function(data) {
-        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        var name = TEST_DIR + 'home.handlebars';
         data.should.eql({
-          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          inputs: [ {dir: TEST_DIR}, name ],
           data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.template(wooo!);\n',
           generated: true,
-          name: __dirname + '/../artifacts/templates/',
+          name: TEST_DIR,
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -72,7 +74,7 @@ describe('handlebars plugin', function() {
     it('should handle server args', function(done) {
       var config = {
         templates: {
-          'js/views/test.js': [__dirname + '/../artifacts/templates/'],
+          'js/views/test.js': [TEST_DIR],
 
           server: {
             bar: 3,
@@ -94,12 +96,12 @@ describe('handlebars plugin', function() {
         return 'wooo!';
       });
       doIt(config, function(data) {
-        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        var name = TEST_DIR + 'home.handlebars';
         data.should.eql({
-          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          inputs: [ {dir: TEST_DIR}, name ],
           data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.template(wooo!);\n',
           generated: true,
-          name: __dirname + '/../artifacts/templates/',
+          name: TEST_DIR,
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -110,12 +112,12 @@ describe('handlebars plugin', function() {
     it('should output only once', function(done) {
       var config = {
         templates: {
-          root: __dirname + '/../artifacts/templates/',
+          root: TEST_DIR,
           'js/views/test.js': [
-            __dirname + '/../artifacts/templates/'
+            TEST_DIR
           ],
           'js/views/test2.js': [
-            __dirname + '/../artifacts/templates/home.handlebars'
+            TEST_DIR + 'home.handlebars'
           ]
         }
       };
@@ -137,12 +139,12 @@ describe('handlebars plugin', function() {
               throw err;
             }
 
-            var name = __dirname + '/../artifacts/templates/home.handlebars';
+            var name = TEST_DIR + 'home.handlebars';
             data1.should.eql({
-              inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+              inputs: [ {dir: TEST_DIR}, name ],
               data: '/* handsfree : home.handlebars*/\ntemplates[\'home.handlebars\'] = Handlebars.compile(\'home\\n\');\n',
               generated: true,
-              name: __dirname + '/../artifacts/templates/',
+              name: TEST_DIR,
               noSeparator: true,
               ignoreWarnings: true
             });
@@ -166,13 +168,13 @@ describe('handlebars plugin', function() {
       var config = {
         templates: {
           template: 'foo.handlebars',
-          root: __dirname + '/../artifacts/templates/',
-          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+          root: TEST_DIR,
+          'js/views/test.js': [TEST_DIR]
         }
       };
 
       doIt(config, function(data) {
-        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        var name = TEST_DIR + 'home.handlebars';
         data.should.be.instanceOf(Error);
         data.code.should.equal('ENOENT');
         done();
@@ -183,18 +185,18 @@ describe('handlebars plugin', function() {
       var config = {
         templates: {
           template: '{{without-extension name}}',
-          root: __dirname + '/../artifacts/templates/',
-          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+          root: TEST_DIR,
+          'js/views/test.js': [TEST_DIR]
         }
       };
 
       doIt(config, function(data) {
-        var name = __dirname + '/../artifacts/templates/home.handlebars';
+        var name = TEST_DIR + 'home.handlebars';
         data.should.eql({
-          inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+          inputs: [ {dir: TEST_DIR}, name ],
           data: 'home',
           generated: true,
-          name: __dirname + '/../artifacts/templates/',
+          name: TEST_DIR,
           noSeparator: true,
           ignoreWarnings: true
         });
@@ -212,24 +214,24 @@ describe('handlebars plugin', function() {
       };
       var config = {
         templates: {
-          'js/views/test.js': [__dirname + '/../artifacts/templates/']
+          'js/views/test.js': [TEST_DIR]
         }
       };
 
       lib.pluginExec('handlebars', 'scripts', module, [], config, function(resources, context) {
-        resources[0].originalResource.should.eql({src: __dirname + '/../artifacts/templates/', name: __dirname + '/../artifacts/templates/', library: undefined, template: true});
+        resources[0].originalResource.should.eql({src: TEST_DIR, name: TEST_DIR, library: undefined, template: true});
 
         resources[0](context, function(err, data) {
           if (err) {
             throw err;
           }
 
-          var name = __dirname + '/../artifacts/templates/home.handlebars';
+          var name = TEST_DIR + 'home.handlebars';
           data.should.eql({
-            inputs: [ {dir: __dirname + '/../artifacts/templates/'}, name ],
+            inputs: [ {dir: TEST_DIR}, name ],
             data: '/* handsfree : ' + name + '*/\ntemplates[\'' + name + '\'] = Handlebars.compile(\'home\\n\');\n',
             generated: true,
-            name: __dirname + '/../artifacts/templates/',
+            name: TEST_DIR,
             noSeparator: true,
             ignoreWarnings: true
           });
