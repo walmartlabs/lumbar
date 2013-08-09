@@ -646,6 +646,10 @@ describe('mixins', function() {
       ];
 
       lib.mixinExec(module, mixins, function(libraries) {
+          if (libraries.err) {
+            throw libraries.err;
+          }
+
           mixins = libraries.mixins;
 
           module.scripts.should.eql([
