@@ -248,7 +248,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql(['js/views/baz.js', 'js/bar.js', {src: 'js/foo/foo.js'}]);
+          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
           done();
         });
     });
@@ -277,7 +277,7 @@ describe('amd plugin', function() {
           amd.resourceList(
             context, next,
             function(err, resources) {
-              resources.should.eql(['js/views/baz.js', 'js/bar.js', {src: 'js/foo/foo.js'}]);
+              resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
               fs.readFile.should.have.been.calledOnce;
               done();
             });
@@ -289,7 +289,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql(['js/bar.js', {src: 'js/foo/foo.js'}]);
+          resources.should.eql([{amd: 'bar'}, {amd: 'foo/foo'}]);
           done();
         });
     });
@@ -301,7 +301,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql(['js/views/baz.js', 'js/bar.js', {src: 'js/foo/foo.js'}]);
+          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
           _.keys(context.platformCache.amdAppModules).should.eql(['foo/foo', 'bar', 'view!baz']);
           done();
         });
@@ -313,7 +313,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql(['js/views/baz.js', 'js/bar.js', {src: 'js/foo/foo.js'}]);
+          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
 
           amd.resourceList(
             context, next,
@@ -384,7 +384,7 @@ describe('amd plugin', function() {
 
           resources.should.eql([
             {src: 'resource_baz'},
-            'js/foo/bar.js'
+            {amd: 'foo/bar'}
           ]);
           done();
         });
