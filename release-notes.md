@@ -1,5 +1,9 @@
 # Release Notes
 
+## 2.3.1 - Aug 8th 2013
+
+- Fixed stylus includes when overriding files in nested mixins
+
 ## 2.3.0 - Aug 7th 2013
 
 - Update stylus to 0.36.1
