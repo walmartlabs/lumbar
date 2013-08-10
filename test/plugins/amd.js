@@ -422,9 +422,14 @@ describe('amd plugin', function() {
         resource: this.spy(function(name) {
           return {src: 'resource_' + name};
         }),
-        definition: function(name, content, isGlobal) {
+        output: function(definition, isAppModule, dependencies, context) {
         },
-        loader: function(name, isGlobal) {
+        lookup: function(name, isAppModule, context) {
+          if (isAppModule) {
+            return 'lookie_here_' + name;
+          } else {
+            return 'lookie_there_' + name;
+          }
         }
       };
 
@@ -452,24 +457,19 @@ describe('amd plugin', function() {
 
       fs.readFile.restore();
       this.stub(fs, 'readFile', function(path, callback) {
-        if (/js\/foo\/foo.js$/.test(path)) {
-          callback(undefined, 'defineView(["bar"], function() {})');
-        } else {
-          callback(undefined, 'defineView(["custom!baz"], function() {})');
-        }
+        callback(undefined, 'define(["custom!baz"], function(baz) {})');
       });
     });
     afterEach(function() {
       delete amd.loaders.custom;
     });
 
-    it('should allow for custom resource lookup', function(done) {
+    it('should allow for custom resources', function(done) {
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
         function(err, resources) {
           amd.loaders.custom.resource.should.have.been.calledWith('baz');
-
 
           resources.should.eql([
             {src: 'resource_baz'},
@@ -478,10 +478,42 @@ describe('amd plugin', function() {
           done();
         });
     });
-    it('should allow for custom declaration mechanisms');
+    it('should allow for custom output mechanisms');
 
-    it('should allow for custom loading mechanisms from module');
-    it('should allow for custom loading mechanisms from global');
+    it('should allow for custom lookup mechanisms from module', function(done) {
+      amd.defaultLoader.output.restore();
+
+      appModule = false;
+      context.fileCache.amdFileModules['custom!baz'] = true;
+      context.resource = 'js/foo/bar.js';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["foo/bar"] = (',
+            'function(baz) {}',
+            ')(lookie_there_baz);\n'
+          ]);
+          done();
+        });
+    });
+    it('should allow for custom lookup mechanisms from global', function(done) {
+      amd.defaultLoader.output.restore();
+
+      appModule = true;
+      context.fileCache.amdFileModules['custom!baz'] = true;
+      context.resource = 'js/foo/bar.js';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["foo/bar"] = (',
+            'function(baz) {}',
+            ')(lookie_here_baz);\n'
+          ]);
+          done();
+        });
+    });
   });
 
   describe('config change', function() {
