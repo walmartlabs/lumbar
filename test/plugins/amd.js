@@ -21,7 +21,9 @@ describe('amd plugin', function() {
       platformCache: {
         amdAppModules: {}
       },
-      fileCache: {},
+      fileCache: {
+        amdFileModules: {}
+      },
       config: {
         isAppModule: function() {
           return appModule;
@@ -268,7 +270,7 @@ describe('amd plugin', function() {
         function(err, resources) {
           resources.should.eql([{src: 'js/foo/foo.js', 'platform': 'foo'}]);
           should.not.exist(context.platformCache.amd);
-          should.not.exist(context.fileCache.amdFileModules);
+          context.fileCache.amdFileModules.should.eql({});
           done();
         });
     });
