@@ -365,8 +365,55 @@ describe('amd plugin', function() {
           done();
         });
     });
-    it('should lookup global define dependencies');
-    it('should lookup local define dependencies');
+    it('should lookup global define dependencies', function(done) {
+      context.platformCache.amdAppModules['baz'] = true;
+      context.resource = 'js/define.js';
+      defineSource = 'define(["baz"], function(baz) {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["define"] = (',
+            'function(baz) {}',
+            ')(wmd["baz"]);\n'
+          ]);
+          done();
+        });
+    });
+    it('should lookup local define dependencies', function(done) {
+      appModule = false;
+      context.fileCache.amdFileModules['baz'] = true;
+      context.resource = 'js/define.js';
+      defineSource = 'define(["baz"], function(baz) {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["define"] = (',
+            'function(baz) {}',
+            ')(wmd["baz"]);\n'
+          ]);
+          done();
+        });
+    });
+    it('should pass undefined for non-amd references', function(done) {
+      context.fileCache.amdFileModules['noamd'] = false;
+      context.resource = 'js/define.js';
+      defineSource = 'define(["noamd"], function(baz) {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["define"] = (',
+            'function(baz) {}',
+            ')(undefined);\n'
+          ]);
+          done();
+        });
+    });
   });
 
   describe('custom loading', function() {
