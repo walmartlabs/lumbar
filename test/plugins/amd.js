@@ -46,6 +46,7 @@ describe('amd plugin', function() {
               column: 38
             }
           },
+          deps: ['view!baz'],
           amd: true,
           view: true,
           source: 'function() {}'
@@ -65,6 +66,7 @@ describe('amd plugin', function() {
               column: 38
             }
           },
+          deps: ['view!baz'],
           amd: true,
           view: true,
           source: 'function() {}'
@@ -208,6 +210,7 @@ describe('amd plugin', function() {
               column: 33
             }
           },
+          deps: ['bar'],
           amd: true,
           view: true,
           source: 'function() {}'
