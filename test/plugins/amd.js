@@ -482,6 +482,40 @@ describe('amd plugin', function() {
     });
   });
 
+  describe('handlebars loader', function() {
+    var defineSource;
+
+    beforeEach(function() {
+      // Really testing the handlebars plugin but test setup is easier this way
+      require('../../lib/plugins/handlebars');
+
+      amd.defaultLoader.output.restore();
+
+      context.resource = 'js/define.js';
+      context.config.attributes.templates = { root: 'templates' };
+
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        callback(undefined, defineSource);
+      });
+    });
+
+    it('should output template resource', function(done) {
+      defineSource = 'define(["hbs!foo"], function(foo) {})';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            {src: 'templates/foo.handlebars'},
+            'wmd["define"] = (',
+            'function(foo) {}',
+            ')(Handlebars.templates["foo"]);\n'
+          ]);
+          done();
+        });
+    });
+  });
+
   describe('custom loading', function() {
     beforeEach(function() {
       amd.loaders.custom = {
