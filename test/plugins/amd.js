@@ -51,6 +51,7 @@ describe('amd plugin', function() {
           deps: ['view!baz'],
           amd: true,
           view: true,
+          loader: amd.loaders.view,
           source: 'function() {}'
         }],
         dependencies: ['view!baz']
@@ -71,6 +72,7 @@ describe('amd plugin', function() {
           deps: ['view!baz'],
           amd: true,
           view: true,
+          loader: amd.loaders.view,
           source: 'function() {}'
         }],
         dependencies: ['view!baz']
@@ -215,6 +217,7 @@ describe('amd plugin', function() {
           deps: ['bar'],
           amd: true,
           view: true,
+          loader: amd.loaders.view,
           source: 'function() {}'
         }],
         dependencies: ['bar']
@@ -465,6 +468,7 @@ describe('amd plugin', function() {
             },
             amd: true,
             view: true,
+            loader: amd.loaders.view,
             source: 'function() {}'
           }],
           dependencies: ['custom!baz']
