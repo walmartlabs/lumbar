@@ -438,7 +438,7 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
       amd.loaders.view.output.restore();
 
-      context.resource = 'js/view/nested/define.js';
+      context.resource = 'js/views/nested/define.js';
 
       fs.readFile.restore();
       this.stub(fs, 'readFile', function(path, callback) {
