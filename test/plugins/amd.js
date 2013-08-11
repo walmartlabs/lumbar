@@ -365,6 +365,22 @@ describe('amd plugin', function() {
           done();
         });
     });
+    it('should handle non-define content', function(done) {
+      context.resource = 'js/define.js';
+      defineSource = 'define(function() {});var foo;';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["define"] = (',
+            'function() {}',
+            ')();\n',
+            'var foo;'
+          ]);
+          done();
+        });
+    });
     it('should lookup global define dependencies', function(done) {
       context.platformCache.amdAppModules['baz'] = true;
       context.resource = 'js/define.js';
