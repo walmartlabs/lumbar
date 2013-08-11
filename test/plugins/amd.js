@@ -343,18 +343,15 @@ describe('amd plugin', function() {
     beforeEach(function() {
       amd.defaultLoader.output.restore();
 
+      context.resource = 'js/define.js';
+
       fs.readFile.restore();
       this.stub(fs, 'readFile', function(path, callback) {
-        if (/js\/define.js/) {
-          callback(undefined, defineSource);
-        } else {
-          callback(undefined, 'defineView(["custom!baz"], function() {})');
-        }
+        callback(undefined, defineSource);
       });
     });
 
     it('should include define boilerplate', function(done) {
-      context.resource = 'js/define.js';
       defineSource = 'define(function() {})';
 
       amd.resourceList(
@@ -369,7 +366,6 @@ describe('amd plugin', function() {
         });
     });
     it('should handle non-define content', function(done) {
-      context.resource = 'js/define.js';
       defineSource = 'define(function() {});var foo;';
 
       amd.resourceList(
@@ -386,7 +382,6 @@ describe('amd plugin', function() {
     });
     it('should lookup global define dependencies', function(done) {
       context.platformCache.amdAppModules['baz'] = true;
-      context.resource = 'js/define.js';
       defineSource = 'define(["baz"], function(baz) {})';
 
       amd.resourceList(
@@ -403,7 +398,6 @@ describe('amd plugin', function() {
     it('should lookup local define dependencies', function(done) {
       appModule = false;
       context.fileCache.amdFileModules['baz'] = true;
-      context.resource = 'js/define.js';
       defineSource = 'define(["baz"], function(baz) {})';
 
       amd.resourceList(
@@ -419,7 +413,6 @@ describe('amd plugin', function() {
     });
     it('should pass undefined for non-amd references', function(done) {
       context.fileCache.amdFileModules['noamd'] = false;
-      context.resource = 'js/define.js';
       defineSource = 'define(["noamd"], function(baz) {})';
 
       amd.resourceList(
