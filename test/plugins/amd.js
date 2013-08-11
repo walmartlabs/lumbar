@@ -488,8 +488,6 @@ describe('amd plugin', function() {
         resource: this.spy(function(name) {
           return {src: 'resource_' + name};
         }),
-        output: function(definition, isAppModule, dependencies, context) {
-        },
         lookup: function(name, isAppModule, context) {
           if (isAppModule) {
             return 'lookie_here_' + name;
