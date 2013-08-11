@@ -491,7 +491,23 @@ describe('amd plugin', function() {
           done();
         });
     });
-    it('should allow for custom output mechanisms');
+    it('should allow for custom output mechanisms', function(done) {
+      amd.defaultLoader.output.restore();
+
+      appModule = false;
+      context.fileCache.amdFileModules['custom!baz'] = true;
+      context.resource = 'js/foo/bar.js';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["foo/bar"] = (',
+            'function(baz) {}',
+            ')(lookie_there_baz);\n'
+          ]);
+          done();
+        });
+    });
 
     it('should allow for custom lookup mechanisms from module', function(done) {
       amd.defaultLoader.output.restore();
