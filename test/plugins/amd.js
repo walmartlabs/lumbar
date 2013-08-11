@@ -516,6 +516,53 @@ describe('amd plugin', function() {
     });
   });
 
+  describe('helpers loader', function() {
+    var defineSource;
+
+    beforeEach(function() {
+      // Really testing the handlebars plugin but test setup is easier this way
+      require('../../lib/plugins/handlebars');
+
+      context.resource = 'js/helpers/define.js';
+
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        callback(undefined, defineSource);
+      });
+    });
+
+    it('should output', function(done) {
+      defineSource = 'defineHelper(["helper!foo"], function(foo) {})';
+      context.fileCache.amdFileModules['helper!foo'] = true;
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'Handlebars.registerHelper("define", (',
+            'function(foo) {}',
+            ')(Handlebars.helpers["foo"]));\n'
+          ]);
+          context.fileCache.knownHelpers.should.eql(['define']);
+          done();
+        });
+    });
+    it('should output global known helpers', function(done) {
+      context.config.attributes.templates = {
+        knownHelpers: []
+      };
+      defineSource = 'defineHelper(function() {})';
+      appModule = true;
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          context.config.attributes.templates.knownHelpers.should.eql(['define']);
+          done();
+        });
+    });
+  });
+
   describe('custom loading', function() {
     beforeEach(function() {
       amd.loaders.custom = {
