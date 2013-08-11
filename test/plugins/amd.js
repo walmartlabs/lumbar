@@ -82,6 +82,9 @@ describe('amd plugin', function() {
     this.stub(amd.defaultLoader, 'output', function(defined) {
       return {amd: defined.name};
     });
+    this.stub(amd.loaders.view, 'output', function(defined) {
+      return {amd: defined.name};
+    });
 
     this.stub(fu, 'setFileArtifact');
     this.stub(fs, 'readFile', function(path, callback) {
@@ -422,6 +425,57 @@ describe('amd plugin', function() {
             'wmd["define"] = (',
             'function(baz) {}',
             ')(undefined);\n'
+          ]);
+          done();
+        });
+    });
+  });
+
+  describe('view loader', function() {
+    var defineSource;
+
+    beforeEach(function() {
+      amd.defaultLoader.output.restore();
+      amd.loaders.view.output.restore();
+
+      context.resource = 'js/view/nested/define.js';
+
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        callback(undefined, defineSource);
+      });
+    });
+
+    it('should output view boilerplate', function(done) {
+      defineSource = 'defineView(function() {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'lwmd[1] = ',
+            'Thorax.Views["nested/define"] = (',
+            'function() {}',
+            ')();\n',
+            'lwmd[1].prototype.name = "nested/define";\n'
+          ]);
+          done();
+        });
+    });
+    it('should lookup from view hash', function(done) {
+      context.resource = 'js/define.js';
+      appModule = false;
+      context.fileCache.amdFileModules['view!baz'] = 1;
+      context.platformCache.amdAppModules['view!boz'] = true;
+      defineSource = 'define(["view!baz", "view!boz"], function(baz, boz) {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'wmd["define"] = (',
+            'function(baz, boz) {}',
+            ')(lwmd[1], Thorax.Views["boz"]);\n'
           ]);
           done();
         });
