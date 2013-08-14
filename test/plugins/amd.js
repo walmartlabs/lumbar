@@ -2,7 +2,8 @@ var _ = require('underscore'),
     amd = require('../../lib/plugins/amd'),
     build = require('../../lib/build'),
     fu = require('../../lib/fileUtil'),
-    fs = require('fs');
+    fs = require('fs'),
+    sinon = require('sinon');
 
 describe('amd plugin', function() {
   var appModule,
@@ -35,6 +36,11 @@ describe('amd plugin', function() {
         },
         attributes: {
           amd: true
+        }
+      },
+      libraries: {
+        getConfig: function() {
+          return {name: 'lib', root: 'foo/'};
         }
       }
     };
@@ -356,6 +362,56 @@ describe('amd plugin', function() {
     });
   });
 
+  describe('libraries', function() {
+    it('should load from the current library', function(done) {
+      context.resource = {'src': 'foo/js/foo/foo.js', library: {name: 'lib', root: 'foo/'}};
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/foo\/foo.js/));
+          fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/bar.js/));
+          fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/views\/baz.js/));
+
+          resources.should.eql([{amd: 'view!lib:baz'}, {amd: 'lib:bar'}, {amd: 'lib:foo/foo'}]);
+          done();
+        });
+    });
+    it('should load from specified library', function(done) {
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        if (/js\/foo\/foo.js$/.test(path)) {
+          callback(undefined, 'defineView(["lib:bar"], function() {})');
+        } else {
+          callback(undefined, 'defineView(["view!lib:baz"], function() {})');
+        }
+      });
+      context.resource = {'src': 'js/foo/foo.js'};
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          fs.readFile.should.have.been.calledWith(sinon.match(/js\/foo\/foo.js/));
+          fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/bar.js/));
+          fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/views\/baz.js/));
+
+          resources.should.eql([{amd: 'view!lib:baz'}, {amd: 'lib:bar'}, {amd: 'foo/foo'}]);
+          done();
+        });
+    });
+    it('should treat files with the same name in different libraries as distinct', function(done) {
+      fs.readFile.restore();
+      this.stub(fs, 'readFile', function(path, callback) {
+        callback(undefined, 'defineView(["lib:bar"], function() {})');
+      });
+      context.resource = {'src': 'js/bar.js'};
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          resources.should.eql([{amd: 'lib:bar'}, {amd: 'bar'}]);
+          done();
+        });
+    });
+  });
+
   describe('defaultLoader', function() {
     var defineSource;
 
@@ -524,6 +580,22 @@ describe('amd plugin', function() {
           mapResources(resources).should.eql([
             {src: 'templates/foo.handlebars'},
             'wmd["define"] = (',
+            'function(foo) {}',
+            ')(Handlebars.templates["foo"]);\n'
+          ]);
+          done();
+        });
+    });
+    it('should lookup template resource in library', function(done) {
+      context.resource = {src: 'js/define.js', library: {name: 'lib', root: 'foo/'}};
+
+      defineSource = 'define(["hbs!foo"], function(foo) {})';
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            {src: 'foo/templates/foo.handlebars', library: {name: 'lib', root: 'foo/'}},
+            'wmd["lib:define"] = (',
             'function(foo) {}',
             ')(Handlebars.templates["foo"]);\n'
           ]);
