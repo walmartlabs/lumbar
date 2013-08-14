@@ -6,6 +6,7 @@ var _ = require('underscore'),
 
 describe('amd plugin', function() {
   var appModule,
+      topLevel,
       context,
       expectedCache,
       next;
@@ -13,6 +14,7 @@ describe('amd plugin', function() {
     fu.resetCache();
 
     appModule = false;
+    topLevel = false;
     next = this.spy(function(callback) { callback(undefined, [context.resource]); });
     context = {
       event: {
@@ -25,6 +27,9 @@ describe('amd plugin', function() {
         amdFileModules: {}
       },
       config: {
+        isTopLevel: function() {
+          return appModule || topLevel;
+        },
         isAppModule: function() {
           return appModule;
         },
@@ -296,6 +301,17 @@ describe('amd plugin', function() {
               fs.readFile.should.have.been.calledOnce;
               done();
             });
+        });
+    });
+    it('should insert dependencies for top level modules', function(done) {
+      topLevel = true;
+      context.platformCache.amdAppModules['view!baz'] = true;
+      context.resource = {'src': 'js/foo/foo.js'};
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
+          done();
         });
     });
     it('should not insert dependencies included in application module', function(done) {
