@@ -47,7 +47,7 @@ For the watch case we will want to be smart about diffing the config so that we 
 WARN: This is currently TBD pending the ability to provide custom plugins for defines in addition to requires.
 
 ```javascript
-defineRouter('web-checkout', {
+defineRouter({
       // Replaces the module routes directive
       'routes': {
         'cart': 'cart',
@@ -62,7 +62,7 @@ defineRouter('web-checkout', {
   // Replaces preload module directive
   Phoenix.preload('checkout');
 
-  Phoenix.Router.create(module, {
+  return {
     cart: function(shippingOptionsFailed) {
       var view = new CartView({ shippingOptionsFailed: cart.saved.length && shippingOptionsFailed });
       if (shippingOptionsFailed) {
@@ -80,10 +80,10 @@ defineRouter('web-checkout', {
       });
       Phoenix.setView(view);
     }
-  });
+  };
 });
 
-defineView('cart', ['hbs!additional/template', 'views/threshold-shipping', 'helpers/magack', 'stylus!cart'], function() {
+defineView(['hbs!additional/template', 'views!threshold-shipping', 'helpers!magack', 'stylus!cart'], function() {
 });
 
 defineHelper('magack', function() {
