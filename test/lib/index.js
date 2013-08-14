@@ -197,7 +197,7 @@ exports.pluginExec = function(plugin, mode, module, libraries, config, callback)
 
         function _callback(err) {
           if (err) {
-            throw err;
+            return callback({err: err});
           }
           callback(context.moduleResources, context);
         }
