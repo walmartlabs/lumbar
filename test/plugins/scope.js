@@ -24,9 +24,11 @@ describe('scope plugin', function() {
       };
 
       lib.pluginExec('scope', 'scripts', module, [], config, function(resources) {
-        resources = _.map(resources, function(resource) {
-          return resource.stringValue || resource.src;
-        });
+        if (!resources.err) {
+          resources = _.map(resources, function(resource) {
+            return resource.stringValue || resource.src;
+          });
+        }
 
         callback(resources);
       });
@@ -76,6 +78,12 @@ describe('scope plugin', function() {
           'js/views/test.js',
           'moduleEnd'
         ]);
+        done();
+      });
+    });
+    it('should fail on defining locals before globals', function(done) {
+      testScope('file', ['js/views/test.js', {src: 'js/init.js', global: true}], function(err) {
+        err.err.should.match(/Scoped files may not appear before global/);
         done();
       });
     });
