@@ -235,7 +235,7 @@ describe('state machine', function() {
       it('should build individual modes if AMD config is avilable', function() {
         stateMachine.buildMode.restore();
         context.platformCache = {
-          amdConfig: {
+          amdAppModules: {
           }
         };
         context.mode = 'foo';
@@ -405,7 +405,7 @@ describe('state machine', function() {
       });
       it('should build if there is a top-level AMD config', function() {
         context.platformCache = {
-          amdConfig: {
+          amdAppModules: {
           }
         };
         context.module = 'home';
