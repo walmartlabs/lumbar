@@ -333,7 +333,7 @@ describe('amd plugin', function() {
           amd.resourceList(
             context, next,
             function(err, resources) {
-              resources.should.eql([]);
+              resources.should.eql([{amd: 'foo/foo'}]);
               done();
             });
         });
