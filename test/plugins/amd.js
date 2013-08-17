@@ -190,6 +190,16 @@ describe('amd plugin', function() {
           done();
         });
     });
+    it('should error if multiple modules are defined', function(done) {
+      context.resource = 'js/define.js';
+      defineSource = 'define(function() {});define(function() {});';
+      amd.resourceList(
+        context, next,
+        function(err) {
+          err.should.match(/Multiple modules defined in "js\/define.js"/);
+          done();
+        });
+    });
     it('should parse js files with simple path', function(done) {
       context.resource = 'js/bar.js';
       expectedCache['foo/bar'].defined[0].name = 'bar';
