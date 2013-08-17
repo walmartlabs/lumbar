@@ -7,6 +7,7 @@ var _ = require('underscore'),
 
 describe('amd plugin', function() {
   var appModule,
+      defineSource,
       topLevel,
       context,
       expectedCache,
@@ -98,6 +99,8 @@ describe('amd plugin', function() {
     });
 
     this.stub(fu, 'setFileArtifact');
+
+    defineSource = 'defineView(["view!baz"], function() {})';
     this.stub(fs, 'readFile', function(path, callback) {
       if (/js\/foo\/foo.js$/.test(path)) {
         callback(undefined, 'defineView(["bar"], function() {})');
@@ -106,7 +109,7 @@ describe('amd plugin', function() {
       } else if (/js\/nonamd.js$/.test(path)) {
         callback(undefined, 'notAMD;');
       } else {
-        callback(undefined, 'defineView(["view!baz"], function() {})');
+        callback(undefined, defineSource);
       }
     });
   });
@@ -424,17 +427,10 @@ describe('amd plugin', function() {
   });
 
   describe('defaultLoader', function() {
-    var defineSource;
-
     beforeEach(function() {
       amd.defaultLoader.output.restore();
 
       context.resource = 'js/define.js';
-
-      fs.readFile.restore();
-      this.stub(fs, 'readFile', function(path, callback) {
-        callback(undefined, defineSource);
-      });
     });
 
     it('should include define boilerplate', function(done) {
@@ -515,18 +511,11 @@ describe('amd plugin', function() {
   });
 
   describe('view loader', function() {
-    var defineSource;
-
     beforeEach(function() {
       amd.defaultLoader.output.restore();
       amd.loaders.view.output.restore();
 
       context.resource = 'js/views/nested/define.js';
-
-      fs.readFile.restore();
-      this.stub(fs, 'readFile', function(path, callback) {
-        callback(undefined, defineSource);
-      });
     });
 
     it('should output view boilerplate', function(done) {
@@ -566,8 +555,6 @@ describe('amd plugin', function() {
   });
 
   describe('handlebars loader', function() {
-    var defineSource;
-
     beforeEach(function() {
       // Really testing the handlebars plugin but test setup is easier this way
       require('../../lib/plugins/handlebars');
@@ -576,11 +563,6 @@ describe('amd plugin', function() {
 
       context.resource = 'js/define.js';
       context.config.attributes.templates = { root: 'templates' };
-
-      fs.readFile.restore();
-      this.stub(fs, 'readFile', function(path, callback) {
-        callback(undefined, defineSource);
-      });
     });
 
     it('should output template resource', function(done) {
@@ -616,18 +598,11 @@ describe('amd plugin', function() {
   });
 
   describe('helpers loader', function() {
-    var defineSource;
-
     beforeEach(function() {
       // Really testing the handlebars plugin but test setup is easier this way
       require('../../lib/plugins/handlebars');
 
       context.resource = 'js/helpers/define.js';
-
-      fs.readFile.restore();
-      this.stub(fs, 'readFile', function(path, callback) {
-        callback(undefined, defineSource);
-      });
     });
 
     it('should output', function(done) {
