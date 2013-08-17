@@ -253,7 +253,7 @@ describe('amd plugin', function() {
         function() {
           next.should.have.been.calledOnce;
           fu.setFileArtifact.should.have.been.calledWith('js/foo/foo.js', 'amd', expectedCache['foo/foo']);
-          fu.setFileArtifact.should.have.been.calledWith('js/bar.js', 'amd', expectedCache['bar']);
+          fu.setFileArtifact.should.have.been.calledWith('js/bar.js', 'amd', expectedCache.bar);
           fu.setFileArtifact.should.have.been.calledWith('js/views/baz.js', 'amd', expectedCache['views/baz']);
           done();
         });
@@ -467,7 +467,7 @@ describe('amd plugin', function() {
         });
     });
     it('should lookup global define dependencies', function(done) {
-      context.platformCache.amdAppModules['baz'] = true;
+      context.platformCache.amdAppModules.baz = true;
       defineSource = 'define(["baz"], function(baz) {})';
 
       amd.resourceList(
@@ -483,7 +483,7 @@ describe('amd plugin', function() {
     });
     it('should lookup local define dependencies', function(done) {
       appModule = false;
-      context.fileCache.amdFileModules['baz'] = true;
+      context.fileCache.amdFileModules.baz = true;
       defineSource = 'define(["baz"], function(baz) {})';
 
       amd.resourceList(
@@ -498,7 +498,7 @@ describe('amd plugin', function() {
         });
     });
     it('should pass undefined for non-amd references', function(done) {
-      context.fileCache.amdFileModules['noamd'] = false;
+      context.fileCache.amdFileModules.noamd = false;
       defineSource = 'define(["noamd"], function(baz) {})';
 
       amd.resourceList(
