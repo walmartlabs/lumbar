@@ -156,6 +156,17 @@ describe('amd plugin', function() {
           done();
         });
     });
+    it('should ignore files that have opt out', function(done) {
+      context.resource = {src: 'js/foo/bar.js', amd: false};
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          next.should.have.been.calledOnce;
+          fu.setFileArtifact.should.not.have.been.called;
+          resources.should.eql([{src: 'js/foo/bar.js', amd: false}]);
+          done();
+        });
+    });
     it('should handle non-amd js files', function(done) {
       context.resource = 'js/nonamd.js';
       amd.resourceList(
