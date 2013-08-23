@@ -111,7 +111,7 @@ This may be done via simple strings or for overrides and conditional behavior, v
 
 When a mixin is included with additional properties such as the `lumbar-loader` include above, these properties will be applied to all resources defined in the mixin. For this allows for the project to override or define their own conditional behavior as necessary.
 
-#### Overriding Files
+### Overriding Files
 
 If a mixin includes a file that is not desired, it's possible to replace the file by specifying the overrides key when including the mixin.
 
@@ -125,6 +125,19 @@ If a mixin includes a file that is not desired, it's possible to replace the fil
     }
 
 This will replace any file references to *static/images/page-dot.png* in the mixin with *image/page-dot.png* in the project's file structure. It's also possible to use the value `true` to specify the exact same file name, just in the local file space and `false` to prevent the file from being output.
+
+Alternatively overrides may be defined on the entire library
+
+    "libaries": [
+      {
+        "name": "carousel-library",
+        "overrides": {
+          "static/images/page-dot.png": "images/page-dot.png"
+        }
+      }
+    }
+
+Which follows the same behavior outlined above. In the case of multiple overrides, the value defined in the mixin takes priority over the library override.
 
 ## Additional information
 

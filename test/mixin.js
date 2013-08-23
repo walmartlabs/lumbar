@@ -797,6 +797,60 @@ describe('mixins', function() {
           done();
         });
     });
+
+    it('should allow library files to be overriden', function(done) {
+      var module = {
+        mixins: [
+          'mixin1',
+          'mixin2'
+        ],
+        static: [ 'baz1.1' ]
+      };
+
+      var mixins = [
+        {
+          name: '1',
+          root: 'mixin1/',
+          overrides: {
+            'baz1.1': 'foo',
+            'baz1.2': true,
+            'baz1.3': false
+          },
+          mixins: {
+            mixin1: {
+              static: [ 'baz1.1', 'baz1.2', 'baz1.3' ]
+            }
+          }
+        },
+        {
+          name: '2',
+          root: 'mixin2/',
+          mixins: {
+            mixin2: {
+              static: [ 'baz1.1', 'baz1.2' ]
+            }
+          }
+        }
+      ];
+
+      lib.mixinExec(module, mixins, function(libraries) {
+          mixins = libraries.mixins;
+
+          var mixin1 = _.extend({}, mixins.mixin1[0]);
+
+          module.static.should.eql([
+            {src: 'foo', originalSrc: 'mixin1/baz1.1', library: mixin1},
+            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2', library: mixin1},
+            {src: 'mixin2/baz1.1', library: mixins.mixin2[0]},
+            {src: 'mixin2/baz1.2', library: mixins.mixin2[0]},
+            'baz1.1'
+          ]);
+
+          mixins.mixin1[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2', 'baz1.3' ]);
+          mixins.mixin2[0].attributes.static.should.eql([ 'baz1.1', 'baz1.2' ]);
+          done();
+        });
+    });
   });
 
   describe('conditional include', function() {

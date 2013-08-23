@@ -384,6 +384,25 @@ describe('amd plugin', function() {
             });
         });
     });
+
+    it('should honor overrides', function(done) {
+      var lib = {name: 'lib', root: 'foo/', overrides: {'js/bar.js': 'js/nonamd.js'}};
+      context.resource = {'src': 'js/foo/foo.js', library: lib};
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          resources.should.eql([
+            {
+              src: 'js/nonamd.js',
+              originalSrc: "foo/js/bar.js",
+              library: lib
+            },
+            {amd: 'lib:foo/foo'}
+          ]);
+
+          done();
+        });
+    });
   });
 
   describe('libraries', function() {

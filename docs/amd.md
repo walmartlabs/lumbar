@@ -91,3 +91,11 @@ defineHelper('magack', function() {
   };
 });
 ```
+
+### Libraries
+
+To support Lumbar libraries, the AMD path syntax has been extended to support referencing paths in specific libraries.
+
+For generic references this takes the form `library:path` and `plugin!library:path` for plugin references.
+
+When omitted the library is assumed to be the library that contains the file being compiled.
