@@ -86,6 +86,20 @@ describe('define-parser', function() {
     });
   });
 
+  describe('defineRouter', function() {
+    it('should parse', function() {
+      parser("defineRouter({foo: 'bar', 'baz': 'bat'}, 'name', ['foo'], function() {});").should.eql([
+        {'name': 'name', deps: ['foo'], routes: {foo: 'bar', baz: 'bat'}, source: 'function() {}', loc: loc(1, 58, 1, 71), router: true, define: true}
+      ]);
+    });
+
+    it('should fail with nested', function() {
+      (function() {
+        parser("defineView('name', [], function() { defineRouter({foo: 'bar'}, function() {}); });");
+      }).should.throw(/Unsupported nested define/);
+    });
+  });
+
   it('should support non-amd files', function() {
     parser("\nfoo\n\nfoo\nfoo").should.eql([
       {source: "\nfoo\n\nfoo\nfoo", loc: loc(1, 0, 5, 3)},
