@@ -1,6 +1,8 @@
 var _ = require('underscore'),
+    fs = require('fs'),
     lib = require('../lib'),
-    moduleMap = require('../../lib/plugins/module-map');
+    moduleMap = require('../../lib/plugins/module-map'),
+    watch = require('../lib/watch');
 
 describe('module-map plugin', function() {
   var modules, config;
@@ -51,6 +53,7 @@ describe('module-map plugin', function() {
 
           data.should.eql({
             data: '/* lumbar module map */\nmodule.exports.moduleMap({"module":true});\n',
+            inputs: [{event: 'module-map'}],
             generated: true,
             noSeparator: true,
             ignoreWarnings: true
@@ -58,6 +61,40 @@ describe('module-map plugin', function() {
         });
         done();
       });
+    });
+  });
+
+  describe('watch', function() {
+    var mock;
+    beforeEach(function() {
+      var readFile = fs.readFile;
+
+      mock = watch.mockWatch();
+
+      this.stub(fs, 'readFileSync', function() {
+        return JSON.stringify({
+          modules: {
+            module: {scripts: [{'module-map': true}]}
+          }
+        });
+      });
+    });
+    afterEach(function() {
+      mock.cleanup();
+    });
+
+    it('should rebuild on module-map event', function(done) {
+      var expectedFiles = ['/module.js', '/module.js'],
+          operations = {
+            1: function(testdir, events) {
+              events.emit('module-map', 'change');
+            }
+          };
+
+      watch.runWatchTest.call(this,
+        'test/artifacts', 'lumbar.json',
+        operations, expectedFiles, {},
+        done);
     });
   });
 

@@ -129,7 +129,7 @@ function checkOutput(operations, expectedFiles, arise, options, cleanup) {
     }
     var seen = seenFiles.length;
     process.nextTick(function() {
-      operations[seen] && operations[seen](fu.lookupPath());
+      operations[seen] && operations[seen](fu.lookupPath(), arise);
     });
     if (seenFiles.length < expectedFiles.length) {
       return;
