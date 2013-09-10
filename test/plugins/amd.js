@@ -740,7 +740,7 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
 
       appModule = false;
-      context.fileCache.amdFileModules['resource_baz'] = true;
+      context.fileCache.amdFileModules.resource_baz = true;
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
@@ -758,7 +758,7 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
 
       appModule = false;
-      context.fileCache.amdFileModules['resource_baz'] = true;
+      context.fileCache.amdFileModules.resource_baz = true;
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
@@ -775,7 +775,7 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
 
       appModule = true;
-      context.fileCache.amdFileModules['resource_baz'] = true;
+      context.fileCache.amdFileModules.resource_baz = true;
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
@@ -792,7 +792,7 @@ describe('amd plugin', function() {
 
   describe('config change', function() {
     it('should detect when style config changed');
-    it('should detect when applicaiton module impacts modules');
+    it('should detect when application module impacts modules');
   });
 });
 
