@@ -50,6 +50,7 @@ describe('amd plugin', function() {
       'foo/bar': {
         defined: [{
           name: 'foo/bar',
+          resourceName: 'js/foo/bar.js',
           loc: {
             start: {
               line: 1,
@@ -71,6 +72,7 @@ describe('amd plugin', function() {
       'views/baz': {
         defined: [{
           name: 'view!baz',
+          resourceName: 'js/views/baz.js',
           loc: {
             start: {
               line: 1,
@@ -203,6 +205,7 @@ describe('amd plugin', function() {
     it('should parse js files with simple path', function(done) {
       context.resource = 'js/bar.js';
       expectedCache['foo/bar'].defined[0].name = 'bar';
+      expectedCache['foo/bar'].defined[0].resourceName = 'js/bar.js';
 
       amd.resourceList(
         context, next,
@@ -238,10 +241,12 @@ describe('amd plugin', function() {
       context.resource = 'js/foo/foo.js';
       expectedCache.bar = expectedCache['foo/bar'];
       expectedCache.bar.defined[0].name = 'bar';
+      expectedCache['foo/bar'].defined[0].resourceName = 'js/bar.js';
       delete expectedCache['foo/bar'];
       expectedCache['foo/foo'] = {
         defined: [{
           name: 'foo/foo',
+          resourceName: 'js/foo/foo.js',
           loc: {
             start: {
               line: 1,
@@ -345,7 +350,7 @@ describe('amd plugin', function() {
         });
     });
     it('should not insert dependencies included in application module', function(done) {
-      context.platformCache.amdAppModules['view!baz'] = true;
+      context.platformCache.amdAppModules['js/views/baz.js'] = true;
       context.resource = {'src': 'js/foo/foo.js'};
       amd.resourceList(
         context, next,
@@ -363,7 +368,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
-          _.keys(context.platformCache.amdAppModules).should.eql(['foo/foo', 'bar', 'view!baz']);
+          _.keys(context.platformCache.amdAppModules).should.eql(['js/foo/foo.js', 'js/bar.js', 'js/views/baz.js']);
           done();
         });
     });
@@ -469,8 +474,8 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["define"] = (',
-            'function() {}',
+            'lwmd[1] = ',
+            '(function() {}',
             ')();\n'
           ]);
           done();
@@ -483,8 +488,8 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["define"] = (',
-            'function() {}',
+            'lwmd[1] = ',
+            '(function() {}',
             ')();\n',
             'var foo;'
           ]);
@@ -492,46 +497,48 @@ describe('amd plugin', function() {
         });
     });
     it('should lookup global define dependencies', function(done) {
-      context.platformCache.amdAppModules.baz = true;
+      context.platformCache.amdAppModules['js/baz.js'] = 1;
       defineSource = 'define(["baz"], function(baz) {})';
 
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["define"] = (',
-            'function(baz) {}',
-            ')(wmd["baz"]);\n'
+            'lwmd[1] = ',
+            '(function(baz) {}',
+            ')(wmd[1]);\n'
           ]);
           done();
         });
     });
     it('should lookup local define dependencies', function(done) {
       appModule = false;
-      context.fileCache.amdFileModules.baz = true;
+      context.fileCache.amdFileModules['js/baz.js'] = 2;
       defineSource = 'define(["baz"], function(baz) {})';
 
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["define"] = (',
-            'function(baz) {}',
-            ')(wmd["baz"]);\n'
+            // Circular dependency here can be ignored as we are sending funky data in
+            // and we are testing the dependency generation.
+            'lwmd[2] = ',
+            '(function(baz) {}',
+            ')(lwmd[2]);\n'
           ]);
           done();
         });
     });
     it('should pass undefined for non-amd references', function(done) {
-      context.fileCache.amdFileModules.noamd = false;
+      context.fileCache.amdFileModules['js/noamd.js'] = false;
       defineSource = 'define(["noamd"], function(baz) {})';
 
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["define"] = (',
-            'function(baz) {}',
+            'lwmd[2] = ',
+            '(function(baz) {}',
             ')(undefined);\n'
           ]);
           done();
@@ -566,17 +573,17 @@ describe('amd plugin', function() {
     it('should lookup from view hash', function(done) {
       context.resource = 'js/define.js';
       appModule = false;
-      context.fileCache.amdFileModules['view!baz'] = 1;
-      context.platformCache.amdAppModules['view!boz'] = true;
+      context.fileCache.amdFileModules['js/views/baz.js'] = 1;
+      context.platformCache.amdAppModules['js/views/boz.js'] = 1;
       defineSource = 'define(["view!baz", "view!boz"], function(baz, boz) {})';
 
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["define"] = (',
-            'function(baz, boz) {}',
-            ')(lwmd[1], Thorax.Views["boz"]);\n'
+            'lwmd[2] = ',
+            '(function(baz, boz) {}',
+            ')(lwmd[1], wmd[1]);\n'
           ]);
           done();
         });
@@ -601,8 +608,8 @@ describe('amd plugin', function() {
         function(err, resources) {
           mapResources(resources).should.eql([
             {src: 'templates/foo.handlebars'},
-            'wmd["define"] = (',
-            'function(foo) {}',
+            'lwmd[1] = ',
+            '(function(foo) {}',
             ')(Handlebars.templates["foo"]);\n'
           ]);
           done();
@@ -617,8 +624,8 @@ describe('amd plugin', function() {
         function(err, resources) {
           mapResources(resources).should.eql([
             {src: 'foo/templates/foo.handlebars', library: {name: 'lib', root: 'foo/'}},
-            'wmd["lib:define"] = (',
-            'function(foo) {}',
+            'lwmd[1] = ',
+            '(function(foo) {}',
             ')(Handlebars.templates["foo"]);\n'
           ]);
           done();
@@ -636,15 +643,17 @@ describe('amd plugin', function() {
 
     it('should output', function(done) {
       defineSource = 'defineHelper(["helper!foo"], function(foo) {})';
-      context.fileCache.amdFileModules['helper!foo'] = true;
+      context.fileCache.amdFileModules['js/helpers/foo.js'] = 1;
 
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'Handlebars.registerHelper("define", (',
+            'lwmd[2] = ',
+            '(',
             'function(foo) {}',
-            ')(Handlebars.helpers["foo"]));\n'
+            ')(lwmd[1]));\n',
+            'Handlebars.registerHelper("define", lwmd[2]);\n'
           ]);
           context.fileCache.knownHelpers.should.eql(['define']);
           done();
@@ -672,7 +681,7 @@ describe('amd plugin', function() {
         resource: this.spy(function(name) {
           return {src: 'resource_' + name};
         }),
-        lookup: function(name, isAppModule, context) {
+        lookup: function(name, path, isAppModule, context) {
           if (isAppModule) {
             return 'lookie_here_' + name;
           } else {
@@ -731,14 +740,14 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
 
       appModule = false;
-      context.fileCache.amdFileModules['custom!baz'] = true;
+      context.fileCache.amdFileModules['resource_baz'] = true;
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["foo/bar"] = (',
-            'function(baz) {}',
+            'lwmd[2] = ',
+            '(function(baz) {}',
             ')(lookie_there_baz);\n'
           ]);
           done();
@@ -749,14 +758,14 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
 
       appModule = false;
-      context.fileCache.amdFileModules['custom!baz'] = true;
+      context.fileCache.amdFileModules['resource_baz'] = true;
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["foo/bar"] = (',
-            'function(baz) {}',
+            'lwmd[2] = ',
+            '(function(baz) {}',
             ')(lookie_there_baz);\n'
           ]);
           done();
@@ -766,14 +775,14 @@ describe('amd plugin', function() {
       amd.defaultLoader.output.restore();
 
       appModule = true;
-      context.fileCache.amdFileModules['custom!baz'] = true;
+      context.fileCache.amdFileModules['resource_baz'] = true;
       context.resource = 'js/foo/bar.js';
       amd.resourceList(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd["foo/bar"] = (',
-            'function(baz) {}',
+            'wmd[1] = lwmd[2] = ',
+            '(function(baz) {}',
             ')(lookie_here_baz);\n'
           ]);
           done();
