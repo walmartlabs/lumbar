@@ -488,6 +488,99 @@ describe('stylus plugin', function() {
         });
       });
     });
+    it('should override nested mixins relative to declaring library', function(done) {
+      fu.lookupPath('');
+
+      var mixins = [{
+        name: 'mixin1',
+        root: 'mixin1/',
+        mixins: {
+          mixin1: {
+            mixins: ['mixin2']
+          }
+        },
+        'styles': {
+          'styleRoot': 'otherRoot/'
+        }
+      },
+      {
+        name: 'mixin',
+        root: 'mixin2/',
+        mixins: {
+          'mixin2': {
+            'styles': [
+              'file1.styl',
+              'file2.styl',
+              'file3.styl',
+              'file4.styl'
+            ]
+          }
+        },
+        'styles': {
+          'styleRoot': 'stylusRoot/',
+          'includes': [
+            'mixin-import.styl'
+          ]
+        }
+      }];
+
+      var config = {
+        modules: {
+          module: {
+            mixins: [
+              {
+                name: "mixin1",
+                overrides: {
+                  'file1.styl': 'bar1.styl',
+                  'file3.styl': true,
+                  'stylusRoot/file4.styl': true
+                }
+              }
+            ],
+            'styles': [
+              'file1.styl',
+              'file2.styl'
+            ]
+          }
+        },
+        'styles': {
+          'styleRoot': 'stillAnotherRoot/'
+        }
+      };
+
+
+      lib.pluginExec('stylus', 'styles', config.modules.module, mixins, config, function(resources, context) {
+        resources[0].plugins.push({
+          plugin: __dirname + '/stylus-mock-worker',
+          data: {
+            rewrite: true
+          }
+        });
+        context.loadResource(resources[0], function(err, data) {
+          if (err) {
+            throw err;
+          }
+
+          checkData(data, [
+            'mixin2/stylusRoot/mixin-import.styl',
+            'mixin2/mixin-import.styl',
+            'mixin2/stylusRoot/foo.styl',
+            'mixin2/foo.styl',
+            'mixin2/stylusRoot/img.png',
+            'mixin2/img.png',
+            'stillAnotherRoot/bar1.styl',
+            'mixin2/stylusRoot/file2.styl',
+            'mixin2/file2.styl',
+            'stillAnotherRoot/file3.styl',
+            'stillAnotherRoot/file4.styl',
+            'stillAnotherRoot/file1.styl',
+            'stillAnotherRoot/img.png',
+            'stillAnotherRoot/file2.styl'
+          ]);
+          done();
+        });
+      });
+    });
   });
 });
 

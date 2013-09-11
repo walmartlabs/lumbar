@@ -1,5 +1,21 @@
 # Release Notes
 
+## Development
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.3...master)
+
+## v2.3.3 - September 11th, 2013
+
+- [#107](https://github.com/walmartlabs/lumbar/issues/107) - Overrides do not nest properly ([@kpdecker](https://api.github.com/users/kpdecker)
+
+- Remove path.relative fork - ad98c29
+- Cleanup loadResource error message - a3e4ad2
+- Fix callback on missing static file - 12eb8e5
+- Always define a module name - 6b7dcd2
+- Include additional info for scope order error - cce73f2
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.2...v2.3.3)
+
 ## 2.3.2 - Aug 8th 2013
 
 - Fixed map error under node 0.10
