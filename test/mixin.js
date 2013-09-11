@@ -797,6 +797,69 @@ describe('mixins', function() {
           done();
         });
     });
+
+    it('should allow nested mixins to be overriden at the top level', function(done) {
+      var mixinDecl = {
+        name: 'mixin2',
+        overrides: {
+          'baz1.1': 'foo',
+          'baz1.2': true,
+          'baz1.3': false
+        }
+      };
+      var module = {
+        mixins: [
+          mixinDecl
+        ],
+        static: [ 'baz1.1' ]
+      };
+
+      var mixins = [
+        {
+          name: '1',
+          root: 'mixin1/',
+          mixins: {
+            mixin1: {
+              static: [ 'baz1.1', 'baz1.2', 'baz1.3' ]
+            },
+            mixin2: {
+              mixins: [
+                {
+                  name: 'mixin1',
+                  overrides: {
+                    'baz1.1': 'foo',
+                    'baz1.2': true
+                  }
+                }
+              ],
+              static: [ 'baz2.1', 'baz2.2' ]
+            }
+          }
+        }
+      ];
+
+      lib.mixinExec(module, mixins, function(libraries) {
+          if (libraries.err) {
+            throw libraries.err;
+          }
+
+          mixins = libraries.mixins;
+
+          var mixin1 = _.extend({}, mixinDecl, mixins.mixin1[0]);
+
+          _.each(module.static, function(file) { delete file.library; });
+
+          module.static.should.eql([
+            {src: 'foo', originalSrc: 'mixin1/baz1.1'},
+            {src: 'baz1.2', originalSrc: 'mixin1/baz1.2'},
+            {src: 'mixin1/baz2.1'},
+            {src: 'mixin1/baz2.2'},
+            'baz1.1'
+          ]);
+
+          done();
+        });
+    });
   });
 
   describe('conditional include', function() {
