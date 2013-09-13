@@ -49,7 +49,7 @@ describe('amd plugin', function() {
     expectedCache = {
       'foo/bar': {
         defined: [{
-          name: 'foo/bar',
+          name: 'js/foo/bar.js',
           resourceName: 'js/foo/bar.js',
           loc: {
             start: {
@@ -71,7 +71,7 @@ describe('amd plugin', function() {
       },
       'views/baz': {
         defined: [{
-          name: 'view!baz',
+          name: 'js/views/baz.js',
           resourceName: 'js/views/baz.js',
           loc: {
             start: {
@@ -204,7 +204,7 @@ describe('amd plugin', function() {
     });
     it('should parse js files with simple path', function(done) {
       context.resource = 'js/bar.js';
-      expectedCache['foo/bar'].defined[0].name = 'bar';
+      expectedCache['foo/bar'].defined[0].name = 'js/bar.js';
       expectedCache['foo/bar'].defined[0].resourceName = 'js/bar.js';
 
       amd.resourceList(
@@ -240,12 +240,12 @@ describe('amd plugin', function() {
     it('should recursively parse', function(done) {
       context.resource = 'js/foo/foo.js';
       expectedCache.bar = expectedCache['foo/bar'];
-      expectedCache.bar.defined[0].name = 'bar';
+      expectedCache.bar.defined[0].name = 'js/bar.js';
       expectedCache['foo/bar'].defined[0].resourceName = 'js/bar.js';
       delete expectedCache['foo/bar'];
       expectedCache['foo/foo'] = {
         defined: [{
-          name: 'foo/foo',
+          name: 'js/foo/foo.js',
           resourceName: 'js/foo/foo.js',
           loc: {
             start: {
@@ -303,7 +303,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
+          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
           done();
         });
     });
@@ -332,7 +332,7 @@ describe('amd plugin', function() {
           amd.resourceList(
             context, next,
             function(err, resources) {
-              resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
+              resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
               fs.readFile.should.have.been.calledOnce;
               done();
             });
@@ -345,7 +345,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
+          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
           done();
         });
     });
@@ -355,7 +355,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'bar'}, {amd: 'foo/foo'}]);
+          resources.should.eql([{amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
           done();
         });
     });
@@ -367,7 +367,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
+          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
           _.keys(context.platformCache.amdAppModules).should.eql(['js/foo/foo.js', 'js/bar.js', 'js/views/baz.js']);
           done();
         });
@@ -379,12 +379,12 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'view!baz'}, {amd: 'bar'}, {amd: 'foo/foo'}]);
+          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
 
           amd.resourceList(
             context, next,
             function(err, resources) {
-              resources.should.eql([{amd: 'foo/foo'}]);
+              resources.should.eql([{amd: 'js/foo/foo.js'}]);
               done();
             });
         });
@@ -402,7 +402,7 @@ describe('amd plugin', function() {
               originalSrc: "foo/js/bar.js",
               library: lib
             },
-            {amd: 'lib:foo/foo'}
+            {amd: 'foo/js/foo/foo.js'}
           ]);
 
           done();
@@ -412,7 +412,7 @@ describe('amd plugin', function() {
 
   describe('libraries', function() {
     it('should load from the current library', function(done) {
-      context.resource = {'src': 'foo/js/foo/foo.js', library: {name: 'lib', root: 'foo/'}};
+      context.resource = {'src': 'js/foo/foo.js', library: {name: 'lib', root: 'foo/'}};
       amd.resourceList(
         context, next,
         function(err, resources) {
@@ -420,7 +420,7 @@ describe('amd plugin', function() {
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/bar.js/));
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/views\/baz.js/));
 
-          resources.should.eql([{amd: 'view!lib:baz'}, {amd: 'lib:bar'}, {amd: 'lib:foo/foo'}]);
+          resources.should.eql([{amd: 'foo/js/views/baz.js'}, {amd: 'foo/js/bar.js'}, {amd: 'foo/js/foo/foo.js'}]);
           done();
         });
     });
@@ -441,7 +441,7 @@ describe('amd plugin', function() {
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/bar.js/));
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/views\/baz.js/));
 
-          resources.should.eql([{amd: 'view!lib:baz'}, {amd: 'lib:bar'}, {amd: 'foo/foo'}]);
+          resources.should.eql([{amd: 'foo/js/views/baz.js'}, {amd: 'foo/js/bar.js'}, {amd: 'js/foo/foo.js'}]);
           done();
         });
     });
@@ -454,7 +454,7 @@ describe('amd plugin', function() {
       amd.resourceList(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'lib:bar'}, {amd: 'bar'}]);
+          resources.should.eql([{amd: 'foo/js/bar.js'}, {amd: 'js/bar.js'}]);
           done();
         });
     });
@@ -575,7 +575,7 @@ describe('amd plugin', function() {
       appModule = false;
       context.fileCache.amdFileModules['js/views/baz.js'] = 1;
       context.platformCache.amdAppModules['js/views/boz.js'] = 1;
-      defineSource = 'define(["view!baz", "view!boz"], function(baz, boz) {})';
+      defineSource = 'define(["view!baz", "views/boz"], function(baz, boz) {})';
 
       amd.resourceList(
         context, next,
@@ -659,6 +659,26 @@ describe('amd plugin', function() {
           done();
         });
     });
+    it('should lookup from helpers hash', function(done) {
+      amd.defaultLoader.output.restore();
+
+      context.resource = 'js/define.js';
+      appModule = false;
+      context.fileCache.amdFileModules['js/helpers/baz.js'] = 1;
+      context.platformCache.amdAppModules['js/helpers/boz.js'] = 1;
+      defineSource = 'define(["helper!baz", "helpers/boz"], function(baz, boz) {})';
+
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'lwmd[2] = ',
+            '(function(baz, boz) {}',
+            ')(lwmd[1], wmd[1]);\n'
+          ]);
+          done();
+        });
+    });
     it('should output global known helpers', function(done) {
       context.config.attributes.templates = {
         knownHelpers: []
@@ -731,7 +751,7 @@ describe('amd plugin', function() {
 
           resources.should.eql([
             {src: 'resource_baz'},
-            {amd: 'foo/bar'}
+            {amd: 'js/foo/bar.js'}
           ]);
           done();
         });
