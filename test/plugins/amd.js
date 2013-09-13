@@ -120,7 +120,7 @@ describe('amd plugin', function() {
   it('should NOP if AMD mode is not enabled', function(done) {
     context.config.attributes.amd = false;
 
-    amd.resourceList(
+    amd.moduleResources(
       context, next,
       function() {
         next.should.have.been.calledOnce;
@@ -132,7 +132,7 @@ describe('amd plugin', function() {
     context.resource = 'js/foo/bar.js';
 
     var error = new Error();
-    amd.resourceList(context, function(callback) { callback(error); }, function(err) {
+    amd.moduleResources(context, function(callback) { callback(error); }, function(err) {
       err.should.equal(error);
       done();
     });
@@ -145,7 +145,7 @@ describe('amd plugin', function() {
     this.stub(fs, 'readFile', function(path, callback) {
       callback(error);
     });
-    amd.resourceList(context, next, function(err) {
+    amd.moduleResources(context, next, function(err) {
       err.should.equal(error);
       done();
     });
@@ -153,7 +153,7 @@ describe('amd plugin', function() {
   describe('parser', function() {
     it('should parse js files', function(done) {
       context.resource = 'js/foo/bar.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -164,7 +164,7 @@ describe('amd plugin', function() {
     });
     it('should ignore files that have opt out', function(done) {
       context.resource = {src: 'js/foo/bar.js', amd: false};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           next.should.have.been.calledOnce;
@@ -175,7 +175,7 @@ describe('amd plugin', function() {
     });
     it('should handle non-amd js files', function(done) {
       context.resource = 'js/nonamd.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -185,7 +185,7 @@ describe('amd plugin', function() {
     });
     it('should handle improperly formated js files', function(done) {
       context.resource = 'js/invalid.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -196,7 +196,7 @@ describe('amd plugin', function() {
     it('should error if multiple modules are defined', function(done) {
       context.resource = 'js/define.js';
       defineSource = 'define(function() {});define(function() {});';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err) {
           err.should.match(/Multiple modules defined in "js\/define.js"/);
@@ -208,7 +208,7 @@ describe('amd plugin', function() {
       expectedCache['foo/bar'].defined[0].name = 'js/bar.js';
       expectedCache['foo/bar'].defined[0].resourceName = 'js/bar.js';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -219,7 +219,7 @@ describe('amd plugin', function() {
     });
     it('should parse complex files', function(done) {
       context.resource = {'src': 'js/foo/bar.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -230,7 +230,7 @@ describe('amd plugin', function() {
     });
     it('should not parse non-js files', function(done) {
       context.resource = 'js/foo/bar.coffee';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -267,7 +267,7 @@ describe('amd plugin', function() {
         dependencies: ['bar']
       };
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function() {
           next.should.have.been.calledOnce;
@@ -282,7 +282,7 @@ describe('amd plugin', function() {
   describe('resources', function() {
     it('should ignore non-amd js files', function(done) {
       context.resource = 'js/nonamd.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql(['js/nonamd.js']);
@@ -291,7 +291,7 @@ describe('amd plugin', function() {
     });
     it('should ignore improperly formated js files', function(done) {
       context.resource = 'js/invalid.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql(['js/invalid.js']);
@@ -301,7 +301,7 @@ describe('amd plugin', function() {
 
     it('should insert dependencies', function(done) {
       context.resource = {'src': 'js/foo/foo.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
@@ -312,7 +312,7 @@ describe('amd plugin', function() {
       this.stub(build, 'filterResource', function() { return false; });
 
       context.resource = {'src': 'js/foo/foo.js', 'platform': 'foo'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{src: 'js/foo/foo.js', 'platform': 'foo'}]);
@@ -323,7 +323,7 @@ describe('amd plugin', function() {
     });
     it('should insert recursive cached dependencies', function(done) {
       context.resource = {'src': 'js/bar.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           fs.readFile.reset();
@@ -332,7 +332,7 @@ describe('amd plugin', function() {
           };
 
           context.resource = {'src': 'js/foo/foo.js'};
-          amd.resourceList(
+          amd.moduleResources(
             context, next,
             function(err, resources) {
               resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
@@ -345,7 +345,7 @@ describe('amd plugin', function() {
       topLevel = true;
       context.platformCache.amdAppModules['view!baz'] = true;
       context.resource = {'src': 'js/foo/foo.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
@@ -355,7 +355,7 @@ describe('amd plugin', function() {
     it('should not insert dependencies included in application module', function(done) {
       context.platformCache.amdAppModules['js/views/baz.js'] = true;
       context.resource = {'src': 'js/foo/foo.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
@@ -367,7 +367,7 @@ describe('amd plugin', function() {
 
       appModule = true;
       context.resource = {'src': 'js/foo/foo.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
@@ -379,12 +379,12 @@ describe('amd plugin', function() {
       // Not strictly required that we do this as the combiner logic will remove dupes
       // but we need to track some of this for circular deps handling anyway
       context.resource = {'src': 'js/foo/foo.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
 
-          amd.resourceList(
+          amd.moduleResources(
             context, next,
             function(err, resources) {
               resources.should.eql([{amd: 'js/foo/foo.js'}]);
@@ -396,7 +396,7 @@ describe('amd plugin', function() {
     it('should honor overrides', function(done) {
       var lib = {name: 'lib', root: 'foo/', overrides: {'js/bar.js': 'js/nonamd.js'}};
       context.resource = {'src': 'js/foo/foo.js', library: lib};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([
@@ -416,7 +416,7 @@ describe('amd plugin', function() {
   describe('libraries', function() {
     it('should load from the current library', function(done) {
       context.resource = {'src': 'js/foo/foo.js', library: {name: 'lib', root: 'foo/'}};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/foo\/foo.js/));
@@ -437,7 +437,7 @@ describe('amd plugin', function() {
         }
       });
       context.resource = {'src': 'js/foo/foo.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           fs.readFile.should.have.been.calledWith(sinon.match(/js\/foo\/foo.js/));
@@ -454,7 +454,7 @@ describe('amd plugin', function() {
         callback(undefined, 'defineView(["lib:bar"], function() {})');
       });
       context.resource = {'src': 'js/bar.js'};
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'foo/js/bar.js'}, {amd: 'js/bar.js'}]);
@@ -472,7 +472,7 @@ describe('amd plugin', function() {
 
     // Note: The output already occured cases is covered by the rest of these tests
     it('should output local registration', function(done) {
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -485,7 +485,7 @@ describe('amd plugin', function() {
     });
     it('should output app registration', function(done) {
       appModule = true;
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -508,7 +508,7 @@ describe('amd plugin', function() {
     it('should include define boilerplate', function(done) {
       defineSource = 'define(function() {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -522,7 +522,7 @@ describe('amd plugin', function() {
     it('should handle non-define content', function(done) {
       defineSource = 'define(function() {});var foo;';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -538,7 +538,7 @@ describe('amd plugin', function() {
       context.platformCache.amdAppModules['js/baz.js'] = 1;
       defineSource = 'define(["baz"], function(baz) {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -554,7 +554,7 @@ describe('amd plugin', function() {
       context.fileCache.amdFileModules['js/baz.js'] = 2;
       defineSource = 'define(["baz"], function(baz) {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -571,7 +571,7 @@ describe('amd plugin', function() {
       context.fileCache.amdFileModules['js/noamd.js'] = false;
       defineSource = 'define(["noamd"], function(baz) {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -595,7 +595,7 @@ describe('amd plugin', function() {
     it('should output view boilerplate', function(done) {
       defineSource = 'defineView(function() {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -615,7 +615,7 @@ describe('amd plugin', function() {
       context.platformCache.amdAppModules['js/views/boz.js'] = 1;
       defineSource = 'define(["view!baz", "views/boz"], function(baz, boz) {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -641,7 +641,7 @@ describe('amd plugin', function() {
 
     it('should output template resource', function(done) {
       defineSource = 'define(["hbs!foo"], function(foo) {})';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -657,7 +657,7 @@ describe('amd plugin', function() {
       context.resource = {src: 'js/define.js', library: {name: 'lib', root: 'foo/'}};
 
       defineSource = 'define(["hbs!foo"], function(foo) {})';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -683,7 +683,7 @@ describe('amd plugin', function() {
       defineSource = 'defineHelper(["helper!foo"], function(foo) {})';
       context.fileCache.amdFileModules['js/helpers/foo.js'] = 1;
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -706,7 +706,7 @@ describe('amd plugin', function() {
       context.platformCache.amdAppModules['js/helpers/boz.js'] = 1;
       defineSource = 'define(["helper!baz", "helpers/boz"], function(baz, boz) {})';
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -724,7 +724,7 @@ describe('amd plugin', function() {
       defineSource = 'defineHelper(function() {})';
       appModule = true;
 
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           context.config.attributes.templates.knownHelpers.should.eql(['define']);
@@ -782,7 +782,7 @@ describe('amd plugin', function() {
 
     it('should allow for custom resources', function(done) {
       context.resource = 'js/foo/bar.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           amd.loaders.custom.resource.should.have.been.calledWith('baz');
@@ -800,7 +800,7 @@ describe('amd plugin', function() {
       appModule = false;
       context.fileCache.amdFileModules.resource_baz = true;
       context.resource = 'js/foo/bar.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -818,7 +818,7 @@ describe('amd plugin', function() {
       appModule = false;
       context.fileCache.amdFileModules.resource_baz = true;
       context.resource = 'js/foo/bar.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
@@ -835,7 +835,7 @@ describe('amd plugin', function() {
       appModule = true;
       context.fileCache.amdFileModules.resource_baz = true;
       context.resource = 'js/foo/bar.js';
-      amd.resourceList(
+      amd.moduleResources(
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
