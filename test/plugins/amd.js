@@ -781,7 +781,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'wmd[1] = lwmd[2] = ',
+            'lwmd[2] = ',
             '(function(baz) {}',
             ')(lookie_here_baz);\n'
           ]);
