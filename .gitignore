@@ -9,3 +9,4 @@ build_package.sh
 *.sublime-workspace
 example/public/**/*.js
 example/public/**/*.css
+cov.html
