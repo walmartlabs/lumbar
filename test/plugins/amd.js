@@ -26,6 +26,7 @@ describe('amd plugin', function() {
         amdAppModules: {}
       },
       fileCache: {
+        amdRegistrationOutput: true,
         amdFileModules: {}
       },
       config: {
@@ -326,7 +327,9 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           fs.readFile.reset();
-          context.fileCache = {};
+          context.fileCache = {
+            amdRegistrationOutput: true
+          };
 
           context.resource = {'src': 'js/foo/foo.js'};
           amd.resourceList(
@@ -455,6 +458,41 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           resources.should.eql([{amd: 'foo/js/bar.js'}, {amd: 'js/bar.js'}]);
+          done();
+        });
+    });
+  });
+
+  describe('registration', function() {
+    beforeEach(function() {
+      context.resource = 'js/define.js';
+      defineSource = 'define(function() {})';
+      context.fileCache.amdRegistrationOutput = false;
+    });
+
+    // Note: The output already occured cases is covered by the rest of these tests
+    it('should output local registration', function(done) {
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'var lwmd = [];',
+            'var wmd = this.__wmd;',
+            {amd: 'js/define.js'}
+          ]);
+          done();
+        });
+    });
+    it('should output app registration', function(done) {
+      appModule = true;
+      amd.resourceList(
+        context, next,
+        function(err, resources) {
+          mapResources(resources).should.eql([
+            'var lwmd = [];',
+            'var wmd = this.__wmd = lwmd;',
+            {amd: 'js/define.js'}
+          ]);
           done();
         });
     });
