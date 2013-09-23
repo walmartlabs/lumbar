@@ -304,7 +304,12 @@ describe('amd plugin', function() {
       amd.moduleResources(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'js/views/baz.js'},
+            {amd: 'js/bar.js'},
+            {amd: 'js/foo/foo.js'}
+          ]);
           done();
         });
     });
@@ -335,7 +340,12 @@ describe('amd plugin', function() {
           amd.moduleResources(
             context, next,
             function(err, resources) {
-              resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+              resources.should.eql([
+                {amdRegistration: true},
+                {amd: 'js/views/baz.js'},
+                {amd: 'js/bar.js'},
+                {amd: 'js/foo/foo.js'}
+              ]);
               fs.readFile.should.have.been.calledOnce;
               done();
             });
@@ -348,7 +358,12 @@ describe('amd plugin', function() {
       amd.moduleResources(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'js/views/baz.js'},
+            {amd: 'js/bar.js'},
+            {amd: 'js/foo/foo.js'}
+          ]);
           done();
         });
     });
@@ -358,7 +373,11 @@ describe('amd plugin', function() {
       amd.moduleResources(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'js/bar.js'},
+            {amd: 'js/foo/foo.js'}
+          ]);
           done();
         });
     });
@@ -370,7 +389,12 @@ describe('amd plugin', function() {
       amd.moduleResources(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'js/views/baz.js'},
+            {amd: 'js/bar.js'},
+            {amd: 'js/foo/foo.js'}
+          ]);
           _.keys(context.platformCache.amdAppModules).should.eql(['js/foo/foo.js', 'js/bar.js', 'js/views/baz.js']);
           done();
         });
@@ -382,12 +406,20 @@ describe('amd plugin', function() {
       amd.moduleResources(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'js/views/baz.js'}, {amd: 'js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'js/views/baz.js'},
+            {amd: 'js/bar.js'},
+            {amd: 'js/foo/foo.js'}
+          ]);
 
           amd.moduleResources(
             context, next,
             function(err, resources) {
-              resources.should.eql([{amd: 'js/foo/foo.js'}]);
+              resources.should.eql([
+                {amdRegistration: true},
+                {amd: 'js/foo/foo.js'}
+              ]);
               done();
             });
         });
@@ -400,6 +432,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           resources.should.eql([
+            {amdRegistration: true},
             {
               src: 'js/nonamd.js',
               originalSrc: "foo/js/bar.js",
@@ -423,7 +456,12 @@ describe('amd plugin', function() {
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/bar.js/));
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/views\/baz.js/));
 
-          resources.should.eql([{amd: 'foo/js/views/baz.js'}, {amd: 'foo/js/bar.js'}, {amd: 'foo/js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'foo/js/views/baz.js'},
+            {amd: 'foo/js/bar.js'},
+            {amd: 'foo/js/foo/foo.js'}
+          ]);
           done();
         });
     });
@@ -444,7 +482,12 @@ describe('amd plugin', function() {
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/bar.js/));
           fs.readFile.should.have.been.calledWith(sinon.match(/foo\/js\/views\/baz.js/));
 
-          resources.should.eql([{amd: 'foo/js/views/baz.js'}, {amd: 'foo/js/bar.js'}, {amd: 'js/foo/foo.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'foo/js/views/baz.js'},
+            {amd: 'foo/js/bar.js'},
+            {amd: 'js/foo/foo.js'}
+          ]);
           done();
         });
     });
@@ -457,7 +500,11 @@ describe('amd plugin', function() {
       amd.moduleResources(
         context, next,
         function(err, resources) {
-          resources.should.eql([{amd: 'foo/js/bar.js'}, {amd: 'js/bar.js'}]);
+          resources.should.eql([
+            {amdRegistration: true},
+            {amd: 'foo/js/bar.js'},
+            {amd: 'js/bar.js'}
+          ]);
           done();
         });
     });
@@ -476,8 +523,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'var lwmd = [];',
-            'var wmd = this.__wmd;',
+            {amdRegistration: true},
             {amd: 'js/define.js'}
           ]);
           done();
@@ -489,8 +535,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
-            'var lwmd = [];',
-            'var wmd = this.__wmd = lwmd;',
+            {amdRegistration: true},
             {amd: 'js/define.js'}
           ]);
           done();
@@ -512,6 +557,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[1] = ',
             '(function() {}',
             ')();\n'
@@ -526,6 +572,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[1] = ',
             '(function() {}',
             ')();\n',
@@ -542,6 +589,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[1] = ',
             '(function(baz) {}',
             ')(wmd[1]);\n'
@@ -560,6 +608,7 @@ describe('amd plugin', function() {
           mapResources(resources).should.eql([
             // Circular dependency here can be ignored as we are sending funky data in
             // and we are testing the dependency generation.
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz) {}',
             ')(lwmd[2]);\n'
@@ -575,6 +624,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz) {}',
             ')(undefined);\n'
@@ -599,6 +649,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[1] = ',
             'Thorax.Views["nested/define"] = (',
             'function() {}',
@@ -619,6 +670,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz, boz) {}',
             ')(lwmd[1], wmd[1]);\n'
@@ -645,6 +697,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             {src: 'templates/foo.handlebars'},
             'lwmd[1] = ',
             '(function(foo) {}',
@@ -661,6 +714,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             {src: 'foo/templates/foo.handlebars', library: {name: 'lib', root: 'foo/'}},
             'lwmd[1] = ',
             '(function(foo) {}',
@@ -687,6 +741,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(',
             'function(foo) {}',
@@ -710,6 +765,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz, boz) {}',
             ')(lwmd[1], wmd[1]);\n'
@@ -788,6 +844,7 @@ describe('amd plugin', function() {
           amd.loaders.custom.resource.should.have.been.calledWith('baz');
 
           resources.should.eql([
+            {amdRegistration: true},
             {src: 'resource_baz'},
             {amd: 'js/foo/bar.js'}
           ]);
@@ -804,6 +861,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz) {}',
             ')(lookie_there_baz);\n'
@@ -822,6 +880,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz) {}',
             ')(lookie_there_baz);\n'
@@ -839,6 +898,7 @@ describe('amd plugin', function() {
         context, next,
         function(err, resources) {
           mapResources(resources).should.eql([
+            {amdRegistration: true},
             'lwmd[2] = ',
             '(function(baz) {}',
             ')(lookie_here_baz);\n'
