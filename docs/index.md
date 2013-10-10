@@ -111,11 +111,11 @@ The resources in a package may also be optionally combined into a single file vi
 
 Next, lets discuss the `modules` section of the *lumbar.json* file. This section lets you define logical groupings of code, static files, stylesheets, and templates (mustache / handlebars).
 
-A modules content is primarily defined by the `scripts`, `styles` and `static` fields which define arrays of resources that will be included within the module. For the `scripts` and `styles` entries all resources will be combined into a single script and single style file at build time. `static` resources will be copied to the build target on build. Each of these fields are optional and omitting a given field will prevent final output of that given file.
+A module's content is primarily defined by the `scripts`, `styles` and `static` fields which define arrays of resources that will be included within the module. For the `scripts` and `styles` entries all resources will be combined into a single script and single style file at build time. `static` resources will be copied to the build target on build. Each of these fields are optional and omitting a given field will prevent final output of that given file.
 
 #### Resources ####
 
-While left somewhat vague as plugins can provide their own definition of what a resource is, at the core level it is content that will be output in the resulting module. In general a resource is a file on the file system that may be transformed by plugins, but in some cases plugins define their own resources. The [module-map](plugins/module-map.md) plugin for example defines it's own resource type that outputs the collective routes and associated modules for the entire package.
+While left somewhat vague as plugins can provide their own definition of what a resource is, at the core level it is content that will be output in the resulting module. In general a resource is a file on the file system that may be transformed by plugins, but in some cases plugins define their own resources. The [module-map](plugins/module-map.md) plugin for example defines its own resource type that outputs the collective routes and associated modules for the entire package.
 
 File resources can be a simple string with relative path and or an object that offers more granularity for the file. If it's a simple filename then an entry like, **init.js** would be appropriate. If additional requirements are needed such as limiting to specific platforms or scope then an object with the `src` field
 set to the relative path should be used, along with any plugin specific filter values. The
@@ -124,7 +124,7 @@ set to the relative path should be used, along with any plugin specific filter v
     {"src": "lumber-loader-localstorage.js", "env" :"production"},
     {"src": "lumber-loader-storage.js", "env": "dev"}
 
-The core implementation provides platform-specific filtering by specifying the `platform` or `platforms` fields on the resource object; the singular form being a string reference to a platform and the plural being an array of platform names. list the platforms we wanted init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this:
+The core implementation provides platform-specific filtering by specifying the `platform` or `platforms` fields on the resource object; the singular form being a string reference to a platform and the plural being an array of platform names we want init.js to be included with. If we were targeting the ipad and iphone platforms our entry would look like this:
 
     { "src": "init.js", "platforms": ["ipad", "iphone"] }
 
@@ -155,7 +155,7 @@ The template can be a handlebars template string or a path to a file that ends i
 
 #### Routes ####
 
-Modules may optionally define backbone routes that it manages via the `routes` field. When paired with [lumbar-loader](https://github.com/walmartlabs/lumbar-loader) the given module will be loaded on demand when the user navigates to a route serviced by that module.
+Modules may optionally define Backbone routes that it manages via the `routes` field. When paired with [lumbar-loader](https://github.com/walmartlabs/lumbar-loader) the given module will be loaded on demand when the user navigates to a route serviced by that module.
 
 Any routes defined for the module are available to javascript code via the `module.routes` field.
 
@@ -230,7 +230,7 @@ configuration. For example the lumbar-loader files can be referenced via a libra
 
 Libraries have two methods of operation, global config and module mixins. The former allows libraries to define common configuration such as common `stylus` include files and the later allows for the addition of specific behaviors to specific modules.
 
-Global config changes are simply defined in the root of the library `lumbar.json` file. When the library is loaded any settings defined here will be imported into the project. Note that each plugin implements it's own inheritance scheme here. Some plugins might treat specific definitions as additive and others might treat them as overrides.
+Global config changes are simply defined in the root of the library `lumbar.json` file. When the library is loaded any settings defined here will be imported into the project. Note that each plugin implements its own inheritance scheme here. Some plugins might treat specific definitions as additive and others might treat them as overrides.
 
 They are discussed in detail [here](libraries.md).
 
@@ -242,7 +242,7 @@ Lumbar offers many options for customization and extensibly through its Plugin A
 
 The bulk of Lumbar's core functionality is implemented through core plugins, such as the [stylus](plugins/stylus.md), [template](plugins/template.md), and [scope](plugins/scope.md) plugins. Documentation on all of the core plugins is available [here](plugins/).
 
-By default each of these plugins are utilized for all builds. If this is not desired then the `ignoreCorePlugins` field may be specified on the build options. When doing this select core plugins may still be used by referencing them name. See [Using 3rd Party Plugins](#plugins-using) below for details.
+By default each of these plugins are utilized for all builds. If this is not desired then the `ignoreCorePlugins` field may be specified on the build options. When doing this select core plugins may still be used by referencing them by name. See [Using 3rd Party Plugins](#plugins-using) below for details.
 
 ### Using 3rd Party Plugins ###
 
