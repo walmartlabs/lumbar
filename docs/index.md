@@ -299,7 +299,7 @@ Read more about our architecture [here](plugins.md).
 
 1. Is there a bootstrap for Lumbar?
 
-  The [thorax-example](https://github.com/walmartlabs/throax-example) project contains all of the content necessary to setup a Lumbar (and Thorax) project. This may be freely copied and used as a basis for new projects.
+  The [thorax-seed](https://github.com/walmartlabs/thorax-seed) project contains all of the content necessary to setup a Lumbar (and Thorax) project. This may be freely copied and used as a basis for new projects.
 
 1. What do I do about **EMFILE** errors?
 
