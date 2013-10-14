@@ -4,6 +4,10 @@
 
 [Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.3...master)
 
+## v2.4.0 - October 14th, 2013
+
+- Update [nib](https://github.com/visionmedia/nib) dependency
+
 ## v2.3.3 - September 11th, 2013
 
 - [#107](https://github.com/walmartlabs/lumbar/issues/107) - Overrides do not nest properly ([@kpdecker](https://api.github.com/users/kpdecker)
