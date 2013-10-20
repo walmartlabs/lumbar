@@ -2,7 +2,15 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.3...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.4...master)
+
+## v2.3.4 - October 20th, 2013
+
+- Fixup server script errors - f59aa40
+- fix bad link for thorax seed/example repo - 6e4b301
+- fix several minor spelling typos - 990002f
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.3...v2.3.4)
 
 ## v2.3.3 - September 11th, 2013
 
