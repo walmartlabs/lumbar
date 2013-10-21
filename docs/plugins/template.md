@@ -9,7 +9,7 @@ load the templates required by a given module.
 ## Usage ##
 
 The template plugin looks for a `template` configuration object defined on the root lumbar config.
-This object should be a hash of javascript pathnames whose values are arrays of template files. on build,
+This object should be a hash of javascript pathnames whose values are arrays of template files. On build,
 each module that includes a file listed in this hash will have the associated templates defined at least
 once in the output.
 
