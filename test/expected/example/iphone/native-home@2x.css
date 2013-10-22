@@ -15,9 +15,7 @@ body {
 header {
   color: #000;
   background-color: #0251b7;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.047, #1a75cf), color-stop(1, #0251b7));
-  background-image: -webkit-linear-gradient(top, #1a75cf 4.7%, #0251b7 100%);
-  background-image: linear-gradient(top, #1a75cf 4.7%, #0251b7 100%);
+  background-image: -webkit-linear-gradient(top, #1a75cf 4.7%, #0251b7);
 }
 .header {
   background: #000;
