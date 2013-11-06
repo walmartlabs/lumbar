@@ -2,7 +2,16 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.4...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.4.0...master)
+
+## v2.4.0 - November 6th, 2013
+
+- Always load server-scripts plugin - a030c0e
+
+Compatibility notes:
+- The server-scripts plugin is now loaded by default. Any plugins that might have used the `server` key on resources will want to migrate to alternatives or instruct their users to disable this plugin.
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.3.4...v2.4.0)
 
 ## v2.3.4 - October 20th, 2013
 
