@@ -36,8 +36,8 @@ describe('server scripts', function() {
           function(err, ret) {
             should.not.exist(err);
             ret.should.eql([
-              {value: 1},
-              {value: 2}
+              {value: 1, server: false},
+              {value: 2, server: false}
             ]);
           });
     });
@@ -126,6 +126,22 @@ describe('server scripts', function() {
           {src: 'bat', server: true}
         ]);
     });
+    it('should ignore server array', function() {
+      test({
+          server: [
+            'foo',
+            {'src': 'bar', server: false},
+            {'src': 'bat', server: true}
+          ],
+          scripts: [
+            'winning'
+          ]
+        },
+        false,
+        [
+          'winning'
+        ]);
+    });
     it('should handle no scripts', function() {
       test({}, true, []);
     });
@@ -144,7 +160,7 @@ describe('server scripts', function() {
 
     function test(module, server, expected) {
       serverScripts.moduleResources(
-          {module: module, fileConfig: {server: server}},
+          {module: module, fileConfig: {server: server}, },
           function(callback) {
             callback(undefined, module.scripts);
           },
