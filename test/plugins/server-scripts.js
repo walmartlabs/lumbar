@@ -13,7 +13,7 @@ describe('server scripts', function() {
   describe('#outputConfigs', function() {
     it('should output both config types', function() {
       serverScripts.outputConfigs(
-          {},
+          {config: {attributes: {server: true}}},
           function(callback) {
             callback(undefined, [{value: 1}, {value: 2}]);
           },
@@ -24,6 +24,20 @@ describe('server scripts', function() {
               {value: 1, server: false},
               {value: 2, server: true},
               {value: 2, server: false}
+            ]);
+          });
+    });
+    it('should output only client files', function() {
+      serverScripts.outputConfigs(
+          {config: {attributes: {server: false}}},
+          function(callback) {
+            callback(undefined, [{value: 1}, {value: 2}]);
+          },
+          function(err, ret) {
+            should.not.exist(err);
+            ret.should.eql([
+              {value: 1},
+              {value: 2}
             ]);
           });
     });
