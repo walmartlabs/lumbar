@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.4.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.4.1...master)
+
+## v2.4.1 - November 6th, 2013
+
+- Fix server script filtering when disabled - e006531
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.4.0...v2.4.1)
 
 ## v2.4.0 - November 6th, 2013
 
