@@ -113,14 +113,14 @@ describe('state machine', function() {
       });
     });
     it('should handle missing directory error', function() {
-      stateMachine.loadConfig(config, event, {}, function(err, context) {
+      stateMachine.loadAndInitDir(config, event, {}, function(err, context) {
         err.should.match(/Output must be defined/);
       });
     });
     it('should handle directory errors', function() {
       isDir = false;
 
-      stateMachine.loadConfig(config, event, {outdir: 'foo'}, function(err, context) {
+      stateMachine.loadAndInitDir(config, event, {outdir: 'foo'}, function(err, context) {
         err.should.match(/Output must be a directory/);
       });
     });
