@@ -15,8 +15,8 @@
     lumbar: {
       // performs an initial build so when tests
       // and initial open are run, code is built
-      build: {
-        lumbarFile: lumbarFile,
+      init  : {
+        build: lumbarFile,
         outputDir: publicDir
       },
       // a long running process that will watch
@@ -25,7 +25,7 @@
       // background: true
       watch: {
         background: false,
-        lumbarFile: lumbarFile,
+        watch: lumbarFile,
         outputDir: publicDir
       }
     }
