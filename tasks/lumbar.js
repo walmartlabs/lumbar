@@ -4,7 +4,7 @@
   var port = 8000,
     publicDir = './public',
     lumbarFile = './lumbar.json';
-  
+
   grunt.loadNpmTasks('lumbar');
 
   grunt.initConfig({
@@ -15,7 +15,7 @@
     lumbar: {
       // performs an initial build so when tests
       // and initial open are run, code is built
-      init  : {
+      init: {
         build: lumbarFile,
         outputDir: publicDir
       },
@@ -80,17 +80,17 @@ module.exports = function(grunt) {
     if (config.minimize) {
       command.push('--minimize');
     }
-	
+
 	if (config.use) {
       command.push('--use');
       command.push(config.use);
     }
-   
+
     if (config.withJson) {
       command.push('--with');
       command.push(config.withJson);
     }
-		
+
     command.push(lumbarFile);
     command.push(outputDir);
 
