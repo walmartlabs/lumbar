@@ -21,14 +21,15 @@
     "bower": "~0.9.2",
     "cheerio": "~0.12",
     "child-pool": "~1.0.0",
+    "coffee-script": "~1.6",
     "esprima": "~1.0",
+    "estraverse": "~1.1.2",
     "growl": "~1.7",
-    "handlebars": "1.0.12",
+    "handlebars": "~1.1.0",
     "nib": "~0.9",
     "stylus": "0.36.1",
     "stylus-images": "1.0.3",
-    "coffee-script": "~1.6",
-    "estraverse": "~1.1.2",
+    "tmp": "0.0.21",
     "underscore": "~1.5.1"
   },
   "devDependencies": {
