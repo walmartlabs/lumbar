@@ -47,54 +47,91 @@ module.exports = function(grunt) {
         mode;
 
     if (config.build) {
-      mode = 'build'
+      mode = 'build';
     }
     if (config.watch) {
       mode = 'watch';
     }
 
     if (mode !== 'watch' && mode !== 'build') {
-      throw new Error('Arguments to lumbar task must be watch: {}, or build: {}');
+      grunt.fatal('Arguments to lumbar task must be watch: {}, or build: {}');
     }
 
     if (!('background' in config)) {
       config.background = true;
     }
+
     // never allow build to be in the background
     if (mode === 'build') {
+      if (config.background) {
+        grunt.warn('You can\'t do a lumbar build in the background, forcing non-background execution...');
+      }
       config.background = false;
     }
 
     // build up command string
     var command = [
       'node',
-      path.join(process.cwd(), 'node_modules/lumbar/bin/lumbar'),
+      path.join(__dirname, '../bin/lumbar'),
       mode
     ];
+
     if (config.package) {
       command.push('--package ' + config.package);
     }
+
     if (config.config) {
-      command.push('--config ' + config.config);
+      command.push('--config');
+      command.push(config.config);
     }
+
     if (config.minimize) {
       command.push('--minimize');
     }
 
-	if (config.use) {
+    if (config.use) {
       command.push('--use');
       command.push(config.use);
     }
 
     if (config.withJson) {
       command.push('--with');
-      command.push(config.withJson);
+      command.push(JSON.stringify(config.withJson));
+    }
+
+    if (config.plugins) {
+      config.plugins.forEach(function(plugin) {
+        if (plugin.use) {
+          command.push('--use');
+          command.push(plugin.use);
+        }
+
+        if (plugin.withJson) {
+          command.push('--with');
+          command.push(JSON.stringify(plugin.withJson));
+        }
+      });
+    }
+
+    if (config.libraries) {
+      config.libraries.forEach(function(library) {
+        command.push('--library=' + library);
+      });
+    }
+
+    if (config.verbose) {
+      command.push('--verbose');
+    }
+
+    if (config.sourceMap) {
+      command.push('--sourceMap');
     }
 
     command.push(lumbarFile);
     command.push(outputDir);
 
     var lumbarProcess = require('child_process').spawn(command.shift(), command);
+
     lumbarProcess.stdout.on('data', function(data) {
       process.stdout.write(data.toString());
     });
