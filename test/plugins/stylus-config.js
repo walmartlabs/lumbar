@@ -82,7 +82,7 @@ describe('stylus-config plugin', function() {
             throw err;
           }
 
-          data.content.should.eql('.test {\n  display: black;\n}\n');
+          data.content.should.eql('.test {\n  display: #000;\n}\n');
 
           done();
         });
