@@ -9,6 +9,8 @@
 - [#114](https://github.com/walmartlabs/lumbar/pull/114) - Extend and improve grunt task ([@patrickkettner](https://api.github.com/users/patrickkettner))
 - [#113](https://github.com/walmartlabs/lumbar/pull/113) - nib -> ~1.0.1, stylus -> 0.41.0 ([@Candid](https://api.github.com/users/Candid))
 - [#111](https://github.com/walmartlabs/lumbar/pull/111) - Update grunt example documentation ([@patrickkettner](https://api.github.com/users/patrickkettner))
+- Update Handlebars to 1.1 versions
+- Update other npm dependencies
 
 [Commits](https://github.com/walmartlabs/lumbar/compare/v2.4.1...v2.5.0)
 

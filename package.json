@@ -18,17 +18,16 @@
   },
   "dependencies": {
     "async": "~0.2",
-    "bower": "~0.9.2",
+    "bower": "1.2.x",
     "cheerio": "~0.12",
     "child-pool": "~1.1.0",
     "esprima": "~1.0",
     "growl": "~1.7",
-    "handlebars": "1.0.12",
+    "handlebars": "1.1.x",
     "nib": "~1.0.1",
     "stylus": "0.41.0",
     "stylus-images": "1.0.3",
     "coffee-script": "~1.6",
-    "estraverse": "~1.1.2",
     "underscore": "~1.5.1"
   },
   "devDependencies": {
