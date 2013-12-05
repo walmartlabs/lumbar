@@ -20,7 +20,7 @@
     "async": "~0.2",
     "bower": "~0.9.2",
     "cheerio": "~0.12",
-    "child-pool": "~1.0.0",
+    "child-pool": "~1.1.0",
     "esprima": "~1.0",
     "growl": "~1.7",
     "handlebars": "1.0.12",
