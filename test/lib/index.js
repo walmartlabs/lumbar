@@ -84,6 +84,8 @@ exports.mockFileList = function(config) {
 
 exports.runTest = function(configFile, expectedDir, options, expectGlob) {
   return function(done) {
+    this.timeout(5000);
+
     var outdir = exports.testDir('lumbar', configFile);
     this.title += ' ' + outdir;
 
