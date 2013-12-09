@@ -126,34 +126,34 @@ describe('state machine', function() {
     });
   });
 
-  describe('#buildPackages', function() {
+  describe('#loadPackages', function() {
     beforeEach(function() {
-      this.stub(stateMachine, 'buildPlatform');
+      this.stub(stateMachine, 'loadPlatform');
     });
     function built() {
-      return stateMachine.buildPlatform.args.map(function(arg) {
+      return stateMachine.loadPlatform.args.map(function(arg) {
         return arg[0].package + ':' + arg[0].platform + ':' + arg[0].module;
       });
     }
 
     it('should iterate over all platforms and packages', function() {
-      stateMachine.buildPackages(context, undefined, function() {});
+      stateMachine.loadPackages(context, undefined, function() {});
 
       built().should.eql(['web:web:undefined', 'native-home:android:undefined', 'native-home:iphone:undefined']);
     });
     it('should iterate over platforms and packages', function() {
-      stateMachine.buildPackages(context, 'web', function() {});
+      stateMachine.loadPackages(context, 'web', function() {});
 
       built().should.eql(['web:web:undefined']);
     });
 
     it('should accept string module name', function() {
-      stateMachine.buildPackages(context, 'native-home', 'home', function() {});
+      stateMachine.loadPackages(context, 'native-home', 'home', function() {});
 
       built().should.eql(['native-home:android:home', 'native-home:iphone:home']);
     });
     it('should accept array of module names', function() {
-      stateMachine.buildPackages(context, 'native-home', ['base', 'home'], function() {});
+      stateMachine.loadPackages(context, 'native-home', ['base', 'home'], function() {});
 
       built().should.eql([
         'native-home:android:base', 'native-home:iphone:base',
@@ -161,42 +161,78 @@ describe('state machine', function() {
       ]);
     });
     it('should treat empty array as all modules', function() {
-      stateMachine.buildPackages(context, 'native-home', [], function() {});
+      stateMachine.loadPackages(context, 'native-home', [], function() {});
 
       built().should.eql(['native-home:android:undefined', 'native-home:iphone:undefined']);
     });
 
     it('should accept package name via hash', function() {
-      stateMachine.buildPackages(context, {package: 'web'}, function() {});
+      stateMachine.loadPackages(context, {package: 'web'}, function() {});
 
       built().should.eql(['web:web:undefined']);
     });
   });
-  describe('#buildPlatform', function() {
+  describe('#loadPlatform', function() {
     beforeEach(function() {
-      this.stub(stateMachine, 'buildMode');
+      this.stub(stateMachine, 'loadMode');
     });
     function built() {
-      return stateMachine.buildMode.args.map(function(arg) {
+      return stateMachine.loadMode.args.map(function(arg) {
         return arg[0];
       });
     }
 
     it('should iterate over all modes', function() {
-      stateMachine.buildPlatform(context, undefined, function() {});
+      stateMachine.loadPlatform(context, undefined, function() {});
 
       built().should.eql(['foo', 'bar']);
     });
     it('should exec a specific mode', function() {
       context.mode = 'scripts';
-      stateMachine.buildPlatform(context, function() {});
+      stateMachine.loadPlatform(context, function() {});
 
       built().should.eql(['scripts']);
     });
   });
 
-  describe('#buildMode', function() {
+  describe('#loadMode', function() {
+    var spy;
     beforeEach(function() {
+      spy = this.spy();
+
+      this.stub(stateMachine, 'buildModule');
+      context.package = 'native-home';
+    });
+    function built() {
+      return spy.getCall(0).args[1].map(function(context) {
+        return context.fileConfig;
+      });
+    }
+
+    it('should build modules', function() {
+      stateMachine.loadMode('foo', context, spy);
+      built().should.eql(['fu', 'gazi']);
+    });
+
+    it('should use passed fileConfig', function() {
+      context.fileConfig = 'bar';
+      stateMachine.loadMode('foo', context, spy);
+      built().should.eql(['bar']);
+    });
+
+    it('should handle outputConfigs error', function() {
+      plugin.outputConfigs = function(context, callback) { callback(new Error('FAILED')); };
+      stateMachine.loadMode('foo', context, function(err) {
+        err.should.match(/FAILED/);
+      });
+    });
+  });
+
+  describe('#buildContexts', function() {
+    var spy;
+    beforeEach(function() {
+      spy = this.spy();
+
       this.stub(stateMachine, 'buildModule');
       context.package = 'native-home';
     });
@@ -207,33 +243,34 @@ describe('state machine', function() {
     }
 
     it('should build modules', function() {
-      stateMachine.buildMode('foo', context, function() {});
+      var fu = context.clone(),
+          gazi = context.clone();
+
+      fu.fileConfig = 'fu';
+      gazi.fileConfig = 'gazi';
+      stateMachine.buildContexts([fu, gazi], function() {});
       built().should.eql(['fu:home', 'fu:base', 'gazi:home', 'gazi:base']);
     });
 
     it('should use passed fileConfig', function() {
-      context.fileConfig = 'bar';
-      stateMachine.buildMode('foo', context, function() {});
+      var bar = context.clone();
+      bar.fileConfig = 'bar';
+      stateMachine.buildContexts([bar], function() {});
       built().should.eql(['bar:home', 'bar:base']);
     });
     it('should build passed modules', function() {
-      context.fileConfig = 'bar';
-      context.module = 'base';
-      stateMachine.buildMode('foo', context, function() {});
+      var bar = context.clone();
+      bar.fileConfig = 'bar';
+      bar.module = 'base';
+      stateMachine.buildContexts([bar], function() {});
       built().should.eql(['bar:base']);
     });
 
-    it('should handle outputConfigs error', function() {
-      plugin.outputConfigs = function(context, callback) { callback(new Error('FAILED')); };
-      stateMachine.buildMode('foo', context, function(err) {
-        err.should.match(/FAILED/);
-      });
-    });
     it('should handle buildModule error', function() {
       stateMachine.buildModule.restore();
       this.stub(stateMachine, 'buildModule', function(context, callback) { callback(new Error('FAILED')); });
 
-      stateMachine.buildMode('foo', context, function(err) {
+      stateMachine.buildContexts([context.clone()], function(err) {
         err.should.match(/FAILED/);
       });
     });
@@ -242,9 +279,10 @@ describe('state machine', function() {
       stateMachine.buildModule.restore();
       this.stub(stateMachine, 'buildModule', function(context, callback) { callback(); });
 
-      context.fileConfig = 'bar';
-      context.module = 'base';
-      stateMachine.buildMode('foo', context, function() {});
+      var bar = context.clone();
+      bar.fileConfig = 'bar';
+      bar.module = 'base';
+      stateMachine.buildContexts([bar], function() {});
       plugin.modeComplete.should.have.been.calledOnce;
     });
   });
