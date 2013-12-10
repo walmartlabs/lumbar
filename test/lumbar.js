@@ -1,4 +1,7 @@
-var lib = require('./lib');
+var _ = require('underscore'),
+    lib = require('./lib'),
+    lumbar = require('../lib/lumbar'),
+    stateMachine = require('../lib/state-machine');
 
 describe('file output', function() {
   it('should output a single dir', lib.runTest('test/artifacts/single-directory.json', 'test/expected/js-dir'));
@@ -16,4 +19,144 @@ describe('integration', function() {
   it('should output inline-styles', lib.runTest('test/artifacts/inline-styles.json', 'test/expected/inline-styles'));
   it('should output json-plugins', lib.runTest('test/artifacts/json-plugins.json', 'test/expected/json-plugin'));
   // TODO : Test file not found and other cases
+});
+
+describe('#moduleMap', function() {
+  var arise;
+  beforeEach(function() {
+    arise = lumbar.init({
+      platforms: ['web', 'webview'],
+      packages: {
+        map: true,
+        store: {
+          platforms: ['web'],
+          modules: ['foo']
+        }
+      },
+      modules: {
+        'foo': {
+          routes: {
+            'bat/:baz': 'bat',
+            'foo': 'bar'
+          }
+        },
+        'bar': {
+          routes: {
+            'bar/bat/:baz': 'bat',
+            'bar/foo': 'bar'
+          }
+        }
+      }
+    }, {});
+  });
+
+  it('should collect map', function(done) {
+    arise.moduleMap(function(err, map) {
+      map.should.eql({
+        "map": {
+          "web": {
+            "modules": {
+              "foo": {
+                "js": "foo.js",
+                "css": undefined
+              },
+              "bar": {
+                "js": "bar.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo",
+              "bar/bat/:baz": "bar",
+              "bar/foo": "bar"
+            }
+          },
+          "webview": {
+            "modules": {
+              "foo": {
+                "js": "foo.js",
+                "css": undefined
+              },
+              "bar": {
+                "js": "bar.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo",
+              "bar/bat/:baz": "bar",
+              "bar/foo": "bar"
+            }
+          }
+        },
+        "store": {
+          "web": {
+            "modules": {
+              "foo": {
+                "js": "foo.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo"
+            }
+          }
+        }
+      });
+      done();
+    });
+  });
+
+  it('should collect map for specific packages', function(done) {
+    arise.moduleMap('store', function(err, map) {
+      map.should.eql({
+        "store": {
+          "web": {
+            "modules": {
+              "foo": {
+                "js": "foo.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo"
+            }
+          }
+        }
+      });
+      done();
+    });
+  });
+
+  it('should collect map for missing packages', function(done) {
+    arise.moduleMap('not found!', function(err, map) {
+      map.should.eql({});
+      done();
+    });
+  });
+
+  it('should handle config errors', function(done) {
+    var error = new Error('Error!');
+    this.stub(stateMachine, 'loadConfig', function(file, event, options, callback) {
+      callback(error);
+    });
+    arise.moduleMap('not found!', function(err, map) {
+      err.should.equal(error);
+      done();
+    });
+  });
+  it('should handle package errors', function(done) {
+    var error = new Error('Error!');
+    this.stub(stateMachine, 'loadPackages', function(context, packageName, callback) {
+      callback(error);
+    });
+    arise.moduleMap('not found!', function(err, map) {
+      err.should.equal(error);
+      done();
+    });
+  });
 });
