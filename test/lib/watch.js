@@ -123,7 +123,7 @@ function checkOutput(operations, expectedFiles, arise, options, cleanup) {
       if (statusFile === 'error') {
         statusFile = status;
       }
-      should.fail(undefined, statusFile,  'watchFile:' + statusFile + ': missing from expected list');
+      throw new Error('watchFile:' + statusFile + ': missing from expected list');
     } else {
       seenFiles.push(statusFile);
     }
