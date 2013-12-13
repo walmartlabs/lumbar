@@ -2,7 +2,16 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.1...master)
+
+## v2.5.1 - December 13th, 2013
+
+- [#115](https://github.com/walmartlabs/lumbar/pull/115) - 2 phase build ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#110](https://github.com/walmartlabs/lumbar/pull/110) - Fix lumbar:watch command for win32 environment. ([@redrathnure](https://api.github.com/users/redrathnure))
+
+- Handle missing keys on clone - 2fa471c
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.0...v2.5.1)
 
 ## v2.5.0 - December 5th, 2013
 
