@@ -25,7 +25,7 @@
     "growl": "~1.7",
     "handlebars": "1.1.x",
     "nib": "~1.0.1",
-    "stylus": "0.41.0",
+    "stylus": "0.41.2",
     "stylus-images": "1.0.3",
     "coffee-script": "~1.6",
     "underscore": "~1.5.1"
