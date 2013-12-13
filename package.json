@@ -1,6 +1,6 @@
 {
   "name": "lumbar",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Supporting your backbone since 2011, Lumbar is a module build system that allows for generation of platform specific javascript modules.",
   "keywords": [
     "build",
