@@ -57,6 +57,7 @@ describe('stylus-config plugin', function() {
   };
 
   describe('config output', function() {
+    this.timeout(5000);
 
     it('should include the config in scripts', function(done) {
 
