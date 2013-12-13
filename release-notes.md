@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.1...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.2...master)
+
+## v2.5.2 - December 13th, 2013
+
+- [#116](https://github.com/walmartlabs/lumbar/pull/116) - Update stylus to 0.41.2 ([@Candid](https://api.github.com/users/Candid))
+- Only pass config source path to stylus-config - 6c5994c
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.1...v2.5.2)
 
 ## v2.5.1 - December 13th, 2013
 
