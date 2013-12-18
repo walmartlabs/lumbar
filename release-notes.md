@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.2...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.0...master)
+
+## v2.6.0 - December 17th, 2013
+- [#117](https://github.com/walmartlabs/lumbar/pull/117) - Expose module map to external sources ([@kpdecker](https://api.github.com/users/kpdecker))
+- Relax version dependencies - 6725d91
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.5.2...v2.6.0)
 
 ## v2.5.2 - December 13th, 2013
 
