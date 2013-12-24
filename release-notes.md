@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.1...master)
+
+## v2.6.1 - December 24th, 2013
+- Use lumbar exit code in grunt task finalizer - aefe633
+- Inherit IO for lumbar exec - 19588a9
+- Fix lumbar grunt task parameter handling - ac3c35b
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.0...v2.6.1)
 
 ## v2.6.0 - December 17th, 2013
 - [#117](https://github.com/walmartlabs/lumbar/pull/117) - Expose module map to external sources ([@kpdecker](https://api.github.com/users/kpdecker))
