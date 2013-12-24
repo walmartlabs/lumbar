@@ -77,7 +77,8 @@ module.exports = function(grunt) {
     ];
 
     if (config.package) {
-      command.push('--package ' + config.package);
+      command.push('--package');
+      command.push(config.package);
     }
 
     if (config.config) {
@@ -124,7 +125,7 @@ module.exports = function(grunt) {
     }
 
     if (config.sourceMap) {
-      command.push('--sourceMap');
+      command.push('--sourceMap' + (config.sourceMap !== true ? '=' + config.sourceMap : ''));
     }
 
     command.push(lumbarFile);
