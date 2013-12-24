@@ -136,7 +136,7 @@ module.exports = function(grunt) {
       done(true);
     } else {
       lumbarProcess.on('exit', function() {
-        done(true);
+        done(lumbarProcess.exitCode);
       });
     }
   });
