@@ -48,3 +48,7 @@ See [thorax-seed](https://github.com/walmartlabs/thorax-seed) for an example pro
 ## History
 
 See [release-notes](release-notes.md) for release history.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/walmartlabs/lumbar/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
