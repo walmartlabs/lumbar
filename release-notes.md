@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.1...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.2...master)
+
+## v2.6.2 - December 31st, 2013
+- Fix externals handling under Cheerio 0.13.0 - c2c727a
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.1...v2.6.2)
 
 ## v2.6.1 - December 24th, 2013
 - Use lumbar exit code in grunt task finalizer - aefe633
