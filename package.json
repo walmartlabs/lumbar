@@ -24,7 +24,7 @@
     "esprima": "1.x",
     "growl": "1.x",
     "handlebars": "1.x",
-    "nib": "~1.0.1",
+    "nib": "1.0.2",
     "stylus": "0.41.2",
     "stylus-images": "1.0.3",
     "coffee-script": "1.x",
