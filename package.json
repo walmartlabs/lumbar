@@ -23,7 +23,7 @@
     "child-pool": "1.x",
     "esprima": "1.x",
     "growl": "1.x",
-    "handlebars": "1.x",
+    "handlebars": "2.x",
     "nib": "1.0.2",
     "stylus": "0.41.2",
     "stylus-images": "1.0.3",
@@ -31,15 +31,15 @@
     "underscore": "1.x"
   },
   "devDependencies": {
-    "chai": "~1.7.2",
+    "chai": "1.x.x",
     "glob": "~3.2.6",
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.6.2",
-    "grunt-mocha-cov": "0.0.7",
-    "grunt-github-pages": "0.0.3",
-    "mocha": "~1.12.0",
+    "grunt-contrib-jshint": "0.x.x",
+    "grunt-mocha-cov": "0.x.x",
+    "grunt-github-pages": "0.x.x",
+    "mocha": "1.x.x",
     "sinon": "~1.7.3",
-    "sinon-chai": "~2.4.0",
+    "sinon-chai": "2.x.x",
     "wrench": "~1.5.1"
   },
   "bin": {
