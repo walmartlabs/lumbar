@@ -2,7 +2,16 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.2...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.0.0...master)
+
+## v3.0.0 - February 10th, 2014
+- [#119](https://github.com/walmartlabs/lumbar/pull/119) - Fix nib version to 1.0.2 ([@Candid](https://api.github.com/users/Candid))
+- Update npm dependencies - f2b535a
+
+Compatibility notes:
+- Handlebars has been updated to use the 2.x codeline
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v2.6.2...v3.0.0)
 
 ## v2.6.2 - December 31st, 2013
 - Fix externals handling under Cheerio 0.13.0 - c2c727a
