@@ -2,7 +2,14 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.0.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.0...master)
+
+## v3.1.0 - February 10th, 2014
+- Allow specific route callbacks in module map - 41e9e60
+- Add serverRender flag to moduleMap output - 5e4ba01
+- Allow mixin of handlebars server options - ba2da0c
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.0.0...v3.1.0)
 
 ## v3.0.0 - February 10th, 2014
 - [#119](https://github.com/walmartlabs/lumbar/pull/119) - Fix nib version to 1.0.2 ([@Candid](https://api.github.com/users/Candid))
