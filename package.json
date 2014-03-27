@@ -23,7 +23,7 @@
     "child-pool": "1.x",
     "esprima": "1.x",
     "growl": "1.x",
-    "handlebars": "1.x",
+    "handlebars": "~1.3.0",
     "nib": "1.0.2",
     "stylus": "0.41.2",
     "stylus-images": "1.0.3",
