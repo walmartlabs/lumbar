@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.1...master)
+
+## v3.1.1 - April 1st, 2014
+- [#121](https://github.com/walmartlabs/lumbar/pull/121) path separator on windows in handlebar templates with libraries [(@DatenMetzgerX)](https://github.com/DatenMetzgerX)
+- Only insert 1 loaderPrefix script - 1e971ec
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.0...v3.1.1)
 
 ## v3.1.0 - February 10th, 2014
 - Allow specific route callbacks in module map - 41e9e60
