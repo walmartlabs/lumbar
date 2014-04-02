@@ -59,6 +59,21 @@ describe('update-externals plugin', function() {
         done);
     });
 
+    it('should insert before all module references', function(done) {
+      test(
+        {fileName: '1.hml'},
+
+        '<link href="foo.js"><link href="module:module">'
+        + '<script type="text/javascript" src="foo.js"></script><script src="module:module"></script><script src="module:module"></script>',
+
+        '<link href="foo.js"><link rel="stylesheet" type="text/css" href="bar/module.css">'
+          + '<script type="text/javascript" src="foo.js"></script>'
+          + '<script type="text/javascript">var lumbarLoadPrefix = \'bar/\';</script>'
+          + '<script type="text/javascript" src="bar/module.js"></script>'
+          + '<script type="text/javascript" src="bar/module.js"></script>',
+        done);
+    });
+
     it('should error on unknown script module', function(done) {
       test({fileName: '1.hml'}, '<script src="module:go ... San Diego"></script>', undefined, function(err) {
         err.message.should.eql('Unknown module "go ... San Diego"');
