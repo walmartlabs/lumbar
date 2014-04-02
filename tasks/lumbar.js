@@ -131,7 +131,7 @@ module.exports = function(grunt) {
     command.push(lumbarFile);
     command.push(outputDir);
 
-    var lumbarProcess = require('child_process').spawn(command.shift(), command, {stdio: 'inherit'});
+    var lumbarProcess = require('child_process').spawn(command.shift(), command, { stdio: 'inherit', cwd: config.cwd });
     if (config.background) {
       done(true);
     } else {
