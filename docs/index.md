@@ -228,7 +228,7 @@ configuration. For example the lumbar-loader files can be referenced via a libra
       "components/lumbar-loader"
     ]
 
-Libraries have two methods of operation, global config and module mixins. The former allows libraries to define common configuration such as common `stylus` include files and the later allows for the addition of specific behaviors to specific modules.
+Libraries have two methods of operation, global config and module mixins. The former allows libraries to define common configuration such as common `stylus` include files and the latter allows for the addition of specific behaviors to specific modules.
 
 Global config changes are simply defined in the root of the library `lumbar.json` file. When the library is loaded any settings defined here will be imported into the project. Note that each plugin implements its own inheritance scheme here. Some plugins might treat specific definitions as additive and others might treat them as overrides.
 
