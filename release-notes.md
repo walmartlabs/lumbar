@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.1...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.2...master)
+
+## v3.1.2 - April 8th, 2014
+- Fix update externals under latest cheerio - e2b56e4
+- minor typo - 2065220
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.1...v3.1.2)
 
 ## v3.1.1 - April 1st, 2014
 - [#121](https://github.com/walmartlabs/lumbar/pull/121) path separator on windows in handlebar templates with libraries [(@DatenMetzgerX)](https://github.com/DatenMetzgerX)
