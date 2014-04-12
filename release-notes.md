@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.2...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.3...master)
+
+## v3.1.3 - April 12th, 2014
+- Do not minimized server builds - 92ee4ad
+- Remove unused imports - db0bcdb
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.2...v3.1.3)
 
 ## v3.1.2 - April 8th, 2014
 - Fix update externals under latest cheerio - e2b56e4
