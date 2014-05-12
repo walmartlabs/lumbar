@@ -19,7 +19,7 @@
   "dependencies": {
     "async": "0.x",
     "bower": "1.x",
-    "cheerio": "0.x",
+    "cheerio": "0.15.x",
     "child-pool": "1.x",
     "esprima": "1.x",
     "growl": "1.x",
