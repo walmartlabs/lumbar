@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.3...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.4...master)
+
+## v3.1.4 - May 12th, 2014
+- Pin cheerio to 0.15.x to avoid cheerio#460 - d1b7315
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.3...v3.1.4)
 
 ## v3.1.3 - April 12th, 2014
 - Do not minimized server builds - 92ee4ad
