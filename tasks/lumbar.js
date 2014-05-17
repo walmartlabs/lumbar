@@ -58,7 +58,8 @@ module.exports = function(grunt) {
     }
 
     if (!('background' in config)) {
-      config.background = true;
+      // Default to background for anything other than build operations
+      config.background = mode !== 'build';
     }
 
     // never allow build to be in the background
