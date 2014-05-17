@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.4...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.5...master)
+
+## v3.1.5 - May 17th, 2014
+- Provide better default for background attribute - 97ab1e0
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.4...v3.1.5)
 
 ## v3.1.4 - May 12th, 2014
 - Pin cheerio to 0.15.x to avoid cheerio#460 - d1b7315
