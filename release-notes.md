@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.5...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.2.0...master)
+
+## v3.2.0 - May 17th, 2014
+- [#101](https://github.com/walmartlabs/lumbar/issues/101) - Create simple config API ([@kpdecker](https://api.github.com/users/kpdecker))
+- Drop travis testing for node 0.8 - 45def31
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.1.5...v3.2.0)
 
 ## v3.1.5 - May 17th, 2014
 - Provide better default for background attribute - 97ab1e0
