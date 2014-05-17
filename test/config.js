@@ -1,6 +1,12 @@
 var Config = require('../lib/config');
 
 describe('config', function() {
+  it('should fail if parsing error occurs', function() {
+    (function() {
+      Config.readConfig(__dirname + '/artifacts/invalid.json');
+    }).should.throw(/Failed to load config .*invalid.json: Line: 3 Column: 4 - Unexpected token ;/);
+  });
+
   it('should fail if no modules are defined', function() {
     (function() {
       Config.create({});
