@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.1...master)
+
+## v4.0.1 - June 9th, 2014
+- Remap base module when using localPath module map - 5ecab63
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.0...v4.0.1)
 
 ## v4.0.0 - June 9th, 2014
 - Include loadPrefix with Lumbar.moduleMap output - a91b944
