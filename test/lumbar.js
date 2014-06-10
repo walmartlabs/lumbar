@@ -46,7 +46,8 @@ describe('#moduleMap', function() {
             'bar/foo': 'bar'
           }
         }
-      }
+      },
+      loadPrefix: 'prefix!'
     }, {});
   });
 
@@ -55,6 +56,8 @@ describe('#moduleMap', function() {
       map.should.eql({
         "map": {
           "web": {
+            "isMap": true,
+            "loadPrefix": "prefix!web/",
             "modules": {
               "foo": {
                 "js": "foo.js",
@@ -73,6 +76,8 @@ describe('#moduleMap', function() {
             }
           },
           "webview": {
+            "isMap": true,
+            "loadPrefix": "prefix!webview/",
             "modules": {
               "foo": {
                 "js": "foo.js",
@@ -93,9 +98,77 @@ describe('#moduleMap', function() {
         },
         "store": {
           "web": {
+            "isMap": true,
+            "loadPrefix": "prefix!web/",
             "modules": {
               "foo": {
                 "js": "foo.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo"
+            }
+          }
+        }
+      });
+      done();
+    });
+  });
+
+  it('should collect map with local path', function(done) {
+    arise.moduleMap(undefined, {localPath: true}, function(err, map) {
+      map.should.eql({
+        "map": {
+          "web": {
+            "isMap": true,
+            "loadPrefix": "prefix!web/",
+            "modules": {
+              "foo": {
+                "js": "web/foo.js",
+                "css": undefined
+              },
+              "bar": {
+                "js": "web/bar.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo",
+              "bar/bat/:baz": "bar",
+              "bar/foo": "bar"
+            }
+          },
+          "webview": {
+            "isMap": true,
+            "loadPrefix": "prefix!webview/",
+            "modules": {
+              "foo": {
+                "js": "webview/foo.js",
+                "css": undefined
+              },
+              "bar": {
+                "js": "webview/bar.js",
+                "css": undefined
+              }
+            },
+            "routes": {
+              "bat/:baz": "foo",
+              "foo": "foo",
+              "bar/bat/:baz": "bar",
+              "bar/foo": "bar"
+            }
+          }
+        },
+        "store": {
+          "web": {
+            "isMap": true,
+            "loadPrefix": "prefix!web/",
+            "modules": {
+              "foo": {
+                "js": "web/foo.js",
                 "css": undefined
               }
             },
@@ -115,6 +188,8 @@ describe('#moduleMap', function() {
       map.should.eql({
         "store": {
           "web": {
+            "isMap": true,
+            "loadPrefix": "prefix!web/",
             "modules": {
               "foo": {
                 "js": "foo.js",
