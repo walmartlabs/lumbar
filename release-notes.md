@@ -2,7 +2,17 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v3.2.0...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.0...master)
+
+## v4.0.0 - June 9th, 2014
+- Include loadPrefix with Lumbar.moduleMap output - a91b944
+- Expose stripPrefix from module map plugin - ce12685
+- Flatten module map for projects without platform - 4ae6bb2
+
+Compatibility notes:
+- Lumbar.moduleMap output has changed to have both dynamic depth and optional path handling via the `localPath` flag. Consumers should now iterate the structure looking for `isMap` and pass the desired `localPath` flag for their needs.
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v3.2.0...v4.0.0)
 
 ## v3.2.0 - May 17th, 2014
 - [#101](https://github.com/walmartlabs/lumbar/issues/101) - Create simple config API ([@kpdecker](https://api.github.com/users/kpdecker))
