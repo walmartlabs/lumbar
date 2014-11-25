@@ -495,7 +495,7 @@ describe('mixins', function() {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
-        stripper(module.scripts).should.eql([{src: 'bower_components/foo/bar.js', bower: 'foo'}]);
+        stripper(module.scripts).should.eql([{src: 'bower_components/foo/bar.js', bower: 'foo', bowerResolved: true}]);
 
         done();
       });
@@ -528,7 +528,7 @@ describe('mixins', function() {
         context.config.moduleList().should.eql(['foo']);
 
         var module = context.config.attributes.modules.foo;
-        stripper(module.scripts).should.eql([{src: 'bower_components/foo/bar.js', bower: 'foo'}]);
+        stripper(module.scripts).should.eql([{src: 'bower_components/foo/bar.js', bower: 'foo', bowerResolved: true}]);
 
         done();
       });
