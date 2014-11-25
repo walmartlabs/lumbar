@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.1...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.2...master)
+
+## v4.0.2 - November 25th, 2014
+- [#122](https://github.com/walmartlabs/lumbar/issues/122) - bower Source-Files ([@DatenMetzgerX](https://api.github.com/users/DatenMetzgerX))
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.1...v4.0.2)
 
 ## v4.0.1 - June 9th, 2014
 - Remap base module when using localPath module map - 5ecab63
