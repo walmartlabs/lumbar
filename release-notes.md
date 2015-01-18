@@ -2,7 +2,15 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.2...master)
+[Commits](https://github.com/walmartlabs/lumbar/compare/v5.0.0...master)
+
+## v5.0.0 - January 18th, 2015
+- [#125](https://github.com/walmartlabs/lumbar/issues/125) - Update stylus version to support bootstrap-stylus and others ([@liorch88](https://api.github.com/users/liorch88))
+
+Compatibility notes:
+- Handlebars, Stylus, Cofeescript, etc dependencies are now peer dependencies. Implementors must now pick the versions that they will integrate with.
+
+[Commits](https://github.com/walmartlabs/lumbar/compare/v4.0.2...v5.0.0)
 
 ## v4.0.2 - November 25th, 2014
 - [#122](https://github.com/walmartlabs/lumbar/issues/122) - bower Source-Files ([@DatenMetzgerX](https://api.github.com/users/DatenMetzgerX))
