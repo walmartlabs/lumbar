@@ -20,7 +20,7 @@
     "alce": "1.x",
     "async": "0.x",
     "bower": "1.x",
-    "cheerio": "0.15.x",
+    "cheerio": "0.22.0",
     "child-pool": "1.x",
     "growl": "1.x",
     "underscore": "1.x"
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "chai": "1.x.x",
-    "cheerio": "^0.18.0",
+    "cheerio": "^0.22.0",
     "coffee-script": "1.x",
     "glob": "^4.3.5",
     "grunt": "~0.4.1",
